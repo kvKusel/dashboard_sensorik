@@ -1,0 +1,26 @@
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+# IDE/Editor Files
+.vscode/
+
+
+# Python virtual environment
+venv/
+
+# Prettier configuration file 
+.prettierrc
+
+# Global project gitignore
+**/.env
+
+**/manage.py
+
+
+**/db.sqlite3
+
+.env
+
