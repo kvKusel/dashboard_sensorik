@@ -77,7 +77,7 @@ const LeafletMap = ({ selectedTree }) => {
 
   const TreeWithSensorIcon = new L.divIcon({
     className: 'custom-icon',
-    html: ReactDOMServer.renderToString(<GreenTreeImage />),
+    html: ReactDOMServer.renderToString(<GreenTreeImage style={{ filter: 'blur(2px)', opacity: '1'}}/> ),
     iconSize: [40, 40] 
 
   });
@@ -146,7 +146,7 @@ const LeafletMap = ({ selectedTree }) => {
 
                             {/* renders the highlighted tree */}
 
-                            <Marker position={[selectedTree.latitude, selectedTree.longitude]} icon={ChosenTreeIcon}>
+                            <Marker position={[selectedTree.latitude, selectedTree.longitude]} icon={ChosenTreeIcon } >
           <Popup>
             A sample popup. <br /> This can contain any HTML.
           </Popup>

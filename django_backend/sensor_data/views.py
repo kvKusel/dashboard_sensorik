@@ -38,7 +38,7 @@ class SoilDataView(View):
             # Convert DataFrame to JSON
             if df is not None:
                 json_data = df.to_json(orient="records", date_format="iso")
-                return JsonResponse(json_data, safe=False)              ##########  change to HTTP Response like in Resistance API Call and remove safe=False!
+                return JsonResponse(json_data, safe=False)             
             else:
                 return JsonResponse({"error": "Query result is empty"}, status=404)
 
@@ -78,7 +78,7 @@ class WeatherStationDataView(View):
             # Convert DataFrame to JSON
             if df is not None:
                 json_data = df.to_json(orient="records", date_format="iso")
-                return JsonResponse(json_data, safe=False)                              ##########  change to HTTP Response like in Resistance API Call and remove safe=False!!!!
+                return JsonResponse(json_data, safe=False)                             
             else:
                 return JsonResponse({"error": "Query result is empty"}, status=404)
 
@@ -221,33 +221,10 @@ class TreeHealthDataView(View):
                     response_json = response.json()
                     print(response_json)
 
-                    # # Extract the resistance data from the whole response                  
-                    # extracted_values = []
-                    
-                    # for element in response_json:
-                    #     element = re.split(',', element)
-                    #     extracted_values.append(element)
-
-                    # extracted_values = extracted_values[2:]    
-
-                    # #extract timestamp and value from each sublist, create a JSON object for each element
-                    # data = [{'time': sublist[0], 'value': float(sublist[3])} for sublist in extracted_values]
-                    # data = json.dumps(data)
-                    # response = HttpResponse(data, content_type='application/json')
-                    # print(response)
-
-
-                                            
+                                          
                                                                 
                     # Return the extracted data as a JSON response
                     return JsonResponse(response_json, status=200, safe=False)
-            #     else:
-            #         # Return an error response if the request failed
-            #         return JsonResponse({"error": "Failed to fetch data"}, status=response.status_code)
-            # else:
-            #     # If authentication fails or access token is not available, return error response
-            #     return JsonResponse({"error": "Authentication failed or access token not available"}, status=401)
-
         except Exception as e:
             # Print the error message to the terminal
             print(f"Error in TreeHealthDataView: {str(e)}")

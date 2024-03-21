@@ -6,17 +6,134 @@ const MapLegend = () => {
   return (
     <>
       <div className="w-100 h-100">
-        <div className="row h-25 d-flex pb-2 pb-lg-4">
+        <div className="row  d-flex pb-2 ">
           <div className="col-12">
-            <h5>Legende:</h5>
+            <h5 className="fw-bold">Legende:</h5>
           </div>
         </div>
-        <div className="row h-75  d-flex">
+        <div className="row  d-flex ">
+        <div className="col-md-5 col-6 d-flex flex-column ">
+        <div className="fw-bold">Zustand Baukrone:</div>
 
-                      {/* icon Burg Lichtenberg */}
-                      <div className="col-xl-4 col-sm-6 d-flex ">
+        
+                    {/*             kein Trockenstress icon */}
+
+                    <div className=" d-flex  ">
+            <div className="d-flex align-items-center">
+              <YellowTreeImage className="legend-icons" />
+            </div>
             <div className="d-flex align-items-center ps-1">
-            <svg width="19" height="19">
+            kein Trockenstress
+            </div>
+          </div>
+        
+
+                    {/*             mäßiger Trockenstress icon */}
+
+                    <div className=" d-flex  ">
+            <div className="d-flex align-items-center">
+              <YellowTreeImage className="legend-icons" />
+            </div>
+            <div className="d-flex align-items-center ps-1">
+            mäßiger T.
+            </div>
+          </div>
+
+
+                    {/*             hoher Trockenstress icon */}
+
+                              <div className=" d-flex  ">
+            <div className="d-flex align-items-center">
+              <YellowTreeImage className="legend-icons" />
+            </div>
+            <div className="d-flex align-items-center ps-1">
+            hoher T.
+            </div>
+          </div>
+
+                    {/*             Frost icon */}
+
+                    <div className=" d-flex  ">
+            <div className="d-flex align-items-center">
+              <YellowTreeImage className="legend-icons" />
+            </div>
+            <div className="d-flex align-items-center ps-1">
+            Frost
+            </div>
+          </div>
+
+
+                              {/*             "kein Sensor eingebaut" icon */}
+
+                              <div className=" d-flex  ">
+            <div className="d-flex align-items-center">
+              <YellowTreeImage className="legend-icons" />
+            </div>
+            <div className="d-flex align-items-center ps-1">
+            kein Sensor
+            </div>
+          </div>
+
+
+
+
+
+
+
+        </div>
+
+        <div className="col-md-3 col-6 d-flex flex-column ">
+        <div className="fw-bold">Bodenfeuchte:</div>
+        
+
+        
+                    {/* feucht Icon */}
+
+                    <div className="d-flex  ">
+            <div className="d-flex align-items-center">
+              <YellowTreeImage className="legend-icons" />
+            </div>
+            <div className="d-flex align-items-center ps-1">
+feucht            </div>
+          </div>
+        
+
+                    {/* mäßig Icon */}
+
+                    <div className="d-flex  ">
+            <div className="d-flex align-items-center">
+              <YellowTreeImage className="legend-icons" />
+            </div>
+            <div className="d-flex align-items-center ps-1">
+mäßig            </div>
+          </div>
+
+
+                              {/* this will be a yellow (activated) tree  */}
+
+                              <div className=" d-flex  ">
+            <div className="d-flex align-items-center">
+              <YellowTreeImage className="legend-icons" />
+            </div>
+            <div className="d-flex align-items-center ps-1">
+trocken
+            </div>
+          </div>
+
+
+
+
+        </div>
+
+        <div className="col-md-4 col-sm-6 d-flex  flex-column">
+        <div className="fw-bold">Andere:</div>
+
+            
+
+                                {/* icon Burg Lichtenberg */}
+                                <div className=" d-flex ">
+            <div className="d-flex align-items-center ps-1">
+            <svg width="27" height="19">
 
   <rect width="100" height="15" rx="0" ry="0" fill="red" fillOpacity="0.7" />
 </svg>
@@ -29,9 +146,9 @@ const MapLegend = () => {
 
             {/* icon Streuobstwiese */}
 
-          <div className="col-xl-4 col-sm-6 d-flex ">
+          <div className=" d-flex ">
             <div className="d-flex align-items-center ps-1">
-            <svg width="19" height="19">
+            <svg width="27" height="19">
                 <rect width="100" height="15" rx="0" ry="0" fill="blue" fillOpacity="0.6" />
               </svg>       
                    </div>
@@ -39,39 +156,12 @@ const MapLegend = () => {
               Projektfläche
             </div>
           </div>
+        
+        </div>
 
-          
 
-                    {/* this will be a yellow (activated) tree  */}
 
-        <div className="col-xl-4 col-sm-6 d-flex  ">
-            <div className="d-flex align-items-center">
-              <YellowTreeImage className="legend-icons" />
-            </div>
-            <div className="d-flex align-items-center ps-1">
-            ausgewählter Baum
-            </div>
-          </div>
-          
-          {/* this will be a normal tree with a sensor  */}
-          <div className="col-xl-4 col-sm-6 d-flex ">
-            <div className="d-flex align-items-center">
-              <GreenTreeImage className="legend-icons" />
-            </div>
-            <div className="d-flex align-items-center ps-1">
-              Baum mit Sensor
-            </div>
-          </div>
 
-                    {/* this will be a tree without a sensor  */}
-                    <div className="col-xl-4 col-sm-6 d-flex ">
-            <div className="d-flex align-items-center">
-              <GreenTreeImage className="legend-icons" />
-            </div>
-            <div className="d-flex align-items-center ps-1">
-              Baum ohne Sensor
-            </div>
-          </div>
 
 
 

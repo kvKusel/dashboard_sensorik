@@ -75,13 +75,13 @@ export const precipitationConfig = {
 
 //Doughnut Chart - General Tree Condition
 export const treeHealthConfig = {
-  arcsLength: [0.3, 0.3, 0.3, 0.3, 0.3, 0.3], // Array of arc lengths
-  colors: ['#FF0000', '#F57D1F', '#FFBB64', '#FDFF00', '#B3FFAE', '#379237'], // Array of colors
+  arcsLength: [0.3, 0.3, 0.3, 0.3], // Array of arc lengths
+  colors: ['#79E0EE','#FF0000', '#FDFF00', '#379237'], // Array of colors
 };
 
 //Doughnut Chart - soil moisture
 export const soilMoistureGaugeChartConfig = {
-  arcsLength: [0.3, 0.3, 0.3], // Array of arc lengths
+  arcsLength: [0.1, 0.1, 0.8], // Array of arc lengths
   colors: ['#FF0000', '#FDFF00', '#379237'], // Array of colors
 };
 

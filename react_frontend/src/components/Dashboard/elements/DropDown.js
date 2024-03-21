@@ -10,7 +10,7 @@ function DropdownButton({ trees, onSelectTree }) {
 
       <Dropdown.Menu className='w-75'>
       {trees.map(tree => (
-        <Dropdown.Item key={tree.id} onClick={() => onSelectTree(tree)}>
+        <Dropdown.Item className="" key={tree.id} onClick={() => onSelectTree(tree)}>
           {tree.name}
         </Dropdown.Item>
       ))}

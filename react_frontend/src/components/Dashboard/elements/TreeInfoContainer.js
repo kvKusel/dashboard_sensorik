@@ -7,18 +7,21 @@ import DropdownButton from './DropDown';
 import { treeHealthConfig, soilMoistureGaugeChartConfig } from '../../../chartsConfig/chartsConfig';
 import MapLegend from './MapLegend';
 
-const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection }) => {
+const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoistureData }) => {
+
 
   // set up for the gauge 
-  const currentValue = 80;
+  const currentValue = soilMoistureData[soilMoistureData.length - 1].value;
+  console.log(currentValue)
 
 
   return (
     <div className="row" style={{ flex: "1 1 auto" }}>
       
       <div className="col-md-4 p-2 d-flex flex-column" >
+        <div>
         <div
-          className="col-12 d-flex flex-column mb-3 h-25 order-1" 
+          className="col-12 d-flex flex-column mb-3 order-1" 
           style={{
             borderRadius: "0px",
             flex: "1 1 auto",
@@ -34,7 +37,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection }) => {
         </div>
           
         <div
-          className="col-12 d-flex flex-column mb-3 h-75 order-2" 
+          className="col-12 d-flex flex-column mb-3 order-2" 
           style={{
             // backgroundColor: "white",
             backgroundColor: "#DDF2FD",
@@ -59,6 +62,8 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection }) => {
         </div>
         
 
+</div>
+
 
 
         <div
@@ -73,11 +78,14 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection }) => {
           }}
         >
 
-               <div className="col-12 d-flex flex-column align-items-center justify-content-center pt-2" >
+
+
+
+               <div className="col-12 d-flex flex-column align-items-center justify-content-center pt-3" >
                {/* it's a "special chart" because the gauge's needle will be resting at 0 if undefined */}
             <Gauge  currentValue={currentValue} config={treeHealthConfig} selectedTree={selectedTree} id={"specialChart"}/> 
             <p className="text-center px-2">
-    Allgemeiner Baumzustand: <strong>{!selectedTree || selectedTree.id === 6 ? '-' : 'Gut'}</strong>
+    Allgemeiner Baumzustand:<br /><strong>{!selectedTree || selectedTree.id === 6 ? '-' : 'Kein Trockenstress'}</strong>
   </p>
                </div>
 
@@ -97,11 +105,11 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection }) => {
           }}
         >
 
-               <div className="col-12 d-flex flex-column align-items-center justify-content-center pt-2" >
+               <div className="col-12 d-flex flex-column align-items-center justify-content-center pt-3" >
                {/* it's a "special chart" because it will be grayed out if undefined */}
             <Gauge  currentValue={currentValue} config={soilMoistureGaugeChartConfig} selectedTree={selectedTree} id={"specialChart"}/> 
             <p className="text-center px-2">
-    Bodenfeuchte: <strong>{!selectedTree || selectedTree.id === 6 ? '-' : 'Gut'}</strong>
+    Bodenfeuchte:<br /> <strong>{!selectedTree || selectedTree.id === 6 ? '-' : 'feucht'}</strong>
   </p>
                </div>
 

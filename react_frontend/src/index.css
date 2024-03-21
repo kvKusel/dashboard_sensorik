@@ -140,13 +140,15 @@ code {
 
 @media (min-width: 1200px) {
   .legend-icons {
+    min-width: 35px;
     height: 100%;
   }
 }
 
 @media (max-width: 1199px) {
   .legend-icons {
-    height: 90%;
+    height: 100%;
+    min-width: 35px;
   }
 }
 
@@ -164,3 +166,6 @@ code {
 }
 
 /* END OF ANIMATIONS - NOT COVERED BY FRAMER MOTION */
+
+
+

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
-const MyButton = ({ to, buttonText }) => {
+const MyButton = ({ to, buttonText, action }) => {
   const fadeIn = {
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { duration: 1, staggerChildren: 1 } },
@@ -28,6 +28,7 @@ const MyButton = ({ to, buttonText }) => {
           }}
           variants={buttonVariants}
           whileHover="hover"
+          onClick={action}
         >
           {buttonText}
         </motion.button>

@@ -29,25 +29,37 @@ const MyJumbotron = () => {
 
 
   const handleButtonClick = () => {
-    const buttons = document.querySelectorAll('.fade-button');
-    buttons.forEach((button, index) => {
-      setTimeout(() => {
-        button.classList.add('fade-out');
-        if (index === buttons.length - 1) {
-          // Remove buttons from the DOM after the last button's animation
-          setTimeout(() => {
-            buttons.forEach((btn) => {
-              btn.remove();
-            });
-          }, 500 * buttons.length); // Wait for the total animation duration
-        }
-      }, index * 500); // Delay each button by 0.5 seconds (500 milliseconds)
-    });
+    console.log("sdads")
+
+    const h1 = document.querySelector('h1');
+    if (h1) {
+      h1.remove();
+      console.log("dadasd")
+    }
   };
+
+  // const handleButtonClick = () => {
+  //   const buttons = document.querySelectorAll('.fade-button');
+  //   buttons.forEach((button, index) => {
+  //     setTimeout(() => {
+  //       button.classList.add('fade-out');
+  //       if (index === buttons.length - 1) {
+  //         // Remove buttons from the DOM after the last button's animation
+  //         setTimeout(() => {
+  //           buttons.forEach((btn) => {
+  //             btn.remove();
+  //           });
+  //         }, 500 * buttons.length); // Wait for the total animation duration
+  //       }
+  //     }, index * 500); // Delay each button by 0.5 seconds (500 milliseconds)
+  //   });
+  // };
   
 
 
   return (
+    <AnimatePresence>
+
     <motion.div
       className="d-flex flex-column justify-content-center align-items-start text-light p-5"
       style={{
@@ -66,29 +78,30 @@ const MyJumbotron = () => {
 
 
             <div className="d-flex row ">
-                             <motion.div className="col-sm-6 p-1" variants={fadeIn}>
+                             {/* <motion.div className="col-sm-6 p-1" variants={fadeIn}>
 
               <button className="fade-button" onClick={handleButtonClick}>Das Projekt</button>
               </motion.div>
               <motion.div className="col-sm-6 p-1" variants={fadeIn}>
 
               <button className="fade-button" to="/dashboard">Dashboard</button>
-              </motion.div>
-              {/* <div className="col-sm-6 p-1">
+              </motion.div> */}
+              <div className="col-sm-6 p-1">
                 <MyButton
-                  // buttonAction={handleFadeOut}
                   buttonText="Das Projekt"
                   className="fade-button"
-                  onClick={handleButtonClick}
+                  action={handleButtonClick}
                 />
               </div>
               <div className="col-sm-6 p-1">
                 <MyButton to="/dashboard" buttonText="Dashboard" className="fade-button"
  />
-              </div> */}
+              </div>
             </div>
 
     </motion.div>
+    </AnimatePresence>
+
   );
 };
 

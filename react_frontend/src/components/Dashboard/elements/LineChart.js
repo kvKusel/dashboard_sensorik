@@ -56,6 +56,7 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
             //     hour: "MMM d, HH:00",
             //   },
             // },
+            
             ticks: {
               maxTicksLimit: 4,
               color: "black",
