@@ -1,6 +1,8 @@
 import React from "react";
 import { ReactComponent as GreenTreeImage } from "../../../assets/green_tree.svg";
 import { ReactComponent as YellowTreeImage } from "../../../assets/yellow_tree.svg";
+import { ReactComponent as NoSensor } from "../../../assets/icon_kein_sensor.svg";
+import IconTree from "./LeafletTreeIcon";
 
 const MapLegend = () => {
   return (
@@ -8,6 +10,10 @@ const MapLegend = () => {
       <div className="w-100 h-100">
         <div className="row  d-flex pb-2 ">
           <div className="col-12">
+          <div>
+      <div>
+      </div>
+    </div>
             <h5 className="fw-bold">Legende:</h5>
           </div>
         </div>
@@ -19,8 +25,8 @@ const MapLegend = () => {
                     {/*             kein Trockenstress icon */}
 
                     <div className=" d-flex  ">
-            <div className="d-flex align-items-center">
-              <YellowTreeImage className="legend-icons" />
+                    <div className="d-flex align-items-center legend-icons">
+              <IconTree color={"green-left"}/>
             </div>
             <div className="d-flex align-items-center ps-1">
             kein Trockenstress
@@ -31,8 +37,8 @@ const MapLegend = () => {
                     {/*             mäßiger Trockenstress icon */}
 
                     <div className=" d-flex  ">
-            <div className="d-flex align-items-center">
-              <YellowTreeImage className="legend-icons" />
+                    <div className="d-flex align-items-center legend-icons">
+              <IconTree color={"yellow-left"}/>
             </div>
             <div className="d-flex align-items-center ps-1">
             mäßiger T.
@@ -43,8 +49,8 @@ const MapLegend = () => {
                     {/*             hoher Trockenstress icon */}
 
                               <div className=" d-flex  ">
-            <div className="d-flex align-items-center">
-              <YellowTreeImage className="legend-icons" />
+                              <div className="d-flex align-items-center legend-icons">
+              <IconTree color={"red-left"}/>
             </div>
             <div className="d-flex align-items-center ps-1">
             hoher T.
@@ -54,9 +60,9 @@ const MapLegend = () => {
                     {/*             Frost icon */}
 
                     <div className=" d-flex  ">
-            <div className="d-flex align-items-center">
-              <YellowTreeImage className="legend-icons" />
-            </div>
+                    <div className="d-flex align-items-center legend-icons">
+              <IconTree color={"blue"}/>
+                          </div>
             <div className="d-flex align-items-center ps-1">
             Frost
             </div>
@@ -66,8 +72,8 @@ const MapLegend = () => {
                               {/*             "kein Sensor eingebaut" icon */}
 
                               <div className=" d-flex  ">
-            <div className="d-flex align-items-center">
-              <YellowTreeImage className="legend-icons" />
+            <div className="d-flex align-items-center legend-icons">
+              <IconTree color={"transparent"}/>
             </div>
             <div className="d-flex align-items-center ps-1">
             kein Sensor
@@ -90,30 +96,30 @@ const MapLegend = () => {
                     {/* feucht Icon */}
 
                     <div className="d-flex  ">
-            <div className="d-flex align-items-center">
-              <YellowTreeImage className="legend-icons" />
+                    <div className="d-flex align-items-center legend-icons">
+              <IconTree color={"green-right"}/>
             </div>
             <div className="d-flex align-items-center ps-1">
-feucht            </div>
+feucht</div>
           </div>
         
 
                     {/* mäßig Icon */}
 
                     <div className="d-flex  ">
-            <div className="d-flex align-items-center">
-              <YellowTreeImage className="legend-icons" />
+                    <div className="d-flex align-items-center legend-icons">
+              <IconTree color={"yellow-right"}/>
             </div>
             <div className="d-flex align-items-center ps-1">
 mäßig            </div>
           </div>
 
 
-                              {/* this will be a yellow (activated) tree  */}
+                              {/* trocken Icon   */}
 
                               <div className=" d-flex  ">
-            <div className="d-flex align-items-center">
-              <YellowTreeImage className="legend-icons" />
+                              <div className="d-flex align-items-center legend-icons">
+              <IconTree color={"red-right"}/>
             </div>
             <div className="d-flex align-items-center ps-1">
 trocken

@@ -72,8 +72,10 @@ const TreeMonitoringSubpage = () => {
       {!isLoading && (
         <React.Fragment>
           {/* First row - map and tree info */}
-          <TreeInfoContainer trees={trees} selectedTree={selectedTree} handleTreeSelection={handleTreeSelection} soilMoistureData={soilMoistureDataSensor1} />
+          {soilMoistureDataSensor1 && (
 
+          <TreeInfoContainer trees={trees} selectedTree={selectedTree} handleTreeSelection={handleTreeSelection} soilMoistureData={soilMoistureDataSensor1} />
+          )}
           {/* Second row - soil moisture data */}
           <div className="row" style={{ flex: "1 1 auto" }}>
             <div className="col-xs-12 d-flex p-2">

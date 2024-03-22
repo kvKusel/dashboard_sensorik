@@ -1,7 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import Chart, { plugins } from "chart.js/auto";
+import { format } from 'date-fns';
 
 const BarChart = ({ barChartConfig, barChartData }) => {
+
+    // creates a timestamp thats 23 hours earlier than current time - used to set the min boundary of x-axis 
+    const twentyFourHoursAgoTimestamp = Date.now() - (23 * 60 * 60 * 1000);
 
   //get the needed data from the props
   const { backgroundColor } = barChartConfig.datasets[0];
@@ -18,18 +22,25 @@ const BarChart = ({ barChartConfig, barChartData }) => {
     const barChartConfiguration = {
       type: "bar",
       data: {
-        labels: barChartData.map((dataPoint) => {
-          const date = new Date(dataPoint.time);
-          const monthAndDay = date.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
-          let hours = date.getHours();
-          if (hours === 24) {
-            hours = '00';
-          } else {
-            hours = hours.toString().padStart(2, '0');
-          }
-          const minutes = date.getMinutes().toString().padStart(2, '0');
-          return [monthAndDay, `${hours}:${minutes}`];
-        }) || [],
+        labels: 
+        
+        barChartData.map(dataPoint => dataPoint.time),
+
+        // barChartData.map((dataPoint) => {
+        //   const date = new Date(dataPoint.time);
+        //   const monthAndDay = date.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
+        //   let hours = date.getHours();
+        //   if (hours === 24) {
+        //     hours = '00';
+        //   } else {
+        //     hours = hours.toString().padStart(2, '0');
+        //   }
+        //   const minutes = date.getMinutes().toString().padStart(2, '0');
+        //   return [monthAndDay, `${hours}:${minutes}`];
+        // }) || [],
+
+
+
                 datasets: [{
           data: dataPoints,
           backgroundColor: backgroundColor,
@@ -49,8 +60,12 @@ const BarChart = ({ barChartConfig, barChartData }) => {
         },
         scales: {
           x: {
-            // type: 'timeseries', 
-            // min: new Date('2024-02-07T15:45:00Z').getTime(),   //make it dynamic later
+            type: 'time', 
+            min:new Date(twentyFourHoursAgoTimestamp),
+            grid: {
+              offset: false,
+            },
+
             // time: {
             //   displayFormats: {
             //     hour: 'MMM d, HH:00', // Customize the display format for hours
@@ -58,6 +73,13 @@ const BarChart = ({ barChartConfig, barChartData }) => {
 
             // },
             ticks: {
+              stepSize: 1, // 6 hours in milliseconds
+
+              callback: function(label, index, labels) {
+                const parsedDate = new Date(label);
+                const formattedDate = format(parsedDate, "MMM d, HH:00").split(", ");
+                return [formattedDate[0], formattedDate[1]];
+            },
               maxTicksLimit: 4,
               color: "black",
               font: {

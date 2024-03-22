@@ -81,7 +81,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
 
 
 
-               <div className="col-12 d-flex flex-column align-items-center justify-content-center pt-3" >
+               <div className="col-12 d-flex flex-column align-items-center justify-content-center pt-4 pb-2" >
                {/* it's a "special chart" because the gauge's needle will be resting at 0 if undefined */}
             <Gauge  currentValue={currentValue} config={treeHealthConfig} selectedTree={selectedTree} id={"specialChart"}/> 
             <p className="text-center px-2">
@@ -105,8 +105,9 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
           }}
         >
 
-               <div className="col-12 d-flex flex-column align-items-center justify-content-center pt-3" >
+               <div className="col-12 d-flex flex-column align-items-center justify-content-center pt-4 pb-2" >
                {/* it's a "special chart" because it will be grayed out if undefined */}
+               
             <Gauge  currentValue={currentValue} config={soilMoistureGaugeChartConfig} selectedTree={selectedTree} id={"specialChart"}/> 
             <p className="text-center px-2">
     Bodenfeuchte:<br /> <strong>{!selectedTree || selectedTree.id === 6 ? '-' : 'feucht'}</strong>
@@ -130,7 +131,10 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
             zIndex: '0', //add this to make sure the controls of the map are underneath the dropdown elements (Dropdown is directly above the map)
           }}
         >
-          <LeafletMap selectedTree={selectedTree}/>
+                    {soilMoistureData && (
+
+          <LeafletMap selectedTree={selectedTree} currentValueSoilMoisture={soilMoistureData[soilMoistureData.length - 1].value}/>
+                    )}
         </div>
 
         <div
@@ -168,7 +172,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
             borderColor: 'silver'
           }}
         >
-          <LeafletMap selectedTree={selectedTree}/>
+          <LeafletMap selectedTree={selectedTree} currentValueSoilMoisture={soilMoistureData[soilMoistureData.length - 1].value}/>
         </div>
           
         <div

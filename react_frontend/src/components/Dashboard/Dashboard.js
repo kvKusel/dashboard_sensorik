@@ -27,9 +27,9 @@ const Dashboard = () => {
       {/* create two columns, one for a side menu, the other for the main content */}
 
       <div className="row mx-xl-5 ">
-        <div className="d-flex justify-content-start">
+        <div className="d-flex justify-content-start pb-2 pt-2">
         <Link to="/" className="text-decoration-none text-dark">
-        <h1 className="display-3">SENSORNETZ LAND <span style={{whiteSpace: "nowrap"}}>L<img src={Logo} alt="Logo" />EBEN</span></h1>
+        <h2 >SENSORNETZ LAND <span style={{whiteSpace: "nowrap"}}>L<img className="logo" src={Logo} alt="Logo" />EBEN</span></h2>
         </Link>
         </div>
         {/* SIDE MENU  */}

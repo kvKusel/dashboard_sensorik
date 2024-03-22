@@ -1,31 +1,42 @@
 import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto"; // Import only Chart, not plugins
+import { format } from 'date-fns';
+
 
 const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
-  console.log(selectedTree);
 
   const lineChartRef = useRef(null);
+
+  // creates a timestamp thats 23 hours earlier than current time - used to set the min boundary of x-axis 
+  const twentyFourHoursAgoTimestamp = Date.now() - (23 * 60 * 60 * 1000);
+
 
   useEffect(() => {
     if (!lineChartRef.current || !lineChartConfig || !lineData) {
       return;
     }
 
+    console.log(        lineData.map(dataPoint => dataPoint.time),
+    )
+
     const lineChartConfigurationStandard = {
       type: "line",
       data: {
-        labels: lineData.map((dataPoint) => {
-          const date = new Date(dataPoint.time);
-          const monthAndDay = date.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
-          let hours = date.getHours();
-          if (hours === 24) {
-            hours = '00';
-          } else {
-            hours = hours.toString().padStart(2, '0');
-          }
-          const minutes = date.getMinutes().toString().padStart(2, '0');
-          return [monthAndDay, `${hours}:${minutes}`];
-        }) || [],
+        labels: 
+          lineData.map(dataPoint => dataPoint.time),
+
+        // lineData.map((dataPoint) => {
+        //   const date = new Date(dataPoint.time);
+        //   const monthAndDay = date.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
+        //   let hours = date.getHours();
+        //   if (hours === 24) {
+        //     hours = '00';
+        //   } else {
+        //     hours = hours.toString().padStart(2, '0');
+        //   }
+        //   const minutes = date.getMinutes().toString().padStart(2, '0');
+        //   return [monthAndDay, `${hours}:${minutes}`];
+        // }) || [],
         
               datasets: [
           {
@@ -50,29 +61,40 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
         },
         scales: {
           x: {
-            // type: "timeseries",
+            type: "time",
             // time: {
             //   displayFormats: {
             //     hour: "MMM d, HH:00",
             //   },
+              
             // },
+            min:new Date(twentyFourHoursAgoTimestamp),
             
             ticks: {
+              callback: function(label, index, labels) {
+                const parsedDate = new Date(label);
+                const formattedDate = format(parsedDate, "MMM d, HH:00").split(", ");
+                return [formattedDate[0], formattedDate[1]];
+            },
+              
               maxTicksLimit: 4,
               color: "black",
               font: {
                 size: 14,
               },
             },
+            
           },
           y: {
             ticks: {
+
               precision:0,
               maxTicksLimit: 4,
               color: "black",
               font: {
                 size: 14,
               },
+              
             },
           },
         },
@@ -130,6 +152,7 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
                 },
               },
               ticks: {
+                
                 maxTicksLimit: 3,
                 // minTicksLimit: 5, // Set a minimum number of ticks
                 // stepSize: 150,

@@ -6,8 +6,10 @@ import ReactDOMServer from 'react-dom/server';
 import MapLegend from './MapLegend';
 import { ReactComponent as GreenTreeImage } from "../../../assets/green_tree.svg";
 import { ReactComponent as YellowTreeImage } from "../../../assets/yellow_tree.svg";
+import IconTree from "./LeafletTreeIcon";
+import MarkerIcon from './LeafletTreeIconSvg';
 
-const LeafletMap = ({ selectedTree }) => {
+const LeafletMap = ({ selectedTree, currentValueSoilMoisture }) => {
 
 
   const [mapCenter, setMapCenter] = useState([49.55660,7.35830]);
@@ -68,19 +70,39 @@ const LeafletMap = ({ selectedTree }) => {
 
   const markerPosition = [49.55765051953722, 7.361306116493143];
 
-  const ChosenTreeIcon = new L.divIcon({
-    className: 'custom-icon',
-    html: ReactDOMServer.renderToString(<YellowTreeImage />),
-    iconSize: [40, 40] 
 
+  
+
+
+  // adjusts the color of the right side of the leaflet icons based on the soil moisture data 
+
+  let colorRight; // Default color
+
+  console.log(currentValueSoilMoisture)
+
+  if (currentValueSoilMoisture < 10) {
+    colorRight = "red";
+  } else if (currentValueSoilMoisture >= 10 && currentValueSoilMoisture < 20) {
+    colorRight = "yellow";
+  } else if (currentValueSoilMoisture >= 20) {
+    colorRight = "green";
+  }
+
+  const ChosenTreeIcon  = new L.divIcon({
+    html: ReactDOMServer.renderToString(<MarkerIcon colorLeft="#FDFF00" colorRight={colorRight} />),
+    className: "",     
+    iconSize: [40, 40],
   });
 
-  const TreeWithSensorIcon = new L.divIcon({
-    className: 'custom-icon',
-    html: ReactDOMServer.renderToString(<GreenTreeImage style={{ filter: 'blur(2px)', opacity: '1'}}/> ),
-    iconSize: [40, 40] 
 
+  const TreeWithSensorIcon  = new L.divIcon({
+    html: ReactDOMServer.renderToString(<MarkerIcon colorLeft="#79E0EE" colorRight={colorRight} />),
+    className: "blurred-icon ",     // makes the NOT chosen icons appear blurry
+    iconSize: [40, 40],
   });
+
+    // end of the function that adjusts the color of the right side of the leaflet icons based on the soil moisture data 
+
 
   useEffect(() => {
     if (selectedTree) {
@@ -120,6 +142,14 @@ const LeafletMap = ({ selectedTree }) => {
                   </Popup>
                 </Marker>
 
+                {currentValueSoilMoisture !== undefined && ( // Check if currentValueSoilMoisture is available
+        <Marker position={[49.55740,7.36071]}  icon={TreeWithSensorIcon}>
+          <Popup>
+            A sample popup. <br /> This can contain any HTML.
+          </Popup>
+        </Marker>
+      )}
+
                   <Marker position={[49.55759,7.36093]} icon={TreeWithSensorIcon}>
                   <Popup>
                     A sample popup. <br /> This can contain any HTML.
@@ -148,7 +178,7 @@ const LeafletMap = ({ selectedTree }) => {
 
                             <Marker position={[selectedTree.latitude, selectedTree.longitude]} icon={ChosenTreeIcon } >
           <Popup>
-            A sample popup. <br /> This can contain any HTML.
+            A special popup. <br /> This can contain any HTML.
           </Popup>
         </Marker>
 

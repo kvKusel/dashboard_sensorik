@@ -148,7 +148,7 @@ code {
 @media (max-width: 1199px) {
   .legend-icons {
     height: 100%;
-    min-width: 35px;
+    width: 35px;
   }
 }
 
@@ -169,3 +169,68 @@ code {
 
 
 
+/* RESPONSIVE LOGO ON TOP OF THE DASHBOARD */
+
+/* @media (min-width: 1200px) {
+  .legend-icons {
+    min-width: 35px;
+    height: 100%;
+  }
+} */
+
+@media (max-width: 2000px) {
+  .logo {
+    max-height: 35px;
+  }
+}
+
+/* END OF RESPONSIVE LOGO ON TOP OF THE DASHBOARD */
+
+
+/*  COLORS OF THE ICONS ON THE LEAFLET MAP AND IN THE LEGEND*/
+
+ /* class "cls-2" controls the left side background of the tree icons */
+
+.legend-icons .blue svg .cls-2 {
+  fill: #79E0EE;
+}
+
+.legend-icons .transparent svg .cls-2 {
+  fill: transparent;
+}
+
+.legend-icons .green-left svg .cls-2 {
+  fill: rgb(25, 135, 84);
+}
+
+.legend-icons .yellow-left svg .cls-2 {
+  fill: #FDFF00;
+}
+
+.legend-icons .red-left svg .cls-2 {
+  fill: red;
+}
+
+ /* class "cls-1" controls the left side background of the tree icons */
+
+
+ .legend-icons .green-right svg .cls-1 {
+  fill: rgb(25, 135, 84);
+}
+
+.legend-icons .yellow-right svg .cls-1 {
+  fill: #FDFF00;
+}
+
+.legend-icons .red-right svg .cls-1 {
+  fill: red;
+}
+
+
+.blurred-icon {
+  filter: blur(2px);
+  opacity: 1;
+}
+
+
+/*  END OF COLORS OF THE ICONS ON THE LEAFLET MAP AND IN THE LEGEND*/
