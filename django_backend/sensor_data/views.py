@@ -2,9 +2,11 @@ import requests
 from django.http import JsonResponse
 from django.views import View
 from influxdb_client import InfluxDBClient
-from .queries import query_soil_moisture_sensor1, query_soil_moisture_sensor2, query_weather_station_precipitation, query_weather_station_temperature
+from .queries import query_soil_moisture_sensor1, query_soil_moisture_sensor2, query_soil_moisture_jonathan, query_weather_station_precipitation, query_weather_station_temperature
 import os
 import json
+from collections import defaultdict
+from datetime import datetime
 import re
 from django.http import HttpResponse
 
@@ -32,6 +34,8 @@ class SoilDataView(View):
                 df = query_soil_moisture_sensor1(client, org=influxdb_org)
             elif query_type == "sensor2":
                 df = query_soil_moisture_sensor2(client, org=influxdb_org)
+            elif query_type == "jonathan":
+                df = query_soil_moisture_jonathan(client, org=influxdb_org)
             else:
                 return JsonResponse({"error": "Invalid query type"}, status=400)
 
@@ -70,14 +74,19 @@ class WeatherStationDataView(View):
             # Execute the appropriate query based on the query type
             if query_type == "precipitation":
                 df = query_weather_station_precipitation(client, org=influxdb_org)
+                df.drop(df.tail(1).index, inplace=True)
+                print(df)
             elif query_type == "temperature":
                 df = query_weather_station_temperature(client, org=influxdb_org)
+                df.drop(df.tail(1).index, inplace=True)
+
             else:
                 return JsonResponse({"error": "Invalid query type"}, status=400)
 
             # Convert DataFrame to JSON
             if df is not None:
                 json_data = df.to_json(orient="records", date_format="iso")
+                print(json_data)
                 return JsonResponse(json_data, safe=False)                             
             else:
                 return JsonResponse({"error": "Query result is empty"}, status=404)
@@ -130,6 +139,9 @@ class ElectricalResistanceDataView(View):
                     data = json.dumps(data)
                     response = HttpResponse(data, content_type='application/json')
                     print(response)
+                    print(data)
+                    
+                    
 
 
                                             
@@ -209,6 +221,9 @@ class TreeHealthDataView(View):
             if access_token:
                 # Define the URL of the API endpoint to fetch electrical resistance data
                 api_url = 'https://api.treesense.net/trees'
+
+
+                
                 
                 # Set up headers with the access token
                 headers = {'Authorization': f'Bearer {access_token}'}

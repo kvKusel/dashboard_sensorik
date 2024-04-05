@@ -4,15 +4,32 @@ import { format } from 'date-fns';
 
 const BarChart = ({ barChartConfig, barChartData }) => {
 
+  console.log(barChartData)
+
+  const firstTimeValue = barChartData.length > 0 ? new Date(barChartData[1].time) : new Date();
+
     // creates a timestamp thats 23 hours earlier than current time - used to set the min boundary of x-axis 
-    const twentyFourHoursAgoTimestamp = Date.now() - (23 * 60 * 60 * 1000);
+    const now = new Date();
+    now.setMinutes(0);
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+
+    const twentyFourHoursAgoTimestamp = new Date(now - (24 * 60 * 60 * 1000));
 
   //get the needed data from the props
   const { backgroundColor } = barChartConfig.datasets[0];
-  const labels = barChartData.map(dataPoint => dataPoint.time);
+  const labels = barChartData.map(dataPoint => {
+    const timeValue = new Date(dataPoint.time); // Convert time string to Date object
+    //timeValue.setMinutes(timeValue.getMinutes() + 30); // Add 30 minutes
+    return timeValue;
+});
+
   const dataPoints = barChartData.map(dataPoint => parseFloat(dataPoint.value));
 
   const barChartRef = useRef(null);
+
+
+
 
   useEffect(() => {
     if (!barChartRef.current || !barChartConfig || !barChartData) {
@@ -22,28 +39,13 @@ const BarChart = ({ barChartConfig, barChartData }) => {
     const barChartConfiguration = {
       type: "bar",
       data: {
-        labels: 
+        labels: labels,
         
-        barChartData.map(dataPoint => dataPoint.time),
-
-        // barChartData.map((dataPoint) => {
-        //   const date = new Date(dataPoint.time);
-        //   const monthAndDay = date.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
-        //   let hours = date.getHours();
-        //   if (hours === 24) {
-        //     hours = '00';
-        //   } else {
-        //     hours = hours.toString().padStart(2, '0');
-        //   }
-        //   const minutes = date.getMinutes().toString().padStart(2, '0');
-        //   return [monthAndDay, `${hours}:${minutes}`];
-        // }) || [],
-
-
-
+        //barChartData.map(dataPoint => dataPoint.time),
                 datasets: [{
           data: dataPoints,
           backgroundColor: backgroundColor,
+          barThickness: "flex",
         }] || [],
       },
       options: {
@@ -60,8 +62,11 @@ const BarChart = ({ barChartConfig, barChartData }) => {
         },
         scales: {
           x: {
-            type: 'time', 
-            min:new Date(twentyFourHoursAgoTimestamp),
+            offset: false,
+            type: 'timeseries', 
+            min:firstTimeValue,
+            max: Date.now(),
+
             grid: {
               offset: false,
             },
@@ -73,7 +78,8 @@ const BarChart = ({ barChartConfig, barChartData }) => {
 
             // },
             ticks: {
-              stepSize: 1, // 6 hours in milliseconds
+              autoSkip:false,
+              stepSize: 1, 
 
               callback: function(label, index, labels) {
                 const parsedDate = new Date(label);
@@ -89,7 +95,7 @@ const BarChart = ({ barChartConfig, barChartData }) => {
             },
           },
           y: {
-            max:20,
+            max:10,
             ticks: {
               precision:0,      //display integers instead of floats
               maxTicksLimit: 4,

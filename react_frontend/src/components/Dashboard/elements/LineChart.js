@@ -4,40 +4,35 @@ import { format } from 'date-fns';
 
 
 const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
+  
+
 
   const lineChartRef = useRef(null);
 
+  let lineChartConfiguration;
+
+
   // creates a timestamp thats 23 hours earlier than current time - used to set the min boundary of x-axis 
-  const twentyFourHoursAgoTimestamp = Date.now() - (23 * 60 * 60 * 1000);
+  const twentyFourHoursAgoTimestamp = Date.now() - (22 * 60 * 60 * 1000);
 
 
   useEffect(() => {
     if (!lineChartRef.current || !lineChartConfig || !lineData) {
-      return;
+      return ;
     }
 
-    console.log(        lineData.map(dataPoint => dataPoint.time),
-    )
+    const labels = lineData.map(dataPoint => {
+      const timeValue = new Date(dataPoint.time); // Convert time string to Date object
+      //timeValue.setMinutes(timeValue.getMinutes() + 30); // Add 30 minutes
+      return timeValue;
+  });
+
 
     const lineChartConfigurationStandard = {
       type: "line",
       data: {
         labels: 
-          lineData.map(dataPoint => dataPoint.time),
-
-        // lineData.map((dataPoint) => {
-        //   const date = new Date(dataPoint.time);
-        //   const monthAndDay = date.toLocaleDateString("en-US", { month: "short", day: "2-digit" });
-        //   let hours = date.getHours();
-        //   if (hours === 24) {
-        //     hours = '00';
-        //   } else {
-        //     hours = hours.toString().padStart(2, '0');
-        //   }
-        //   const minutes = date.getMinutes().toString().padStart(2, '0');
-        //   return [monthAndDay, `${hours}:${minutes}`];
-        // }) || [],
-        
+        labels,
               datasets: [
           {
             data: lineData.map((dataPoint) => parseFloat(dataPoint.value)),
@@ -52,25 +47,20 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
         responsive: true,
         maintainAspectRatio: false,
         layout: {
-          // padding: {
-          //   left: 50,
-          //   right: 50,
-          //   top: 5,
-          //   bottom: 5,
-          // },
+
         },
         scales: {
           x: {
-            type: "time",
+            type: "timeseries",
             // time: {
-            //   displayFormats: {
-            //     hour: "MMM d, HH:00",
-            //   },
-              
+            //   unit: 'second',
+            //   unitStepSize: 1,
             // },
+            offset: false,
             min:new Date(twentyFourHoursAgoTimestamp),
-            
+            max: Date.now(),
             ticks: {
+              autoSkip: false,
               callback: function(label, index, labels) {
                 const parsedDate = new Date(label);
                 const formattedDate = format(parsedDate, "MMM d, HH:00").split(", ");
@@ -121,9 +111,8 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
       },
     };
 
-    let lineChartConfiguration;
 
-    if ((!selectedTree || selectedTree.id === 6) && id !== 'temperatureChart') {
+    if ((!selectedTree || selectedTree.id === 6 || selectedTree.id === 7) && id !== 'temperatureChart') {
       lineChartConfiguration = {
         type: "line",
         data: {
@@ -144,7 +133,7 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
           },
           scales: {
             x: {
-              type: "timeseries",
+              type: "time",
               time: {
                 unit: "day",
                 displayFormats: {
@@ -200,32 +189,6 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
           },
         },
         plugins: [
-          // {
-          //   beforeDraw: (chart, args, options) => {
-          //     const {
-          //       ctx,
-          //       chartArea: { top, right, bottom, left, width, height },
-          //       scales: { x, y },
-          //     } = chart;
-          //     ctx.save();
-          //     ctx.strokeStyle = "green";
-          //     ctx.strokeRect(left, y.getPixelForValue(45), width, 0);
-          //     ctx.restore();
-          //   },
-          // },
-          // {
-          //   beforeDraw: (chart, args, options) => {
-          //     const {
-          //       ctx,
-          //       chartArea: { top, right, bottom, left, width, height },
-          //       scales: { x, y },
-          //     } = chart;
-          //     ctx.save();
-          //     ctx.strokeStyle = "green";
-          //     ctx.strokeRect(left, y.getPixelForValue(40), width, 0);
-          //     ctx.restore();
-          //   },
-          // },
           {
             beforeDraw: (chart, args, options) => {
               const {
@@ -288,6 +251,14 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
       lineChart.destroy();
     };
   }, [lineChartConfig, lineData, selectedTree, id]);
+
+  if (!lineData) {
+    return (
+      <div style={{ textAlign: "center", paddingTop: "20px" }}>
+        <p>Daten momentan nicht verfügbar. Wir arbeiten bereits an ihrer Wiederherstellung...</p>
+      </div>
+    );
+  }
 
   return (
     <canvas

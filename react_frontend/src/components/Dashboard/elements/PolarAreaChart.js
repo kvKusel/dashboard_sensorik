@@ -92,7 +92,7 @@ const WindDirectionChart = () => {
   }, []);
 
   return (
-    <div style={{maxHeight:"60%"}} className=''>
+    <div style={{maxHeight:"40%", maxWidth: "50%"}} className=''>
       <canvas ref={chartRef}
       ></canvas>
     </div>

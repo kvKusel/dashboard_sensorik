@@ -29,7 +29,7 @@ export const fetchResistanceData = async () => {
         const parsedData = JSON.parse(response.data);
         return parsedData;
     } catch (error) {
-        console.error("Error fetching data from Django:", error);
+        console.error("Error fetching electrical resistance data from Django:", error);
         return null;
     }
 };
@@ -37,10 +37,10 @@ export const fetchResistanceData = async () => {
 export const fetchTreeHealthData = async () => {
     try {
         const response = await axios.get('http://127.0.0.1:8000/tree-health-data/');
-        const parsedData = JSON.parse(response.data);
-        return parsedData;
+        // const parsedData = JSON.parse(response.data);
+        return response.data;
     } catch (error) {
-        console.error("Error fetching data from Django:", error);
+        console.error("Error fetching tree health data from Django:", error);
         return null;
     }
 };

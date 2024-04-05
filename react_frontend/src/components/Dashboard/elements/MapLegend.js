@@ -2,13 +2,13 @@ import React from "react";
 import { ReactComponent as GreenTreeImage } from "../../../assets/green_tree.svg";
 import { ReactComponent as YellowTreeImage } from "../../../assets/yellow_tree.svg";
 import { ReactComponent as NoSensor } from "../../../assets/icon_kein_sensor.svg";
-import IconTree from "./LeafletTreeIcon";
+import IconTree from "./LeafletTreeIconForLegend";
 
 const MapLegend = () => {
   return (
     <>
       <div className="w-100 h-100">
-        <div className="row  d-flex pb-2 ">
+        <div className="row  d-flex  ">
           <div className="col-12">
           <div>
       <div>
@@ -19,7 +19,7 @@ const MapLegend = () => {
         </div>
         <div className="row  d-flex ">
         <div className="col-md-5 col-6 d-flex flex-column ">
-        <div className="fw-bold">Zustand Baukrone:</div>
+        <div className="fw-bold">Zustand allgemein:</div>
 
         
                     {/*             kein Trockenstress icon */}
@@ -41,7 +41,7 @@ const MapLegend = () => {
               <IconTree color={"yellow-left"}/>
             </div>
             <div className="d-flex align-items-center ps-1">
-            mäßiger T.
+            leichter T.
             </div>
           </div>
 

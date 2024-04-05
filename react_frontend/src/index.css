@@ -228,9 +228,23 @@ code {
 
 
 .blurred-icon {
-  filter: blur(2px);
+  filter: blur(4px);
   opacity: 1;
 }
 
-
 /*  END OF COLORS OF THE ICONS ON THE LEAFLET MAP AND IN THE LEGEND*/
+
+
+/*  DOUGHNUT CHART STYLING*/
+
+.gauge-chart {
+  max-height: 100%;
+  max-width: 100%;
+}
+@media (max-width: 768px) {
+.gaugeChartsTrees  {
+  max-width: 60%;
+}
+}
+
+/*  END OF DOUGHNUT CHART STYLING*/
