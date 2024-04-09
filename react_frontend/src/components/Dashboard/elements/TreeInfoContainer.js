@@ -79,24 +79,26 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
 
 </div>
 
-
+        <div className='order-5 col-12 d-flex tree-gauge-container-md-and-larger'
+        style={{
+      justifyContent: "space-between"}}
+        >
 
         <div
-          className="col-12 d-flex flex-column justify-content-between order-5 mb-3" 
+          className="col-sm-6 col-md-12 d-flex   order-5 tree-gauge-child-md-and-larger" 
           style={{
             backgroundColor: "white",
             borderRadius: "0px",
             borderStyle: 'solid',
             borderWidth:'1px',
-            borderColor: 'silver'
-
+            borderColor: 'silver',
           }}
         >
 
 
 
 
-               <div className="col-12 d-flex flex-column align-items-center justify-content-center pt-3 pt-md-5 pb-md-4  " >
+               <div className="col-12  d-flex flex-column align-items-center justify-content-center pt-3 pt-md-5 pb-md-4  pb-xl-0 pt-xl-1  " >
                {/* it's a "special chart" because the gauge's needle will be resting at 0 if undefined */}
             <Gauge  classAsProp="gaugeChartsTrees" currentValue={healthState} config={treeHealthConfig} selectedTree={selectedTree} id={"specialChart"}/> 
             <p className="text-center px-2">
@@ -123,18 +125,19 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
         
           
         <div
-          className="col-12 d-flex flex-column justify-content-between order-5  " 
+          className="col-sm-6 col-md-12 d-flex  order-5  tree-gauge-child-md-and-larger" 
           style={{
             backgroundColor: "white",
             borderRadius: "0px",
             borderStyle: 'solid',
             borderWidth:'1px',
-            borderColor: 'silver'
+            borderColor: 'silver',
+
 
           }}
         >
 
-               <div className="col-12 d-flex flex-column align-items-center justify-content-center pt-3 pt-md-5 pb-md-4 " >
+               <div className="col-12 d-flex flex-column align-items-center justify-content-center pt-3 pt-md-5 pb-md-4 pb-xl-0 pt-xl-1 mt-xl-2" >
                {/* it's a "special chart" because it will be grayed out if undefined */}
                
             <Gauge classAsProp="gaugeChartsTrees" currentValue={currentValue} config={soilMoistureGaugeChartConfig} selectedTree={selectedTree} id={"specialChart"} /> 
@@ -153,6 +156,8 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
                </div>
 
                
+        </div>
+
         </div>
         
 

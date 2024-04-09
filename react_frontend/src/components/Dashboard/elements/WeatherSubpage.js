@@ -65,7 +65,7 @@ const WeatherSubpage = () => {
 
 </div> */}
 
-              <div className="row">
+              <div className="row px-3">
       <div className="col-12  d-flex  p-2 ">
           <div
             style={{
@@ -74,7 +74,7 @@ const WeatherSubpage = () => {
               alignItems: 'center',
               flex: "1 1 auto",
               borderRadius: "0px",
-              backgroundColor: "white",
+              backgroundColor: "transparent",
               borderStyle: "solid",
               borderWidth: "1px",
               borderColor: "transparent",
@@ -84,14 +84,14 @@ const WeatherSubpage = () => {
             }}
           >
             <div className="d-flex flex-column  pt-2">
-            <div className=" text-center" >Letzte Messung:<br></br> <span className="d-flex justify-content-center fw-bold">05/04/2024 um 16:00</span></div>
+            <div className=" fs-3 text-center" >Letzte Messung:<br></br> <span className="d-flex justify-content-center fw-bold">05/04/2024 um 16:00</span></div>
 
             </div>
           </div>
         </div>
 
 
-        <div className="col-6  d-flex  p-2 ">
+        <div className="col-sm-6  d-flex  p-2 ">
           <div
             style={{
               display: 'flex',
@@ -99,7 +99,7 @@ const WeatherSubpage = () => {
               alignItems: 'center',
               flex: "1 1 auto",
               borderRadius: "0px",
-              backgroundColor: "white",
+              backgroundColor: "transparent",
               borderStyle: "solid",
               borderWidth: "1px",
               borderColor: "transparent",
@@ -109,7 +109,7 @@ const WeatherSubpage = () => {
             }}
           >
             <div className="d-flex flex-column align-items-center justify-content-center pt-2">
-            <div className="" >Temperatur:<br></br> <span className="d-flex justify-content-center fw-bold">20°C</span></div>
+            <div className="fs-3" >Temperatur:<br></br> <span className="d-flex justify-content-center fw-bold">20°C</span></div>
 
             </div>
           </div>
@@ -118,7 +118,7 @@ const WeatherSubpage = () => {
 
 
 
-        <div className="col-6 d-flex  p-2">
+        <div className="col-sm-6 d-flex  p-2">
           <div
             style={{
               display: 'flex',
@@ -126,7 +126,7 @@ const WeatherSubpage = () => {
               alignItems: 'center',
               flex: "1 1 auto",
               borderRadius: "0px",
-              backgroundColor: "white",
+              backgroundColor: "transparent",
               borderStyle: "solid",
               borderWidth: "1px",
               borderColor: "transparent",
@@ -136,7 +136,7 @@ const WeatherSubpage = () => {
             }}
           >
             <div className="d-flex flex-column align-items-center justify-content-center pt-2">
-            <div className=" " >Niederschlag: <br></br><span className="d-flex justify-content-center fw-bold">3 mm/h</span></div>
+            <div className="fs-3" >Niederschlag: <br></br><span className="d-flex justify-content-center fw-bold">3 mm/h</span></div>
 
             </div>
           </div>
@@ -157,21 +157,22 @@ const WeatherSubpage = () => {
       borderColor: "silver",
       display: "flex", // Ensure inner div fills available space
       flexDirection: "column", // Stack children vertically
-      justifyContent: "center",
+      //justifyContent: "center",
       alignItems: "center",
       width: "50%"
     }}
   >
-    <div className="d-flex flex-column align-items-center justify-content-center pt-2 " style={{ maxWidth: "80%" }}>
+    <div className="d-flex pt-2 align-items-center" style={{ flex: "1 1 auto", maxWidth: "100%", maxHeight: "100%"}}>
       <Gauge currentValue={currentValue} config={uvIndexConfig} id={"uvIndex"}/>
-      <p className="text-center">UV-Index: <strong>4</strong></p>
     </div>
+    <p className="text-center">UV-Index: <br></br> <strong>4</strong></p>
+
   </div>
 </div>
 
 
         <div className="col-6  col-lg-3 d-flex p-2">
-          <div className="justify-content-center align-items-center d-flex"
+          <div className=" "
             style={{
               flex: "1 1 auto",
               borderRadius: "0px",
@@ -179,15 +180,17 @@ const WeatherSubpage = () => {
               borderStyle: "solid",
               borderWidth: "1px",
               borderColor: "silver",
-              width: "50%"
+              width: "50%",
+              flexDirection: "column"
 
             }}
           >
-            <div className="d-flex flex-column align-items-center justify-content-center pt-2 ">
+            <div className=" pt-2 pb-3" style={{maxWidth: "", maxHeight: "", flex: ""}} >
             <WindDirectionChart />
-              <p className=' text-center '>Wind: <strong>2 km/h, NWN</strong></p>
 
             </div>
+            <p style={{flex: "1 1 auto"}} className=' text-center '>Wind: <br></br> <strong>2 km/h, NWN</strong></p>
+
           </div>
         </div>
 
@@ -203,28 +206,31 @@ const WeatherSubpage = () => {
             style={{
               display: 'flex',
               justifyContent: 'center',
-              alignItems: 'center',
+              //alignItems: 'center',
               flex: "1 1 auto",
               borderRadius: "0px",
               backgroundColor: "white",
               borderStyle: "solid",
               borderWidth: "1px",
               borderColor: "silver",
-              width: "50%"
+              width: "50%",
+              flexDirection: "column",
+            
 
             }}
           >
-            <div className="d-flex flex-column align-items-center pt-2" style={{flex: "1 1 auto"}} >
+            <div className="d-flex flex-column pt-2 px-2 align-items-center" style={{flex: "1 1 auto",}} >
 
               <HorizontalBarChart />
-              <div className=' text-center'>Luftfeuchte: <strong>80%</strong></div>
 
             </div>
+                          <p style={{flex: "1 1 auto"}} className=' text-center'>Luftfeuchte: <br></br> <strong>80%</strong></p>
+
           </div>
         </div>
 
         <div className="col-6  col-lg-3 d-flex p-2">
-  <div className="justify-content-center align-items-center"
+  <div className="d-flex justify-content-center align-items-center"
     style={{
       flex: "1 1 auto",
       borderRadius: "0px",
@@ -238,9 +244,11 @@ const WeatherSubpage = () => {
 
     }}
   >
-    <div className="d-flex flex-column align-items-center justify-content-center pt-2" style={{ maxWidth:"80%" }}>
+    <div className="d-flex pt-2 align-items-center" style={{ flex: "1 1 auto", maxWidth: "100%", maxHeight: "100%"}}>
       <Gauge currentValue={currentValue} config={barometerConfig} id={"Luftdruck"}/>
-      <p className="text-center">Luftdruck: <strong>1015 hPa</strong></p>
+    </div>
+    <div>
+    <p className="text-center">Luftdruck:<br></br> <strong>1015 hPa</strong></p>
     </div>
   </div>
 </div>

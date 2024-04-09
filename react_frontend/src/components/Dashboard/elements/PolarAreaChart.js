@@ -42,6 +42,7 @@ const WindDirectionChart = () => {
           }]
         },
         options: {
+          aspectRatio: 2,
           responsive: true,
           maintainAspectRatio: false,
                     scales: {
@@ -92,7 +93,7 @@ const WindDirectionChart = () => {
   }, []);
 
   return (
-    <div style={{maxHeight:"40%", maxWidth: "50%"}} className=''>
+    <div>
       <canvas ref={chartRef}
       ></canvas>
     </div>

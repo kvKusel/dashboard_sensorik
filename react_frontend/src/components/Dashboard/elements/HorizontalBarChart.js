@@ -40,6 +40,7 @@ const HorizontalBarChart = () => {
           }]
         },
         options: {
+          maxBarThickness:"30",
                   responsive: true,
         maintainAspectRatio: false,
           indexAxis: 'y',
@@ -92,7 +93,7 @@ const HorizontalBarChart = () => {
   }, []);
 
   return (
-    <div className='d-flex justify-content-center align-items-center p-2' style={{maxHeight: "45%", maxWidth: "90%"}}>
+    <div className='d-flex justify-content-center align-items-center p-2' style={{maxWidth: "80%"}}>
       <canvas  className=''  ref={chartRef}></canvas>
     </div>
   );

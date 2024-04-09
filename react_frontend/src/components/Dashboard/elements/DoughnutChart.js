@@ -33,7 +33,7 @@ const Gauge = ({ currentValue, config, selectedTree, id, classAsProp}) => {
       arcsLength={arcsLength}
       colors={colors}
       className={`gauge-chart ${classAsProp}`}
-      style={{width:"100%"}}
+      //style={{width:"100%"}}
       />
   );
 };

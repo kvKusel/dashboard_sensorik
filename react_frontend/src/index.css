@@ -241,10 +241,34 @@ code {
   max-height: 100%;
   max-width: 100%;
 }
-@media (max-width: 768px) {
+
+@media (max-width: 767px) {
 .gaugeChartsTrees  {
-  max-width: 60%;
+  max-width: 80%;
 }
 }
 
+@media (min-width: 768px) {
+.tree-gauge-container-md-and-larger {
+  flex-direction: column;
+  
+}
+}
+
+
+  @media (max-width: 767px) {
+    .tree-gauge-child-md-and-larger {
+      width: calc(50% - 5px)
+
+    }
+    }
+
+
+    @media (min-width: 768px) {
+      .tree-gauge-child-md-and-larger {
+        height: 48.5%
+  
+      }
+      }
 /*  END OF DOUGHNUT CHART STYLING*/
+
