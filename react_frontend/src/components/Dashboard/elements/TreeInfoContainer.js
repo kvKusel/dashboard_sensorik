@@ -5,7 +5,7 @@ import DropdownButton from './DropDown';
 import { treeHealthConfig, soilMoistureGaugeChartConfig } from '../../../chartsConfig/chartsConfig';
 import MapLegend from './MapLegend';
 
-const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoistureData, treeSenseGeneralHealthData }) => {
+const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoistureData, treeSenseGeneralHealthData, lastValuesSoilMoisture }) => {
 
 
   // set up for the needles of the  gauge charts 
@@ -54,7 +54,6 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
         <div
           className="col-12 d-flex flex-column mb-3 order-2" 
           style={{
-            // backgroundColor: "white",
             backgroundColor: "white",
 
             borderRadius: "0px",
@@ -100,7 +99,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
 
                <div className="col-12  d-flex flex-column align-items-center justify-content-center pt-3 pt-md-5 pb-md-4  pb-xl-0 pt-xl-1  " >
                {/* it's a "special chart" because the gauge's needle will be resting at 0 if undefined */}
-            <Gauge  classAsProp="gaugeChartsTrees" currentValue={healthState} config={treeHealthConfig} selectedTree={selectedTree} id={"specialChart"}/> 
+            <Gauge  classAsProp="gaugeChartsTrees" currentValue={healthState} config={treeHealthConfig} selectedTree={selectedTree} id={"specialChartGeneral"}/> 
             <p className="text-center px-2">
   Allgemeiner Baumzustand:<br />
   <strong>
@@ -140,7 +139,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
                <div className="col-12 d-flex flex-column align-items-center justify-content-center pt-3 pt-md-5 pb-md-4 pb-xl-0 pt-xl-1 mt-xl-2" >
                {/* it's a "special chart" because it will be grayed out if undefined */}
                
-            <Gauge classAsProp="gaugeChartsTrees" currentValue={currentValue} config={soilMoistureGaugeChartConfig} selectedTree={selectedTree} id={"specialChart"} /> 
+            <Gauge classAsProp="gaugeChartsTrees" currentValue={currentValue} config={soilMoistureGaugeChartConfig} selectedTree={selectedTree} id={"specialChartSoilMoisture"} /> 
             <p className="text-center px-2">
   Bodenfeuchte:<br />
   <strong>
@@ -176,7 +175,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
         >
                     {/* {soilMoistureData && ( */}
 
-          <LeafletMap selectedTree={selectedTree} currentValueSoilMoisture={soilMoistureData? soilMoistureData[soilMoistureData.length - 1].value : soilMoistureData} treeSenseHealth={healthStateRaw}/>
+          <LeafletMap selectedTree={selectedTree} currentValueSoilMoisture={lastValuesSoilMoisture} treeSenseHealth={healthStateRaw}/>
                     
         </div>
 
@@ -215,7 +214,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
             borderColor: 'silver'
           }}
         >
-          <LeafletMap selectedTree={selectedTree} currentValueSoilMoisture={soilMoistureData? soilMoistureData[soilMoistureData.length - 1].value : soilMoistureData} treeSenseHealth={healthStateRaw}/>
+          <LeafletMap selectedTree={selectedTree} currentValueSoilMoisture={lastValuesSoilMoisture} treeSenseHealth={healthStateRaw}/>
         </div>
           
         <div

@@ -8,7 +8,7 @@ import { barometerConfig, uvIndexConfig } from "../../../chartsConfig/chartsConf
 import WindDirectionChart from "./PolarAreaChart";
 import weatherStation from "../../../assets/weather_station.jpg"
 
-const WeatherSubpage = () => {
+const WeatherSubpage = ({lastMeasurementTime, temperature, precipitation}) => {
   // set up for the gauge, delete later
   const currentValue = 20;
 
@@ -84,7 +84,7 @@ const WeatherSubpage = () => {
             }}
           >
             <div className="d-flex flex-column  pt-2">
-            <div className=" fs-3 text-center" >Letzte Messung:<br></br> <span className="d-flex justify-content-center fw-bold">05/04/2024 um 16:00</span></div>
+            <div className=" fs-3 text-center" >Letzte Messung:<br></br> <span className="d-flex justify-content-center fw-bold">{lastMeasurementTime}</span></div>
 
             </div>
           </div>
@@ -109,7 +109,7 @@ const WeatherSubpage = () => {
             }}
           >
             <div className="d-flex flex-column align-items-center justify-content-center pt-2">
-            <div className="fs-3" >Temperatur:<br></br> <span className="d-flex justify-content-center fw-bold">20°C</span></div>
+            <div className="fs-3" >Temperatur:<br></br> <span className="d-flex justify-content-center fw-bold">{temperature}°C</span></div>
 
             </div>
           </div>
@@ -136,7 +136,7 @@ const WeatherSubpage = () => {
             }}
           >
             <div className="d-flex flex-column align-items-center justify-content-center pt-2">
-            <div className="fs-3" >Niederschlag: <br></br><span className="d-flex justify-content-center fw-bold">3 mm/h</span></div>
+            <div className="fs-3" >Niederschlag: <br></br><span className="d-flex justify-content-center fw-bold">{precipitation} mm/h</span></div>
 
             </div>
           </div>

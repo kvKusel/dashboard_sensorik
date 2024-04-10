@@ -11,7 +11,7 @@ const MyButton = ({ to, buttonText, action }) => {
   
 
   const buttonVariants = {
-    hover: { backgroundColor: 'black', color: 'white' },
+    hover: { backgroundColor: 'white', color: 'black' },
   };
 
   return (
@@ -22,9 +22,10 @@ const MyButton = ({ to, buttonText, action }) => {
           className="btn btn-light btn-lg "
           style={{
             width: "8em",
-            backgroundColor: 'white',
-            color: 'black',
+            backgroundColor: 'transparent',
+            color: 'white',
             borderRadius: '0',
+            borderWidth:"0.1rem"
           }}
           variants={buttonVariants}
           whileHover="hover"

@@ -2,13 +2,14 @@ import requests
 from django.http import JsonResponse
 from django.views import View
 from influxdb_client import InfluxDBClient
-from .queries import query_soil_moisture_sensor1, query_soil_moisture_sensor2, query_soil_moisture_jonathan, query_weather_station_precipitation, query_weather_station_temperature
+from .queries import query_soil_moisture_pleiner_mostbirne, query_soil_moisture_roter_boskoop, query_soil_moisture_schoener_von_nordhausen, query_soil_moisture_cox_orangenrenette, query_soil_moisture_jonathan, query_weather_station_precipitation, query_weather_station_temperature
 import os
 import json
 from collections import defaultdict
 from datetime import datetime
 import re
 from django.http import HttpResponse
+import pandas as pd
 
 
 
@@ -30,12 +31,78 @@ class SoilDataView(View):
             # Determine the type of query based on the request
             query_type = request.GET.get("query_type")
 
-            if query_type == "sensor1":
-                df = query_soil_moisture_sensor1(client, org=influxdb_org)
-            elif query_type == "sensor2":
-                df = query_soil_moisture_sensor2(client, org=influxdb_org)
+            if query_type == "pleiner_mostbirne":
+                df = query_soil_moisture_pleiner_mostbirne(client, org=influxdb_org)
+                if df is not None:
+                    # Convert the 'value' column to float format from string
+                    df['value'] = df['value'].astype(float)
+                    # Convert the 'time' column to datetime format
+                    df['time'] = pd.to_datetime(df['time'])
+
+                    # Round '_time' to nearest hour
+                    df['time'] = df['time'].dt.round('H')
+
+                    # Group by '_time' and calculate the mean of '_value' for each hour
+                    df = df.groupby('time').mean().reset_index()
+                    df['value'] = df['value'].astype(str)      
+                    
+            elif query_type == "roter_boskoop":
+                df = query_soil_moisture_roter_boskoop(client, org=influxdb_org)
+                if df is not None:
+                    # Convert the 'value' column to float format from string
+                    df['value'] = df['value'].astype(float)
+                    # Convert the 'time' column to datetime format
+                    df['time'] = pd.to_datetime(df['time'])
+
+                    # Round '_time' to nearest hour
+                    df['time'] = df['time'].dt.round('H')
+
+                    # Group by '_time' and calculate the mean of '_value' for each hour
+                    df = df.groupby('time').mean().reset_index()
+                    df['value'] = df['value'].astype(str)      
+                    
+            elif query_type == "schoener_von_nordhausen":
+                df = query_soil_moisture_schoener_von_nordhausen(client, org=influxdb_org)
+                if df is not None:
+                    # Convert the 'value' column to float format from string
+                    df['value'] = df['value'].astype(float)
+                    # Convert the 'time' column to datetime format
+                    df['time'] = pd.to_datetime(df['time'])
+
+                    # Round '_time' to nearest hour
+                    df['time'] = df['time'].dt.round('H')
+
+                    # Group by '_time' and calculate the mean of '_value' for each hour
+                    df = df.groupby('time').mean().reset_index()
+                    df['value'] = df['value'].astype(str)      
+            elif query_type == "cox_orangenrenette":
+                df = query_soil_moisture_cox_orangenrenette(client, org=influxdb_org)
+                if df is not None:
+                    # Convert the 'value' column to float format from string
+                    df['value'] = df['value'].astype(float)
+                    # Convert the 'time' column to datetime format
+                    df['time'] = pd.to_datetime(df['time'])
+
+                    # Round '_time' to nearest hour
+                    df['time'] = df['time'].dt.round('H')
+
+                    # Group by '_time' and calculate the mean of '_value' for each hour
+                    df = df.groupby('time').mean().reset_index()
+                    df['value'] = df['value'].astype(str)      
             elif query_type == "jonathan":
                 df = query_soil_moisture_jonathan(client, org=influxdb_org)
+                if df is not None:
+                    # Convert the 'value' column to float format from string
+                    df['value'] = df['value'].astype(float)
+                    # Convert the 'time' column to datetime format
+                    df['time'] = pd.to_datetime(df['time'])
+
+                    # Round '_time' to nearest hour
+                    df['time'] = df['time'].dt.round('H')
+
+                    # Group by '_time' and calculate the mean of '_value' for each hour
+                    df = df.groupby('time').mean().reset_index()
+                    df['value'] = df['value'].astype(str)      
             else:
                 return JsonResponse({"error": "Invalid query type"}, status=400)
 
@@ -75,7 +142,6 @@ class WeatherStationDataView(View):
             if query_type == "precipitation":
                 df = query_weather_station_precipitation(client, org=influxdb_org)
                 df.drop(df.tail(1).index, inplace=True)
-                print(df)
             elif query_type == "temperature":
                 df = query_weather_station_temperature(client, org=influxdb_org)
                 df.drop(df.tail(1).index, inplace=True)
@@ -86,7 +152,6 @@ class WeatherStationDataView(View):
             # Convert DataFrame to JSON
             if df is not None:
                 json_data = df.to_json(orient="records", date_format="iso")
-                print(json_data)
                 return JsonResponse(json_data, safe=False)                             
             else:
                 return JsonResponse({"error": "Query result is empty"}, status=404)
@@ -138,9 +203,7 @@ class ElectricalResistanceDataView(View):
                     data = [{'time': sublist[0], 'value': float(sublist[3])} for sublist in extracted_values]
                     data = json.dumps(data)
                     response = HttpResponse(data, content_type='application/json')
-                    print(response)
-                    print(data)
-                    
+
                     
 
 
@@ -192,7 +255,6 @@ class ElectricalResistanceDataView(View):
             if response.status_code == 200:
                 # Extract the access token from the response JSON
                 access_token = response.json().get('accessToken')
-                print('success')
                 return access_token
             else:
                 # Handle authentication failure or other error
@@ -234,7 +296,6 @@ class TreeHealthDataView(View):
                 # Check if the request was successful (status code 200)
                 if response.status_code == 200:
                     response_json = response.json()
-                    print(response_json)
 
                                           
                                                                 
@@ -277,7 +338,6 @@ class TreeHealthDataView(View):
             if response.status_code == 200:
                 # Extract the access token from the response JSON
                 access_token = response.json().get('accessToken')
-                print('success')
                 return access_token
             else:
                 # Handle authentication failure or other error

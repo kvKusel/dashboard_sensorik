@@ -10,13 +10,15 @@ const Gauge = ({ currentValue, config, selectedTree, id, classAsProp}) => {
   console.log(selectedTree)
 
   // Check if selectedTree is undefined or selectedTree.id is 6
-  if (id === "specialChart" && (!selectedTree || selectedTree.id === 6 || selectedTree.id === 7 || selectedTree.id === 3 || selectedTree.id === 5 || selectedTree === null)) {
+  if (id === "specialChartGeneral" && (!selectedTree ||  selectedTree.id === 3 ||  selectedTree.id === 5  || selectedTree.id === 6 || selectedTree.id === 7 || selectedTree === null)) {
     // Set needle to a hard-coded value if selectedTree is undefined or selectedTree.id is 6 (overview project area) or 7 (overview Streuobstwiese)
     colors = config.colors;
     currentValue = 0;
   }
-  else {
-    
+  else if (id === "specialChartSoilMoisture" && (!selectedTree   || selectedTree.id === 6 || selectedTree.id === 7 || selectedTree === null)) {
+    // Set needle to a hard-coded value if selectedTree is undefined or selectedTree.id is 6 (overview project area) or 7 (overview Streuobstwiese)
+    colors = config.colors;
+    currentValue = 0;
   }
 
   return (

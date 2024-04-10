@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import MyButton from "./Button";
+import DownArrow from "./DownArrow";
+import ProjectDescription from "./ProjectDescription";
 
 const MyJumbotron = () => {
   const [isVisible, setIsVisible] = useState(true);
@@ -13,93 +15,51 @@ const MyJumbotron = () => {
   });
 
   const fadeIn = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 1, staggerChildren: 0.5 } },
+    hidden: { opacity: 0, },
+    visible: { opacity: 1, transition: { duration: 2, staggerChildren: 1 , delay: 0.3,} },
   };
 
-  const fadeOut = {
-    hidden: { opacity: 1 },
-    visible: { opacity: 0, transition: { duration: 1 } },
+  const fadeInDelayButton = {
+    hidden: { opacity: 0, },
+    visible: { opacity: 1, transition: { duration: 2, staggerChildren: 1 , delay: 0.9,} },
   };
 
-  const handleFadeOut = () => {
-    setIsVisible(false); // Update state to trigger fade-out animation
-    console.log(isVisible);
+  const fadeInDelayArrow = {
+    hidden: { opacity: 0, },
+    visible: { opacity: 1, transition: { duration: 2, staggerChildren: 1 , delay: 2,} },
   };
-
-
-  const handleButtonClick = () => {
-    console.log("sdads")
-
-    const h1 = document.querySelector('h1');
-    if (h1) {
-      h1.remove();
-      console.log("dadasd")
-    }
-  };
-
-  // const handleButtonClick = () => {
-  //   const buttons = document.querySelectorAll('.fade-button');
-  //   buttons.forEach((button, index) => {
-  //     setTimeout(() => {
-  //       button.classList.add('fade-out');
-  //       if (index === buttons.length - 1) {
-  //         // Remove buttons from the DOM after the last button's animation
-  //         setTimeout(() => {
-  //           buttons.forEach((btn) => {
-  //             btn.remove();
-  //           });
-  //         }, 500 * buttons.length); // Wait for the total animation duration
-  //       }
-  //     }, index * 500); // Delay each button by 0.5 seconds (500 milliseconds)
-  //   });
-  // };
-  
 
 
   return (
     <AnimatePresence>
 
     <motion.div
-      className="d-flex flex-column justify-content-center align-items-start text-light p-5"
+      className="d-flex flex-column justify-content-center align-items-center text-light p-5"
       style={{
         minHeight: "100vh",
         ...backgroundStyle, // Apply dynamic background style
       }}
-      initial="hidden"
-      animate="visible"
-      variants={fadeIn}
-      exit={fadeOut}
+      // initial="hidden"
+      // animate="visible"
+  
     >
-      <motion.hr variants={fadeIn} className="border-dark" />
-      <motion.h1 variants={fadeIn} style={{ fontWeight: "normal" }}>
-        <div className="row"> Sensorikfläche an der Burg Lichtenberg</div>
+      {/* <motion.hr variants={fadeIn} className="border-dark" /> */}
+      <motion.h1 variants={fadeIn} style={{ fontWeight: "500" }} initial="hidden" animate="visible">
+        <div className="row fs-1 text-center" > SENSOREN LAND L(I)EBEN</div>
       </motion.h1>
 
 
-            <div className="d-flex row ">
-                             {/* <motion.div className="col-sm-6 p-1" variants={fadeIn}>
+      <motion.div variants={fadeInDelayButton} initial="hidden" animate="visible" className="d-flex row pt-2">
+          <MyButton to="/dashboard" buttonText="Dashboard" className="fade-button" />
+        </motion.div>
+        <motion.div variants={fadeInDelayArrow} initial="hidden" animate="visible" className="" style={{flex: "0.1 0.1 auto"}}>
 
-              <button className="fade-button" onClick={handleButtonClick}>Das Projekt</button>
-              </motion.div>
-              <motion.div className="col-sm-6 p-1" variants={fadeIn}>
-
-              <button className="fade-button" to="/dashboard">Dashboard</button>
-              </motion.div> */}
-              <div className="col-sm-6 p-1">
-                <MyButton
-                  buttonText="Das Projekt"
-                  className="fade-button"
-                  action={handleButtonClick}
-                />
-              </div>
-              <div className="col-sm-6 p-1">
-                <MyButton to="/dashboard" buttonText="Dashboard" className="fade-button"
- />
-              </div>
-            </div>
+        <DownArrow />
+        </motion.div>
 
     </motion.div>
+    <ProjectDescription />
+
     </AnimatePresence>
 
   );
