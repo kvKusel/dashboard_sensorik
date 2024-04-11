@@ -32,7 +32,7 @@ const MyJumbotron = () => {
 
   return (
     <AnimatePresence>
-
+<div>
     <motion.div
       className="d-flex flex-column justify-content-center align-items-center text-light p-5"
       style={{
@@ -59,7 +59,7 @@ const MyJumbotron = () => {
 
     </motion.div>
     <ProjectDescription />
-
+    </div>
     </AnimatePresence>
 
   );
