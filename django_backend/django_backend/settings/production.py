@@ -3,7 +3,7 @@ from .base import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = ["django-env.eba-5rnwgdid.eu-north-1.elasticbeanstalk.com"]
+ALLOWED_HOSTS = ["sensorikbackend.eba-acgbgkr4.eu-north-1.elasticbeanstalk.com"]
 
 # Allow for requests from the react server
-CORS_ALLOWED_ORIGINS = []
+CORS_ALLOWED_ORIGINS = ["https://master.d289olbq1w6lrz.amplifyapp.com/"]

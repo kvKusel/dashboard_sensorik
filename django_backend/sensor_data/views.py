@@ -10,7 +10,13 @@ from datetime import datetime
 import re
 from django.http import HttpResponse
 import pandas as pd
+from django.shortcuts import render
 
+
+
+# render the index page
+def index(request):
+    return render(request, 'index.html')
 
 
 #right now the data is not saved into the database (models.py), fix it in the future (using worker?) 

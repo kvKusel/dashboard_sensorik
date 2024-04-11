@@ -141,8 +141,12 @@ STATIC_URL = 'static/'
 
 # Where Django will look for static files
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR.parent, 'react_frontend', 'build', 'static')
+    os.path.join(BASE_DIR.parent, 'sensor_data', 'static')
 ]
+
+# Define the directory where static files will be collected
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 
 
 # Where Django will look for React's index.html
