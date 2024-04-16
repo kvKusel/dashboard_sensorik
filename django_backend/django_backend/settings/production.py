@@ -10,7 +10,9 @@ ALLOWED_HOSTS = [
 ]
 
 # Allow for requests from the react server
-CORS_ALLOWED_ORIGINS = ["https://master.d289olbq1w6lrz.amplifyapp.com/"]
+CORS_ALLOWED_ORIGINS = ["https://master.d289olbq1w6lrz.amplifyapp.com/",
+                        'https://teststeststests.shop',
+                        'https://www.teststeststests.shop']
 
 CORS_ORIGIN_WHITELIST = [
     'https://www.teststeststests.shop',
