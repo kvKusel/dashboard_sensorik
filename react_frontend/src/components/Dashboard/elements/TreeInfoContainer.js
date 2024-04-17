@@ -100,7 +100,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
                <div className="col-12  d-flex flex-column align-items-center justify-content-center pt-3 pt-md-5 pb-md-4  pb-xl-0 pt-xl-1  " >
                {/* it's a "special chart" because the gauge's needle will be resting at 0 if undefined */}
             <Gauge  classAsProp="gaugeChartsTrees" currentValue={healthState} config={treeHealthConfig} selectedTree={selectedTree} id={"specialChartGeneral"}/> 
-            <p className="text-center px-2">
+            <p className="d-flex flex-column align-items-center justify-content-center text-center px-2" style={{flex: "1 1 auto"}}>
   Allgemeiner Baumzustand:<br />
   <strong>
     {!selectedTree || selectedTree.id === 6 || selectedTree.id === 7 ? '-' : (
@@ -140,7 +140,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
                {/* it's a "special chart" because it will be grayed out if undefined */}
                
             <Gauge classAsProp="gaugeChartsTrees" currentValue={currentValue} config={soilMoistureGaugeChartConfig} selectedTree={selectedTree} id={"specialChartSoilMoisture"} /> 
-            <p className="text-center px-2">
+            <p className="d-flex flex-column align-items-center justify-content-center text-center px-2" style={{flex: "1 1 auto"}}>
   Bodenfeuchte:<br />
   <strong>
     {!selectedTree || selectedTree.id === 6 || selectedTree.id === 7 ? '-' : (

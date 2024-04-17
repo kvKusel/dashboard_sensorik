@@ -1,8 +1,12 @@
 import axios from "axios";
 
+const API_URL = process.env.REACT_APP_API_URL; // This will switch based on the environment - dev env will point to local Django, prod env to the proper domain
+
+console.log("url:", API_URL)
+
 export const fetchSoilMoistureData = async (queryType) => {
     try {
-        const response = await axios.get(`https://teststeststests.shop/soil-data/?query_type=${queryType}`);
+        const response = await axios.get(`${API_URL}/soil-data/?query_type=${queryType}`);
         const parsedData = JSON.parse(response.data);
         return parsedData;
     } catch (error) {
@@ -13,7 +17,7 @@ export const fetchSoilMoistureData = async (queryType) => {
 
 export const fetchWeatherStationData = async (queryType) => {
     try {
-        const response = await axios.get(`https://teststeststests.shop/weather-station-data/?query_type=${queryType}`);
+        const response = await axios.get(`${API_URL}/weather-station-data/?query_type=${queryType}`);
         const parsedData = JSON.parse(response.data);
         console.log(parsedData)
         return parsedData;
@@ -25,7 +29,7 @@ export const fetchWeatherStationData = async (queryType) => {
 
 export const fetchResistanceData = async () => {
     try {
-        const response = await axios.get('https://teststeststests.shop/electrical-resistance-data/');
+        const response = await axios.get(`${API_URL}/electrical-resistance-data/`);
         const parsedData = JSON.parse(response.data);
         return parsedData;
     } catch (error) {
@@ -36,7 +40,7 @@ export const fetchResistanceData = async () => {
 
 export const fetchTreeHealthData = async () => {
     try {
-        const response = await axios.get('https://teststeststests.shop/tree-health-data/');
+        const response = await axios.get(`${API_URL}/tree-health-data/`);
         // const parsedData = JSON.parse(response.data);
         return response.data;
     } catch (error) {
