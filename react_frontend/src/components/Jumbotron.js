@@ -4,13 +4,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import MyButton from "./Button";
 import DownArrow from "./DownArrow";
 import ProjectDescription from "./ProjectDescription";
+import headerImage from '../assets/header_image.webp';
+
 
 const MyJumbotron = () => {
   const [isVisible, setIsVisible] = useState(true);
 
   const [backgroundStyle, setBackgroundStyle] = useState({
-    background:
-      'linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url("/header-overlay.jpg") no-repeat center center fixed',
+    background: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${headerImage}) no-repeat center center fixed`,
     backgroundSize: "cover",
   });
 
@@ -58,10 +59,12 @@ const MyJumbotron = () => {
         </motion.div>
 
     </motion.div>
+    <div id='project-description'>
     <ProjectDescription />
     </div>
+    </div>
     </AnimatePresence>
-
+    // </div>
   );
 };
 

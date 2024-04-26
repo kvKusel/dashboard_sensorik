@@ -4,8 +4,9 @@ import Gauge from "./DoughnutChart";
 import DropdownButton from './DropDown';
 import { treeHealthConfig, soilMoistureGaugeChartConfig } from '../../../chartsConfig/chartsConfig';
 import MapLegend from './MapLegend';
+import JoyrideOnboarding from "./JoyrideOnboarding";
 
-const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoistureData, treeSenseGeneralHealthData, lastValuesSoilMoisture }) => {
+const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoistureData, treeSenseGeneralHealthData, lastValuesSoilMoisture, run, setRun, steps }) => {
 
 
   // set up for the needles of the  gauge charts 
@@ -33,7 +34,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
   return (
     <div className="row" style={{ flex: "1 1 auto" }}>
       
-      <div className="col-md-4 p-2 d-flex flex-column " >
+      <div className="col-md-3 p-2 d-flex flex-column " >
         <div>
         <div
           className="col-12 d-flex flex-column mb-3 order-1" 
@@ -66,7 +67,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
           }}
         >
       
-            <div className=" text-center p-2 d-flex align-items-center lead fw-bold" style={{ display: "flex", alignItems: "center", justifyContent: 'center'}}>
+            <div className=" text-center p-2 d-flex align-items-center lead fw-bolder" style={{ display: "flex", alignItems: "center", justifyContent: 'center'}}>
               {selectedTree && selectedTree.id !== 6 ? selectedTree.name : "Projektareal"}
               
             </div>
@@ -97,7 +98,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
 
 
 
-               <div className="col-12  d-flex flex-column align-items-center justify-content-center pt-3 pt-md-5 pb-md-4  pb-xl-0 pt-xl-1  " >
+               <div className="col-12  d-flex flex-column align-items-center justify-content-center pt-3 pt-md-5 pb-md-4  pb-md-4 pt-xl-5 pt-xl-3  " >
                {/* it's a "special chart" because the gauge's needle will be resting at 0 if undefined */}
             <Gauge  classAsProp="gaugeChartsTrees" currentValue={healthState} config={treeHealthConfig} selectedTree={selectedTree} id={"specialChartGeneral"}/> 
             <p className="d-flex flex-column align-items-center justify-content-center text-center px-2" style={{flex: "1 1 auto"}}>
@@ -136,7 +137,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
           }}
         >
 
-               <div className="col-12 d-flex flex-column align-items-center justify-content-center pt-3 pt-md-5 pb-md-4 pb-xl-0 pt-xl-1 mt-xl-2" >
+               <div className="col-12 d-flex flex-column align-items-center justify-content-center pt-3 pt-md-5 pb-md-4 pt-xl-5 pt-xl-3" >
                {/* it's a "special chart" because it will be grayed out if undefined */}
                
             <Gauge classAsProp="gaugeChartsTrees" currentValue={currentValue} config={soilMoistureGaugeChartConfig} selectedTree={selectedTree} id={"specialChartSoilMoisture"} /> 
@@ -161,7 +162,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
         
 
         <div
-          className="col-12 p-2 mb-3 order-3 mobile-only"
+          className="col-12 p-2 mb-3 order-3 mobile-only second-step"
           style={{
             flex: "1 1 auto",
 
@@ -200,10 +201,10 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
         
       </div>
           
-      <div className="col-md-8 p-2 medium-and-larger-screens-only " >
+      <div className="col-md-9 p-2 medium-and-larger-screens-only " >
         
         <div
-          className="col-12 p-2 "
+          className="col-12 p-2 third-step"
           style={{
             flex: "1 1 80%",
 
@@ -234,8 +235,10 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
 
       </div>
 
-      
+      <JoyrideOnboarding run={run} setRun={setRun} steps={steps} />
+
     </div>
+    
   );
 };
 

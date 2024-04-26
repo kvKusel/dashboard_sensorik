@@ -35,7 +35,7 @@
   src: url("./assets/fonts/Poppins-BoldItalic.ttf") format("truetype");
 }
 
-/* The rest of your existing styles below */
+/* The rest of the existing styles below */
 body {
   margin: 0;
   font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI",
@@ -49,6 +49,20 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.parallax {
+    /* Set up the background image with cover size and fixed attachment */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh; /* Adjust the height as needed */
+    width: 100%; /* Ensure it covers the full width */
+    object-fit: cover;
+    position: absolute;
+      top: 0;
+  left: 0;
 }
 
 /* END OF GENERAL STYLING  */

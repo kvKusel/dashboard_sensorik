@@ -1,52 +1,64 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-const WindDirectionChart = () => {
+const WindDirectionChart = ({windDirection}) => {
   const chartRef = useRef(null);
   let windDirectionChart = null;
 
-  // Placeholder data for wind direction (one value)
-  const directionPlaceholder = [0, 0, 0, 0, 100, 0, 0, 0]; // 100 represents the direction (S, South)
 
-  useEffect(() => {
-    if (chartRef.current) {
+  const calculateDirectionData = (windDirection) => {
+    const index = Math.floor(windDirection / 45) % 8;
+    return Array(8).fill(0).map((_, idx) => idx === index ? 100 : 0);
+};
+
+
+useEffect(() => {
+  if (chartRef.current) {
       const ctx = chartRef.current.getContext('2d');
+      const directionData = calculateDirectionData(windDirection);
+
+      if (windDirectionChart) {
+          windDirectionChart.destroy();
+      }
 
       windDirectionChart = new Chart(ctx, {
-        type: 'polarArea',
-        data: {
-          labels: ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'],
-          datasets: [{
-            label: 'Wind Direction',
-            data: directionPlaceholder,
+          type: 'polarArea',
+          data: {
+              labels: ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'],
+              datasets: [{
+                  label: 'Wind Direction',
+                  data: directionData,
             backgroundColor: [
-              'rgba(255, 99, 132, 0.5)',
-              'rgba(54, 162, 235, 0.5)',
-              'rgba(255, 206, 86, 0.5)',
-              'rgba(75, 192, 192, 0.5)',
-              '#6499E9',              'rgba(255, 159, 64, 0.5)',
-              'rgba(255, 99, 132, 0.5)',
-              'rgba(54, 162, 235, 0.5)'
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(75, 192, 192, 0.2)'
             ],
             borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              '#6499E9', 
-              'rgba(255, 159, 64, 1)',
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)'
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(75, 192, 192, 0.2)'
             ],
             borderWidth: 1
           }]
         },
         options: {
+          circular: false,
           aspectRatio: 2,
           responsive: true,
           maintainAspectRatio: false,
                     scales: {
             r: {
+              
               angleLines: {
                 display: true,
                 color: 'black'

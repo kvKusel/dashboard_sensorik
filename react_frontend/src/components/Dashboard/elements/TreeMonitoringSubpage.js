@@ -15,8 +15,22 @@ import {
   fetchTreeHealthData,
 } from "../../../chartsConfig/apiCalls";
 import WeatherSubpage from "./WeatherSubpage";
+import { useWeatherStationPrecipitation } from "../../../hooks/weatherStation/WeatherStationPrecipitation ";
+import { useWeatherStationTemperature } from "../../../hooks/weatherStation/WeatherStationTemperatureData";
+import { useWeatherStationUVIndex } from "../../../hooks/weatherStation/WeatherStationUVIndex";
+import { useFetchSoilMoistureDataCoxOrangenrenette } from "../../../hooks/soilMoisture/CoxOrangenrenette";
+import { useFetchSoilMoistureDataPleinerMostbirne } from "../../../hooks/soilMoisture/PleinerMostbirne";
+import { useFetchSoilMoistureDataRoterBoskoop } from "../../../hooks/soilMoisture/RoterBoskoop";
+import { useFetchSoilMoistureDataSchoenerVonNordhausen } from "../../../hooks/soilMoisture/SchoenerVonNordhausen";
+import { useFetchSoilMoistureDataJonathan } from "../../../hooks/soilMoisture/Jonathan";
+import { useFetchResistanceDataCoxOrangenrenette } from "../../../hooks/treeSense/CoxOrangenrenetteTS";
+import { useWeatherStationHumidity } from "../../../hooks/weatherStation/WeatherStationHumidity";
+import { useWeatherStationAirPressure } from "../../../hooks/weatherStation/WeatherStationAirPressure";
+import { useWeatherStationWindSpeed } from "../../../hooks/weatherStation/WeatherStationWindSpeed";
+import { useWeatherStationWindDirection } from "../../../hooks/weatherStation/WeatherStationWindDirection";
 
-const TreeMonitoringSubpage = () => {
+
+const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
   // prepare the trees and props for the child components
   const trees = [
     {
@@ -53,52 +67,73 @@ const TreeMonitoringSubpage = () => {
     { id: 7, name: "Obstwiese", latitude: 49.5566, longitude: 7.3583 },
   ];
 
+  /////////////////////////                     update the state, by using hooks (from hooks subfolder) that make api calls:     ///////////////////////////////////////
+
+  //precipitation data from the weather station
+  const {
+    weatherStationPrecipitationData,
+    lastTimestampFormatted,
+    lastPrecipitationValue,
+  } = useWeatherStationPrecipitation();
+
+  //temperature data from the weather station
+  const { weatherStationTemperatureData, lastValueWeatherStationTemperature } =
+    useWeatherStationTemperature();
+
+  //UV-Index data from the weather station
+  const uVIndex = useWeatherStationUVIndex();
+
+    //humidity data from the weather station
+    const humidity = useWeatherStationHumidity();
+
+    //air pressure data from the weather station
+    const airPressure = useWeatherStationAirPressure();
+
+    //wind speed data from the weather station
+    const windSpeed = useWeatherStationWindSpeed();
+
+    //wind direction data from the weather station
+    const windDirection = useWeatherStationWindDirection();
+
+  // soil moisture - "Cox Orangenrenette"
+  const {
+    soilMoistureDataCoxOrangenrenette,
+    lastValueSoilMoistureCoxOrangenrenette,
+  } = useFetchSoilMoistureDataCoxOrangenrenette();
+
+  // soil moisture - "Pleiner Mostbirne"
+  const {
+    soilMoistureDataPleinerMostbirne,
+    lastValueSoilMoisturePleinerMostbirne,
+  } = useFetchSoilMoistureDataPleinerMostbirne();
+
+  // soil moisture - "Roter Boskoop"
+  const { soilMoistureDataRoterBoskoop, lastValueSoilMoistureRoterBoskoop } =
+    useFetchSoilMoistureDataRoterBoskoop();
+
+  // soil moisture - "SchoenerVonNordhausen"
+  const {
+    soilMoistureDataSchoenerVonNordhausen,
+    lastValueSoilMoistureSchoenerVonNordhausen,
+  } = useFetchSoilMoistureDataSchoenerVonNordhausen();
+
+  // soil moisture - "Jonathan"
+  const { soilMoistureDataJonathan, lastValueSoilMoistureJonathan } =
+    useFetchSoilMoistureDataJonathan();
+
+  // Resistance Data - "Cox Orangenrenette"
+  const resistanceDataCoxOrangenrenette =
+    useFetchResistanceDataCoxOrangenrenette();
+
+  /////////////////////////                 End of updating the state by using hooks (from hooks subfolder) that make api calls     ///////////////////////////////////////
+
   const [selectedTree, setSelectedTree] = useState(null);
 
   const handleTreeSelection = (tree) => {
     setSelectedTree(tree);
   };
 
-  const [
-    soilMoistureDataPleinerMostbirne,
-    setSoilMoistureDataPleinerMostbirne,
-  ] = useState([]);
-  const [soilMoistureDataRoterBoskoop, setSoilMoistureDataRoterBoskoop] =
-    useState([]);
-  const [
-    soilMoistureDataSchoenerVonNordhausen,
-    setSoilMoistureDataSchoenerVonNordhausen,
-  ] = useState([]);
-  const [soilMoistureDataJonathan, setSoilMoistureDataJonathan] = useState([]);
-  const [
-    soilMoistureDataCoxOrangenrenette,
-    setSoilMoistureDataCoxOrangenrenette,
-  ] = useState([]);
-
   const [lastValuesSoilMoisture, setLastValuesSoilMoisture] = useState([]);
-
-  const [weatherStationPrecipitationData, setWeatherStationPrecipitationData] =
-    useState([]);
-
-  const [weatherStationTemperatureData, setWeatherStationTemperatureData] =
-    useState([]);
-
-  const [
-    lastTimestampWeatherStationFormatted,
-    setLastTimestampWeatherStationFormatted,
-  ] = useState("");
-
-  const [
-    lastValueWeatherStationPrecipitation,
-    setLastValueWeatherStationPrecipitation,
-  ] = useState("");
-
-  const [
-    lastValueWeatherStationTemperature,
-    setLastValueWeatherStationTemperature,
-  ] = useState("");
-
-  const [resistanceDataSensor1, setResistanceDataSensor1] = useState([]);
 
   // General tree health
 
@@ -111,139 +146,57 @@ const TreeMonitoringSubpage = () => {
 
   // Execute the API calls and fetch the needed data
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Soil moisture data
-        const soilMoistureDataSensorPleinerMostbirne =
-          await fetchSoilMoistureData("pleiner_mostbirne");
-        const soilMoistureDataSensorRoterBoskoop = await fetchSoilMoistureData(
-          "roter_boskoop"
-        );
-        const soilMoistureDataSensorSchoenerVonNordhausen =
-          await fetchSoilMoistureData("schoener_von_nordhausen");
-        const soilMoistureDataSensorJonathan = await fetchSoilMoistureData(
-          "jonathan"
-        );
-        const soilMoistureDataSensorCoxOrangenrenette =
-          await fetchSoilMoistureData("cox_orangenrenette");
+    if (
+      lastValueSoilMoistureCoxOrangenrenette !== null &&
+      lastValueSoilMoisturePleinerMostbirne !== null &&
+      lastValueSoilMoistureRoterBoskoop !== null &&
+      lastValueSoilMoistureSchoenerVonNordhausen !== null &&
+      lastValueSoilMoistureJonathan !== null &&
+      resistanceDataCoxOrangenrenette !== null &&
+      weatherStationTemperatureData !== null &&
+      weatherStationPrecipitationData !== null
+    ) {
+      // Extracting the last value from each dataset, will be used to render icon colors on the map
+      const lastValueSoilMoisture = [
+        lastValueSoilMoistureCoxOrangenrenette,
+        lastValueSoilMoisturePleinerMostbirne,
+        lastValueSoilMoistureRoterBoskoop,
+        lastValueSoilMoistureSchoenerVonNordhausen,
+        lastValueSoilMoistureJonathan,
+      ];
 
-        setSoilMoistureDataPleinerMostbirne(
-          soilMoistureDataSensorPleinerMostbirne
-        );
-        setSoilMoistureDataRoterBoskoop(soilMoistureDataSensorRoterBoskoop);
-        setSoilMoistureDataSchoenerVonNordhausen(
-          soilMoistureDataSensorSchoenerVonNordhausen
-        );
-        setSoilMoistureDataJonathan(soilMoistureDataSensorJonathan);
-        setSoilMoistureDataCoxOrangenrenette(
-          soilMoistureDataSensorCoxOrangenrenette
-        );
-
-        // Extracting the last value from each dataset, will be used to render icon colors on the map
-        const lastValueSoilMoisture = [
-          parseFloat(
-            soilMoistureDataSensorPleinerMostbirne[
-              soilMoistureDataSensorPleinerMostbirne.length - 1
-            ].value
-          ),
-          parseFloat(
-            soilMoistureDataSensorRoterBoskoop[
-              soilMoistureDataSensorRoterBoskoop.length - 1
-            ].value
-          ),
-          parseFloat(
-            soilMoistureDataSensorSchoenerVonNordhausen[
-              soilMoistureDataSensorSchoenerVonNordhausen.length - 1
-            ].value
-          ),
-          parseFloat(
-            soilMoistureDataSensorJonathan[
-              soilMoistureDataSensorJonathan.length - 1
-            ].value
-          ),
-          parseFloat(
-            soilMoistureDataSensorCoxOrangenrenette[
-              soilMoistureDataSensorCoxOrangenrenette.length - 1
-            ].value
-          ),
-        ];
-
-        if (lastValuesSoilMoisture.every((value) => !isNaN(value))) {
-          setLastValuesSoilMoisture(lastValueSoilMoisture);
-        }
-
-        // General tree health
-        const treeSenseGeneralHealthData = await fetchTreeHealthData();
-        setTreeSenseCoxOrangenrenetteGeneralHealth(treeSenseGeneralHealthData);
-
-        const resistanceDataFetched = await fetchResistanceData();
-
-        const weatherStationPrecipitationDataFetched =
-          await fetchWeatherStationData("precipitation");
-        const weatherStationTemperatureDataFetched =
-          await fetchWeatherStationData("temperature");
-
-        // get and set the date and time of the last measurement, will be displayed in the weather station section
-        const lastTimestampWeatherStation =
-          weatherStationPrecipitationDataFetched[
-            weatherStationPrecipitationDataFetched.length - 1
-          ].time;
-
-        const lastTimestampWeatherStationAsDate = new Date(
-          lastTimestampWeatherStation
-        );
-        const lastTimestampWeatherStationFormatted = `${(
-          "0" + lastTimestampWeatherStationAsDate.getDate()
-        ).slice(-2)}/${(
-          "0" +
-          (lastTimestampWeatherStationAsDate.getMonth() + 1)
-        ).slice(-2)}/${lastTimestampWeatherStationAsDate.getFullYear()} um ${(
-          "0" + lastTimestampWeatherStationAsDate.getHours()
-        ).slice(-2)}:${(
-          "0" + lastTimestampWeatherStationAsDate.getMinutes()
-        ).slice(-2)}`;
-        setLastTimestampWeatherStationFormatted(
-          lastTimestampWeatherStationFormatted
-        );
-
-        // get and set the last precipitation value, will be displayed in the weather station section
-        const lastEntryWeatherStationPrecipitation =
-          weatherStationPrecipitationDataFetched[
-            weatherStationPrecipitationDataFetched.length - 1
-          ].value;
-
-        setLastValueWeatherStationPrecipitation(lastEntryWeatherStationPrecipitation)  
-
-        // get and set the last temperature value, will be displayed in the weather station section
-        const lastEntryWeatherStationTemperature =
-        weatherStationTemperatureDataFetched[
-          weatherStationTemperatureDataFetched.length - 1
-        ].value;
-                
-        setLastValueWeatherStationTemperature(lastEntryWeatherStationTemperature) 
-
-
-
-
-        setResistanceDataSensor1(resistanceDataFetched);
-        setWeatherStationPrecipitationData(
-          weatherStationPrecipitationDataFetched
-        );
-        setWeatherStationTemperatureData(weatherStationTemperatureDataFetched);
-
-        setIsLoading(false); // Set loading to false once data is fetched
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        console.log("Precipitation data:", weatherStationPrecipitationData);
-        setIsLoading(false); // Set loading to false in case of error
+      if (lastValuesSoilMoisture.every((value) => !isNaN(value))) {
+        setLastValuesSoilMoisture(lastValueSoilMoisture);
       }
-    };
 
-    fetchData();
-  }, []);
+      const fetchData = async () => {
+        try {
+          // General tree health
+          const treeSenseGeneralHealthData = await fetchTreeHealthData();
+          setTreeSenseCoxOrangenrenetteGeneralHealth(
+            treeSenseGeneralHealthData
+          );
+
+          setIsLoading(false); // Set loading to false once data is fetched
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          setIsLoading(false); // Set loading to false in case of error
+        }
+      };
+
+      fetchData();
+    }
+  }, [
+    lastValueSoilMoistureCoxOrangenrenette,
+    lastValueSoilMoisturePleinerMostbirne,
+    lastValueSoilMoistureSchoenerVonNordhausen,
+    lastValueSoilMoistureJonathan,
+    weatherStationTemperatureData,
+    lastValueWeatherStationTemperature,
+  ]);
 
   return (
-    <div style={{ minHeight: "80vh" }}>
+    <div style={{ minHeight: "80vh" }} className="first-step">
       {/* Display loading indicator while data is being fetched */}
       {isLoading && (
         <div
@@ -264,33 +217,39 @@ const TreeMonitoringSubpage = () => {
           {/* First row - map and tree info */}
           {/* {soilMoistureDataPleinerMostbirne && soilMoistureDataJonathan && 
             treeSenseCoxOrangenrenetteGeneralHealth && ( */}
-          <TreeInfoContainer
-            trees={trees}
-            selectedTree={selectedTree}
-            handleTreeSelection={handleTreeSelection}
-            soilMoistureData={
-              selectedTree && selectedTree.id === 1
-                ? soilMoistureDataPleinerMostbirne
-                : selectedTree && selectedTree.id === 2
-                ? soilMoistureDataSchoenerVonNordhausen
-                : selectedTree && selectedTree.id === 3
-                ? soilMoistureDataRoterBoskoop
-                : selectedTree && selectedTree.id === 4
-                ? soilMoistureDataCoxOrangenrenette
-                : selectedTree && selectedTree.id === 5
-                ? soilMoistureDataJonathan
-                : //else / default
-                  [soilMoistureDataPleinerMostbirne]
-            }
-            lastValuesSoilMoisture={lastValuesSoilMoisture}
-            treeSenseGeneralHealthData={treeSenseCoxOrangenrenetteGeneralHealth}
-          />
-
+          <div>
+            <TreeInfoContainer
+              trees={trees}
+              selectedTree={selectedTree}
+              handleTreeSelection={handleTreeSelection}
+              soilMoistureData={
+                selectedTree && selectedTree.id === 1
+                  ? soilMoistureDataPleinerMostbirne
+                  : selectedTree && selectedTree.id === 2
+                  ? soilMoistureDataSchoenerVonNordhausen
+                  : selectedTree && selectedTree.id === 3
+                  ? soilMoistureDataRoterBoskoop
+                  : selectedTree && selectedTree.id === 4
+                  ? soilMoistureDataCoxOrangenrenette
+                  : selectedTree && selectedTree.id === 5
+                  ? soilMoistureDataJonathan
+                  : //else / default
+                    [soilMoistureDataPleinerMostbirne]
+              }
+              lastValuesSoilMoisture={lastValuesSoilMoisture}
+              treeSenseGeneralHealthData={
+                treeSenseCoxOrangenrenetteGeneralHealth
+              }
+              run={run}
+              setRun={setRun}
+              steps={steps}
+            />
+          </div>
           {/* Second row - soil moisture data */}
-          <div className="row" style={{ flex: "1 1 auto" }}>
+          <div className="row " style={{ flex: "1 1 auto" }}>
             <div className="col-xs-12 d-flex p-2 ">
               <div
-                className="chart-container "
+                className="chart-container step-4 "
                 style={{
                   flex: "1 1 auto",
                   maxHeight: "30vh",
@@ -340,14 +299,12 @@ const TreeMonitoringSubpage = () => {
                   borderColor: "silver",
                 }}
               >
-                {resistanceDataSensor1 && (
-                  <LineChart
-                    lineChartConfig={electricalResistanceConfig}
-                    lineData={resistanceDataSensor1}
-                    trees={trees}
-                    selectedTree={selectedTree}
-                  />
-                )}
+                <LineChart
+                  lineChartConfig={electricalResistanceConfig}
+                  lineData={resistanceDataCoxOrangenrenette}
+                  trees={trees}
+                  selectedTree={selectedTree}
+                />
               </div>
             </div>
           </div>
@@ -404,9 +361,14 @@ const TreeMonitoringSubpage = () => {
           </div>
 
           <WeatherSubpage
-            lastMeasurementTime={lastTimestampWeatherStationFormatted}
-            precipitation={lastValueWeatherStationPrecipitation}
+            lastMeasurementTime={lastTimestampFormatted}
+            precipitation={lastPrecipitationValue}
             temperature={lastValueWeatherStationTemperature}
+            UV={uVIndex}
+            humidity={humidity}
+            airPressure={airPressure}
+            windSpeed={windSpeed}
+            windDirection={windDirection}
           />
         </React.Fragment>
       )}

@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import Chart from 'chart.js/auto';
 
-const HorizontalBarChart = () => {
+const HorizontalBarChart = ({values}) => {
   const chartRef = useRef(null);
   let horizontalBarChart = null;
 
@@ -20,9 +20,9 @@ const HorizontalBarChart = () => {
           labels: ['January'],
           datasets: [
             {
-            data: [80],
-            backgroundColor: '#6499E9',
-            borderColor: 'rgba(75, 192, 192, 1)',
+            data: [values],
+            backgroundColor:'rgba(75, 192, 192, 0.2)',
+            borderColor: 'rgba(75, 192, 192, 0.2)',
             borderWidth: 1,
             barThickness: 'flex', // Adjust the thickness of the bars
             barPercentage: 0.5,
@@ -30,8 +30,8 @@ const HorizontalBarChart = () => {
                 
           },
           {
-            data: [20],
-            backgroundColor: '#DDF2FD',
+            data: [100-values],
+            backgroundColor: 'rgb(192, 192, 192)',
             borderColor: 'rgba(75, 192, 192, 1)',
             borderWidth: 0,
             barThickness: 'flex', // Adjust the thickness of the bars

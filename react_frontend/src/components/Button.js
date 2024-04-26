@@ -11,7 +11,7 @@ const MyButton = ({ to, buttonText, action }) => {
   
 
   const buttonVariants = {
-    hover: { backgroundColor: 'white', color: 'black' },
+    hover: { backgroundColor: 'black', color: 'white' },
   };
 
   return (
@@ -22,8 +22,8 @@ const MyButton = ({ to, buttonText, action }) => {
           className="btn btn-light btn-lg "
           style={{
             width: "8em",
-            backgroundColor: 'transparent',
-            color: 'white',
+            backgroundColor: 'white',
+            color: 'black',
             borderRadius: '0',
             borderWidth:"0.1rem"
           }}

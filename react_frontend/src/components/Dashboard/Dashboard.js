@@ -1,11 +1,44 @@
 import React, { useState } from "react";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 import WeatherSubpage from "./elements/WeatherSubpage";
 import TreeMonitoringSubpage from "./elements/TreeMonitoringSubpage";
 import WebcamSubpage from "./elements/WebcamSubpage";
-import Logo from '../../assets/logo_landlieben.png';
+import Logo from "../../assets/logo_landlieben.png";
 
 const Dashboard = () => {
+  const [runTutorial, setRunTutorial] = useState(false);
+
+  //define steps for onboarding process
+  const steps = [
+    {
+      target: ".first-step",
+      content:
+        "Willkommen zu unserem Dashboard! In den nächsten 60 Sekunden werden wir Dir seine Funktionsweise erklären.",
+      placement: "center",
+    },
+    {
+      target: ".second-step",
+      content: "Die Karte stellt den aktuell ausgewählten Ansicht dar.",
+      placement: "bottom",
+    },
+    {
+      target: ".third-step",
+      content: "Die Karte stellt den aktuell ausgewählten Ansicht dar.",
+      placement: "bottom",
+    },
+    {
+      target: ".step-4",
+      content: "Hier wird die Bodenfeuchte des ausgewählten Bäumes in den letzten 24h angezeigt.",
+      placement: "bottom",
+    },
+    {
+      target: ".step-5",
+      content: "Hier wird die Bodenfeuchte des ausgewählten Bäumes in den letzten 24h angezeigt.",
+      placement: "bottom",
+    },
+    // Define more steps as needed
+  ];
+
   const [activeTab, setActiveTab] = useState("Baummonitoring");
 
   const handleTabChange = (newTab) => {
@@ -18,50 +51,62 @@ const Dashboard = () => {
     <div
       className="container-fluid d-flex flex-column justify-content-between"
       style={{
-        background:
-        "#F6F1E9",
-          // "linear-gradient(to right, #232D3F, #4D4C7D, #4D4C7D, #4D4C7D, #232D3F)",
+        background: "#F6F1E9",
+        // "linear-gradient(to right, #232D3F, #4D4C7D, #4D4C7D, #4D4C7D, #232D3F)",
         minHeight: "100vh",
       }}
     >
       {/* create two columns, one for a side menu, the other for the main content */}
 
       <div className="row mx-xl-5 ">
-        <div className="d-flex justify-content-start pb-2 pt-2">
-        <Link to="/" className="text-decoration-none text-dark">
-        <h2 >SENSORNETZ LAND <span style={{whiteSpace: "nowrap"}}>L<img className="logo" src={Logo} alt="Logo" />EBEN</span></h2>
-        </Link>
+        <div className="d-flex  align-items-center justify-content-between">
+          <div className=" pt-2" style={{ flexGrow: 1 }}>
+          <div className="d-none d-sm-block"> {/* Hide on small screens, show on medium and larger */}
+  <Link to="/" className="text-decoration-none text-dark">
+    <h2>
+      SENSORNETZ LAND{" "}
+      <span style={{ whiteSpace: "nowrap" }}>
+        L<img className="logo" src={Logo} alt="Logo" />
+        EBEN
+      </span>
+    </h2>
+  </Link>
+</div>
+
+<div className="d-sm-none"> {/* Hide on medium and larger screens, show only on small screens */}
+  <Link to="/" className="text-decoration-none text-dark">
+    <img className="logo" src={Logo} alt="Logo" />
+  </Link>
+</div>
+
+          </div>{" "}
+          <div className="pt-2 ">
+            <div
+              className="btn btn-danger rounded-pill text-decoration-none"
+              onClick={() => setRunTutorial(true)}
+            >
+              <p className="fw-bold m-0">Onboarding</p>{" "}
+              {/* m-0 removes default margin from <p> */}
+            </div>
+          </div>
         </div>
-        {/* SIDE MENU  */}
-
-        {/* <div
-          className="col-lg-2 mt-2 mb-2  px-0 "
-          style={{
-            backgroundColor: "white",
-            borderRadius: "5px",
-            borderStyle: 'solid',
-            borderWidth:'1px',
-            borderColor: 'silver'
-          }}
-        >
-
-<SideMenu onTabChange={handleTabChange} />
-        </div> */}
-
         {/*MAIN CONTENT  */}
         <div className="col-lg-12 ">
-   {/* charts and content generated dynamically */}
-   <div className="ms-lg-2">       
-          {activeTab === "Baummonitoring" ? (
-            <TreeMonitoringSubpage />
-          ) : activeTab === "Wetter" ? (
-            <WeatherSubpage />
-          ) : (
-            <WebcamSubpage />
-          )}
+          {/* charts and content generated dynamically */}
+          <div className="ms-lg-2">
+            {activeTab === "Baummonitoring" ? (
+              <TreeMonitoringSubpage
+                run={runTutorial}
+                setRun={setRunTutorial}
+                steps={steps}
+              />
+            ) : activeTab === "Wetter" ? (
+              <WeatherSubpage />
+            ) : (
+              <WebcamSubpage />
+            )}
+          </div>
         </div>
-        </div>
-
       </div>
     </div>
   );

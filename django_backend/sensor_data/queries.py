@@ -86,6 +86,8 @@ def query_soil_moisture_jonathan(client, org):
     return execute_and_process_query(client, org, query)
 
 
+#####################################################           weather station queries             ########################################################
+
 
 def query_weather_station_precipitation(client, org):
     query = f'''
@@ -112,6 +114,81 @@ from(bucket: "Kusel")
       r.type == "Air Temperature"
     )
   |> aggregateWindow(every: 1h, fn: mean) 
+
+'''
+    return execute_and_process_query(client, org, query)
+
+def query_weather_station_uv_index(client, org):
+    query = f'''
+from(bucket: "Kusel")
+  |> range(start: -1d)
+  |> filter(fn: (r) =>
+      r._measurement == "mqtt_consumer" and
+      r._field == "measurementValue" and
+      r.device == "eui-2cf7f1c0443003da" and
+      r.type == "UV Index"
+    )
+  |> last()
+
+'''
+    return execute_and_process_query(client, org, query)
+
+def query_weather_station_humidity(client, org):
+    query = f'''
+from(bucket: "Kusel")
+  |> range(start: -1d)
+  |> filter(fn: (r) =>
+      r._measurement == "mqtt_consumer" and
+      r._field == "measurementValue" and
+      r.device == "eui-2cf7f1c0443003da" and
+      r.type == "Air Humidity"
+    )
+  |> last()
+
+'''
+    return execute_and_process_query(client, org, query)
+
+def query_weather_station_air_pressure(client, org):
+    query = f'''
+from(bucket: "Kusel")
+  |> range(start: -1d)
+  |> filter(fn: (r) =>
+      r._measurement == "mqtt_consumer" and
+      r._field == "measurementValue" and
+      r.device == "eui-2cf7f1c0443003da" and
+      r.type == "Barometric Pressure"
+    )
+  |> last()
+
+'''
+    return execute_and_process_query(client, org, query)
+
+def query_weather_station_wind_speed(client, org):
+    query = f'''
+from(bucket: "Kusel")
+  |> range(start: -1d)
+  |> filter(fn: (r) =>
+      r._measurement == "mqtt_consumer" and
+      r._field == "measurementValue" and
+      r.device == "eui-2cf7f1c0443003da" and
+      r.type == "Wind Speed"
+    )
+  |> last()
+
+'''
+    return execute_and_process_query(client, org, query)
+
+def query_weather_station_wind_direction(client, org):
+    query = f'''
+from(bucket: "Kusel")
+  |> range(start: -1d)
+  |> filter(fn: (r) =>
+      r._measurement == "mqtt_consumer" and
+      r._field == "measurementValue" and
+      r.device == "eui-2cf7f1c0443003da" and
+      r.type == "Wind Direction Sensor"
+    )
+  |> last()
 
 '''
     return execute_and_process_query(client, org, query)

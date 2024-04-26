@@ -4,10 +4,32 @@ import GaugeChart from "react-gauge-chart";
 //its possible apparently to create a gauge chart using chart.js, update this later accordingly
 
 const Gauge = ({ currentValue, config, selectedTree, id, classAsProp}) => {
-  const arcsLength = config.arcsLength;
-  let colors = config.colors;
+  let arcsLength;
 
-  console.log(selectedTree)
+  const minPressure = 950;
+  const maxPressure = 1050;
+
+  // Check if config.arcsLength is defined
+  if (config.arcsLength) {
+    arcsLength = config.arcsLength;
+  } else if (id === "uvIndex") {
+    // Convert currentValue scaled by 10 into a portion of 2π radians
+    const scaledValue = (currentValue ) / 150 * 2 * Math.PI;
+    const remaining = 2 * Math.PI - scaledValue; // Remaining part of the circle
+    arcsLength = [scaledValue, remaining];
+  } else if (id === "airPressure") {
+    // Calculate arc lengths based on air pressure from 950 to 1050 hPa
+
+    const range = maxPressure - minPressure;
+    const normalizedValue = (currentValue - minPressure) / range; // Normalize the current value within the range
+    const airPressureArc = normalizedValue * Math.PI; // Convert to radians (half-circle)
+    const remainingArc = Math.PI - airPressureArc; // Remaining arc in the half-circle
+    arcsLength = [airPressureArc, remainingArc];
+  } 
+  else {
+    arcsLength = [0.1, 0.4]; // Default values if no specific conditions are met
+  }  let colors = config.colors;
+
 
   // Check if selectedTree is undefined or selectedTree.id is 6
   if (id === "specialChartGeneral" && (!selectedTree ||  selectedTree.id === 3 ||  selectedTree.id === 5  || selectedTree.id === 6 || selectedTree.id === 7 || selectedTree === null)) {
@@ -21,10 +43,19 @@ const Gauge = ({ currentValue, config, selectedTree, id, classAsProp}) => {
     currentValue = 0;
   }
 
+  
+
   return (
     <GaugeChart
       id="gauge-chart"
-      percent={currentValue / 100}
+      percent={
+        id === "airPressure"
+          ? ((currentValue - minPressure) / (maxPressure - minPressure))  // Normalize air pressure
+          : id === "uvIndex"
+          ? currentValue / 150  // Normalize UV index based on the scale of 0-150
+          : currentValue / 100  // Default scaling for other types
+      }
+      
       needleColor="black"
       textColor="transparent"
       fontSize="2px"

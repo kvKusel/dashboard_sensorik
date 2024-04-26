@@ -2,8 +2,6 @@ import axios from "axios";
 
 const API_URL = process.env.REACT_APP_API_URL; // This will switch based on the environment - dev env will point to local Django, prod env to the proper domain
 
-console.log("url:", API_URL)
-
 export const fetchSoilMoistureData = async (queryType) => {
     try {
         const response = await axios.get(`${API_URL}/soil-data/?query_type=${queryType}`);
@@ -27,9 +25,9 @@ export const fetchWeatherStationData = async (queryType) => {
     }
 };
 
-export const fetchResistanceData = async () => {
+export const fetchResistanceData = async (queryType) => {
     try {
-        const response = await axios.get(`${API_URL}/electrical-resistance-data/`);
+        const response = await axios.get(`${API_URL}/electrical-resistance-data/?query_type=${queryType}`);
         const parsedData = JSON.parse(response.data);
         return parsedData;
     } catch (error) {

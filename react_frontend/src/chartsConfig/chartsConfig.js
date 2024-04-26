@@ -87,12 +87,12 @@ export const soilMoistureGaugeChartConfig = {
 
 //Doughnut Chart - UV Index
 export const uvIndexConfig = {
-  arcsLength: [0.1, 0.4], // Array of arc lengths, make dynamic later!!!!!!!!!!!!
-  colors: ['#6499E9', '#DDF2FD'], // Array of colors
+  // arcsLength: [0.1, 0.4], // Array of arc lengths, make dynamic later!!!!!!!!!!!!
+  colors: ['rgba(75, 192, 192, 0.2)', 'rgb(192, 192, 192)'], // Array of colors
 };
 
 //Doughnut Chart - barometere
 export const barometerConfig = {
-  arcsLength: [0.075, 0.525], // Array of arc lengths, adjusted for 270 degrees
-  colors: ['#6499E9', '#DDF2FD'], // Array of colors
+  // arcsLength: [0.075, 0.525], // Array of arc lengths, adjusted for 270 degrees
+  colors:['rgba(75, 192, 192, 0.2)', 'rgb(192, 192, 192)'], // Array of colors
 };

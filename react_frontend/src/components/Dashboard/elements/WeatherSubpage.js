@@ -8,9 +8,19 @@ import { barometerConfig, uvIndexConfig } from "../../../chartsConfig/chartsConf
 import WindDirectionChart from "./PolarAreaChart";
 import weatherStation from "../../../assets/weather_station.jpg"
 
-const WeatherSubpage = ({lastMeasurementTime, temperature, precipitation}) => {
-  // set up for the gauge, delete later
-  const currentValue = 20;
+//function to convert numerical values of wind direction provided by sensor into compass directions
+function getWindDirection(degrees) {
+  const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
+  const index = Math.round(degrees / 45) % 8; // Divide by 45 degrees for each sector and use modulo 8 to wrap around
+  return directions[index];
+}
+
+
+const WeatherSubpage = ({lastMeasurementTime, temperature, precipitation, UV, humidity, airPressure, windSpeed, windDirection}) => {
+
+  const windDirectionDescription = getWindDirection(windDirection);
+
+
 
   return (
     // first row - weather station header
@@ -38,32 +48,6 @@ const WeatherSubpage = ({lastMeasurementTime, temperature, precipitation}) => {
 
 
             <div className="row mb-4 " >
-            {/* <div className="col-6">
-
-
- <div className="col-12 d-flex ps-0 p-2">
-  <div
-    style={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      flex: "1 1 auto",
-      borderRadius: "0px",
-      backgroundColor: "white",
-      borderStyle: "solid",
-      borderWidth: "1px",
-      borderColor: "transparent",
-      backgroundColor: "transparent",              
-    }}
-  >
-    <div className="d-flex flex-column align-items-center justify-content-center py-2 rounded-circle">
-    <div className=" " ><img src={weatherStation} alt="niederschlag"  style={{maxWidth: "100%"}}/></div>
-
-    </div>
-  </div>
-</div> 
-
-</div> */}
 
               <div className="row px-3">
       <div className="col-12  d-flex  p-2 ">
@@ -109,7 +93,7 @@ const WeatherSubpage = ({lastMeasurementTime, temperature, precipitation}) => {
             }}
           >
             <div className="d-flex flex-column align-items-center justify-content-center pt-2">
-            <div className="fs-3" >Temperatur:<br></br> <span className="d-flex justify-content-center fw-bold">{temperature}°C</span></div>
+            <div className="fs-3" >Temperatur:<br></br> <span className="d-flex justify-content-center fw-bold">{parseInt(Math.round(temperature))}°C</span></div>
 
             </div>
           </div>
@@ -136,7 +120,7 @@ const WeatherSubpage = ({lastMeasurementTime, temperature, precipitation}) => {
             }}
           >
             <div className="d-flex flex-column align-items-center justify-content-center pt-2">
-            <div className="fs-3" >Niederschlag: <br></br><span className="d-flex justify-content-center fw-bold">{precipitation} mm/h</span></div>
+            <div className="fs-3" >Niederschlag: <br></br><span className="d-flex justify-content-center fw-bold">    {Math.round(precipitation)} mm/h</span></div>
 
             </div>
           </div>
@@ -163,9 +147,18 @@ const WeatherSubpage = ({lastMeasurementTime, temperature, precipitation}) => {
     }}
   >
     <div className="d-flex pt-2 align-items-center" style={{ flex: "1 1 auto", maxWidth: "100%", maxHeight: "100%"}}>
-      <Gauge currentValue={currentValue} config={uvIndexConfig} id={"uvIndex"}/>
+      <Gauge currentValue={UV*10} config={uvIndexConfig} id={"uvIndex"}/>
     </div>
-    <p className="text-center">UV-Index: <br></br> <strong>4</strong></p>
+    <p className="text-center">
+  UV-Index: <br></br>
+  <strong>{UV}{" "}
+  {UV >= 0 && UV <= 2 && "(niedrig)"}
+  {UV > 2 && UV <= 5 && "(mäßig)"}
+  {UV > 5 && UV <= 7 && "(hoch)"}
+  {UV > 7 && UV <= 10 && "(sehr hoch)"}
+  {UV > 10 && "(extrem)"}
+  </strong>
+</p>
 
   </div>
 </div>
@@ -186,10 +179,10 @@ const WeatherSubpage = ({lastMeasurementTime, temperature, precipitation}) => {
             }}
           >
             <div className=" pt-2 pb-3" style={{maxWidth: "", maxHeight: "", flex: ""}} >
-            <WindDirectionChart />
+            <WindDirectionChart windDirection={windDirection} />
 
             </div>
-            <p style={{flex: "1 1 auto"}} className=' text-center '>Wind: <br></br> <strong>2 km/h, NWN</strong></p>
+            <p style={{flex: "1 1 auto"}} className=' text-center '>Wind: <br></br> <strong>{windSpeed} km/h, {windDirectionDescription}</strong></p>
 
           </div>
         </div>
@@ -221,10 +214,10 @@ const WeatherSubpage = ({lastMeasurementTime, temperature, precipitation}) => {
           >
             <div className="d-flex flex-column pt-2 px-2 align-items-center" style={{flex: "1 1 auto",}} >
 
-              <HorizontalBarChart />
+              <HorizontalBarChart values={humidity}/>
 
             </div>
-                          <p style={{flex: "1 1 auto"}} className=' text-center'>Luftfeuchte: <br></br> <strong>80%</strong></p>
+                          <p style={{flex: "1 1 auto"}} className=' text-center'>Luftfeuchte: <br></br> <strong>{humidity}%</strong></p>
 
           </div>
         </div>
@@ -245,10 +238,10 @@ const WeatherSubpage = ({lastMeasurementTime, temperature, precipitation}) => {
     }}
   >
     <div className="d-flex pt-2 align-items-center" style={{ flex: "1 1 auto", maxWidth: "100%", maxHeight: "100%"}}>
-      <Gauge currentValue={currentValue} config={barometerConfig} id={"Luftdruck"}/>
+      <Gauge currentValue={(parseInt(airPressure) / 100 + 47).toFixed(0)} config={barometerConfig} id={"airPressure"}/>
     </div>
     <div>
-    <p className="text-center">Luftdruck:<br></br> <strong>1015 hPa</strong></p>
+    <p className="text-center">Luftdruck:<br></br> <strong>{(parseInt(airPressure) / 100 + 47).toFixed(0)} hPa</strong></p>
     </div>
   </div>
 </div>

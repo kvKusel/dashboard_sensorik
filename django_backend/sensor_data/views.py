@@ -2,7 +2,7 @@ import requests
 from django.http import JsonResponse
 from django.views import View
 from influxdb_client import InfluxDBClient
-from .queries import query_soil_moisture_pleiner_mostbirne, query_soil_moisture_roter_boskoop, query_soil_moisture_schoener_von_nordhausen, query_soil_moisture_cox_orangenrenette, query_soil_moisture_jonathan, query_weather_station_precipitation, query_weather_station_temperature
+from .queries import query_soil_moisture_pleiner_mostbirne, query_soil_moisture_roter_boskoop, query_soil_moisture_schoener_von_nordhausen, query_soil_moisture_cox_orangenrenette, query_soil_moisture_jonathan, query_weather_station_precipitation, query_weather_station_temperature, query_weather_station_uv_index, query_weather_station_humidity, query_weather_station_air_pressure, query_weather_station_wind_speed, query_weather_station_wind_direction
 import os
 import json
 from collections import defaultdict
@@ -151,7 +151,16 @@ class WeatherStationDataView(View):
             elif query_type == "temperature":
                 df = query_weather_station_temperature(client, org=influxdb_org)
                 df.drop(df.tail(1).index, inplace=True)
-
+            elif query_type == "uv_index":
+                df = query_weather_station_uv_index(client, org=influxdb_org)
+            elif query_type == "humidity":
+                df = query_weather_station_humidity(client, org=influxdb_org)  
+            elif query_type == "air_pressure":
+                df = query_weather_station_air_pressure(client, org=influxdb_org)    
+            elif query_type == "wind_speed":
+                df = query_weather_station_wind_speed(client, org=influxdb_org)           
+            elif query_type == "wind_direction":
+                df = query_weather_station_wind_direction(client, org=influxdb_org)              
             else:
                 return JsonResponse({"error": "Invalid query type"}, status=400)
 
@@ -180,43 +189,43 @@ class WeatherStationDataView(View):
 class ElectricalResistanceDataView(View):
     def get(self, request, *args, **kwargs):
         try:
+            
+            # Determine the type of query based on the request
+            query_type = request.GET.get("query_type")
+            
             # Perform authentication to obtain the access token
             access_token = self.authenticate()
 
             if access_token:
                 # Define the URL of the API endpoint to fetch electrical resistance data
-                api_url = 'https://api.treesense.net/data/A84041B42187E5C6'
-                
-                # Set up headers with the access token
-                headers = {'Authorization': f'Bearer {access_token}'}
-                
-                # Make a GET request to the API endpoint
-                response = requests.get(api_url, headers=headers)
-                
-                # Check if the request was successful (status code 200)
-                if response.status_code == 200:
-                    response_json = response.json()
-                    # Extract the resistance data from the whole response                  
-                    extracted_values = []
+                if query_type == "cox_orangenrenette":
+                    api_url = 'https://api.treesense.net/data/A84041B42187E5C6'
                     
-                    for element in response_json:
-                        element = re.split(',', element)
-                        extracted_values.append(element)
-
-                    extracted_values = extracted_values[2:]    
-
-                    #extract timestamp and value from each sublist, create a JSON object for each element
-                    data = [{'time': sublist[0], 'value': float(sublist[3])} for sublist in extracted_values]
-                    data = json.dumps(data)
-                    response = HttpResponse(data, content_type='application/json')
-
+                    # Set up headers with the access token
+                    headers = {'Authorization': f'Bearer {access_token}'}
                     
+                    # Make a GET request to the API endpoint
+                    response = requests.get(api_url, headers=headers)
+                    
+                    # Check if the request was successful (status code 200)
+                    if response.status_code == 200:
+                        response_json = response.json()
+                        # Extract the resistance data from the whole response                  
+                        extracted_values = []
+                        
+                        for element in response_json:
+                            element = re.split(',', element)
+                            extracted_values.append(element)
 
+                        extracted_values = extracted_values[2:]    
 
-                                            
+                        #extract timestamp and value from each sublist, create a JSON object for each element
+                        data = [{'time': sublist[0], 'value': float(sublist[3])} for sublist in extracted_values]
+                        data = json.dumps(data)
+                        response = HttpResponse(data, content_type='application/json')                                        
                                                                 
-                    # Return the extracted data as a JSON response
-                    return JsonResponse(data, status=200, safe=False)
+                        # Return the extracted data as a JSON response
+                        return JsonResponse(data, status=200, safe=False)
                 else:
                     # Return an error response if the request failed
                     return JsonResponse({"error": "Failed to fetch data"}, status=response.status_code)
