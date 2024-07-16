@@ -69,6 +69,7 @@ const BarChart = ({ barChartConfig, barChartData }) => {
 
             grid: {
               offset: false,
+              color: "lightgrey"
             },
 
             // time: {
@@ -87,7 +88,7 @@ const BarChart = ({ barChartConfig, barChartData }) => {
                 return [formattedDate[0], formattedDate[1]];
             },
               maxTicksLimit: 4,
-              color: "black",
+              color: "lightgrey",
               font: {
                 size: 14,
               },
@@ -95,11 +96,14 @@ const BarChart = ({ barChartConfig, barChartData }) => {
             },
           },
           y: {
+            grid: {
+              color: "lightgrey",
+            },
             max:10,
             ticks: {
               precision:0,      //display integers instead of floats
               maxTicksLimit: 4,
-              color: "black",
+              color: "lightgrey",
               font: {
                 size: 14,
               },
@@ -110,7 +114,7 @@ const BarChart = ({ barChartConfig, barChartData }) => {
           title: {
             text: barChartConfig.plugins.title.text,
             display: "yes",
-            color: "black",
+            color: "lightgrey",
             font: {
               size: "18rem",
             },
@@ -118,7 +122,7 @@ const BarChart = ({ barChartConfig, barChartData }) => {
           legend: {
             display: false,
             labels: {
-              color: "black",
+              color: "lightgrey",
               font: {
                 size: "18rem",
               },
@@ -153,7 +157,7 @@ const BarChart = ({ barChartConfig, barChartData }) => {
       const yCenter = top + (bottom - top) / 2;
 
       ctx.font = "1rem Poppins, sans-serif";
-      ctx.fillStyle = "black";
+      ctx.fillStyle = "lightgrey";
       ctx.textAlign = "center";
 
       // Function to wrap text

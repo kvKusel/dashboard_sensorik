@@ -7,6 +7,7 @@ import {
   temperatureConfig,
   soilMoistureConfig,
   electricalResistanceConfig,
+  treeMoistureContentLineChartConfig
 } from "../../../chartsConfig/chartsConfig";
 import {
   fetchSoilMoistureData,
@@ -23,12 +24,15 @@ import { useFetchSoilMoistureDataPleinerMostbirne } from "../../../hooks/soilMoi
 import { useFetchSoilMoistureDataRoterBoskoop } from "../../../hooks/soilMoisture/RoterBoskoop";
 import { useFetchSoilMoistureDataSchoenerVonNordhausen } from "../../../hooks/soilMoisture/SchoenerVonNordhausen";
 import { useFetchSoilMoistureDataJonathan } from "../../../hooks/soilMoisture/Jonathan";
+
 import { useFetchResistanceDataCoxOrangenrenette } from "../../../hooks/treeSense/CoxOrangenrenetteTS";
+
+import { useFetchTreeMoistureContentDataCoxOrangenrenette } from "../../../hooks/treeSense/CoxOrangenrenetteMoistureContent";
+
 import { useWeatherStationHumidity } from "../../../hooks/weatherStation/WeatherStationHumidity";
 import { useWeatherStationAirPressure } from "../../../hooks/weatherStation/WeatherStationAirPressure";
 import { useWeatherStationWindSpeed } from "../../../hooks/weatherStation/WeatherStationWindSpeed";
 import { useWeatherStationWindDirection } from "../../../hooks/weatherStation/WeatherStationWindDirection";
-
 
 const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
   // prepare the trees and props for the child components
@@ -83,17 +87,17 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
   //UV-Index data from the weather station
   const uVIndex = useWeatherStationUVIndex();
 
-    //humidity data from the weather station
-    const humidity = useWeatherStationHumidity();
+  //humidity data from the weather station
+  const humidity = useWeatherStationHumidity();
 
-    //air pressure data from the weather station
-    const airPressure = useWeatherStationAirPressure();
+  //air pressure data from the weather station
+  const airPressure = useWeatherStationAirPressure();
 
-    //wind speed data from the weather station
-    const windSpeed = useWeatherStationWindSpeed();
+  //wind speed data from the weather station
+  const windSpeed = useWeatherStationWindSpeed();
 
-    //wind direction data from the weather station
-    const windDirection = useWeatherStationWindDirection();
+  //wind direction data from the weather station
+  const windDirection = useWeatherStationWindDirection();
 
   // soil moisture - "Cox Orangenrenette"
   const {
@@ -121,9 +125,12 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
   const { soilMoistureDataJonathan, lastValueSoilMoistureJonathan } =
     useFetchSoilMoistureDataJonathan();
 
-  // Resistance Data - "Cox Orangenrenette"
+  // Resistance Data and Tree Water Content Data  - "Cox Orangenrenette"
   const resistanceDataCoxOrangenrenette =
     useFetchResistanceDataCoxOrangenrenette();
+
+  const treeMoistureContentDataCoxOrangenrenette = 
+    useFetchTreeMoistureContentDataCoxOrangenrenette(); 
 
   /////////////////////////                 End of updating the state by using hooks (from hooks subfolder) that make api calls     ///////////////////////////////////////
 
@@ -153,9 +160,10 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
       lastValueSoilMoistureSchoenerVonNordhausen !== null &&
       lastValueSoilMoistureJonathan !== null &&
       resistanceDataCoxOrangenrenette !== null &&
+      treeMoistureContentDataCoxOrangenrenette !== null &&
       weatherStationTemperatureData !== null &&
       weatherStationPrecipitationData !== null
-    ) {
+   )  {
       // Extracting the last value from each dataset, will be used to render icon colors on the map
       const lastValueSoilMoisture = [
         lastValueSoilMoistureCoxOrangenrenette,
@@ -205,6 +213,7 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
             justifyContent: "center",
             alignItems: "center",
             minHeight: "80vh",
+            color: "lightgrey"
           }}
         >
           <p className="fs-1">Sensordaten werden geladen...</p>
@@ -254,10 +263,10 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
                   flex: "1 1 auto",
                   maxHeight: "30vh",
                   borderRadius: "0px",
-                  backgroundColor: "white",
+                  backgroundColor: "#5D7280",
                   borderStyle: "solid",
                   borderWidth: "1px",
-                  borderColor: "silver",
+                  borderColor: "#5D7280",
                 }}
               >
                 {/* {soilMoistureDataPleinerMostbirne && soilMoistureDataJonathan &&( */}
@@ -293,10 +302,35 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
                   flex: "1 1 auto",
                   maxHeight: "30vh",
                   borderRadius: "0px",
-                  backgroundColor: "white",
+                  backgroundColor: "#5D7280",
                   borderStyle: "solid",
                   borderWidth: "1px",
-                  borderColor: "silver",
+                  borderColor: "#5D7280",
+                }}
+              >
+                <LineChart
+                  lineChartConfig={treeMoistureContentLineChartConfig}
+                  lineData={treeMoistureContentDataCoxOrangenrenette}
+                  trees={trees}
+                  selectedTree={selectedTree}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* fourth row - tree crown moisture data */}
+          <div className="row " style={{ flex: "1 1 auto" }}>
+            <div className="col-xs-12 d-flex p-2">
+              <div
+                className="chart-container"
+                style={{
+                  flex: "1 1 auto",
+                  maxHeight: "30vh",
+                  borderRadius: "0px",
+                  backgroundColor: "#5D7280",
+                  borderStyle: "solid",
+                  borderWidth: "1px",
+                  borderColor: "#5D7280",
                 }}
               >
                 <LineChart
@@ -309,7 +343,7 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
             </div>
           </div>
 
-          {/* Fourth row - precipitation data */}
+          {/* fifth row - precipitation data */}
           <div className="row " style={{ flex: "1 1 auto" }}>
             <div className="col-xs-12 d-flex p-2">
               <div
@@ -318,10 +352,10 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
                   flex: "1 1 auto",
                   maxHeight: "30vh",
                   borderRadius: "0px",
-                  backgroundColor: "white",
+                  backgroundColor: "#5D7280",
                   borderStyle: "solid",
                   borderWidth: "1px",
-                  borderColor: "silver",
+                  borderColor: "#5D7280",
                 }}
               >
                 {weatherStationPrecipitationData && (
@@ -334,8 +368,8 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
             </div>
           </div>
 
-          {/* Fifth row - temperature from weather station */}
-          <div className="row " style={{ flex: "1 1 auto" }}>
+          {/* sixth row - temperature from weather station */}
+          <div className="row " style={{ flex: "1 1 auto", marginBottom:"15px" }}>
             <div className="col-xs-12 d-flex p-2 ">
               <div
                 className="chart-container"
@@ -343,10 +377,10 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
                   flex: "1 1 auto",
                   maxHeight: "30vh",
                   borderRadius: "0px",
-                  backgroundColor: "white",
+                  backgroundColor: "#5D7280",
                   borderStyle: "solid",
                   borderWidth: "1px",
-                  borderColor: "silver",
+                  borderColor: "#5D7280",
                 }}
               >
                 {weatherStationTemperatureData && (
@@ -360,7 +394,7 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
             </div>
           </div>
 
-          <WeatherSubpage
+          {/* <WeatherSubpage
             lastMeasurementTime={lastTimestampFormatted}
             precipitation={lastPrecipitationValue}
             temperature={lastValueWeatherStationTemperature}
@@ -369,7 +403,7 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
             airPressure={airPressure}
             windSpeed={windSpeed}
             windDirection={windDirection}
-          />
+          /> */}
         </React.Fragment>
       )}
     </div>

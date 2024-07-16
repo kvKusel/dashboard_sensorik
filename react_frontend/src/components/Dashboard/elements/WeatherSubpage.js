@@ -1,254 +1,129 @@
-import React, { useState, useEffect } from "react";
-import { ReactComponent as GreenTreeImage } from "../../../assets/green_tree.svg";
-import cloudsImage from "../../../assets/sky-with-clouds.jpg";
-import precipitationImage from "../../../assets/precipitation.jpg";
-import Gauge from "./DoughnutChart";
-import HorizontalBarChart from "./HorizontalBarChart";
-import { barometerConfig, uvIndexConfig } from "../../../chartsConfig/chartsConfig";
-import WindDirectionChart from "./PolarAreaChart";
-import weatherStation from "../../../assets/weather_station.jpg"
+import React, { useState } from "react";
+import LeafletMap from "./LeafletMap";
+import LineChart from "./LineChart";
+import BarChart from "./BarChart";
 
-//function to convert numerical values of wind direction provided by sensor into compass directions
-function getWindDirection(degrees) {
-  const directions = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-  const index = Math.round(degrees / 45) % 8; // Divide by 45 degrees for each sector and use modulo 8 to wrap around
-  return directions[index];
-}
+import { useWeatherStationTemperature } from "../../../hooks/weatherStation/WeatherStationTemperatureData";
+import { useWeatherStationPrecipitation } from "../../../hooks/weatherStation/WeatherStationPrecipitation ";
 
+import {
+  precipitationConfig,
+  temperatureConfig,
+  soilMoistureConfig,
+  electricalResistanceConfig,
+  treeMoistureContentLineChartConfig,
+} from "../../../chartsConfig/chartsConfig";
 
-const WeatherSubpage = ({lastMeasurementTime, temperature, precipitation, UV, humidity, airPressure, windSpeed, windDirection}) => {
+const WeatherDashboard = ({}) => {
+  // set up for the needles of the  gauge charts
+  //const currentValue = soilMoistureData? soilMoistureData[soilMoistureData.length - 1].value : 0
 
-  const windDirectionDescription = getWindDirection(windDirection);
+  //temperature data from the weather station
+  const { weatherStationTemperatureData, lastValueWeatherStationTemperature } =
+    useWeatherStationTemperature();
 
-
+  //precipitation data from the weather station
+  const {
+    weatherStationPrecipitationData,
+    lastTimestampFormatted,
+    lastPrecipitationValue,
+  } = useWeatherStationPrecipitation();
 
   return (
-    // first row - weather station header
-    <div>
-      <div className="row" style={{ flex: "1 1 auto" }}>
-        <div className="col-12 d-flex p-2">
-          <div
-            className="fs-1 text-center p-3"
-            style={{
-              flex: "1 1 auto",
-              maxHeight: "30vh",
-              borderRadius: "0px",
-              backgroundColor: "rgba(75, 192, 192, 0.2)",
-              borderStyle: "solid",
-              borderWidth: "1px",
-              borderColor: "silver",
-              // backgroundImage: `url(${cloudsImage})`, // Set the background image
-            }}
-          >
-            Aktuelle Wetterlage - Wetterstation Lichtenberg:
-          </div>
+    <>
+      <div className="row mt-4" style={{ flex: "1 1 auto" }}>
+        <div
+          className="col-12 p-2 mb-3 mx-2"
+          style={{
+            flex: "1 1 auto",
+
+            backgroundColor: "#5D7280",
+            borderRadius: "0px",
+            borderStyle: "solid",
+            borderWidth: "1px",
+            borderColor: "#5D7280",
+            zIndex: "0", //add this to make sure the controls of the map are underneath the dropdown elements (Dropdown is directly above the map)
+          }}
+        >
+          <LeafletMap />
         </div>
       </div>
-      {/* second row */}
 
-
-            <div className="row mb-4 " >
-
-              <div className="row px-3">
-      <div className="col-12  d-flex  p-2 ">
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flex: "1 1 auto",
-              borderRadius: "0px",
-              backgroundColor: "transparent",
-              borderStyle: "solid",
-              borderWidth: "1px",
-              borderColor: "transparent",
-              backgroundColor: "transparent",
-                            // backgroundImage: `url(${cloudsImage})`, // Set the background image
-
-            }}
-          >
-            <div className="d-flex flex-column  pt-2">
-            <div className=" fs-3 text-center" >Letzte Messung:<br></br> <span className="d-flex justify-content-center fw-bold">{lastMeasurementTime}</span></div>
-
-            </div>
-          </div>
-        </div>
-
-
-        <div className="col-sm-6  d-flex  p-2 ">
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flex: "1 1 auto",
-              borderRadius: "0px",
-              backgroundColor: "transparent",
-              borderStyle: "solid",
-              borderWidth: "1px",
-              borderColor: "transparent",
-              backgroundColor: "transparent",
-                            // backgroundImage: `url(${cloudsImage})`, // Set the background image
-
-            }}
-          >
-            <div className="d-flex flex-column align-items-center justify-content-center pt-2">
-            <div className="fs-3" >Temperatur:<br></br> <span className="d-flex justify-content-center fw-bold">{parseInt(Math.round(temperature))}°C</span></div>
-
-            </div>
-          </div>
-        </div>
-
-
-
-
-        <div className="col-sm-6 d-flex  p-2">
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              flex: "1 1 auto",
-              borderRadius: "0px",
-              backgroundColor: "transparent",
-              borderStyle: "solid",
-              borderWidth: "1px",
-              borderColor: "transparent",
-              backgroundColor: "transparent",
-                            // backgroundImage: `url(${precipitationImage})`, // Set the background image
-
-            }}
-          >
-            <div className="d-flex flex-column align-items-center justify-content-center pt-2">
-            <div className="fs-3" >Niederschlag: <br></br><span className="d-flex justify-content-center fw-bold">    {Math.round(precipitation)} mm/h</span></div>
-
-            </div>
-          </div>
-        </div>
-        </div>
-
-
-
-        
-        <div className="col-6  col-lg-3 d-flex p-2">
-  <div
-    style={{
-      flex: "1 1 auto",
-      borderRadius: "0px",
-      backgroundColor: "white",
-      borderStyle: "solid",
-      borderWidth: "1px",
-      borderColor: "silver",
-      display: "flex", // Ensure inner div fills available space
-      flexDirection: "column", // Stack children vertically
-      //justifyContent: "center",
-      alignItems: "center",
-      width: "50%"
-    }}
-  >
-    <div className="d-flex pt-2 align-items-center" style={{ flex: "1 1 auto", maxWidth: "100%", maxHeight: "100%"}}>
-      <Gauge currentValue={UV*10} config={uvIndexConfig} id={"uvIndex"}/>
-    </div>
-    <p className="text-center">
-  UV-Index: <br></br>
-  <strong>{UV}{" "}
-  {UV >= 0 && UV <= 2 && "(niedrig)"}
-  {UV > 2 && UV <= 5 && "(mäßig)"}
-  {UV > 5 && UV <= 7 && "(hoch)"}
-  {UV > 7 && UV <= 10 && "(sehr hoch)"}
-  {UV > 10 && "(extrem)"}
-  </strong>
-</p>
-
-  </div>
-</div>
-
-
-        <div className="col-6  col-lg-3 d-flex p-2">
-          <div className=" "
-            style={{
-              flex: "1 1 auto",
-              borderRadius: "0px",
-              backgroundColor: "white",
-              borderStyle: "solid",
-              borderWidth: "1px",
-              borderColor: "silver",
-              width: "50%",
-              flexDirection: "column"
-
-            }}
-          >
-            <div className=" pt-2 pb-3" style={{maxWidth: "", maxHeight: "", flex: ""}} >
-            <WindDirectionChart windDirection={windDirection} />
-
-            </div>
-            <p style={{flex: "1 1 auto"}} className=' text-center '>Wind: <br></br> <strong>{windSpeed} km/h, {windDirectionDescription}</strong></p>
-
-          </div>
-        </div>
-
-      {/* third row */}
-
-
-
-
-
-        <div className="col-6  col-lg-3 d-flex p-2">
+      <div className="row " style={{ flex: "1 1 auto" }}>
+        <div
+          className="chart-container d-flex p-2 mx-2"
+          style={{
+            flex: "1 1 auto",
+            maxHeight: "30vh",
+            borderRadius: "0px",
+            backgroundColor: "#5D7280",
+            borderStyle: "solid",
+            borderWidth: "1px",
+            borderColor: "#5D7280",
+          }}
+        >
+          {weatherStationTemperatureData && (
+            <LineChart
+              id="temperatureChart"
+              lineChartConfig={temperatureConfig}
+              lineData={weatherStationTemperatureData}
+            />
+          )}
           
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              //alignItems: 'center',
-              flex: "1 1 auto",
-              borderRadius: "0px",
-              backgroundColor: "white",
-              borderStyle: "solid",
-              borderWidth: "1px",
-              borderColor: "silver",
-              width: "50%",
-              flexDirection: "column",
-            
+        </div>
+      </div>
 
-            }}
-          >
-            <div className="d-flex flex-column pt-2 px-2 align-items-center" style={{flex: "1 1 auto",}} >
-
-              <HorizontalBarChart values={humidity}/>
-
-            </div>
-                          <p style={{flex: "1 1 auto"}} className=' text-center'>Luftfeuchte: <br></br> <strong>{humidity}%</strong></p>
-
+      <div className="row " style={{ flex: "1 1 auto" }}>
+        <div
+          className="chart-container d-flex p-2 mx-2"
+          style={{
+            flex: "1 1 auto",
+            maxHeight: "30vh",
+            borderRadius: "0px",
+            backgroundColor: "#5D7280",
+            borderStyle: "solid",
+            borderWidth: "1px",
+            borderColor: "#5D7280",
+          }}
+        >
+          <div className="d-flex " style={{color: "lightgrey"}}>
+            <div className="d-flex">
+          <div className="pe-3">Wetterstation Burg Lichtenberg</div>
+          <div className="pe-5">
+          <label className="switch">
+          <input type="checkbox"  />
+          <span className="slider round"></span>
+        </label>
+        </div>
+        </div>
+          <div>Wetterstation Siebenpfeiffer-Gymnasium</div>
           </div>
         </div>
-
-        <div className="col-6  col-lg-3 d-flex p-2">
-  <div className="d-flex justify-content-center align-items-center"
-    style={{
-      flex: "1 1 auto",
-      borderRadius: "0px",
-      backgroundColor: "white",
-      borderStyle: "solid",
-      borderWidth: "1px",
-      borderColor: "silver",
-      display: "flex", // Ensure inner div fills available space
-      flexDirection: "column", // Stack children vertically
-      width: "50%",
-
-    }}
-  >
-    <div className="d-flex pt-2 align-items-center" style={{ flex: "1 1 auto", maxWidth: "100%", maxHeight: "100%"}}>
-      <Gauge currentValue={(parseInt(airPressure) / 100 + 47).toFixed(0)} config={barometerConfig} id={"airPressure"}/>
-    </div>
-    <div>
-    <p className="text-center">Luftdruck:<br></br> <strong>{(parseInt(airPressure) / 100 + 47).toFixed(0)} hPa</strong></p>
-    </div>
-  </div>
-</div>
-
       </div>
+
+      <div className="row mt-3" style={{ flex: "1 1 auto" }}>
+        <div
+          className="chart-container d-flex p-2 mx-2"
+          style={{
+            flex: "1 1 auto",
+            maxHeight: "30vh",
+            borderRadius: "0px",
+            backgroundColor: "#5D7280",
+            borderStyle: "solid",
+            borderWidth: "1px",
+            borderColor: "#5D7280",
+          }}
+        >
+          {weatherStationPrecipitationData && (
+            <BarChart
+              barChartConfig={precipitationConfig}
+              barChartData={weatherStationPrecipitationData}
+            />
+          )}
+        </div>
       </div>
+    </>
   );
 };
 
-export default WeatherSubpage;
+export default WeatherDashboard;

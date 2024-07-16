@@ -19,6 +19,15 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
     if (healthStateRaw === 0) {
       return 92
     }
+    else if (healthStateRaw === 1) {
+      return 60
+    }
+    else if (healthStateRaw === 2) {
+      return 35
+    }
+    else if (healthStateRaw === 4) {
+      return 15
+    }
     // make sure that there is no error if there are serverside problems (so no data)
     else {
       return 0
@@ -32,7 +41,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
 
 
   return (
-    <div className="row" style={{ flex: "1 1 auto" }}>
+    <div className="row mt-4" style={{ flex: "1 1 auto" }}>
       
       <div className="col-md-3 p-2 d-flex flex-column " >
         <div>
@@ -87,11 +96,11 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
         <div
           className="col-sm-6 col-md-12 d-flex   order-5 tree-gauge-child-md-and-larger" 
           style={{
-            backgroundColor: "white",
+            backgroundColor: "#5D7280",
             borderRadius: "0px",
             borderStyle: 'solid',
             borderWidth:'1px',
-            borderColor: 'silver',
+            borderColor: '#5D7280',
           }}
         >
 
@@ -101,8 +110,8 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
                <div className="col-12  d-flex flex-column align-items-center justify-content-center pt-3 pt-md-5 pb-md-4  pb-md-4 pt-xl-5 pt-xl-3  " >
                {/* it's a "special chart" because the gauge's needle will be resting at 0 if undefined */}
             <Gauge  classAsProp="gaugeChartsTrees" currentValue={healthState} config={treeHealthConfig} selectedTree={selectedTree} id={"specialChartGeneral"}/> 
-            <p className="d-flex flex-column align-items-center justify-content-center text-center px-2" style={{flex: "1 1 auto"}}>
-  Allgemeiner Baumzustand:<br />
+            <p className="d-flex flex-column align-items-center justify-content-center text-center px-2 " style={{flex: "1 1 auto", color: "lightgrey"}}>
+  Wasserbilanz Baum:<br />
   <strong>
     {!selectedTree || selectedTree.id === 6 || selectedTree.id === 7 ? '-' : (
       selectedTree.id === 3 || selectedTree.id === 5 ? 'Sensor nicht vorhanden' : (
@@ -127,11 +136,11 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
         <div
           className="col-sm-6 col-md-12 d-flex  order-5  tree-gauge-child-md-and-larger" 
           style={{
-            backgroundColor: "white",
+            backgroundColor: "#5D7280",
             borderRadius: "0px",
             borderStyle: 'solid',
             borderWidth:'1px',
-            borderColor: 'silver',
+            borderColor: '#5D7280',
 
 
           }}
@@ -141,7 +150,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
                {/* it's a "special chart" because it will be grayed out if undefined */}
                
             <Gauge classAsProp="gaugeChartsTrees" currentValue={currentValue} config={soilMoistureGaugeChartConfig} selectedTree={selectedTree} id={"specialChartSoilMoisture"} /> 
-            <p className="d-flex flex-column align-items-center justify-content-center text-center px-2" style={{flex: "1 1 auto"}}>
+            <p className="d-flex flex-column align-items-center justify-content-center text-center px-2" style={{flex: "1 1 auto", color: "lightgrey"}}>
   Bodenfeuchte:<br />
   <strong>
     {!selectedTree || selectedTree.id === 6 || selectedTree.id === 7 ? '-' : (
@@ -166,11 +175,11 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
           style={{
             flex: "1 1 auto",
 
-            backgroundColor: "white",
+            backgroundColor: "#5D7280",
             borderRadius: "0px",
             borderStyle: 'solid',
             borderWidth:'1px',
-            borderColor: 'silver',
+            borderColor: '#5D7280',
             zIndex: '0', //add this to make sure the controls of the map are underneath the dropdown elements (Dropdown is directly above the map)
           }}
         >
@@ -185,11 +194,11 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
           style={{
                           flex: "1 1 auto",
             maxHeight:"70%",
-            backgroundColor: "white",
+            backgroundColor: "#5D7280",
             borderRadius: "0px",
             borderStyle: 'solid',
             borderWidth:'1px',
-            borderColor: 'silver',
+            borderColor: '#5D7280',
             zIndex: '0', //add this to make sure the controls of the map are underneath the dropdown elements (Dropdown is directly above the map)
 
             
@@ -208,11 +217,11 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
           style={{
             flex: "1 1 80%",
 
-            backgroundColor: "white",
+            backgroundColor: "#5D7280",
             borderRadius: "0px",
             borderStyle: 'solid',
             borderWidth:'1px',
-            borderColor: 'silver'
+            borderColor: '#5D7280'
           }}
         >
           <LeafletMap selectedTree={selectedTree} currentValueSoilMoisture={lastValuesSoilMoisture} treeSenseHealth={healthStateRaw}/>
@@ -223,11 +232,11 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
           style={{
                           flex: "1 1 20%",
             // maxHeight:"90%",
-            backgroundColor: "white",
+            backgroundColor: "#5D7280",
             borderRadius: "0px",
             borderStyle: 'solid',
             borderWidth:'1px',
-            borderColor: 'silver'
+            borderColor: '#5D7280'
           }}
         >
           <MapLegend />

@@ -282,6 +282,106 @@ class ElectricalResistanceDataView(View):
             return None
 
 
+
+##################################################              TreeSense tree moisture content endpoint        ################################################################
+
+
+#deifnitely double check here the refresh token and the log out options, make sure that everything is secure. 
+#libraries like Django OAuth Toolkit or Auth0 for more robust authentication and token management?
+
+
+class TreeMoistureContentDataView(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            
+            # Determine the type of query based on the request
+            query_type = request.GET.get("query_type")
+            
+            # Perform authentication to obtain the access token
+            access_token = self.authenticate()
+
+            if access_token:
+                # Define the URL of the API endpoint to fetch moisture content data
+                if query_type == "cox_orangenrenette":
+                    api_url = 'https://api.treesense.net/moisture-content/A84041B42187E5C6'
+                    
+                    # Set up headers with the access token
+                    headers = {'Authorization': f'Bearer {access_token}'}
+                    
+                    # Make a GET request to the API endpoint
+                    response = requests.get(api_url, headers=headers)
+                    
+                    # Check if the request was successful (status code 200)
+                    if response.status_code == 200:
+                        response_json = response.json()
+                        
+                        # Skip the first two header elements and process the remaining elements
+                        extracted_values = [re.split(',', element) for element in response_json[2:]]
+                        
+                        # Extract timestamp and moisture_content from each sublist, create a JSON object for each element
+                        data = [{'time': sublist[0], 'value': float(sublist[5]) * 100} for sublist in extracted_values]
+                        
+                        # Convert the data to JSON format
+                        data_json = json.dumps(data)
+                        
+                        # Return the extracted data as a JSON response
+                        return JsonResponse(data_json, status=200, safe=False)
+                else:
+                    # Return an error response if the request failed
+                    return JsonResponse({"error": "Failed to fetch data"}, status=response.status_code)
+            else:
+                # If authentication fails or access token is not available, return error response
+                return JsonResponse({"error": "Authentication failed or access token not available"}, status=401)
+
+        except Exception as e:
+            # Print the error message to the terminal
+            print(f"Error in ElectricalResistanceDataView: {str(e)}")
+
+            # Return a JSON response indicating the error
+            return JsonResponse({"error": str(e)}, status=500)
+    
+    def authenticate(self):
+        try:
+            # Define login endpoint URL and the login data
+            login_url = 'https://api.treesense.net/login'
+            email = os.getenv("LOGIN_EMAIL")
+            password = os.getenv("LOGIN_PASSWORD")
+
+            if not email or not password:
+                print("Login credentials not found in environment variables.")
+                return None
+
+            # Define login payload (username and password)            
+            payload = {
+                "email": email,
+                "password": password
+            }
+
+            # Set up headers
+            headers = {
+                'accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+
+            # Send a POST request to the login endpoint with the payload
+            response = requests.post(login_url, json=payload, headers=headers)
+
+            # Check if the request was successful (status code 200)
+            if response.status_code == 200:
+                # Extract the access token from the response JSON
+                access_token = response.json().get('accessToken')
+                return access_token
+            else:
+                # Handle authentication failure or other error
+                print(f"Failed to authenticate. Status code: {response.status_code}")
+                return None
+
+        except Exception as e:
+            # Print the error message to the terminal
+            print(f"Error during authentication: {str(e)}")
+            return None
+        
+
 ##################################################              TreeSense tree general health endpoint        ################################################################
 
 

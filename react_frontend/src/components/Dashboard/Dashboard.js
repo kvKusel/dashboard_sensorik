@@ -4,6 +4,8 @@ import WeatherSubpage from "./elements/WeatherSubpage";
 import TreeMonitoringSubpage from "./elements/TreeMonitoringSubpage";
 import WebcamSubpage from "./elements/WebcamSubpage";
 import Logo from "../../assets/logo_landlieben.png";
+import Dropdown from 'react-bootstrap/Dropdown';
+
 
 const Dashboard = () => {
   const [runTutorial, setRunTutorial] = useState(false);
@@ -13,7 +15,7 @@ const Dashboard = () => {
     {
       target: ".first-step",
       content:
-        "Willkommen zu unserem Dashboard! In den nächsten 60 Sekunden werden wir Dir seine Funktionsweise erklären.",
+        "Willkommen zu unserem Dashboard! In den nächsten 60 Sekunden zeigen wir Dir welche Informationen die Seite für Dich bereithält.",
       placement: "center",
     },
     {
@@ -41,8 +43,8 @@ const Dashboard = () => {
 
   const [activeTab, setActiveTab] = useState("Baummonitoring");
 
-  const handleTabChange = (newTab) => {
-    setActiveTab(newTab);
+  const handleSelect = (eventKey) => {
+    setActiveTab(eventKey);
   };
 
   return (
@@ -51,7 +53,7 @@ const Dashboard = () => {
     <div
       className="container-fluid d-flex flex-column justify-content-between"
       style={{
-        background: "#F6F1E9",
+        background: "#354F61",
         // "linear-gradient(to right, #232D3F, #4D4C7D, #4D4C7D, #4D4C7D, #232D3F)",
         minHeight: "100vh",
       }}
@@ -62,15 +64,17 @@ const Dashboard = () => {
         <div className="d-flex  align-items-center justify-content-between">
           <div className=" pt-2" style={{ flexGrow: 1 }}>
           <div className="d-none d-sm-block"> {/* Hide on small screens, show on medium and larger */}
-  <Link to="/" className="text-decoration-none text-dark">
-    <h2>
+          <h2>
+  <Link to="/" className="text-decoration-none text-white">
+    
       SENSORNETZ LAND{" "}
       <span style={{ whiteSpace: "nowrap" }}>
         L<img className="logo" src={Logo} alt="Logo" />
         EBEN
       </span>
-    </h2>
+    
   </Link>
+  </h2>
 </div>
 
 <div className="d-sm-none"> {/* Hide on medium and larger screens, show only on small screens */}
@@ -80,12 +84,25 @@ const Dashboard = () => {
 </div>
 
           </div>{" "}
+          <div className="pt-2 mx-3 ">
+          <Dropdown onSelect={handleSelect}>
+          <Dropdown.Toggle variant="danger" id="dropdown-basic">
+        Thema auswählen
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu>
+        <Dropdown.Item eventKey="Baummonitoring">Baummonitoring</Dropdown.Item>
+        <Dropdown.Item eventKey="Wetter">Wetter</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
+          </div>
+
           <div className="pt-2 ">
             <div
-              className="btn btn-danger rounded-pill text-decoration-none"
+              className="btn btn-danger  text-decoration-none"
               onClick={() => setRunTutorial(true)}
             >
-              <p className="fw-bold m-0">Onboarding</p>{" "}
+              <p className=" m-0 px-3">Hilfe</p>{" "}
               {/* m-0 removes default margin from <p> */}
             </div>
           </div>

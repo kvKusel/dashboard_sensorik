@@ -27,7 +27,7 @@ const MyJumbotron = () => {
 
   const fadeInDelayArrow = {
     hidden: { opacity: 0, },
-    visible: { opacity: 1, transition: { duration: 2, staggerChildren: 1 , delay: 2,} },
+    visible: { opacity: 1, transition: { duration: 2, staggerChildren: 1 , delay: 0.8,} },
   };
 
 

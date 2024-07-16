@@ -13,11 +13,11 @@ const MarkerComponent = ({ position, selectedTree, currentValueSoilMoisture, tre
 
     console.log(position)
     
-    // Adjust the color of the left side of the leaflet icons based on the tree health data
+    // Adjust the color of the left side of the leaflet icons based on the tree health data - so far its only for one of the trees (Schoner von Nordhausen?)
     let colorLeft; // Default color
   
-    if (treeSenseHealth === 0 && (treeID === 1 || treeID === 2 || treeID === 4 ) ) {
-      colorLeft = "rgb(25, 135, 84)";
+    if (treeSenseHealth === 2 && (treeID === 1 || treeID === 2 || treeID === 4 ) ) {
+      colorLeft = "red";
     } else if ((treeID === 3 )|| treeID === 5) {
       colorLeft = "white";
     }

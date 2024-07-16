@@ -51,6 +51,9 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
         },
         scales: {
           x: {
+            grid: {
+              color: "lightgrey",
+            },
             type: "timeseries",
             // time: {
             //   unit: 'second',
@@ -68,7 +71,7 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
             },
               
               maxTicksLimit: 4,
-              color: "black",
+              color: "lightgrey",
               font: {
                 size: 14,
               },
@@ -76,11 +79,14 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
             
           },
           y: {
+            grid: {
+              color: "lightgrey",
+            },
             ticks: {
 
               precision:0,
               maxTicksLimit: 4,
-              color: "black",
+              color: "lightgrey",
               font: {
                 size: 14,
               },
@@ -92,7 +98,7 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
           title: {
             text: lineChartConfig.plugins.title.text,
             display: "yes",
-            color: "black",
+            color: "lightgrey",
             font: {
               size: "18rem",
             },
@@ -100,7 +106,7 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
           legend: {
             display: false,
             labels: {
-              color: "black",
+              color: "lightgrey",
               font: {
                 size: "18rem",
               },
@@ -133,6 +139,9 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
           },
           scales: {
             x: {
+              grid: {
+                color: "lightgrey",
+              },
               type: "time",
               time: {
                 unit: "day",
@@ -146,20 +155,23 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
                 // minTicksLimit: 5, // Set a minimum number of ticks
                 // stepSize: 150,
                 // autoSkip: false,
-                color: "black",
+                color: "lightgrey",
                 font: {
                   size: 14,
                 },
               },
             },
             y: {
+              grid: {
+                color: "lightgrey",
+              },
               min: 0,
               max: 60,
               ticks: {
                 precision:0,
                 maxTicksLimit: 4,
                 // stepSize: 25, // Adjust the step size as needed
-                color: "black",
+                color: "lightgrey",
                 font: {
                   size: 14,
                 },
@@ -171,7 +183,7 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
             title: {
               text: lineChartConfig.plugins.title.text,
               display: "yes",
-              color: "black",
+              color: "lightgrey",
               font: {
                 size: "18rem",
               },
@@ -179,7 +191,7 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
             legend: {
               display: false,
               labels: {
-                color: "black",
+                color: "lightgrey",
                 font: {
                   size: "18rem",
                 },
@@ -206,7 +218,7 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
               const yCenter = top + (bottom - top) / 2;
 
               ctx.font = "1rem Poppins, sans-serif";
-              ctx.fillStyle = "black";
+              ctx.fillStyle = "lightgrey";
               ctx.textAlign = "center";
 
               // Function to wrap text

@@ -7,7 +7,7 @@ import IconTree from "./LeafletTreeIconForLegend";
 const MapLegend = () => {
   return (
     <>
-      <div className="w-100 h-100">
+      <div className="w-100 h-100 " style={{ color: 'lightgrey' }}>
         <div className="row  d-flex  ">
           <div className="col-12">
           <div>
@@ -19,7 +19,7 @@ const MapLegend = () => {
         </div>
         <div className="row  d-flex ">
         <div className="col-md-5 col-6 d-flex flex-column ">
-        <div className="fw-bold">Zustand allgemein:</div>
+        <div className="fw-bold"> Wasserbilanz Baum:</div>
 
         
                     {/*             kein Trockenstress icon */}
@@ -73,7 +73,7 @@ const MapLegend = () => {
 
                               <div className=" d-flex  ">
             <div className="d-flex align-items-center legend-icons">
-              <IconTree color={"transparent"}/>
+              <IconTree color={"white"}/>
             </div>
             <div className="d-flex align-items-center ps-1">
             kein Sensor

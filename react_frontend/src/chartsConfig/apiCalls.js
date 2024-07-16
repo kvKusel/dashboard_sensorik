@@ -36,6 +36,17 @@ export const fetchResistanceData = async (queryType) => {
     }
 };
 
+export const fetchTreeMoistureContentData = async (queryType) => {
+    try {
+        const response = await axios.get(`${API_URL}/tree-moisture-content-data/?query_type=${queryType}`);
+        const parsedData = JSON.parse(response.data);
+        return parsedData;
+    } catch (error) {
+        console.error("Error fetching tree moisture content data from Django:", error);
+        return null;
+    }
+};
+
 export const fetchTreeHealthData = async () => {
     try {
         const response = await axios.get(`${API_URL}/tree-health-data/`);
