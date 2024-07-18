@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import MyButton from "./Button";
@@ -14,6 +14,29 @@ const MyJumbotron = () => {
     background: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${headerImage}) no-repeat center center fixed`,
     backgroundSize: "cover",
   });
+
+  const updateBackgroundStyle = () => {
+    if (window.innerWidth <= 768) {
+      setBackgroundStyle({
+        background: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${headerImage}) no-repeat center center fixed`,
+        backgroundSize: "auto",
+      });
+    } else {
+      setBackgroundStyle({
+        background: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${headerImage}) no-repeat center center fixed`,
+        backgroundSize: "cover",
+      });
+    }
+  };
+
+  useEffect(() => {
+    updateBackgroundStyle();
+    window.addEventListener("resize", updateBackgroundStyle);
+
+    return () => {
+      window.removeEventListener("resize", updateBackgroundStyle);
+    };
+  }, []);
 
   const fadeIn = {
     hidden: { opacity: 0, },
