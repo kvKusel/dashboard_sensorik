@@ -12,7 +12,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
   // set up for the needles of the  gauge charts 
   const currentValue = soilMoistureData? soilMoistureData[soilMoistureData.length - 1].value : 0
 
-  const healthStateRaw = treeSenseGeneralHealthData[0].health_state;
+  const healthStateRaw = treeSenseGeneralHealthData[0].status;
 
 
   const treeSenseCoxOrangenrenetteHealth = (healthStateRaw) => {

@@ -7,8 +7,8 @@ function DropdownButton({ trees, onSelectTree }) {
   
   return (
     <Dropdown className='dropdown-center '>
-      <Dropdown.Toggle className='text-center lead fs-5 px-0 fw-normal'  variant="success" id="dropdown-basic" style={{ width: '100%', borderRadius:1, backgroundColor: "#0079FF"}}>
-        Baum wählen
+      <Dropdown.Toggle className='text-center lead fs-5 px-0 fw-normal'  variant="success" id="dropdown-basic" style={{ width: '100%', borderRadius:1, backgroundColor: "#003065", borderColor:"#003065"}}>
+        Ansicht wählen
       </Dropdown.Toggle>
 
       <Dropdown.Menu className='w-75'>

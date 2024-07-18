@@ -28,10 +28,10 @@ export const fetchWeatherStationData = async (queryType) => {
 export const fetchResistanceData = async (queryType) => {
     try {
         const response = await axios.get(`${API_URL}/electrical-resistance-data/?query_type=${queryType}`);
-        const parsedData = JSON.parse(response.data);
-        return parsedData;
+        // axios automatically parses the JSON response
+        return response.data;
     } catch (error) {
-        console.error("Error fetching electrical resistance data from Django:", error);
+        console.error("Error fetching tree moisture content data from Django:", error);
         return null;
     }
 };
@@ -39,8 +39,8 @@ export const fetchResistanceData = async (queryType) => {
 export const fetchTreeMoistureContentData = async (queryType) => {
     try {
         const response = await axios.get(`${API_URL}/tree-moisture-content-data/?query_type=${queryType}`);
-        const parsedData = JSON.parse(response.data);
-        return parsedData;
+        // axios automatically parses the JSON response
+        return response.data;
     } catch (error) {
         console.error("Error fetching tree moisture content data from Django:", error);
         return null;
@@ -50,10 +50,10 @@ export const fetchTreeMoistureContentData = async (queryType) => {
 export const fetchTreeHealthData = async () => {
     try {
         const response = await axios.get(`${API_URL}/tree-health-data/`);
-        // const parsedData = JSON.parse(response.data);
+        // axios automatically parses the JSON response
         return response.data;
     } catch (error) {
-        console.error("Error fetching tree health data from Django:", error);
+        console.error("Error fetching tree moisture content data from Django:", error);
         return null;
     }
 };

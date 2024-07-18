@@ -13,8 +13,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 import dotenv
-import sshtunnel
-import atexit
+
+
 
 # Load environment variables from .env file
 dotenv.load_dotenv()
@@ -98,33 +98,33 @@ WSGI_APPLICATION = 'django_backend.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 
-# SSH connection to pythonanywhere db
-sshtunnel.SSH_TIMEOUT = 5.0
-sshtunnel.TUNNEL_TIMEOUT = 5.0
+# # SSH connection to pythonanywhere db
+# sshtunnel.SSH_TIMEOUT = 5.0
+# sshtunnel.TUNNEL_TIMEOUT = 5.0
 
-# Start the SSH tunnel
-tunnel = sshtunnel.SSHTunnelForwarder(
-    ('ssh.eu.pythonanywhere.com'),  # PythonAnywhere SSH hostname
-    ssh_username='scdash',  # Your PythonAnywhere username
-    ssh_password= os.getenv("pythonanywhere"),  # The password you use to log in to the PythonAnywhere website
-    remote_bind_address=('scdash.mysql.eu.pythonanywhere-services.com', 3306)  # Your PythonAnywhere database hostname
-)
-tunnel.start()
+# # Start the SSH tunnel
+# tunnel = sshtunnel.SSHTunnelForwarder(
+#     ('ssh.eu.pythonanywhere.com'),  # PythonAnywhere SSH hostname
+#     ssh_username='scdash',  # Your PythonAnywhere username
+#     ssh_password= os.getenv("pythonanywhere"),  # The password you use to log in to the PythonAnywhere website
+#     remote_bind_address=('scdash.mysql.eu.pythonanywhere-services.com', 3306)  # Your PythonAnywhere database hostname
+# )
+# tunnel.start()
 
-# Ensure the tunnel is stopped when the Django process exits
-atexit.register(tunnel.stop)
-
+# # Ensure the tunnel is stopped when the Django process exits
+# atexit.register(tunnel.stop)
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'scdash$default',
-        'USER': 'scdash',
-        'PASSWORD': os.getenv("db_password"),
-        'HOST': '127.0.0.1',
-        'PORT': tunnel.local_bind_port,
+        'NAME': 'scdash_local',
+        'USER': 'scdash_local_user',
+        'PASSWORD': '1234', 
+        'HOST': 'localhost',
+        'PORT': '3306',  # Default MySQL port
     }
 }
+
 
 
 # Password validation

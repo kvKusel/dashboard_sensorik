@@ -50,78 +50,124 @@ const WeatherDashboard = ({}) => {
       </div>
 
       <div className="row " style={{ flex: "1 1 auto" }}>
-        <div
-          className="chart-container d-flex p-2 mx-2"
-          style={{
-            flex: "1 1 auto",
-            maxHeight: "30vh",
-            borderRadius: "0px",
-            backgroundColor: "#5D7280",
-            borderStyle: "solid",
-            borderWidth: "1px",
-            borderColor: "#5D7280",
-          }}
-        >
-          {weatherStationTemperatureData && (
-            <LineChart
-              id="temperatureChart"
-              lineChartConfig={temperatureConfig}
-              lineData={weatherStationTemperatureData}
-            />
-          )}
-          
+        <div className="col-12 d-flex px-2 ">
+          <div
+            className="chart-container d-flex "
+            style={{
+              flex: "1 1 auto",
+              maxHeight: "30vh",
+              borderRadius: "0px",
+              backgroundColor: "#5D7280",
+              borderStyle: "solid",
+              borderWidth: "1px",
+              borderColor: "#5D7280",
+            }}
+          >
+            {weatherStationTemperatureData && (
+              <LineChart
+                id="temperatureChart"
+                lineChartConfig={temperatureConfig}
+                lineData={weatherStationTemperatureData}
+              />
+            )}
+          </div>
         </div>
       </div>
 
-      <div className="row " style={{ flex: "1 1 auto" }}>
-        <div
-          className="chart-container d-flex p-2 mx-2"
-          style={{
-            flex: "1 1 auto",
-            maxHeight: "30vh",
-            borderRadius: "0px",
-            backgroundColor: "#5D7280",
-            borderStyle: "solid",
-            borderWidth: "1px",
-            borderColor: "#5D7280",
-          }}
-        >
-          <div className="d-flex " style={{color: "lightgrey"}}>
-            <div className="d-flex">
-          <div className="pe-3">Wetterstation Burg Lichtenberg</div>
-          <div className="pe-5">
-          <label className="switch">
-          <input type="checkbox"  />
-          <span className="slider round"></span>
-        </label>
-        </div>
-        </div>
-          <div>Wetterstation Siebenpfeiffer-Gymnasium</div>
+      <div className="row" style={{ flex: "1 1 auto" }}>
+        <div className="col-12 d-flex flex-wrap px-2">
+          <div
+            className="col-12 col-md-6 col-lg-4 col-xl-5 pb-2 d-flex align-items-center px-2"
+            style={{
+              backgroundColor: "#5D7280",
+              color: "lightgray",
+            }}
+          >
+            <div className="px-4">Wetterstation Burg Lichtenberg</div>
+            <div className="">
+            <label className="switch">
+            <input type="checkbox" defaultChecked />
+            <span className="slider round"></span>
+          </label>
+            </div>
+          </div>
+
+          <div
+            className="col-12 col-md-6 col-lg-8 col-xl-7 pb-2 d-flex align-items-center px-2"
+            style={{
+              backgroundColor: "#5D7280",
+              color: "lightgray",
+            }}
+          >
+            <div className="px-4">Wetterstation Siebenpfeiffer-Gymnasium</div>
+            <div className="">
+              <label className="switch">
+                <input type="checkbox" />
+                <span className="slider round"></span>
+              </label>
+            </div>
           </div>
         </div>
       </div>
 
       <div className="row mt-3" style={{ flex: "1 1 auto" }}>
-        <div
-          className="chart-container d-flex p-2 mx-2"
-          style={{
-            flex: "1 1 auto",
-            maxHeight: "30vh",
-            borderRadius: "0px",
-            backgroundColor: "#5D7280",
-            borderStyle: "solid",
-            borderWidth: "1px",
-            borderColor: "#5D7280",
-          }}
-        >
-          {weatherStationPrecipitationData && (
-            <BarChart
-              barChartConfig={precipitationConfig}
-              barChartData={weatherStationPrecipitationData}
-            />
-          )}
+        <div className="col-12 d-flex px-2 ">
+          <div
+            className="chart-container d-flex "
+            style={{
+              flex: "1 1 auto",
+              maxHeight: "30vh",
+  
+              backgroundColor: "#5D7280",
+   
+            }}
+          >
+            {weatherStationPrecipitationData && (
+              <BarChart
+                barChartConfig={precipitationConfig}
+                barChartData={weatherStationPrecipitationData}
+              />
+            )}
+          </div>
         </div>
       </div>
+
+      <div className="row" style={{ flex: "1 1 auto" }}>
+        <div className="col-12 d-flex flex-wrap px-2">
+          <div
+            className="col-12 col-md-6 col-lg-4 col-xl-5 pb-2 d-flex align-items-center px-2"
+            style={{
+              backgroundColor: "#5D7280",
+              color: "lightgray",
+            }}
+          >
+            <div className="px-4">Wetterstation Burg Lichtenberg</div>
+            <div className="">
+         <label className="switch">
+            <input type="checkbox" defaultChecked />
+            <span className="slider round"></span>
+          </label>
+            </div>
+          </div>
+
+          <div
+            className="col-12 col-md-6 col-lg-8 col-xl-7 pb-2 d-flex align-items-center px-2"
+            style={{
+              backgroundColor: "#5D7280",
+              color: "lightgray",
+            }}
+          >
+            <div className="px-4">Wetterstation Siebenpfeiffer-Gymnasium</div>
+            <div className="">
+              <label className="switch">
+                <input type="checkbox" />
+                <span className="slider round"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </>
   );
 };

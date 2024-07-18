@@ -48,7 +48,7 @@ export const electricalResistanceConfig = {
   ],
   plugins: {
     title: {
-      text: "Elektrischer Widerstand [kΩ]",
+      text: "Elektr. Widerstand des Baums [kΩ]",
     },
   },
 };

@@ -63,7 +63,7 @@ const BarChart = ({ barChartConfig, barChartData }) => {
         scales: {
           x: {
             offset: false,
-            type: 'timeseries', 
+            type: 'time', 
             min:firstTimeValue,
             max: Date.now(),
 

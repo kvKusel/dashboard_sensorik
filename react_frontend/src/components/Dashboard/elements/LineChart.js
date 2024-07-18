@@ -54,7 +54,7 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
             grid: {
               color: "lightgrey",
             },
-            type: "timeseries",
+            type: "time",
             // time: {
             //   unit: 'second',
             //   unitStepSize: 1,
