@@ -12,7 +12,6 @@ from django.core.management import call_command
 from django.utils.timezone import now as tz_now, make_aware, utc
 from django.db import connections, connection
 
-
 # Add the project root to the Python path - uncomment for production environment!
 # path = '/home/scdash/django_project/dashboard_smartcity/django_backend'
 # if path not in sys.path:
@@ -24,22 +23,21 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_backend.settings.base')
 
 # Add the project root to the Python path
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..'))
-if project_root not in sys.path:
+if (project_root not in sys.path):
     sys.path.append(project_root)
 
 # Setup Django
 django.setup()
 
-
 # Try to import the models
 try:
-    from sensor_data.models import Device, TreeMoistureReading, ElectricalResistanceReading, TreeHealthReading
+    from sensor_data.models import Device, TreeMoistureReading, ElectricalResistanceReading, TreeHealthReading, WeatherData
     print("Successfully imported sensor_data.models")
 except ModuleNotFoundError as e:
     print(f"Error importing sensor_data.models: {e}")
 
 class Command(BaseCommand):
-    help = 'Fetches data from Treesense API and stores it'
+    help = 'Fetches data from Treesense and ThingsBoard APIs and stores it'
 
     def authenticate(self):
         try:
@@ -215,6 +213,7 @@ class Command(BaseCommand):
         else:
             self.stdout.write(self.style.ERROR(f'Failed to fetch tree health data. Status code: {response.status_code}'))
 
+  
     def handle(self, *args, **kwargs):
         while True:
             try:
@@ -226,6 +225,8 @@ class Command(BaseCommand):
                     self.fetch_tree_moisture_data(access_token)
                     self.fetch_electrical_resistance_data(access_token)
                     self.fetch_tree_health_data(access_token)
+
+
                     self.stdout.write(f"Next execution in 20 minutes at {tz_now() + timedelta(minutes=20)}")
 
                 else:

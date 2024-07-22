@@ -17,8 +17,9 @@ class WeatherData(models.Model):
     wind_direction = models.FloatField()
     precipitation = models.FloatField()
     air_pressure = models.FloatField()
-    uv = models.FloatField()
-    luminosity = models.FloatField()
+    uv = models.FloatField(null=True, blank=True)  # Optional field
+    luminosity = models.FloatField(null=True, blank=True)  # Optional field
+    rainfall_counter = models.FloatField()  
 
     class Meta:
         ordering = ['-timestamp']

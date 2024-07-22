@@ -11,8 +11,9 @@ import re
 from django.http import HttpResponse
 import pandas as pd
 from django.shortcuts import render
-from sensor_data.models import TreeMoistureReading, Device, ElectricalResistanceReading, TreeHealthReading
-
+from sensor_data.models import TreeMoistureReading, Device, ElectricalResistanceReading, TreeHealthReading, WeatherData
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 
 
@@ -244,3 +245,89 @@ class TreeHealthDataView(View):
 
         except Device.DoesNotExist:
             return JsonResponse({'error': 'Device not found'}, status=404)
+        
+
+#############################              TTN Webhooks - weathers station Siebenpfeiffer Gymnasium        ###########################################
+
+@method_decorator(csrf_exempt, name='dispatch')
+class TTNWebhookView(View):
+
+    def post(self, request, *args, **kwargs):
+        try:
+            data = json.loads(request.body)
+            device_id = data['end_device_ids']['device_id']
+            payload = data['uplink_message']['decoded_payload']
+
+            # Get or create the device
+            device, created = Device.objects.get_or_create(device_id=device_id)
+
+            # Extract data from payload
+            temperature = payload.get('temperature')
+            humidity = payload.get('humidity')
+            wind_speed = payload.get('wind_speed')
+            wind_direction = payload.get('wind_direction')
+            precipitation = payload.get('rainfall_total')
+            air_pressure = payload.get('pressure')
+            uv = payload.get('uv')  # This field may not be present
+            luminosity = payload.get('luminosity')  # This field may not be present
+            rainfall_counter = payload.get('rainfall_counter')
+            timestamp = datetime.datetime.now()  # Or use the timestamp from TTN if available
+
+
+            # Create a new WeatherData entry
+            WeatherData.objects.create(
+                device=device,
+                timestamp=timestamp,
+                temperature=temperature,
+                humidity=humidity,
+                wind_speed=wind_speed,
+                wind_direction=wind_direction,
+                precipitation=precipitation,
+                air_pressure=air_pressure,
+                uv=uv,
+                luminosity=luminosity,
+                rainfall_counter=rainfall_counter
+            )
+
+            return JsonResponse({'status': 'success'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)})
+    
+    def get(self, request, *args, **kwargs):
+        # Example of another method in the same view class
+        return JsonResponse({'status': 'method not allowed'}, status=405)
+    
+#############################             weather station data Siebenpfeiffer Gymnasium        ###########################################
+   
+    
+class WeatherDataView(View):
+
+    def get(self, request, *args, **kwargs):
+        try:
+            # You can add filtering parameters based on your needs, for example, by device or date range
+            device_id = request.GET.get('device_id')
+            if device_id:
+                device = Device.objects.get(device_id=device_id)
+                weather_data = WeatherData.objects.filter(device=device).order_by('-timestamp')[:100]  # Fetch latest 100 records
+            else:
+                weather_data = WeatherData.objects.all().order_by('-timestamp')[:100]  # Fetch latest 100 records
+
+            data = []
+            for record in weather_data:
+                data.append({
+                    'timestamp': record.timestamp.isoformat(),
+                    'temperature': record.temperature,
+                    'humidity': record.humidity,
+                    'wind_speed': record.wind_speed,
+                    'wind_direction': record.wind_direction,
+                    'precipitation': record.precipitation,
+                    'air_pressure': record.air_pressure,
+                    'uv': record.uv,
+                    'luminosity': record.luminosity,
+                })
+
+            return JsonResponse(data, safe=False)
+        except Device.DoesNotExist:
+            return JsonResponse({'error': 'Device not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
