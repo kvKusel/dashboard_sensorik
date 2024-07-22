@@ -15,7 +15,7 @@ import {
   fetchResistanceData,
   fetchTreeHealthData,
 } from "../../../chartsConfig/apiCalls";
-import WeatherSubpage from "./WeatherSubpage";
+import WeatherSubpage from "./WeatherDashboard/WeatherSubpage";
 import { useWeatherStationPrecipitation } from "../../../hooks/weatherStation/WeatherStationPrecipitation ";
 import { useWeatherStationTemperature } from "../../../hooks/weatherStation/WeatherStationTemperatureData";
 import { useWeatherStationUVIndex } from "../../../hooks/weatherStation/WeatherStationUVIndex";
@@ -184,7 +184,7 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
           setTreeSenseCoxOrangenrenetteGeneralHealth(
             treeSenseGeneralHealthData
           );
-
+          
           setIsLoading(false); // Set loading to false once data is fetched
         } catch (error) {
           console.error("Error fetching data:", error);

@@ -42,7 +42,7 @@ const MarkerComponent = ({ position, selectedTree, currentValueSoilMoisture, tre
     html: ReactDOMServer.renderToString(
       <MarkerIcon colorLeft={colorLeft} colorRight={colorRight} />
     ),
-    className: isSelectedTreePosition || selectedTree.id == 7 ? "" : "blurred-icon", // makes the NOT chosen icons appear blurry
+    className: isSelectedTreePosition || (selectedTree && selectedTree.id === 7) || selectedTree === null ? "" : "blurred-icon", // makes the NOT chosen icons appear blurry
     iconSize: isSelectedTreePosition ? [53, 53] : [40, 40],
   });
 

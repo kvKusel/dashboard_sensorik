@@ -11,7 +11,7 @@ const MyJumbotron = () => {
   const [isVisible, setIsVisible] = useState(true);
 
   const [backgroundStyle, setBackgroundStyle] = useState({
-    background: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${headerImage}) no-repeat center top fixed`,
+    background: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${headerImage}) no-repeat center center fixed`,
     backgroundSize: "cover",
   });
 

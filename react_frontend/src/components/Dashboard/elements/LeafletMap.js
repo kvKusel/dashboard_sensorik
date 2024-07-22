@@ -9,8 +9,8 @@ const LeafletMap = ({
   currentValueSoilMoisture,
   treeSenseHealth,
 }) => {
-  const [mapCenter, setMapCenter] = useState([49.5566, 7.3583]);
-  const [mapZoom, setMapZoom] = useState(16);
+  const [mapCenter, setMapCenter] = useState([49.55769, 7.3613]);
+  const [mapZoom, setMapZoom] = useState(18);
 
   console.log(treeSenseHealth);
   console.log(selectedTree);
@@ -236,8 +236,8 @@ const LeafletMap = ({
         style={polygonStyleStreuobstwiese}
       />
 
-      {selectedTree &&
-        selectedTree.id !== 6 && ( // Conditionally render the Marker when a tree is selected - use later to highlight the selected tree by changing the icon background
+      {
+        selectedTree?.id !== 6 && ( // Conditionally render the Marker when a tree is selected - use later to highlight the selected tree by changing the icon background
           <>
             {/* render all 5 trees with installed sensors on the Streuobstwiese */}
             <MarkerComponent

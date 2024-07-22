@@ -4,12 +4,22 @@ import django
 import requests
 import json
 import re
-import time  # Import the time module
-from datetime import datetime, timedelta
+import time  
+from datetime import datetime, timedelta, timezone
 from django.core.management.base import BaseCommand
-from django.utils.timezone import now as tz_now, make_aware, utc
+from django.core.management import call_command
 
-# Ensure the Django settings module is set
+from django.utils.timezone import now as tz_now, make_aware, utc
+from django.db import connections, connection
+
+
+# Add the project root to the Python path - uncomment for production environment!
+# path = '/home/scdash/django_project/dashboard_smartcity/django_backend'
+# if path not in sys.path:
+#     sys.path.append(path)
+#     print(f"Added {path} to sys.path")
+    
+# Ensure the Django settings module is set, set to production in production environment!
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_backend.settings.base')
 
 # Add the project root to the Python path
@@ -20,9 +30,6 @@ if project_root not in sys.path:
 # Setup Django
 django.setup()
 
-# Print the Python path and current working directory to debug the issue
-print("Python Path:", sys.path)
-print("Current Working Directory:", os.getcwd())
 
 # Try to import the models
 try:
@@ -45,7 +52,7 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.ERROR("Login credentials not found in environment variables."))
                 return None
 
-            # Define login payload (username and password)            
+            # Define login payload (username and password)
             payload = {
                 "email": email,
                 "password": password
@@ -76,6 +83,10 @@ class Command(BaseCommand):
             return None
 
     def fetch_tree_moisture_data(self, access_token):
+        # Re-open the connection before operations
+        connections.close_all()
+        connections['default'].connect()
+
         # Get or create the device
         device, created = Device.objects.get_or_create(
             device_id='A84041B42187E5C6',
@@ -87,7 +98,7 @@ class Command(BaseCommand):
         if latest_reading:
             latest_time = latest_reading.timestamp
         else:
-            latest_time = make_aware(datetime.min, timezone=utc)
+            latest_time = make_aware(datetime.min, timezone.utc)
 
         api_url = f'https://api.treesense.net/moisture-content/{device.device_id}'
         headers = {'Authorization': f'Bearer {access_token}'}
@@ -103,7 +114,7 @@ class Command(BaseCommand):
             for sublist in extracted_values:
                 time_str = sublist[0]
                 time_parsed = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%SZ')
-                time_parsed = make_aware(time_parsed, timezone=utc)
+                time_parsed = make_aware(time_parsed, timezone.utc)
                 if time_parsed > latest_time:
                     moisture_value = float(sublist[5]) * 100
                     data_objects.append(TreeMoistureReading(
@@ -120,6 +131,10 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR(f'Failed to fetch tree moisture data. Status code: {response.status_code}'))
 
     def fetch_electrical_resistance_data(self, access_token):
+        # Re-open the connection before operations
+        connections.close_all()
+        connections['default'].connect()
+
         # Get or create the device
         device, created = Device.objects.get_or_create(
             device_id='A84041B42187E5C6',
@@ -131,7 +146,7 @@ class Command(BaseCommand):
         if latest_reading:
             latest_time = latest_reading.timestamp
         else:
-            latest_time = make_aware(datetime.min, timezone=utc)
+            latest_time = make_aware(datetime.min, timezone.utc)
 
         api_url = f'https://api.treesense.net/data/{device.device_id}'
         headers = {'Authorization': f'Bearer {access_token}'}
@@ -147,7 +162,7 @@ class Command(BaseCommand):
             for sublist in extracted_values:
                 time_str = sublist[0]
                 time_parsed = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%SZ')
-                time_parsed = make_aware(time_parsed, timezone=utc)
+                time_parsed = make_aware(time_parsed, timezone.utc)
                 if time_parsed > latest_time:
                     resistance_value = float(sublist[3])
                     data_objects.append(ElectricalResistanceReading(
@@ -164,6 +179,10 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR(f'Failed to fetch electrical resistance data. Status code: {response.status_code}'))
 
     def fetch_tree_health_data(self, access_token):
+        # Re-open the connection before operations
+        connections.close_all()
+        connections['default'].connect()
+
         # Get or create the device
         device, created = Device.objects.get_or_create(
             device_id='A84041B42187E5C6',
@@ -215,5 +234,13 @@ class Command(BaseCommand):
             except Exception as e:
                 self.stdout.write(self.style.ERROR(f'Error: {str(e)}'))
 
+            # Close connections after operations
+            connections.close_all()
+
             # Wait for 20 minutes before the next execution
             time.sleep(20 * 60)  # No name conflict now
+
+# Run the command if this script is executed directly
+if __name__ == "__main__":
+    from django.core.management import call_command
+    call_command('fetch_data')

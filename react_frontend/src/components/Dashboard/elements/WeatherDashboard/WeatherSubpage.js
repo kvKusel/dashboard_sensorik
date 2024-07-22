@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import LeafletMap from "./LeafletMap";
-import LineChart from "./LineChart";
-import BarChart from "./BarChart";
+import LeafletMap from "../LeafletMap";
+import LineChart from "../LineChart";
+import BarChart from "../BarChart";
 
-import { useWeatherStationTemperature } from "../../../hooks/weatherStation/WeatherStationTemperatureData";
-import { useWeatherStationPrecipitation } from "../../../hooks/weatherStation/WeatherStationPrecipitation ";
+import { useWeatherStationTemperature } from "../../../../hooks/weatherStation/WeatherStationTemperatureData";
+import { useWeatherStationPrecipitation } from "../../../../hooks/weatherStation/WeatherStationPrecipitation ";
 
 import {
   precipitationConfig,
@@ -12,9 +12,11 @@ import {
   soilMoistureConfig,
   electricalResistanceConfig,
   treeMoistureContentLineChartConfig,
-} from "../../../chartsConfig/chartsConfig";
+} from "../../../../chartsConfig/chartsConfig";
 
-const WeatherDashboard = ({}) => {
+import WeatherMap from "./WeatherMap";
+
+const WeatherDashboard = () => {
   // set up for the needles of the  gauge charts
   //const currentValue = soilMoistureData? soilMoistureData[soilMoistureData.length - 1].value : 0
 
@@ -45,7 +47,7 @@ const WeatherDashboard = ({}) => {
             zIndex: "0", //add this to make sure the controls of the map are underneath the dropdown elements (Dropdown is directly above the map)
           }}
         >
-          <LeafletMap />
+          <WeatherMap />
         </div>
       </div>
 

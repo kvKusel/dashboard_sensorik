@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import WeatherSubpage from "./elements/WeatherSubpage";
+import WeatherSubpage from "./elements/WeatherDashboard/WeatherSubpage";
 import TreeMonitoringSubpage from "./elements/TreeMonitoringSubpage";
 import WebcamSubpage from "./elements/WebcamSubpage";
 import Logo from "../../assets/logo_landlieben.png";
@@ -118,7 +118,7 @@ const Dashboard = () => {
                 steps={steps}
               />
             ) : activeTab === "Wetter" ? (
-              <WeatherSubpage />
+              <WeatherSubpage  />
             ) : (
               <WebcamSubpage />
             )}

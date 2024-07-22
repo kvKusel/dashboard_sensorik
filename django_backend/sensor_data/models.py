@@ -7,6 +7,24 @@ class Device(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.device_id})"
+    
+class WeatherData(models.Model):
+    device = models.ForeignKey(Device, on_delete=models.CASCADE, related_name='weather_data')
+    timestamp = models.DateTimeField(auto_now_add=True)
+    temperature = models.FloatField()
+    humidity = models.FloatField()
+    wind_speed = models.FloatField()
+    wind_direction = models.FloatField()
+    precipitation = models.FloatField()
+    air_pressure = models.FloatField()
+    uv = models.FloatField()
+    luminosity = models.FloatField()
+
+    class Meta:
+        ordering = ['-timestamp']
+
+    def __str__(self):
+        return f"{self.device.name} - {self.timestamp}"
 
 class TreeMoistureReading(models.Model):
     device = models.ForeignKey(Device, on_delete=models.CASCADE, related_name='moisture_readings')

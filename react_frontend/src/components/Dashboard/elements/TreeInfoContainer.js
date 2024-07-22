@@ -77,7 +77,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
         >
       
             <div className=" text-center p-2 d-flex align-items-center lead fw-bolder" style={{ display: "flex", alignItems: "center", justifyContent: 'center'}}>
-              {selectedTree && selectedTree.id !== 6 ? selectedTree.name : "Projektareal"}
+              {selectedTree  ? selectedTree.name : "Obstwiese"}
               
             </div>
 
