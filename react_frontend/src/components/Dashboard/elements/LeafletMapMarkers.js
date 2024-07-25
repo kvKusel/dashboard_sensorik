@@ -11,7 +11,6 @@ const MarkerComponent = ({ position, selectedTree, currentValueSoilMoisture, tre
   // Check if the position matches the selected tree latitude and longitude - used to render the bigger sized and focused icon for the selected tree
   const isSelectedTreePosition = selectedTree && position[0] === selectedTree.latitude && position[1] === selectedTree.longitude;
 
-    console.log(position)
     
     // Adjust the color of the left side of the leaflet icons based on the tree health data - so far its only for one of the trees (Schoner von Nordhausen?)
     let colorLeft; // Default color

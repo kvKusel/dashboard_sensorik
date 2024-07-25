@@ -15,6 +15,7 @@ from sensor_data.models import TreeMoistureReading, Device, ElectricalResistance
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import logging
+from django.utils import timezone
 
 
 # render the index page
@@ -273,66 +274,68 @@ ALLOWED_DEVICE_IDS = {
     "a840413cc1884fb6-hochbeet-moisture1": {
         'type': 'soil_moisture_sensor',
         'field_mapping': {
-            'water_SOIL': 'soil_moisture_value'
+            'soil_moisture_value': 'water_SOIL'
         }
     },
     "a8404182ba5900fe-moisture-dragino-2": {
         'type': 'soil_moisture_sensor',
         'field_mapping': {
-            'water_SOIL': 'soil_moisture_value'
+            'soil_moisture_value': 'water_SOIL'
         }
     },
     "a840414c035908cd-moisture-dragino-3": {
         'type': 'soil_moisture_sensor',
         'field_mapping': {
-            'water_SOIL': 'soil_moisture_value'
+            'soil_moisture_value': 'water_SOIL'
         }
     },
     "a84041df075908cc-moisture-dragino-4": {
         'type': 'soil_moisture_sensor',
         'field_mapping': {
-            'water_SOIL': 'soil_moisture_value'
+            'soil_moisture_value': 'water_SOIL'
         }
     },
     "a84041bf545908c5-moisture-dragino-5": {
         'type': 'soil_moisture_sensor',
         'field_mapping': {
-            'water_SOIL': 'soil_moisture_value'
+            'soil_moisture_value': 'water_SOIL'
         }
     },
     "a84041ea2b5908ce-moisture-dragino-6": {
         'type': 'soil_moisture_sensor',
         'field_mapping': {
-            'water_SOIL': 'soil_moisture_value'
+            'soil_moisture_value': 'water_SOIL'
         }
     },
     "a84041f571875f2b-ph-dragino2-schule": {
         'type': 'ph_sensor',
         'field_mapping': {
-            'PH1_SOIL': 'ph_value'
+            'ph_value': 'PH1_SOIL'
         }
     },
     "a84041a8e1875f29-ph-dragino1-schule": {
         'type': 'ph_sensor',
         'field_mapping': {
-            'PH1_SOIL': 'ph_value'
+            'ph_value': 'PH1_SOIL'
         }
     },
     "2cf7f1c054400013-ph-sensecap2-schule": {
         'type': 'ph_sensor_sensecap',
         'field_mapping': {
-            'measurementId_4097': 'temperature',
-            'measurementId_4106': 'ph_value'
+            'temperature': 'measurementId_4097',
+            'ph_value': 'measurementId_4106'
         }
     },
     "2cf7f1c05440005d-ph-sensecap-schule": {
         'type': 'ph_sensor_sensecap',
         'field_mapping': {
-            'measurementId_4097': 'temperature',
-            'measurementId_4106': 'ph_value'
+            'temperature': 'measurementId_4097',
+            'ph_value': 'measurementId_4106'
         }
     }
 }
+
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class TTNWebhookView(View):
@@ -342,9 +345,8 @@ class TTNWebhookView(View):
             logger.info(f"Received webhook data: {request.body}")
             data = json.loads(request.body)
 
-            # Adjust this line to match the actual payload structure
-            device_ids = data['end_device_ids']
-            device_id = device_ids['device_id']
+            # Extract device_id from the correct location in the payload
+            device_id = data['end_device_ids']['device_id']
 
             # Check if the device ID is allowed
             if device_id not in ALLOWED_DEVICE_IDS:
@@ -354,33 +356,62 @@ class TTNWebhookView(View):
             device_info = ALLOWED_DEVICE_IDS[device_id]
             device, created = Device.objects.get_or_create(device_id=device_id)
 
-            # Adjust this line to match the actual payload structure
+            # Extract payload from the correct location
             payload = data['uplink_message']['decoded_payload']
             device_type = device_info['type']
             field_mapping = device_info['field_mapping']
 
-            if device_type == 'ph_sensor':
+            logger.debug(f"Device type: {device_type}")
+            logger.debug(f"Payload: {payload}")
+
+            if device_type == 'soil_moisture_sensor':
+                # Check if the required field is in the payload
+                if field_mapping['soil_moisture_value'] not in payload:
+                    logger.error(f"Missing field {field_mapping['soil_moisture_value']} in payload: {payload}")
+                    return JsonResponse({'status': 'error', 'message': f"Missing field {field_mapping['soil_moisture_value']} in payload"}, status=400)
+
+                moisture_data = {
+                    'device': device,
+                    'timestamp': timezone.now(),  # Use timezone-aware datetime
+                    'soil_moisture_value': float(payload[field_mapping['soil_moisture_value']])
+                }
+
+                SoilMoistureReading.objects.create(**moisture_data)
+                logger.info(f"Successfully created SoilMoistureReading entry for device {device_id}")
+
+            elif device_type == 'ph_sensor':
+                if field_mapping['ph_value'] not in payload:
+                    logger.error(f"Missing field {field_mapping['ph_value']} in payload: {payload}")
+                    return JsonResponse({'status': 'error', 'message': f"Missing field {field_mapping['ph_value']} in payload"}, status=400)
+
                 ph_data = {
                     'device': device,
-                    'timestamp': datetime.now(),
-                    'ph_value': float(payload[field_mapping['PH1_SOIL']])
+                    'timestamp': timezone.now(),  # Use timezone-aware datetime
+                    'ph_value': float(payload[field_mapping['ph_value']])
                 }
 
                 pHReading.objects.create(**ph_data)
                 logger.info(f"Successfully created pHReading entry for device {device_id}")
 
             elif device_type == 'ph_sensor_sensecap':
-                measurements = payload
-                ph_value = measurements.get(field_mapping['measurementId_4106'])
-                if ph_value:
+                messages = payload.get('messages', [])
+                ph_value = None
+                for message in messages:
+                    if message.get('measurementId') == field_mapping['ph_value']:
+                        ph_value = message.get('measurementValue')
+                        break
+
+                if ph_value is not None:
                     ph_data = {
                         'device': device,
-                        'timestamp': datetime.now(),
+                        'timestamp': timezone.now(),  # Use timezone-aware datetime
                         'ph_value': float(ph_value)
                     }
 
-                    pHReading.objects.create(**ph_data)
-                    logger.info(f"Successfully created pHReading entry for device {device_id}")
+                    new_reading = pHReading.objects.create(**ph_data)
+                    logger.info(f"Successfully created pHReading entry (id: {new_reading.id}) for device {device_id} with pH value {ph_value}")
+                else:
+                    logger.warning(f"No pH value found in payload for device {device_id}")
 
             return JsonResponse({'status': 'success'})
 
@@ -393,7 +424,6 @@ class TTNWebhookView(View):
         except Exception as e:
             logger.exception("Error processing webhook data")
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
-
 
         
 #############################             weather station data Siebenpfeiffer Gymnasium        ###########################################
