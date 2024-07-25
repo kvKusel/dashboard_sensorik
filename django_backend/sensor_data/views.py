@@ -253,7 +253,6 @@ class TreeHealthDataView(View):
         
 
 #############################              TTN Webhooks - weathers station Siebenpfeiffer Gymnasium        ###########################################
-
 logger = logging.getLogger(__name__)
 
 ALLOWED_DEVICE_IDS = {
@@ -335,7 +334,6 @@ ALLOWED_DEVICE_IDS = {
     }
 }
 
-
 @method_decorator(csrf_exempt, name='dispatch')
 class TTNWebhookView(View):
 
@@ -343,7 +341,9 @@ class TTNWebhookView(View):
         try:
             logger.info(f"Received webhook data: {request.body}")
             data = json.loads(request.body)
-            device_ids = data['data']['end_device_ids']
+
+            # Adjust this line to match the actual payload structure
+            device_ids = data['end_device_ids']
             device_id = device_ids['device_id']
 
             # Check if the device ID is allowed
@@ -353,7 +353,9 @@ class TTNWebhookView(View):
 
             device_info = ALLOWED_DEVICE_IDS[device_id]
             device, created = Device.objects.get_or_create(device_id=device_id)
-            payload = data['data']['uplink_message']['decoded_payload']
+
+            # Adjust this line to match the actual payload structure
+            payload = data['uplink_message']['decoded_payload']
             device_type = device_info['type']
             field_mapping = device_info['field_mapping']
 
@@ -361,15 +363,15 @@ class TTNWebhookView(View):
                 ph_data = {
                     'device': device,
                     'timestamp': datetime.now(),
-                    'ph_value': float(payload['PH1_SOIL'])
+                    'ph_value': float(payload[field_mapping['PH1_SOIL']])
                 }
 
                 pHReading.objects.create(**ph_data)
                 logger.info(f"Successfully created pHReading entry for device {device_id}")
 
             elif device_type == 'ph_sensor_sensecap':
-                measurements = {m['measurementId']: m['measurementValue'] for m in payload['messages']}
-                ph_value = measurements.get(4106)
+                measurements = payload
+                ph_value = measurements.get(field_mapping['measurementId_4106'])
                 if ph_value:
                     ph_data = {
                         'device': device,
@@ -391,8 +393,6 @@ class TTNWebhookView(View):
         except Exception as e:
             logger.exception("Error processing webhook data")
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
-
-
 
 
         

@@ -19,6 +19,9 @@ import {
 
 import HochbeetMap from "./HochbeetMap";
 
+const API_URL = process.env.REACT_APP_API_URL; // This will switch based on the environment - dev env will point to local Django, prod env to the proper domain
+
+
 const HochbeetDashboard = () => {
 
   const [isLoading, setIsLoading] = useState(true); // State to track loading status
@@ -35,12 +38,12 @@ const HochbeetDashboard = () => {
 
   const fetchAllSoilMoistureGymnasiumData = async () => {
     try {
-      const response1 = await axios.get('http://127.0.0.1:8000/soil-moisture-data-hochbeet-project/?query_type=hochbeet_moisture1');
-      const response2 = await axios.get('http://127.0.0.1:8000/soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_2');
-      const response3 = await axios.get('http://127.0.0.1:8000/soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_3');
-      const response4 = await axios.get('http://127.0.0.1:8000/soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_4');
-      const response5 = await axios.get('http://127.0.0.1:8000/soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_5');
-      const response6 = await axios.get('http://127.0.0.1:8000/soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_6');
+      const response1 = await axios.get(`${API_URL}/soil-moisture-data-hochbeet-project/?query_type=hochbeet_moisture1`);
+      const response2 = await axios.get(`${API_URL}/soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_2`);
+      const response3 = await axios.get(`${API_URL}/soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_3`);
+      const response4 = await axios.get(`${API_URL}/soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_4`);
+      const response5 = await axios.get(`${API_URL}/soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_5`);
+      const response6 = await axios.get(`${API_URL}/soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_6`);
       
       setAllSoilMoistureDataGymnasium([
         { queryType: 'hochbeet_moisture1', data: response1.data },
