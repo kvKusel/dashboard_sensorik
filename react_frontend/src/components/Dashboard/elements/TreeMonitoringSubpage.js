@@ -190,6 +190,24 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
     lastValueWeatherStationTemperature,
   ]);
 
+
+
+    // Set a timeout to check if isLoading is stuck
+    useEffect(() => {
+      const loadingTimeout = setTimeout(() => {
+        if (isLoading) {
+          // Handle the timeout situation, you can either refresh or show an error message
+          window.location.reload(); // Refresh the page
+          // Or you can show an error message:
+          // setIsLoading(false);
+          // alert("Loading data is taking longer than expected. Please try again later.");
+        }
+      }, 5000); // 5 seconds timeout
+  
+      return () => clearTimeout(loadingTimeout); // Clear the timeout if the component unmounts or isLoading changes
+    }, [isLoading]);
+
+    
   return (
     <div style={{ minHeight: "80vh" }} className="first-step">
       {/* Display loading indicator while data is being fetched */}

@@ -81,6 +81,7 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) =
           grid: {
             color: "lightgrey",
           },
+          
           ticks: {
             precision: 0,
             maxTicksLimit: 4,
