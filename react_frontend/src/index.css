@@ -376,3 +376,42 @@ input:checked + .slider:before {
 }
 
 /* END OF LEGEND OF THE WEATHER MAP */
+
+
+/*   CUSTOM NAVBAR */
+
+.nav-link {
+  color: white;
+}
+
+.custom-dropdown .dropdown-toggle {
+  color: white !important;
+}
+
+.custom-dropdown .dropdown-toggle::after {
+  color: white !important;
+}
+
+.custom-dropdown .dropdown-toggle:hover,
+.custom-dropdown .dropdown-toggle:focus {
+  color: white !important;
+}
+
+.custom-toggler:focus {
+  box-shadow: none !important;
+}
+
+.navbar-toggler {
+  border: solid !important;
+  border-color: #5D7280 !important;
+  outline-color: white;
+}
+
+.navbar-toggler:focus {
+  outline: none !important;
+}
+
+
+/* END OF LEGEND OF THE WEATHER MAP */
+
+

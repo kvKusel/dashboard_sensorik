@@ -3,22 +3,44 @@ import LeafletMap from "../LeafletMap";
 import LineChart from "../LineChart";
 import BarChart from "../BarChart";
 
-import { useWeatherStationTemperature } from "../../../../hooks/weatherStation/WeatherStationTemperatureData";
-import { useWeatherStationPrecipitation } from "../../../../hooks/weatherStation/WeatherStationPrecipitation ";
-
 import {
   precipitationConfig,
   temperatureConfig,
   soilMoistureConfig,
   electricalResistanceConfig,
   treeMoistureContentLineChartConfig,
+  airPressureConfig,
+  humidityConfig
 } from "../../../../chartsConfig/chartsConfig";
 
 import WeatherMap from "./WeatherMap";
 
+import {
+  Card,
+  CardContent,
+  Typography,
+  Grid,
+  Switch,
+  CardMedia,
+  CardActions,
+  Button,
+} from "@mui/material";
+
+
+
+import { useWeatherStationHumidity } from "../../../../hooks/weatherStation/WeatherStationHumidity";
+import { useWeatherStationAirPressure } from "../../../../hooks/weatherStation/WeatherStationAirPressure";
+import { useWeatherStationWindSpeed } from "../../../../hooks/weatherStation/WeatherStationWindSpeed";
+import { useWeatherStationWindDirection } from "../../../../hooks/weatherStation/WeatherStationWindDirection";
+import { useWeatherStationPrecipitation } from "../../../../hooks/weatherStation/WeatherStationPrecipitation ";
+import { useWeatherStationTemperature } from "../../../../hooks/weatherStation/WeatherStationTemperatureData";
+import { useWeatherStationUVIndex } from "../../../../hooks/weatherStation/WeatherStationUVIndex";
+
+import {
+  fetchWeatherStationData,
+} from "../../../../chartsConfig/apiCalls";
+
 const WeatherDashboard = () => {
-  // set up for the needles of the  gauge charts
-  //const currentValue = soilMoistureData? soilMoistureData[soilMoistureData.length - 1].value : 0
 
   //temperature data from the weather station
   const { weatherStationTemperatureData, lastValueWeatherStationTemperature } =
@@ -30,6 +52,24 @@ const WeatherDashboard = () => {
     lastTimestampFormatted,
     lastPrecipitationValue,
   } = useWeatherStationPrecipitation();
+
+    //UV-Index data from the weather station
+    const uVIndex = useWeatherStationUVIndex();
+
+    //humidity data from the weather station
+    const {lastValueWeatherStationHumidity, weatherStationHumidityData }  = useWeatherStationHumidity();
+  
+    //air pressure data from the weather station
+    const {weatherStationAirPressureData, lastValueWeatherStationAirPressure} = useWeatherStationAirPressure();
+  
+    //wind speed data from the weather station
+    const windSpeed = useWeatherStationWindSpeed();
+  
+    //wind direction data from the weather station
+    const windDirection = useWeatherStationWindDirection();
+
+  console.log("air pressure," , weatherStationAirPressureData)
+
 
   return (
     <>
@@ -51,6 +91,142 @@ const WeatherDashboard = () => {
         </div>
       </div>
 
+
+     {/* <div className="row mb-3" style={{ flex: "1 1 auto"}}>
+        <div className="col-12 d-flex flex-wrap px-2">
+          <div
+            className="col-12 col-md-6 col-lg-4 col-xl-5  d-flex align-items-center p-5"
+            style={{
+              backgroundColor: "#5D7280",
+              color: "lightgray",
+            }}
+          >
+            <div className="px-4">Wetterstation Burg Lichtenberg</div>
+            <div className="">
+            <label className="switch">
+            <input type="checkbox" defaultChecked disabled/>
+            <span className="slider round"></span>
+          </label>
+            </div>
+          </div>
+
+          <div
+            className="col-12 col-md-6 col-lg-8 col-xl-7  d-flex align-items-center p-5"
+            style={{
+              backgroundColor: "#5D7280",
+              color: "lightgray",
+            }}
+          >
+            <div className="px-4">Wetterstation Siebenpfeiffer-Gymnasium</div>
+            <div className="">
+              <label className="switch">
+    <input type="checkbox" disabled />
+                <span className="slider round"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div> */}
+
+
+      <div className="row mb-3" style={{ flex: "1 1 auto" }}>
+  <div className="col-12 d-flex flex-wrap px-2">
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={6} lg={4}>
+        <Card style={{ backgroundColor: "#5D7280", color: "lightgray" }}>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              <strong>Temperatur</strong>
+            </Typography>
+            <Typography variant="body2" color="lightgray">
+              Aktueller Wert: {lastValueWeatherStationTemperature} °C
+            </Typography>
+            <Typography variant="body2" color="lightgray">
+              Am: {lastTimestampFormatted}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <Card style={{ backgroundColor: "#5D7280", color: "lightgray" }}>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+            <strong>Niederschlag</strong>
+            </Typography>
+            <Typography variant="body2" color="lightgray">
+              Aktueller Wert: {lastPrecipitationValue} mm
+            </Typography>
+            <Typography variant="body2" color="lightgray">
+              Am: {lastTimestampFormatted}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <Card style={{ backgroundColor: "#5D7280", color: "lightgray" }}>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+            <strong>Luftfeuchte</strong>
+            </Typography>
+            <Typography variant="body2" color="lightgray">
+              Aktueller Wert: {lastValueWeatherStationHumidity} %
+            </Typography>
+            <Typography variant="body2" color="lightgray">
+              Am: {lastTimestampFormatted}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <Card style={{ backgroundColor: "#5D7280", color: "lightgray" }}>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+            <strong>Luftdruck</strong>
+            </Typography>
+            <Typography variant="body2" color="lightgray">
+              Aktueller Wert: {lastValueWeatherStationAirPressure } hPa
+            </Typography>
+            <Typography variant="body2" color="lightgray">
+              Am: {lastTimestampFormatted}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <Card style={{ backgroundColor: "#5D7280", color: "lightgray" }}>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+            <strong>Windgeschw.</strong>
+            </Typography>
+            <Typography variant="body2" color="lightgray">
+              Aktueller Wert: {windSpeed} m/s
+            </Typography>
+            <Typography variant="body2" color="lightgray">
+              Am: {lastTimestampFormatted}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <Card style={{ backgroundColor: "#5D7280", color: "lightgray" }}>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+            <strong>Windrichtung</strong>
+            </Typography>
+            <Typography variant="body2" color="lightgray">
+              Aktueller Wert: {windDirection} 
+            </Typography>
+            <Typography variant="body2" color="lightgray">
+              Am: {lastTimestampFormatted}
+            </Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+  </div>
+</div>
+
+
       <div className="row " style={{ flex: "1 1 auto" }}>
         <div className="col-12 d-flex px-2 ">
           <div
@@ -58,7 +234,6 @@ const WeatherDashboard = () => {
             style={{
               flex: "1 1 auto",
               maxHeight: "30vh",
-              borderRadius: "0px",
               backgroundColor: "#5D7280",
               borderStyle: "solid",
               borderWidth: "1px",
@@ -76,43 +251,8 @@ const WeatherDashboard = () => {
         </div>
       </div>
 
-      <div className="row" style={{ flex: "1 1 auto" }}>
-        <div className="col-12 d-flex flex-wrap px-2">
-          <div
-            className="col-12 col-md-6 col-lg-4 col-xl-5 pb-2 d-flex align-items-center px-2"
-            style={{
-              backgroundColor: "#5D7280",
-              color: "lightgray",
-            }}
-          >
-            <div className="px-4">Wetterstation Burg Lichtenberg</div>
-            <div className="">
-            <label className="switch">
-            <input type="checkbox" defaultChecked />
-            <span className="slider round"></span>
-          </label>
-            </div>
-          </div>
 
-          <div
-            className="col-12 col-md-6 col-lg-8 col-xl-7 pb-2 d-flex align-items-center px-2"
-            style={{
-              backgroundColor: "#5D7280",
-              color: "lightgray",
-            }}
-          >
-            <div className="px-4">Wetterstation Siebenpfeiffer-Gymnasium</div>
-            <div className="">
-              <label className="switch">
-                <input type="checkbox" />
-                <span className="slider round"></span>
-              </label>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="row mt-3" style={{ flex: "1 1 auto" }}>
+      <div className="row mt-3 mb-3" style={{ flex: "1 1 auto" }}>
         <div className="col-12 d-flex px-2 ">
           <div
             className="chart-container d-flex "
@@ -134,42 +274,54 @@ const WeatherDashboard = () => {
         </div>
       </div>
 
-      <div className="row" style={{ flex: "1 1 auto" }}>
-        <div className="col-12 d-flex flex-wrap px-2">
+    
+      <div className="row mt-3 mb-3" style={{ flex: "1 1 auto" }}>
+        <div className="col-12 d-flex px-2 ">
           <div
-            className="col-12 col-md-6 col-lg-4 col-xl-5 pb-2 d-flex align-items-center px-2"
+            className="chart-container d-flex "
             style={{
+              flex: "1 1 auto",
+              maxHeight: "30vh",
+  
               backgroundColor: "#5D7280",
-              color: "lightgray",
+   
             }}
           >
-            <div className="px-4">Wetterstation Burg Lichtenberg</div>
-            <div className="">
-         <label className="switch">
-            <input type="checkbox" defaultChecked />
-            <span className="slider round"></span>
-          </label>
-            </div>
-          </div>
-
-          <div
-            className="col-12 col-md-6 col-lg-8 col-xl-7 pb-2 d-flex align-items-center px-2"
-            style={{
-              backgroundColor: "#5D7280",
-              color: "lightgray",
-            }}
-          >
-            <div className="px-4">Wetterstation Siebenpfeiffer-Gymnasium</div>
-            <div className="">
-              <label className="switch">
-                <input type="checkbox" />
-                <span className="slider round"></span>
-              </label>
-            </div>
+            {weatherStationAirPressureData && (
+              <LineChart
+                lineChartConfig={airPressureConfig}
+                lineData={weatherStationAirPressureData}
+                id="temperatureChart"              />
+            )}
           </div>
         </div>
       </div>
 
+
+    
+      <div className="row mt-3 mb-3" style={{ flex: "1 1 auto" }}>
+        <div className="col-12 d-flex px-2 ">
+          <div
+            className="chart-container d-flex "
+            style={{
+              flex: "1 1 auto",
+              maxHeight: "30vh",
+  
+              backgroundColor: "#5D7280",
+   
+            }}
+          >
+            {weatherStationAirPressureData && (
+              <LineChart
+                lineChartConfig={humidityConfig}
+                lineData={weatherStationHumidityData}
+                id="temperatureChart"              />
+            )}
+          </div>
+        </div>
+      </div>
+
+      
     </>
   );
 };

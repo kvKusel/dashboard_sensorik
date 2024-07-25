@@ -70,6 +70,43 @@ export const temperatureConfig = {
   },
 };
 
+//Air Pressure last 24h Line Chart
+export const airPressureConfig = {
+  datasets: [
+    {
+      fill: true,
+      borderColor: "#39B5E0",
+      tension: 0.1,
+      backgroundColor: "#92C7A5", // Fill color
+    },
+  ],
+  plugins: {
+    title: {
+      text: "Luftdruck [hPa]",
+    },
+  },
+};
+
+
+//Humidity last 24h Line Chart
+export const humidityConfig = {
+  datasets: [
+    {
+      fill: true,
+      borderColor: "orange",
+      tension: 0.1,
+      backgroundColor: "#92C7A5", // Fill color
+    },
+  ],
+  plugins: {
+    title: {
+      text: "Luftfeuchte [%]",
+    },
+  },
+};
+
+
+
 //Bar Chart - Precipitation
 export const precipitationConfig = {
   datasets: [
@@ -108,4 +145,9 @@ export const uvIndexConfig = {
 export const barometerConfig = {
   // arcsLength: [0.075, 0.525], // Array of arc lengths, adjusted for 270 degrees
   colors: ["rgba(75, 192, 192, 0.2)", "rgb(192, 192, 192)"], // Array of colors
+};
+
+export const pHConfig = {
+  arcsLength: [5 / 14, 1 / 14, 2 / 14, 1 / 14, 5 / 14], // Adjusted array of arc lengths
+  colors: ["#FF0060", "#F6FA70", "#00DFA2", "#F6FA70", "#FF0060"], // Array of colors matching the arc lengths
 };

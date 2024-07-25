@@ -59,3 +59,25 @@ class TreeHealthReading(models.Model):
 
     def __str__(self):
         return f"{self.device.name} - {self.timestamp}: {self.health_state}"
+    
+class SoilMoistureReading(models.Model):
+    device = models.ForeignKey(Device, on_delete=models.CASCADE, related_name='soil_moisture_readings')
+    timestamp = models.DateTimeField()
+    soil_moisture_value = models.FloatField()
+
+    def __str__(self):
+        return f"{self.device.name} - {self.soil_moisture_value} at {self.timestamp}"
+
+    class Meta:
+        ordering = ['-timestamp']
+        
+class pHReading(models.Model):
+    device = models.ForeignKey(Device, on_delete=models.CASCADE, related_name='ph_readings')
+    timestamp = models.DateTimeField()
+    ph_value = models.FloatField()
+
+    def __str__(self):
+        return f"{self.device.name} - {self.ph_value} at {self.timestamp}"
+
+    class Meta:
+        ordering = ['-timestamp']

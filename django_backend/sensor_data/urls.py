@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import SoilDataView, WeatherStationDataView, ElectricalResistanceDataView, TreeHealthDataView, index, TreeMoistureContentDataView, TTNWebhookView, WeatherDataView
+from .views import pHDataHochbeetProject, SoilDataView, WeatherStationDataView, ElectricalResistanceDataView, TreeHealthDataView, index, TreeMoistureContentDataView, TTNWebhookView, WeatherDataView, SoilMoistureDataHochbeetProject
 
 urlpatterns = [
     path('soil-data/', SoilDataView.as_view(), name='soil_data'),
@@ -9,6 +9,9 @@ urlpatterns = [
     path('tree-health-data/', TreeHealthDataView.as_view(), name='tree_health__data'),
     path('ttn-webhook/', TTNWebhookView.as_view(), name='ttn-webhook'),
     path('weather-data-gymnasium/', WeatherDataView.as_view(), name='weather-data-gymnasium'),
+    path('soil-moisture-data-hochbeet-project/', SoilMoistureDataHochbeetProject.as_view(), name='soil-moisture-data-hochbeet-project'),
+    path('ph-data/', pHDataHochbeetProject.as_view(), name='ph-data'),
+
     path('', index, name='index')
 
 ] 

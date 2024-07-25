@@ -41,7 +41,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
 
 
   return (
-    <div className="row mt-4" style={{ flex: "1 1 auto" }}>
+    <div className="row mt-md-2" style={{ flex: "1 1 auto" }}>
       
       <div className="col-md-3 p-2 d-flex flex-column " >
         <div>
@@ -186,7 +186,6 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
                     {/* {soilMoistureData && ( */}
 
           <LeafletMap selectedTree={selectedTree} currentValueSoilMoisture={lastValuesSoilMoisture} treeSenseHealth={healthStateRaw}/>
-                    
         </div>
 
         <div

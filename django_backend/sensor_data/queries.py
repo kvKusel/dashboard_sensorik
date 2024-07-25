@@ -143,7 +143,7 @@ from(bucket: "Kusel")
       r.device == "eui-2cf7f1c0443003da" and
       r.type == "Air Humidity"
     )
-  |> last()
+  |> aggregateWindow(every: 1h, fn: mean) 
 
 '''
     return execute_and_process_query(client, org, query)
@@ -158,7 +158,7 @@ from(bucket: "Kusel")
       r.device == "eui-2cf7f1c0443003da" and
       r.type == "Barometric Pressure"
     )
-  |> last()
+  |> aggregateWindow(every: 1h, fn: mean) 
 
 '''
     return execute_and_process_query(client, org, query)

@@ -84,20 +84,7 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
   const { weatherStationTemperatureData, lastValueWeatherStationTemperature } =
     useWeatherStationTemperature();
 
-  //UV-Index data from the weather station
-  const uVIndex = useWeatherStationUVIndex();
 
-  //humidity data from the weather station
-  const humidity = useWeatherStationHumidity();
-
-  //air pressure data from the weather station
-  const airPressure = useWeatherStationAirPressure();
-
-  //wind speed data from the weather station
-  const windSpeed = useWeatherStationWindSpeed();
-
-  //wind direction data from the weather station
-  const windDirection = useWeatherStationWindDirection();
 
   // soil moisture - "Cox Orangenrenette"
   const {

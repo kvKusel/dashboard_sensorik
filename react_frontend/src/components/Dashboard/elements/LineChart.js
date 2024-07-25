@@ -3,14 +3,21 @@ import Chart from "chart.js/auto"; // Import only Chart, not plugins
 import { format } from 'date-fns';
 
 
-const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
+const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) => {
   
 
+  useEffect(() => {
+    console.log("current data: ", lineData);
+    console.log("current data type: ", typeof(lineData));
 
+  }, [lineData  ]);
+
+  
   const lineChartRef = useRef(null);
 
   let lineChartConfiguration;
 
+  
 
   // creates a timestamp thats 23 hours earlier than current time - used to set the min boundary of x-axis 
   const twentyFourHoursAgoTimestamp = Date.now() - (22 * 60 * 60 * 1000);
@@ -24,101 +31,94 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
     const labels = lineData.map(dataPoint => {
       const timeValue = new Date(dataPoint.time); // Convert time string to Date object
       //timeValue.setMinutes(timeValue.getMinutes() + 30); // Add 30 minutes
+
       return timeValue;
   });
 
-
-    const lineChartConfigurationStandard = {
-      type: "line",
-      data: {
-        labels: 
-        labels,
-              datasets: [
-          {
-            data: lineData.map((dataPoint) => parseFloat(dataPoint.value)),
-            borderColor: lineChartConfig.datasets[0].borderColor,
-            fill: lineChartConfig.datasets[0].fill,
-            hidden: false,
-            backgroundColor: lineChartConfig.datasets[0].backgroundColor,
+    
+  const lineChartConfigurationStandard = {
+    type: "line",
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          data: lineData.map((dataPoint) => parseFloat(dataPoint.value)),
+          borderColor: lineChartConfig.datasets[0].borderColor,
+          fill: lineChartConfig.datasets[0].fill,
+          hidden: false,
+          backgroundColor: lineChartConfig.datasets[0].backgroundColor,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      layout: {},
+      scales: {
+        x: {
+          grid: {
+            color: "lightgrey",
           },
-        ],
+          type: "time",
+          offset: false,
+          min: new Date(twentyFourHoursAgoTimestamp),
+          max: Date.now(),
+          ticks: {
+            autoSkip: false,
+            callback: function (label, index, labels) {
+              const parsedDate = new Date(label);
+              const formattedDate = format(parsedDate, "MMM d, HH:00").split(", ");
+              return [formattedDate[0], formattedDate[1]];
+            },
+            maxTicksLimit: 4,
+            color: "lightgrey",
+            font: {
+              size: 14,
+            },
+          },
+        },
+        y: {
+          grid: {
+            color: "lightgrey",
+          },
+          ticks: {
+            precision: 0,
+            maxTicksLimit: 4,
+            color: "lightgrey",
+            font: {
+              size: 14,
+            },
+            callback: function (value) {
+              return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "");
+            },
+          },
+        },
       },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        layout: {
-
-        },
-        scales: {
-          x: {
-            grid: {
-              color: "lightgrey",
-            },
-            type: "time",
-            // time: {
-            //   unit: 'second',
-            //   unitStepSize: 1,
-            // },
-            offset: false,
-            min:new Date(twentyFourHoursAgoTimestamp),
-            max: Date.now(),
-            ticks: {
-              autoSkip: false,
-              callback: function(label, index, labels) {
-                const parsedDate = new Date(label);
-                const formattedDate = format(parsedDate, "MMM d, HH:00").split(", ");
-                return [formattedDate[0], formattedDate[1]];
-            },
-              
-              maxTicksLimit: 4,
-              color: "lightgrey",
-              font: {
-                size: 14,
-              },
-            },
-            
-          },
-          y: {
-            grid: {
-              color: "lightgrey",
-            },
-            ticks: {
-
-              precision:0,
-              maxTicksLimit: 4,
-              color: "lightgrey",
-              font: {
-                size: 14,
-              },
-              
-            },
+      plugins: {
+        title: {
+          text: lineChartConfig.plugins.title.text,
+          display: "yes",
+          color: "lightgrey",
+          font: {
+            size: "18rem",
           },
         },
-        plugins: {
-          title: {
-            text: lineChartConfig.plugins.title.text,
-            display: "yes",
+        legend: {
+          display: false,
+          labels: {
             color: "lightgrey",
             font: {
               size: "18rem",
             },
           },
-          legend: {
-            display: false,
-            labels: {
-              color: "lightgrey",
-              font: {
-                size: "18rem",
-              },
-            },
-            position: "bottom",
-          },
+          position: "bottom",
         },
       },
-    };
+    },
+  };
+  
 
-
-    if ((!selectedTree || selectedTree.id === 6 || selectedTree.id === 7) && id !== 'temperatureChart') {
+    if ((!selectedTree || selectedTree.id === 6 || selectedTree.id === 7) && id !== 'temperatureChart' && activeTab !== "hochbeet" && activeTab !== "Wetter") {
       lineChartConfiguration = {
         type: "line",
         data: {
@@ -211,7 +211,7 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
               ctx.save();
 
               const text =
-                "Bitte einen Baum auswählen, um die Daten anzuzeigen";
+                "Bitte einen Datensatz auswählen, um die Daten anzuzeigen";
               const maxWidth = width - 20; // Adjust according to your needs
               const lineHeight = 20; // Adjust according to your needs
               const xCenter = left + (right - left) / 2;
@@ -250,12 +250,147 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id }) => {
           },
         ],
       };
-    } else {
+    } 
+    
+    else if ( lineData.length == 0 && activeTab == "hochbeet") {
+      lineChartConfiguration = {
+        type: "line",
+        data: {
+          labels: [],
+          datasets: [],
+        },
+
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          layout: {
+            // padding: {
+            //   left: 50,
+            //   right: 50,
+            //   top: 5,
+            //   bottom: 5,
+            // },
+          },
+          scales: {
+            x: {
+              grid: {
+                color: "lightgrey",
+              },
+              type: "time",
+              time: {
+                unit: "day",
+                displayFormats: {
+                  hour: "MMM d, HH:00",
+                },
+              },
+              ticks: {
+                
+                maxTicksLimit: 3,
+                // minTicksLimit: 5, // Set a minimum number of ticks
+                // stepSize: 150,
+                // autoSkip: false,
+                color: "lightgrey",
+                font: {
+                  size: 14,
+                },
+              },
+            },
+            y: {
+              grid: {
+                color: "lightgrey",
+              },
+              min: 0,
+              max: 60,
+              ticks: {
+                precision:0,
+                maxTicksLimit: 4,
+                // stepSize: 25, // Adjust the step size as needed
+                color: "lightgrey",
+                font: {
+                  size: 14,
+                },
+              },
+            },
+          },
+
+          plugins: {
+            title: {
+              text: lineChartConfig.plugins.title.text,
+              display: "yes",
+              color: "lightgrey",
+              font: {
+                size: "18rem",
+              },
+            },
+            legend: {
+              display: false,
+              labels: {
+                color: "lightgrey",
+                font: {
+                  size: "18rem",
+                },
+              },
+              position: "bottom",
+            },
+          },
+        },
+        plugins: [
+          {
+            beforeDraw: (chart, args, options) => {
+              const {
+                ctx,
+                chartArea: { top, right, bottom, left, width, height },
+                scales: { x, y },
+              } = chart;
+              ctx.save();
+
+              const text =
+                "Bitte einen Datensatz auswählen, um die Daten anzuzeigen";
+              const maxWidth = width - 20; // Adjust according to your needs
+              const lineHeight = 20; // Adjust according to your needs
+              const xCenter = left + (right - left) / 2;
+              const yCenter = top + (bottom - top) / 2;
+
+              ctx.font = "1rem Poppins, sans-serif";
+              ctx.fillStyle = "lightgrey";
+              ctx.textAlign = "center";
+
+              // Function to wrap text
+              function wrapText(text, x, y, maxWidth, lineHeight) {
+                const words = text.split(" ");
+                let line = "";
+                let yPosition = y;
+
+                for (let word of words) {
+                  const testLine = line + word + " ";
+                  const metrics = ctx.measureText(testLine);
+                  const testWidth = metrics.width;
+                  if (testWidth > maxWidth && line !== "") {
+                    ctx.fillText(line, x, yPosition);
+                    line = word + " ";
+                    yPosition += lineHeight;
+                  } else {
+                    line = testLine;
+                  }
+                }
+                ctx.fillText(line, x, yPosition);
+              }
+
+              // Call wrapText function
+              wrapText(text, xCenter, yCenter, maxWidth, lineHeight);
+
+              ctx.restore();
+            },
+          },
+        ],
+      };
+    }
+    else {
       // Use the regular lineChartConfig when selectedTree is defined
       lineChartConfiguration = lineChartConfigurationStandard;
     }
 
-    console.log(lineChartConfiguration);
+    console.log("line chart config: ", lineChartConfiguration);
 
     const lineChart = new Chart(lineChartRef.current, lineChartConfiguration);
 

@@ -8,6 +8,15 @@ const Gauge = ({ currentValue, config, selectedTree, id, classAsProp}) => {
 
   const minPressure = 950;
   const maxPressure = 1050;
+  const minPH = 0;
+  const maxPH = 14;
+
+   // Function to normalize pH value to a 0-100 scale
+   const normalizePHValue = (value) => {
+    const minGauge = 0;
+    const maxGauge = 100;
+    return ((value - minPH) / (maxPH - minPH)) * (maxGauge - minGauge) + minGauge;
+  };
 
   // Check if config.arcsLength is defined
   if (config.arcsLength) {
@@ -51,8 +60,8 @@ const Gauge = ({ currentValue, config, selectedTree, id, classAsProp}) => {
       percent={
         id === "airPressure"
           ? ((currentValue - minPressure) / (maxPressure - minPressure))  // Normalize air pressure
-          : id === "uvIndex"
-          ? currentValue / 150  // Normalize UV index based on the scale of 0-150
+          : id === "pH"
+          ? currentValue / 14  // Normalize UV index based on the scale of 0-150
           : currentValue / 100  // Default scaling for other types
       }
       
