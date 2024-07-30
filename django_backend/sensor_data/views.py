@@ -235,9 +235,14 @@ class TreeMoistureContentDataView(View):
 
 class TreeHealthDataView(View):
     def get(self, request, *args, **kwargs):
+        device_id = request.GET.get('device_id', None)
+        
+        if not device_id:
+            return JsonResponse({'error': 'Device ID is required'}, status=400)
+       
         # Fetch the latest data from the database
         try:
-            device = Device.objects.get(device_id='A84041B42187E5C6')
+            device = Device.objects.get(device_id=device_id)
             latest_readings = TreeHealthReading.objects.filter(device=device).order_by('-timestamp')[:16]  # Adjust the number of records as needed
 
             data = []
@@ -265,7 +270,7 @@ ALLOWED_DEVICE_IDS = {
             'wind_speed': 'wind_speed',
             'wind_direction': 'wind_direction',
             'rainfall_total': 'precipitation',
-            'pressure': 'air_pressure',
+            'air_pressure': 'pressure',
             'uv': 'uv',
             'luminosity': 'luminosity',
             'rainfall_counter': 'rainfall_counter'
@@ -378,6 +383,35 @@ class TTNWebhookView(View):
 
                 SoilMoistureReading.objects.create(**moisture_data)
                 logger.info(f"Successfully created SoilMoistureReading entry for device {device_id}")
+                
+            elif device_type == 'weather_station':
+                # List of required fields for the weather station
+                required_fields = ['temperature', 'humidity', 'wind_speed', 'wind_direction', 'precipitation', 'pressure','rainfall_counter']
+
+                # Check if all required fields are in the payload
+                missing_fields = [field for field in required_fields if field_mapping[field] not in payload]
+                if missing_fields:
+                    logger.error(f"Missing fields {', '.join(missing_fields)} in payload: {payload}")
+                    return JsonResponse({'status': 'error', 'message': f"Missing fields {', '.join(missing_fields)} in payload"}, status=400)
+
+                # Create weather data dictionary
+                weather_data = {
+                    'device': device,
+                    'timestamp': timezone.now(),  # Use timezone-aware datetime
+                    'temperature': float(payload[field_mapping['temperature']]),
+                    'humidity': float(payload[field_mapping['humidity']]),
+                    'wind_speed': float(payload[field_mapping['wind_speed']]),
+                    'wind_direction': float(payload[field_mapping['wind_direction']]),
+                    'precipitation': float(payload[field_mapping['precipitation']]),
+                    'pressure': float(payload[field_mapping['pressure']]),
+                    'rainfall_counter': float(payload[field_mapping['rainfall_counter']])
+                }
+
+                WeatherData.objects.create(**weather_data)
+                logger.info(f"Successfully created WeatherData entry for device {device_id}")
+
+
+
 
             elif device_type == 'ph_sensor':
                 if field_mapping['ph_value'] not in payload:
@@ -450,8 +484,6 @@ class WeatherDataView(View):
                     'wind_direction': record.wind_direction,
                     'precipitation': record.precipitation,
                     'air_pressure': record.air_pressure,
-                    'uv': record.uv,
-                    'luminosity': record.luminosity,
                 })
 
             soil_moisture_data_list = []

@@ -6,7 +6,7 @@ import MarkerIcon from "./LeafletTreeIconSvg";
 
 const MarkerComponent = ({ position, selectedTree, currentValueSoilMoisture, treeSenseHealth, popup, treeID }) => {
 
-     
+    console.log("value soil moisture for markers:", currentValueSoilMoisture)
 
   // Check if the position matches the selected tree latitude and longitude - used to render the bigger sized and focused icon for the selected tree
   const isSelectedTreePosition = selectedTree && position[0] === selectedTree.latitude && position[1] === selectedTree.longitude;
@@ -17,7 +17,15 @@ const MarkerComponent = ({ position, selectedTree, currentValueSoilMoisture, tre
   
     if (treeSenseHealth === 2 && (treeID === 1 || treeID === 2 || treeID === 4 ) ) {
       colorLeft = "red";
-    } else if ((treeID === 3 )|| treeID === 5) {
+    }
+    if (treeSenseHealth === 1 && (treeID === 1 || treeID === 2 || treeID === 4 ) ) {
+      colorLeft = "yellow";
+    }
+
+    if (treeSenseHealth === 0 && (treeID === 1 || treeID === 2 || treeID === 4 ) ) {
+      colorLeft = "green";
+    }
+     else if ((treeID === 3 )|| treeID === 5) {
       colorLeft = "white";
     }
   
@@ -25,6 +33,8 @@ const MarkerComponent = ({ position, selectedTree, currentValueSoilMoisture, tre
   // Adjust the color of the right side of the leaflet icons based on the soil moisture data
   let colorRight; // Default color
 
+  //Pleiner Mostbirne:
+  if (treeID === 1 || treeID === 2 || treeID === 3 || treeID === 4 || treeID === 5) {
   if (currentValueSoilMoisture < 10 && currentValueSoilMoisture) {
     colorRight = "red";
   } else if (currentValueSoilMoisture >= 10 && currentValueSoilMoisture < 20) {
@@ -36,6 +46,7 @@ const MarkerComponent = ({ position, selectedTree, currentValueSoilMoisture, tre
   } else if (!currentValueSoilMoisture) {
     colorRight = "white";
   } 
+}
   
   const icon = new L.divIcon({
     html: ReactDOMServer.renderToString(

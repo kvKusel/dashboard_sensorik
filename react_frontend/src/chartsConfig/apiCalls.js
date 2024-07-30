@@ -47,13 +47,14 @@ export const fetchTreeMoistureContentData = async (queryType) => {
     }
 };
 
-export const fetchTreeHealthData = async () => {
+export const fetchTreeHealthData = async (deviceId) => {
     try {
-        const response = await axios.get(`${API_URL}/tree-health-data/`);
+        const response = await axios.get(`${API_URL}/tree-health-data/?device_id=${deviceId}`);
+
         // axios automatically parses the JSON response
         return response.data;
     } catch (error) {
-        console.error("Error fetching tree moisture content data from Django:", error);
+        console.error("Error fetching tree health data from Django:", error);
         return null;
     }
 };

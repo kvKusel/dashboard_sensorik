@@ -244,7 +244,7 @@ const LeafletMap = ({
               position={[49.55733911301222, 7.3607157322857075]}
               selectedTree={selectedTree}
               currentValueSoilMoisture={currentValueSoilMoisture[1]}
-              treeSenseHealth={treeSenseHealth}
+              treeSenseHealth={treeSenseHealth[1]}
               popup={"Pleiner Mostbirne"}
               treeID={1}
             />
@@ -252,7 +252,7 @@ const LeafletMap = ({
               position={[49.55751276556591, 7.361085800771698]}
               selectedTree={selectedTree}
               currentValueSoilMoisture={currentValueSoilMoisture[3]}
-              treeSenseHealth={treeSenseHealth}
+              treeSenseHealth={treeSenseHealth[2]}
               popup={"Schöner von Nordhausen"}
               treeID={2}
             />
@@ -260,7 +260,7 @@ const LeafletMap = ({
               position={[49.55765249375624, 7.361099770403598]}
               selectedTree={selectedTree}
               currentValueSoilMoisture={currentValueSoilMoisture[1]}
-              treeSenseHealth={treeSenseHealth}
+              treeSenseHealth={treeSenseHealth[0]}
               popup={"Roter Boskoop"}
               treeID={3}
             />
@@ -268,7 +268,7 @@ const LeafletMap = ({
               position={[49.55763383926781, 7.36134283963924]}
               selectedTree={selectedTree}
               currentValueSoilMoisture={currentValueSoilMoisture[0]}
-              treeSenseHealth={treeSenseHealth}
+              treeSenseHealth={treeSenseHealth[0]}
               popup={"Cox Orangenrenette"}
               treeID={4}
             />
@@ -276,7 +276,7 @@ const LeafletMap = ({
               position={[49.55780646950395, 7.361366709398196]}
               selectedTree={selectedTree}
               currentValueSoilMoisture={currentValueSoilMoisture[4]}
-              treeSenseHealth={treeSenseHealth}
+              treeSenseHealth={treeSenseHealth[0]}
               popup={"Jonathan"}
               treeID={5}
             />

@@ -11,30 +11,32 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
 
   // set up for the needles of the  gauge charts 
   const currentValue = soilMoistureData? soilMoistureData[soilMoistureData.length - 1].value : 0
+  console.log("current value: ", currentValue)
 
-  const healthStateRaw = treeSenseGeneralHealthData[0].status;
+  const healthStateRaw = treeSenseGeneralHealthData;
 
 
-  const treeSenseCoxOrangenrenetteHealth = (healthStateRaw) => {
-    if (healthStateRaw === 0) {
-      return 92
-    }
-    else if (healthStateRaw === 1) {
-      return 60
-    }
-    else if (healthStateRaw === 2) {
-      return 35
-    }
-    else if (healthStateRaw === 4) {
-      return 15
-    }
-    // make sure that there is no error if there are serverside problems (so no data)
-    else {
-      return 0
-    }
+  const treeSenseGeneralHealth = (healthStatesRaw) => {
+    return healthStatesRaw.map(healthStateRaw => {
+      if (healthStateRaw === 0) {
+        return 92;
+      } else if (healthStateRaw === 1) {
+        return 60;
+      } else if (healthStateRaw === 2) {
+        return 35;
+      } else if (healthStateRaw === 4) {
+        return 15;
+      } else {
+        return 0;
+      }
+    });
   }
+  
 
-  const healthState = treeSenseCoxOrangenrenetteHealth(healthStateRaw);
+  const healthStateNeedleValues = treeSenseGeneralHealth(healthStateRaw);
+  console.log("tree container healt state list: ", healthStateNeedleValues)
+  console.log("tree container healt state  RAW list: ", healthStateRaw)
+
 
 
   // end of set up for the needles of the  gauge charts 
@@ -109,21 +111,37 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
 
                <div className="col-12  d-flex flex-column align-items-center justify-content-center pt-3 pt-md-5 pb-md-4  pb-md-4 pt-xl-5 pt-xl-3  " >
                {/* it's a "special chart" because the gauge's needle will be resting at 0 if undefined */}
-            <Gauge  classAsProp="gaugeChartsTrees" currentValue={healthState} config={treeHealthConfig} selectedTree={selectedTree} id={"specialChartGeneral"}/> 
+            <Gauge  classAsProp="gaugeChartsTrees" currentValue={healthStateNeedleValues} config={treeHealthConfig} selectedTree={selectedTree} id={"specialChartGeneral"}/> 
             <p className="d-flex flex-column align-items-center justify-content-center text-center px-2 " style={{flex: "1 1 auto", color: "lightgrey"}}>
   Wasserbilanz Baum:<br />
   <strong>
-    {!selectedTree || selectedTree.id === 6 || selectedTree.id === 7 ? '-' : (
-      selectedTree.id === 3 || selectedTree.id === 5 ? 'Sensor nicht vorhanden' : (
-        healthStateRaw === 0 ? 'Kein Trockenstress' : (
-          healthStateRaw === 1 ? 'Leichter Trockenstress' : (
-            healthStateRaw === 2 ? 'Trockenstress' : (
-              healthStateRaw === 3 || !healthStateRaw ? 'Keine Daten' : 'Frost'
+  {!selectedTree || selectedTree.id === 6 || selectedTree.id === 7 ? '-' : (
+  selectedTree.id === 3 || selectedTree.id === 5 ? 'Sensor nicht vorhanden' : (
+    selectedTree.id === 4 && healthStateRaw[0] === 0 ? 'Kein Trockenstress' : (
+      selectedTree.id === 4 && healthStateRaw[0] === 1 ? 'Leichter Trockenstress' : (
+        selectedTree.id === 4 && healthStateRaw[0] === 2 ? 'Trockenstress' : (
+          selectedTree.id === 4 && healthStateRaw[0] === 3 || !healthStateRaw ? 'Keine Daten' : (
+            selectedTree.id === 1 && healthStateRaw[1] === 0 ? 'Kein Trockenstress' : (
+              selectedTree.id === 1 && healthStateRaw[1] === 1 ? 'Leichter Trockenstress' : (
+                selectedTree.id === 1 && healthStateRaw[1] === 2 ? 'Trockenstress' : (
+                  selectedTree.id === 1 && healthStateRaw[1] === 3 || !healthStateRaw ? 'Keine Daten' : (
+                    selectedTree.id === 2 && healthStateRaw[2] === 0 ? 'Kein Trockenstress' : (
+                      selectedTree.id === 2 && healthStateRaw[2] === 1 ? 'Leichter Trockenstress' : (
+                        selectedTree.id === 2 && healthStateRaw[2] === 2 ? 'Trockenstress' : (
+                          selectedTree.id === 2 && healthStateRaw[2] === 3 || !healthStateRaw ? 'Keine Daten' : 'Frost'
+                        )
+                      )
+                    )
+                  )
+                )
+              )
             )
           )
         )
       )
-    )}
+    )
+  )
+)}
   </strong>
 </p>
 

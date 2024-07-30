@@ -92,7 +92,7 @@ const WeatherDashboard = () => {
       </div>
 
 
-     {/* <div className="row mb-3" style={{ flex: "1 1 auto"}}>
+     <div className="row mb-3" style={{ flex: "1 1 auto"}}>
         <div className="col-12 d-flex flex-wrap px-2">
           <div
             className="col-12 col-md-6 col-lg-4 col-xl-5  d-flex align-items-center p-5"
@@ -104,7 +104,7 @@ const WeatherDashboard = () => {
             <div className="px-4">Wetterstation Burg Lichtenberg</div>
             <div className="">
             <label className="switch">
-            <input type="checkbox" defaultChecked disabled/>
+            <input type="checkbox" defaultChecked />
             <span className="slider round"></span>
           </label>
             </div>
@@ -126,7 +126,7 @@ const WeatherDashboard = () => {
             </div>
           </div>
         </div>
-      </div> */}
+      </div>
 
 
       <div className="row mb-3" style={{ flex: "1 1 auto" }}>

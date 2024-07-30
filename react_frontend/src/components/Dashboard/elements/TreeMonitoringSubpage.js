@@ -7,7 +7,7 @@ import {
   temperatureConfig,
   soilMoistureConfig,
   electricalResistanceConfig,
-  treeMoistureContentLineChartConfig
+  treeMoistureContentLineChartConfig,
 } from "../../../chartsConfig/chartsConfig";
 import {
   fetchSoilMoistureData,
@@ -84,8 +84,6 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
   const { weatherStationTemperatureData, lastValueWeatherStationTemperature } =
     useWeatherStationTemperature();
 
-
-
   // soil moisture - "Cox Orangenrenette"
   const {
     soilMoistureDataCoxOrangenrenette,
@@ -116,8 +114,8 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
   const resistanceDataCoxOrangenrenette =
     useFetchResistanceDataCoxOrangenrenette();
 
-  const treeMoistureContentDataCoxOrangenrenette = 
-    useFetchTreeMoistureContentDataCoxOrangenrenette(); 
+  const treeMoistureContentDataCoxOrangenrenette =
+    useFetchTreeMoistureContentDataCoxOrangenrenette();
 
   /////////////////////////                 End of updating the state by using hooks (from hooks subfolder) that make api calls     ///////////////////////////////////////
 
@@ -134,9 +132,22 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
   const [
     treeSenseCoxOrangenrenetteGeneralHealth,
     setTreeSenseCoxOrangenrenetteGeneralHealth,
-  ] = useState([]);
+  ] = useState();
 
-  const [isLoading, setIsLoading] = useState(true); // State to track loading status
+  const [
+    treeSensePleinerMostbirneGeneralHealth,
+    setTreeSensePleinerMostbirneGeneralHealth,
+  ] = useState();
+
+  const [
+    treeSenseSchoenerVonNordhausenGeneralHealth,
+    setTreeSenseSchoenerVonNordhauseneGeneralHealth,
+  ] = useState();
+
+  const [generalTreeHealthList, setGeneralTreeHealthList] = useState([]);
+
+  // State to track loading status
+  const [isLoading, setIsLoading] = useState(true);
 
   // Execute the API calls and fetch the needed data
   useEffect(() => {
@@ -150,7 +161,7 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
       treeMoistureContentDataCoxOrangenrenette !== null &&
       weatherStationTemperatureData !== null &&
       weatherStationPrecipitationData !== null
-   )  {
+    ) {
       // Extracting the last value from each dataset, will be used to render icon colors on the map
       const lastValueSoilMoisture = [
         lastValueSoilMoistureCoxOrangenrenette,
@@ -166,12 +177,29 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
 
       const fetchData = async () => {
         try {
+          const deviceIdCoxOrangenrenette = "A84041B42187E5C6"; // Cox Orangenrenette Device ID
+          const deviceIdCoxPleinerMostbirne = "A840418F1187E5C4"; // Cox Orangenrenette Device ID
+          const deviceIdSchoenerVonNordhausen = "A840414A6187E5C5"; // Cox Orangenrenette Device ID
+
           // General tree health
-          const treeSenseGeneralHealthData = await fetchTreeHealthData();
+          const treeSenseGeneralHealthDataCoxOrangenrenette =
+            await fetchTreeHealthData(deviceIdCoxOrangenrenette);
           setTreeSenseCoxOrangenrenetteGeneralHealth(
-            treeSenseGeneralHealthData
+            treeSenseGeneralHealthDataCoxOrangenrenette
           );
-          
+
+          const treeSenseGeneralHealthDataPleinerMostbirne =
+            await fetchTreeHealthData(deviceIdCoxPleinerMostbirne);
+          setTreeSensePleinerMostbirneGeneralHealth(
+            treeSenseGeneralHealthDataPleinerMostbirne
+          );
+
+          const treeSenseGeneralHealthDataSchoenerVonNordhausen =
+            await fetchTreeHealthData(deviceIdSchoenerVonNordhausen);
+          setTreeSenseSchoenerVonNordhauseneGeneralHealth(
+            treeSenseGeneralHealthDataSchoenerVonNordhausen
+          );
+
           setIsLoading(false); // Set loading to false once data is fetched
         } catch (error) {
           console.error("Error fetching data:", error);
@@ -190,24 +218,68 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
     lastValueWeatherStationTemperature,
   ]);
 
+  useEffect(() => {
+
+    let treeSenseGeneralHealthDataList = [];
 
 
-    // Set a timeout to check if isLoading is stuck
-    useEffect(() => {
-      const loadingTimeout = setTimeout(() => {
-        if (isLoading) {
-          // Handle the timeout situation, you can either refresh or show an error message
-          window.location.reload(); // Refresh the page
-          // Or you can show an error message:
-          // setIsLoading(false);
-          // alert("Loading data is taking longer than expected. Please try again later.");
-        }
-      }, 5000); // 5 seconds timeout
-  
-      return () => clearTimeout(loadingTimeout); // Clear the timeout if the component unmounts or isLoading changes
-    }, [isLoading]);
+    if (
+      treeSenseCoxOrangenrenetteGeneralHealth !== null &&
+      treeSensePleinerMostbirneGeneralHealth !== null &&
+      treeSenseSchoenerVonNordhausenGeneralHealth !== null
+    ) {
+      // Extracting the last value from each dataset, will be used to render icon colors on the map
+       treeSenseGeneralHealthDataList = [
+        treeSenseCoxOrangenrenetteGeneralHealth,
+        treeSensePleinerMostbirneGeneralHealth,
+        treeSenseSchoenerVonNordhausenGeneralHealth,
+      ];
+    }
 
+    if (
+      treeSenseGeneralHealthDataList.length === 3 &&
+      treeSenseGeneralHealthDataList[0] && treeSenseGeneralHealthDataList[0].length > 0 &&
+      treeSenseGeneralHealthDataList[1] && treeSenseGeneralHealthDataList[1].length > 0 &&
+      treeSenseGeneralHealthDataList[2] && treeSenseGeneralHealthDataList[2].length > 0
+    ) {
+      console.log("List with general health, first item: ", treeSenseGeneralHealthDataList[0]);
+
+      
+    // You can access the latest (newest) status here if needed
+    const healthStatusList = treeSenseGeneralHealthDataList.map(dataset => dataset[0].status);
     
+    console.log("List with general health, newest statuses: ", healthStatusList);
+
+    setGeneralTreeHealthList(healthStatusList);
+
+      }
+
+
+
+  }, [
+    treeSenseCoxOrangenrenetteGeneralHealth,
+    treeSensePleinerMostbirneGeneralHealth,
+    treeSenseSchoenerVonNordhausenGeneralHealth,
+  ]);
+
+
+
+
+  // Set a timeout to check if isLoading is stuck
+  useEffect(() => {
+    const loadingTimeout = setTimeout(() => {
+      if (isLoading) {
+        // Handle the timeout situation, you can either refresh or show an error message
+        window.location.reload(); // Refresh the page
+        // Or you can show an error message:
+        // setIsLoading(false);
+        // alert("Loading data is taking longer than expected. Please try again later.");
+      }
+    }, 5000); // 5 seconds timeout
+
+    return () => clearTimeout(loadingTimeout); // Clear the timeout if the component unmounts or isLoading changes
+  }, [isLoading]);
+
   return (
     <div style={{ minHeight: "80vh" }} className="first-step">
       {/* Display loading indicator while data is being fetched */}
@@ -218,7 +290,7 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
             justifyContent: "center",
             alignItems: "center",
             minHeight: "80vh",
-            color: "lightgrey"
+            color: "lightgrey",
           }}
         >
           <p className="fs-1">Sensordaten werden geladen...</p>
@@ -252,7 +324,7 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
               }
               lastValuesSoilMoisture={lastValuesSoilMoisture}
               treeSenseGeneralHealthData={
-                treeSenseCoxOrangenrenetteGeneralHealth
+                generalTreeHealthList
               }
               run={run}
               setRun={setRun}
@@ -374,7 +446,10 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
           </div>
 
           {/* sixth row - temperature from weather station */}
-          <div className="row " style={{ flex: "1 1 auto", marginBottom:"15px" }}>
+          <div
+            className="row "
+            style={{ flex: "1 1 auto", marginBottom: "15px" }}
+          >
             <div className="col-xs-12 d-flex p-2 ">
               <div
                 className="chart-container"

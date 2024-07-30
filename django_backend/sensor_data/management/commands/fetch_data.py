@@ -85,131 +85,171 @@ class Command(BaseCommand):
         connections.close_all()
         connections['default'].connect()
 
-        # Get or create the device
-        device, created = Device.objects.get_or_create(
-            device_id='A84041B42187E5C6',
-            defaults={'name': 'Cox Orangenrenette', 'location': 'Default Location'}
-        )
+        # List of devices
+        devices = [
+            {'device_id': 'A84041B42187E5C6', 'name': 'Cox Orangenrenette', 'location': 'Default Location'},
+            {'device_id': 'A840418F1187E5C4', 'name': 'Pleiner Mostbirne', 'location': 'Streuobstwiese'},
+            {'device_id': 'A840414A6187E5C5', 'name': 'Schöner von Nordhausen', 'location': 'Streuobstwiese'}
+        ]
 
-        # Get the latest timestamp from the database for this device
-        latest_reading = TreeMoistureReading.objects.filter(device=device).order_by('-timestamp').first()
-        if latest_reading:
-            latest_time = latest_reading.timestamp
-        else:
-            latest_time = make_aware(datetime.min, timezone.utc)
+        for device_info in devices:
+            # Get or create the device
+            device, created = Device.objects.get_or_create(
+                device_id=device_info['device_id'],
+                defaults={'name': device_info['name'], 'location': device_info['location']}
+            )
 
-        api_url = f'https://api.treesense.net/moisture-content/{device.device_id}'
-        headers = {'Authorization': f'Bearer {access_token}'}
+            # Get the latest timestamp from the database for this device
+            latest_reading = TreeMoistureReading.objects.filter(device=device).order_by('-timestamp').first()
+            if latest_reading:
+                latest_time = latest_reading.timestamp
+            else:
+                latest_time = make_aware(datetime.min, timezone.utc)
 
-        response = requests.get(api_url, headers=headers)
+            api_url = f'https://api.treesense.net/moisture-content/{device.device_id}'
+            headers = {'Authorization': f'Bearer {access_token}'}
 
-        if response.status_code == 200:
-            response_json = response.json()
+            response = requests.get(api_url, headers=headers)
 
-            extracted_values = [re.split(',', element) for element in response_json[2:]]
+            if response.status_code == 200:
+                response_json = response.json()
 
-            data_objects = []
-            for sublist in extracted_values:
-                time_str = sublist[0]
-                time_parsed = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%SZ')
-                time_parsed = make_aware(time_parsed, timezone.utc)
-                if time_parsed > latest_time:
-                    moisture_value = float(sublist[5]) * 100
-                    data_objects.append(TreeMoistureReading(
-                        device=device,
-                        timestamp=time_parsed,  # Use time_parsed
-                        moisture_value=moisture_value
-                    ))
+                extracted_values = [re.split(',', element) for element in response_json[2:]]
 
-            if data_objects:
-                TreeMoistureReading.objects.bulk_create(data_objects)
+                data_objects = []
+                for sublist in extracted_values:
+                    time_str = sublist[0]
+                    time_parsed = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%SZ')
+                    time_parsed = make_aware(time_parsed, timezone.utc)
+                    if time_parsed > latest_time:
+                        moisture_value = float(sublist[5]) * 100
+                        data_objects.append(TreeMoistureReading(
+                            device=device,
+                            timestamp=time_parsed,
+                            moisture_value=moisture_value
+                        ))
 
-            self.stdout.write(self.style.SUCCESS('Tree moisture data fetched and stored successfully'))
-        else:
-            self.stdout.write(self.style.ERROR(f'Failed to fetch tree moisture data. Status code: {response.status_code}'))
+                if data_objects:
+                    TreeMoistureReading.objects.bulk_create(data_objects)
+
+                self.stdout.write(self.style.SUCCESS(f'Tree moisture data for device {device.device_id} fetched and stored successfully'))
+            else:
+                self.stdout.write(self.style.ERROR(f'Failed to fetch tree moisture data for device {device.device_id}. Status code: {response.status_code}'))
+
 
     def fetch_electrical_resistance_data(self, access_token):
         # Re-open the connection before operations
         connections.close_all()
         connections['default'].connect()
 
-        # Get or create the device
-        device, created = Device.objects.get_or_create(
-            device_id='A84041B42187E5C6',
-            defaults={'name': 'Cox Orangenrenette', 'location': 'Default Location'}
-        )
+        # List of devices
+        devices = [
+            {'device_id': 'A84041B42187E5C6', 'name': 'Cox Orangenrenette', 'location': 'Default Location'},
+            {'device_id': 'B93052C43298F7D8', 'name': 'Golden Delicious', 'location': 'Orchard A'},
+            {'device_id': 'C75163D54321G9E1', 'name': 'Granny Smith', 'location': 'Orchard B'}
+        ]
 
-        # Get the latest timestamp from the database for this device
-        latest_reading = ElectricalResistanceReading.objects.filter(device=device).order_by('-timestamp').first()
-        if latest_reading:
-            latest_time = latest_reading.timestamp
-        else:
-            latest_time = make_aware(datetime.min, timezone.utc)
+        for device_info in devices:
+            # Get or create the device
+            device, created = Device.objects.get_or_create(
+                device_id=device_info['device_id'],
+                defaults={'name': device_info['name'], 'location': device_info['location']}
+            )
 
-        api_url = f'https://api.treesense.net/data/{device.device_id}'
-        headers = {'Authorization': f'Bearer {access_token}'}
+            # Get the latest timestamp from the database for this device
+            latest_reading = ElectricalResistanceReading.objects.filter(device=device).order_by('-timestamp').first()
+            if latest_reading:
+                latest_time = latest_reading.timestamp
+            else:
+                latest_time = make_aware(datetime.min, timezone.utc)
 
-        response = requests.get(api_url, headers=headers)
+            api_url = f'https://api.treesense.net/data/{device.device_id}'
+            headers = {'Authorization': f'Bearer {access_token}'}
 
-        if response.status_code == 200:
-            response_json = response.json()
+            response = requests.get(api_url, headers=headers)
 
-            extracted_values = [re.split(',', element) for element in response_json[2:]]
+            if response.status_code == 200:
+                response_json = response.json()
 
-            data_objects = []
-            for sublist in extracted_values:
-                time_str = sublist[0]
-                time_parsed = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%SZ')
-                time_parsed = make_aware(time_parsed, timezone.utc)
-                if time_parsed > latest_time:
-                    resistance_value = float(sublist[3])
-                    data_objects.append(ElectricalResistanceReading(
-                        device=device,
-                        timestamp=time_parsed,  # Use time_parsed
-                        resistance_value=resistance_value
-                    ))
+                extracted_values = [re.split(',', element) for element in response_json[2:]]
 
-            if data_objects:
-                ElectricalResistanceReading.objects.bulk_create(data_objects)
+                data_objects = []
+                for sublist in extracted_values:
+                    time_str = sublist[0]
+                    time_parsed = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%SZ')
+                    time_parsed = make_aware(time_parsed, timezone.utc)
+                    if time_parsed > latest_time:
+                        resistance_value = float(sublist[3])
+                        data_objects.append(ElectricalResistanceReading(
+                            device=device,
+                            timestamp=time_parsed,  # Use time_parsed
+                            resistance_value=resistance_value
+                        ))
 
-            self.stdout.write(self.style.SUCCESS('Electrical resistance data fetched and stored successfully'))
-        else:
-            self.stdout.write(self.style.ERROR(f'Failed to fetch electrical resistance data. Status code: {response.status_code}'))
+                if data_objects:
+                    ElectricalResistanceReading.objects.bulk_create(data_objects)
+
+                self.stdout.write(self.style.SUCCESS(f'Electrical resistance data for device {device.device_id} fetched and stored successfully'))
+            else:
+                self.stdout.write(self.style.ERROR(f'Failed to fetch electrical resistance data for device {device.device_id}. Status code: {response.status_code}'))
+
 
     def fetch_tree_health_data(self, access_token):
         # Re-open the connection before operations
         connections.close_all()
         connections['default'].connect()
 
-        # Get or create the device
-        device, created = Device.objects.get_or_create(
-            device_id='A84041B42187E5C6',
-            defaults={'name': 'Cox Orangenrenette', 'location': 'Default Location'}
-        )
+        # List of devices to fetch data for
+        devices = [
+            {
+                'device_id': 'A84041B42187E5C6',
+                'name': 'Cox Orangenrenette',
+                'location': 'Streuobstwiese'
+            },
+            {
+                'device_id': 'A840414A6187E5C5',
+                'name': 'Schöner von Nordhausen',
+                'location': 'Streuobstwiese'
+            },
+            {
+                'device_id': 'A840418F1187E5C4',
+                'name': 'Pleiner Mostbirne',
+                'location': 'Streuobstwiese'
+            }
+        ]
+
+
 
         api_url = 'https://api.treesense.net/trees'
         headers = {'Authorization': f'Bearer {access_token}'}
 
         response = requests.get(api_url, headers=headers)
 
+
         if response.status_code == 200:
-            response_json = response.json()
+                response_json = response.json()
 
-            data_objects = []
-            for item in response_json:
-                if 'A84041B42187E5C6' in item['hardware_serials']:
-                    time_parsed = tz_now()
-                    health_state = item['health_state']
-                    data_objects.append(TreeHealthReading(
-                        device=device,
-                        timestamp=time_parsed,  # Use current time as the timestamp
-                        health_state=health_state
-                    ))
+                for device_info in devices:
+                    # Get or create the device
+                    device, created = Device.objects.get_or_create(
+                        device_id=device_info['device_id'],
+                        defaults={'name': device_info['name'], 'location': device_info['location']}
+                    )
 
-            if data_objects:
-                TreeHealthReading.objects.bulk_create(data_objects)
+                    data_objects = []
+                    for item in response_json:
+                        if device_info['device_id'] in item['hardware_serials']:
+                            time_parsed = tz_now()
+                            health_state = item['health_state']
+                            data_objects.append(TreeHealthReading(
+                                device=device,
+                                timestamp=time_parsed,  # Use current time as the timestamp
+                                health_state=health_state
+                            ))
 
-            self.stdout.write(self.style.SUCCESS('Tree health data fetched and stored successfully'))
+                    if data_objects:
+                        TreeHealthReading.objects.bulk_create(data_objects)
+                        self.stdout.write(self.style.SUCCESS(f'Tree health data for {device.device_id} fetched and stored successfully'))
         else:
             self.stdout.write(self.style.ERROR(f'Failed to fetch tree health data. Status code: {response.status_code}'))
 
