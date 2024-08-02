@@ -81,3 +81,14 @@ class pHReading(models.Model):
 
     class Meta:
         ordering = ['-timestamp']
+        
+class waterLevelReading(models.Model):
+    device = models.ForeignKey(Device, on_delete=models.CASCADE, related_name='water_level_readings')
+    timestamp = models.DateTimeField()
+    water_level_value = models.FloatField()
+
+    def __str__(self):
+        return f"{self.device.name} - {self.water_level_value} at {self.timestamp}"
+
+    class Meta:
+        ordering = ['-timestamp']

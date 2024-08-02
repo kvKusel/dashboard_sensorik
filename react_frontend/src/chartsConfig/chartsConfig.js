@@ -70,6 +70,40 @@ export const temperatureConfig = {
   },
 };
 
+//Temperature Burg Lichtenberg - used in the Weather Dashboard
+export const temperatureConfigBurgLichtenbergWeatherDashboard = {
+  datasets: [
+    {
+      fill: true,
+      borderColor: "rgba(75, 192, 192, 1)",
+      tension: 0.1,
+      backgroundColor: "#92C7A5", // Fill color
+    },
+  ],
+  plugins: {
+    title: {
+      text: "Temperatur [°C]",
+    },
+  },
+};
+
+
+//Temperature Siebenpfeiffer-Gymnasium - used in the Weather Dashboard
+export const temperatureConfigGymnasiumWeatherDashboard = {
+  datasets: [
+    {
+      fill: true,
+      borderColor: "rgba(153, 102, 255, 1)",
+      tension: 0.1,
+      backgroundColor: "#92C7A5", // Fill color
+    },
+  ],
+  plugins: {
+    title: {
+      text: "Temperatur [°C]",
+    },
+  },
+};
 //Air Pressure last 24h Line Chart
 export const airPressureConfig = {
   datasets: [
@@ -114,6 +148,37 @@ export const precipitationConfig = {
       fill: false,
       backgroundColor: "#39B5E0",
       tension: 0.1,
+    },
+  ],
+  plugins: {
+    title: {
+      text: "Niederschlag [mm/h]",
+    },
+  },
+};
+
+
+export const precipitationConfigGymnasium = {
+  datasets: [
+    {
+      fill: false,
+      backgroundColor: "rgba(153, 102, 255, 1)",
+    },
+  ],
+  plugins: {
+    title: {
+      text: "Niederschlag [mm/h]",
+    },
+  },
+};
+
+export const precipitationConfigBurgLichtenberg = {
+  datasets: [
+    {
+      fill: false,
+      backgroundColor: "rgba(75, 192, 192, 1)",
+      borderColor:"red",
+
     },
   ],
   plugins: {

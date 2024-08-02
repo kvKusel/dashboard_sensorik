@@ -6,6 +6,7 @@ import WebcamSubpage from "./elements/WebcamSubpage";
 import Logo from "../../assets/logo_landlieben.png";
 import { Navbar, Nav, NavDropdown, Button, Dropdown } from 'react-bootstrap';
 import HochbeetSubpage from "./elements/HochbeetDashboard/HochbeetSubpage";
+import WaterLevelSubpage from "./elements/WaterLevelDashboard/WaterLevelSubpage";
 
 const Dashboard = () => {
   const [runTutorial, setRunTutorial] = useState(false);
@@ -145,7 +146,9 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
     <Dropdown.Menu>
       <Dropdown.Item eventKey="Baummonitoring">Baummonitoring</Dropdown.Item>
       <Dropdown.Item eventKey="Wetter">Wetter</Dropdown.Item>
-      <Dropdown.Item eventKey="Hochbeet">Hochbeete</Dropdown.Item>
+      <Dropdown.Item eventKey="Hochbeet">Hochbeet-Projekt</Dropdown.Item>
+      <Dropdown.Item eventKey="Pegelmonitoring">Pegelmonitoring</Dropdown.Item>
+
     </Dropdown.Menu>
   </Dropdown>
 </div>
@@ -225,14 +228,13 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
           <div className="ms-lg-2">
             {activeTab === "Baummonitoring" ? (
               <TreeMonitoringSubpage
-                // run={runTutorial}
-                // setRun={setRunTutorial}
-                // steps={steps}
+       
               />
             ) : activeTab === "Wetter" ? (
-              <WeatherSubpage  />
+              <WeatherSubpage  /> ) : activeTab === "Hochbeet" ? (
+                <HochbeetSubpage  />
             ) : (
-              <HochbeetSubpage />
+              <WaterLevelSubpage />
             )}
           </div>
         </div>

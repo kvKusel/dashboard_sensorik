@@ -35,6 +35,35 @@ const HochbeetDashboard = () => {
   const [lastPHValue, setLastPHValue] = useState(null);
 
 
+  const [
+    weatherStationGymnasiumPrecipitationData,
+    setWeatherStationGymnasiumPrecipitationData,
+  ] = useState([]);
+
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/weather-data-gymnasium/`);
+        const data = response.data;
+
+        // Extract precipitation data
+        const precipitationData = data.weather_data.map((entry) => ({
+          time: entry.timestamp,
+          value: entry.precipitation,
+        }));
+
+        setWeatherStationGymnasiumPrecipitationData(precipitationData)
+      } catch (error) {
+        console.error("Error fetching the weather data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
+
 
   const fetchAllSoilMoistureGymnasiumData = async () => {
     try {
@@ -348,10 +377,10 @@ useEffect(() => {
 
           }}
         >
-                      {weatherStationPrecipitationData && (
+                      {weatherStationGymnasiumPrecipitationData && (
                   <BarChart
                     barChartConfig={precipitationConfig}
-                    barChartData={weatherStationPrecipitationData}
+                    barChartData={weatherStationGymnasiumPrecipitationData}
                   />)}
         </div>
 

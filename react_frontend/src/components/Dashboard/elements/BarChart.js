@@ -6,7 +6,7 @@ const BarChart = ({ barChartConfig, barChartData }) => {
 
   console.log(barChartData)
 
-  const firstTimeValue = barChartData.length > 0 ? new Date(barChartData[1].time) : new Date();
+  //const firstTimeValue = barChartData.length > 0 ? new Date(barChartData[1].time) : new Date();
 
     // creates a timestamp thats 23 hours earlier than current time - used to set the min boundary of x-axis 
     const now = new Date();
@@ -14,17 +14,8 @@ const BarChart = ({ barChartConfig, barChartData }) => {
     now.setSeconds(0);
     now.setMilliseconds(0);
 
-    const twentyFourHoursAgoTimestamp = new Date(now - (24 * 60 * 60 * 1000));
+    const twentyFourHoursAgoTimestamp = Date.now() - (22 * 60 * 60 * 1000);
 
-  //get the needed data from the props
-  const { backgroundColor } = barChartConfig.datasets[0];
-  const labels = barChartData.map(dataPoint => {
-    const timeValue = new Date(dataPoint.time); // Convert time string to Date object
-    //timeValue.setMinutes(timeValue.getMinutes() + 30); // Add 30 minutes
-    return timeValue;
-});
-
-  const dataPoints = barChartData.map(dataPoint => parseFloat(dataPoint.value));
 
   const barChartRef = useRef(null);
 
@@ -36,17 +27,50 @@ const BarChart = ({ barChartConfig, barChartData }) => {
       return ;
     }
 
+    console.log ("current bar chart data: ", barChartData)
+
+      // Normalize the barChartData format
+      const normalizedBarChartData = Array.isArray(barChartData[0])
+      ? barChartData[0]
+      : barChartData;
+
+    // Extract and format labels
+    const labels = normalizedBarChartData.map(dataPoint => {
+      let date = new Date(dataPoint.time);
+      return date;
+  });
+  console.log("Current data (bar chart):", normalizedBarChartData);
+
+    console.log("Current LABELS (bar chart):", labels);
+
+    // Extract datasets
+    const datasets = Array.isArray(barChartData[0])
+      ? barChartData.map((data, index) => ({
+          label: barChartConfig.datasets[index].label,
+          data: data.map(dataPoint => parseFloat(dataPoint.value)),
+          borderColor: barChartConfig.datasets[index].borderColor,
+          backgroundColor: barChartConfig.datasets[index].backgroundColor,
+          fill: barChartConfig.datasets[index].fill,
+        }))
+      : [
+          {
+            label: barChartConfig.datasets[0].label,
+            data: normalizedBarChartData.map(dataPoint => parseFloat(dataPoint.value)),
+            borderColor: barChartConfig.datasets[0].borderColor,
+            backgroundColor: barChartConfig.datasets[0].backgroundColor,
+            fill: barChartConfig.datasets[0].fill,
+          },
+        ];
+
+    console.log("Current datasets (bar chart):", datasets);
+
     const barChartConfiguration = {
       type: "bar",
       data: {
         labels: labels,
-        
-        //barChartData.map(dataPoint => dataPoint.time),
-                datasets: [{
-          data: dataPoints,
-          backgroundColor: backgroundColor,
-          barThickness: "flex",
-        }] || [],
+        datasets: datasets,
+        barThickness: "flex",
+
       },
       options: {
         animations: false,
@@ -63,8 +87,8 @@ const BarChart = ({ barChartConfig, barChartData }) => {
         scales: {
           x: {
             offset: false,
-            type: 'time', 
-            min:firstTimeValue,
+            type: 'timeseries', 
+            min:twentyFourHoursAgoTimestamp,
             max: Date.now(),
 
             grid: {
@@ -99,7 +123,7 @@ const BarChart = ({ barChartConfig, barChartData }) => {
             grid: {
               color: "lightgrey",
             },
-            max:10,
+            max:20,
             ticks: {
               precision:0,      //display integers instead of floats
               maxTicksLimit: 4,
@@ -144,7 +168,7 @@ const BarChart = ({ barChartConfig, barChartData }) => {
             // const { datasets } = chart.options.data;
             console.log(barChartData)
             const maxValue = Math.max(...barChartData.map(dataPoint => dataPoint.value));
-            console.log(maxValue)
+            console.log("max Value: ", maxValue)
      // Check if the maximum value is 0
      if (maxValue === 0) {
       ctx.save();
@@ -192,12 +216,20 @@ const BarChart = ({ barChartConfig, barChartData }) => {
       ],
     };
 
+    // Add barThickness, maxBarThickness, and barPercentage properties to the datasets
+barChartConfiguration.data.datasets.forEach(dataset => {
+  dataset.barThickness = 20; // Fixed thickness for bars
+  dataset.maxBarThickness = 50; // Maximum thickness for bars
+  dataset.categoryPercentage = 0.8; // Percentage of the category width the bars should occupy
+  dataset.barPercentage = 0.9; // Percentage of the available space the bars should occupy
+});
+
     const barChart = new Chart(barChartRef.current, barChartConfiguration);
 
     return () => {
       barChart.destroy();
     };
-  }, [barChartConfig, barChartData, backgroundColor, labels, dataPoints]);
+  }, [barChartConfig, barChartData]);
 
   return (
     <canvas

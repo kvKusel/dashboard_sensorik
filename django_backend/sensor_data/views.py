@@ -11,7 +11,7 @@ import re
 from django.http import HttpResponse
 import pandas as pd
 from django.shortcuts import render
-from sensor_data.models import TreeMoistureReading, Device, ElectricalResistanceReading, TreeHealthReading, WeatherData, SoilMoistureReading, pHReading
+from sensor_data.models import TreeMoistureReading, Device, ElectricalResistanceReading, TreeHealthReading, WeatherData, SoilMoistureReading, pHReading, waterLevelReading
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import logging
@@ -265,15 +265,15 @@ ALLOWED_DEVICE_IDS = {
     "24e124454d083548-wetter-schule": {
         'type': 'weather_station',
         'field_mapping': {
-            'temperature': 'temperature',
-            'humidity': 'humidity',
-            'wind_speed': 'wind_speed',
-            'wind_direction': 'wind_direction',
-            'rainfall_total': 'precipitation',
-            'air_pressure': 'pressure',
-            'uv': 'uv',
-            'luminosity': 'luminosity',
-            'rainfall_counter': 'rainfall_counter'
+        'temperature': 'temperature',
+        'humidity': 'humidity',
+        'wind_speed': 'wind_speed',
+        'wind_direction': 'wind_direction',
+        'precipitation': 'rainfall_total',
+        'air_pressure': 'pressure',
+        'uv': 'uv',
+        'luminosity': 'luminosity',
+        'rainfall_counter': 'rainfall_counter'
         }
     },
     "a840413cc1884fb6-hochbeet-moisture1": {
@@ -324,20 +324,27 @@ ALLOWED_DEVICE_IDS = {
             'ph_value': 'PH1_SOIL'
         }
     },
-    "2cf7f1c054400013-ph-sensecap2-schule": {
-        'type': 'ph_sensor_sensecap',
-        'field_mapping': {
-            'temperature': 'measurementId_4097',
-            'ph_value': 'measurementId_4106'
-        }
-    },
-    "2cf7f1c05440005d-ph-sensecap-schule": {
-        'type': 'ph_sensor_sensecap',
-        'field_mapping': {
-            'temperature': 'measurementId_4097',
-            'ph_value': 'measurementId_4106'
-        }
+"2cf7f1c054400013-ph-sensecap2-schule": {
+    'type': 'ph_sensor_sensecap',
+    'field_mapping': {
+        'temperature': 4097,
+        'ph_value': 4106
     }
+},
+"2cf7f1c05440005d-ph-sensecap-schule": {
+    'type': 'ph_sensor_sensecap',
+    'field_mapping': {
+        'temperature': 4097,
+        'ph_value': 4106
+    }
+},
+"eui-a8404169c187e059-water-lvl-kv": {
+    'type': 'water_level_sensor',
+    'field_mapping': {
+        'water_level': "Distance",
+    }
+}
+
 }
 
 
@@ -385,15 +392,6 @@ class TTNWebhookView(View):
                 logger.info(f"Successfully created SoilMoistureReading entry for device {device_id}")
                 
             elif device_type == 'weather_station':
-                # List of required fields for the weather station
-                required_fields = ['temperature', 'humidity', 'wind_speed', 'wind_direction', 'precipitation', 'pressure','rainfall_counter']
-
-                # Check if all required fields are in the payload
-                missing_fields = [field for field in required_fields if field_mapping[field] not in payload]
-                if missing_fields:
-                    logger.error(f"Missing fields {', '.join(missing_fields)} in payload: {payload}")
-                    return JsonResponse({'status': 'error', 'message': f"Missing fields {', '.join(missing_fields)} in payload"}, status=400)
-
                 # Create weather data dictionary
                 weather_data = {
                     'device': device,
@@ -403,7 +401,9 @@ class TTNWebhookView(View):
                     'wind_speed': float(payload[field_mapping['wind_speed']]),
                     'wind_direction': float(payload[field_mapping['wind_direction']]),
                     'precipitation': float(payload[field_mapping['precipitation']]),
-                    'pressure': float(payload[field_mapping['pressure']]),
+                    'air_pressure': float(payload[field_mapping['air_pressure']]),
+                    'uv': float(payload[field_mapping['uv']]) if field_mapping['uv'] in payload else None,
+                    'luminosity': float(payload[field_mapping['luminosity']]) if field_mapping['luminosity'] in payload else None,
                     'rainfall_counter': float(payload[field_mapping['rainfall_counter']])
                 }
 
@@ -430,10 +430,12 @@ class TTNWebhookView(View):
             elif device_type == 'ph_sensor_sensecap':
                 messages = payload.get('messages', [])
                 ph_value = None
+                temperature_value = None
                 for message in messages:
                     if message.get('measurementId') == field_mapping['ph_value']:
                         ph_value = message.get('measurementValue')
-                        break
+                    elif message.get('measurementId') == field_mapping['temperature']:
+                        temperature_value = message.get('measurementValue')
 
                 if ph_value is not None:
                     ph_data = {
@@ -446,6 +448,20 @@ class TTNWebhookView(View):
                     logger.info(f"Successfully created pHReading entry (id: {new_reading.id}) for device {device_id} with pH value {ph_value}")
                 else:
                     logger.warning(f"No pH value found in payload for device {device_id}")
+                    
+            elif device_type == 'water_level_sensor':
+                if field_mapping['water_level'] not in payload:
+                    logger.error(f"Missing field {field_mapping['water_level']} in payload: {payload}")
+                    return JsonResponse({'status': 'error', 'message': f"Missing field {field_mapping['water_level']} in payload"}, status=400)
+
+                water_level_data = {
+                    'device': device,
+                    'timestamp': timezone.now(),  # Use timezone-aware datetime
+                    'water_level': float(payload[field_mapping['water_level']])
+                }
+
+                waterLevelReading.objects.create(**water_level_data)
+                logger.info(f"Successfully created pHReading entry for device {device_id}")
 
             return JsonResponse({'status': 'success'})
 
@@ -597,4 +613,44 @@ class pHDataHochbeetProject(View):
 
         except Exception as e:
             logger.error(f"Error in pHDataHochbeetProject: {str(e)}")
+            return JsonResponse({"error": str(e)}, status=500)
+        
+        
+      
+#############################             water level data         ###########################################
+
+
+class waterLevelDataView(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            query_type = request.GET.get("query_type")
+            if not query_type:
+                return JsonResponse({"error": "Query type is required"}, status=400)
+
+            device_ids = {
+                "water_level_kv": "eui-a8404169c187e059-water-lvl-kv",
+
+            }
+
+            device_id = device_ids.get(query_type)
+            if not device_id:
+                return JsonResponse({"error": "Invalid query type"}, status=400)
+
+            try:
+                device = Device.objects.get(device_id=device_id)
+            except Device.DoesNotExist:
+                return JsonResponse({"error": "Device not found"}, status=404)
+
+            readings = waterLevelReading.objects.filter(device=device).order_by('timestamp')
+
+            if readings.exists():
+                response_data = list(readings.values('timestamp', 'water_level_value'))
+                logger.info(f"Response data: {response_data}")
+
+                return JsonResponse(response_data, safe=False)
+            else:
+                return JsonResponse({"error": "Query result is empty"}, status=404)
+
+        except Exception as e:
+            logger.error(f"Error in water level data: {str(e)}")
             return JsonResponse({"error": str(e)}, status=500)

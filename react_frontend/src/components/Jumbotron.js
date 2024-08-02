@@ -13,6 +13,8 @@ const MyJumbotron = () => {
   const [backgroundStyle, setBackgroundStyle] = useState({
     background: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${headerImage}) no-repeat center bottom fixed`,
     backgroundSize: "cover",
+    //backgroundSize: "absolute",
+
   });
 
   const fadeIn = {
