@@ -48,6 +48,8 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) =
           fill: lineChartConfig.datasets[index].fill,
           hidden: false,
           backgroundColor: lineChartConfig.datasets[index].backgroundColor,
+          spanGaps: true,
+
         }))
       : [
           {
@@ -56,6 +58,7 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) =
             fill: lineChartConfig.datasets[0].fill,
             hidden: false,
             backgroundColor: lineChartConfig.datasets[0].backgroundColor,
+            spanGaps: true,
           },
         ];
 
@@ -69,6 +72,7 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) =
     },
     options: {
       responsive: true,
+      spanGaps: true,
       maintainAspectRatio: false,
       layout: {},
       scales: {
@@ -146,6 +150,8 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) =
 
         options: {
           responsive: true,
+          spanGaps: true,
+
           maintainAspectRatio: false,
           layout: {
             // padding: {
@@ -415,6 +421,8 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) =
 
         options: {
           responsive: true,
+          spanGaps: true,
+
           maintainAspectRatio: false,
           layout: {
             // padding: {
