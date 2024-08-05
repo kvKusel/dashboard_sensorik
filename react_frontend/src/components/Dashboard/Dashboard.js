@@ -32,6 +32,16 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
  Diese praxisnahe Anwendung von Technologie im Gartenbau fördert nicht nur das Verständnis für nachhaltige Anbaumethoden, sondern weckt auch das Interesse \
  der Schüler an MINT-Fächern.";
         break;
+        case "Pegelmonitoring":
+          alertText = "Das Wasserstandüberwachungs-Projekt nutzt die IoT-Technologie, um Wasserstände in Echtzeit zu überwachen. \
+        Derzeit haben wir einen experimentellen Wasserstandssensor im Einsatz, der vor der Kreisverwaltung Kusel eingebaut wurde. \
+        Weitere Sensoren sind bereits in Planung und werden bald installiert. \
+        Diese Sensoren liefern wichtige Daten zur Vorhersage von Hochwasserereignissen und zur effizienten Wasserwirtschaft. \
+        Mit diesen Informationen können wir potenzielle Überschwemmungen frühzeitig erkennen und entsprechende Maßnahmen ergreifen. \
+        Dieses Projekt ist ein wichtiger Schritt zur Verbesserung des Hochwasserschutzes und zur Gewährleistung der Sicherheit unserer Gemeinden. \
+        Es fördert zudem das Bewusstsein für Umweltschutz und die Bedeutung von nachhaltigem Wassermanagement. \
+        Durch die Integration dieser Technologie schaffen wir eine sichere und zukunftsorientierte Infrastruktur für alle Bewohner.";
+          break;
         default:
           alertText = "No selection made.";
       }
@@ -210,6 +220,9 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
                       </NavDropdown.Item>
                       <NavDropdown.Item as="button" eventKey="Hochbeet">
                         Hochbeet-Projekt
+                      </NavDropdown.Item>
+                      <NavDropdown.Item as="button" eventKey="Pegelmonitoring">
+                        Pegelmonitoring
                       </NavDropdown.Item>
                     </NavDropdown>
                   </Nav>

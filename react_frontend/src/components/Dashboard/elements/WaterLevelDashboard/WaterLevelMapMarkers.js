@@ -9,7 +9,7 @@ const WeatherMarkerComponent = ({ position, popup }) => {
      
     const customIcon = new L.Icon({
         iconUrl: weatherStationIcon,
-        iconSize: [28, 28], // Adjust the size as needed
+        iconSize: [53, 53], // Adjust the size as needed
         iconAnchor: [16, 32], // Adjust the anchor point as needed
         popupAnchor: [0, -32] // Adjust the popup anchor point as needed
       });

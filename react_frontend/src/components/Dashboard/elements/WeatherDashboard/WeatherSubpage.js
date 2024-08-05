@@ -80,10 +80,6 @@ const WeatherDashboard = () => {
   const { weatherStationTemperatureData, lastValueWeatherStationTemperature } =
     useWeatherStationTemperature();
 
-  console.log(
-    "weather station burg lichtenberg temp: ",
-    weatherStationTemperatureData
-  );
 
   //precipitation data from the weather station Burg Lichtenberg
   const {
@@ -109,7 +105,6 @@ const WeatherDashboard = () => {
   //wind direction data from the weather station Burg Lichtenberg
   const windDirection = useWeatherStationWindDirection();
 
-  console.log("air pressure,", weatherStationAirPressureData);
 
   //////////////////////////////////////      fetching and preparing weather data from Siebenpfeiffer Gymnasium     //////////////////////////////////
 
@@ -152,7 +147,6 @@ const WeatherDashboard = () => {
         const data = response.data;
 
         setWeatherDataGymnasium(data.weather_data);
-        console.log("Weather Data:", data.weather_data);
 
         // Extract air pressure data
         const airPressureData = data.weather_data.map((entry) => ({
@@ -276,7 +270,6 @@ const getCardinalDirection = (degree) => {
     })),
   ];
 
-  console.log("normalization: ", normalizedTemperatureBurg, xValuesTemperature);
 
 
 
@@ -318,7 +311,6 @@ const getCardinalDirection = (degree) => {
     })),
   ];
 
-console.log("normalized humidity dataset:", normalizedDataHumidity)
 
 
     // precipitation
@@ -358,7 +350,6 @@ console.log("normalized humidity dataset:", normalizedDataHumidity)
     })),
   ];
 
-  console.log("normalization precipitation: ", weatherStationPrecipitationData,  normalizedDataPrecipitation[0]);
 
 
   /////////////////////////////////////////////////            prepare temperature data                ////////////////////////////////////////////
@@ -412,7 +403,6 @@ console.log("normalized humidity dataset:", normalizedDataHumidity)
      lineDataPrecipitation.push(weatherStationGymnasiumPrecipitationData);
    }
 
-   console.log ("current precipitation data: ", lineDataPrecipitation)
  
    const precipitationConfigTwoDatasets = {
      datasets: [
@@ -509,7 +499,6 @@ console.log("normalized humidity dataset:", normalizedDataHumidity)
 
     //only create the DOM when data is ready
     useEffect(() => {
-      console.log("WIND: ", lastPrecipitationValue)
       if (
         weatherStationTemperatureData !== null &&
         weatherStationPrecipitationData !== null &&
@@ -524,13 +513,16 @@ console.log("normalized humidity dataset:", normalizedDataHumidity)
         lastPrecipitationValue !== undefined &&
         lastValueWeatherStationHumidity && 
         weatherStationGymnasiumWindSpeedData.length > 0 &&
-        weatherStationGymnasiumWindDirectionData.length > 0
+        weatherStationGymnasiumWindDirectionData.length > 0 &&
+        normalizedDataPrecipitation.length > 0 &&
+        normalizedDataTemperature.length > 0 &&
+        lastValueWeatherStationTemperature  !== null 
       ) {
   
             setIsLoading(false); // Set loading to false once data is fetched
           } 
     }, [
-      weatherStationPrecipitationData,weatherStationAirPressureData,  weatherStationHumidityData, weatherStationGymnasiumAirPressureData, lastPrecipitationValue, weatherStationTemperatureData, weatherStationGymnasiumTemperatureData, weatherDataGymnasium, weatherStationGymnasiumPrecipitationData, weatherStationGymnasiumHumidityData, weatherStationGymnasiumWindSpeedData, lastValueWeatherStationAirPressure, lastValueWeatherStationHumidity, weatherStationGymnasiumWindDirectionData
+      lastValueWeatherStationTemperature, normalizedDataTemperature, normalizedDataPrecipitation, weatherStationPrecipitationData,weatherStationAirPressureData,  weatherStationHumidityData, weatherStationGymnasiumAirPressureData, lastPrecipitationValue, weatherStationTemperatureData, weatherStationGymnasiumTemperatureData, weatherDataGymnasium, weatherStationGymnasiumPrecipitationData, weatherStationGymnasiumHumidityData, weatherStationGymnasiumWindSpeedData, lastValueWeatherStationAirPressure, lastValueWeatherStationHumidity, weatherStationGymnasiumWindDirectionData
     ]);
 
     

@@ -471,7 +471,7 @@ class TTNWebhookView(View):
                 water_level_data = {
                     'device': device,
                     'timestamp': timezone.now(),  # Use timezone-aware datetime
-                    'water_level': water_level_cm
+                    'water_level_value': water_level_cm
                 }
 
                 waterLevelReading.objects.create(**water_level_data)
