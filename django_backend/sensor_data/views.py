@@ -454,14 +454,29 @@ class TTNWebhookView(View):
                     logger.error(f"Missing field {field_mapping['water_level']} in payload: {payload}")
                     return JsonResponse({'status': 'error', 'message': f"Missing field {field_mapping['water_level']} in payload"}, status=400)
 
+                # Extract and clean the water level value
+                water_level_str = payload[field_mapping['water_level']]
+                
+                # Remove non-numeric characters (except for '.' and '-')
+                water_level_str_clean = ''.join(c for c in water_level_str if c.isdigit() or c in ['.', '-'])
+
+                # Convert to float and convert mm to cm
+                try:
+                    water_level_mm = float(water_level_str_clean)
+                    water_level_cm = water_level_mm / 10
+                except ValueError:
+                    logger.error(f"Invalid water level value: {water_level_str} in payload: {payload}")
+                    return JsonResponse({'status': 'error', 'message': f"Invalid water level value: {water_level_str}"}, status=400)
+
                 water_level_data = {
                     'device': device,
                     'timestamp': timezone.now(),  # Use timezone-aware datetime
-                    'water_level': float(payload[field_mapping['water_level']])
+                    'water_level': water_level_cm
                 }
 
                 waterLevelReading.objects.create(**water_level_data)
-                logger.info(f"Successfully created pHReading entry for device {device_id}")
+                logger.info(f"Successfully created waterLevelReading entry for device {device_id}")
+
 
             return JsonResponse({'status': 'success'})
 
