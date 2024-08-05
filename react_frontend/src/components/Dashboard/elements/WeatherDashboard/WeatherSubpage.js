@@ -318,6 +318,8 @@ const getCardinalDirection = (degree) => {
     })),
   ];
 
+console.log("normalized humidity dataset:", normalizedDataHumidity)
+
 
     // precipitation
 
@@ -474,16 +476,6 @@ const getCardinalDirection = (degree) => {
   
   /////////////////////////////////////////////////            prepare humidity data                ////////////////////////////////////////////
 
-  let lineDataHumidity = [];
-  let datasetsHumidity = [];
-
-  if (stateSliderBurgLichtenberg) {
-    lineDataTemperature.push(weatherStationHumidityData);
-  }
-
-  if (stateSliderSiebenpfeifferGymnasium) {
-    lineDataTemperature.push(weatherStationGymnasiumHumidityData);
-  }
 
   const humidityConfigTwoDatasets = {
     datasets: [
@@ -640,14 +632,14 @@ const getCardinalDirection = (degree) => {
 
 {!stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium && (
       <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(153, 102, 255, 1)" }}>{weatherStationGymnasiumTemperatureData[weatherStationGymnasiumTemperatureData.length - 1].value
+        Aktueller Wert: <span style={{ color: "rgba(153, 102, 255, 1)" }}>{normalizedDataTemperature[1][normalizedDataTemperature[1].length - 1].value
         } °C</span>
       </Typography>
     )}
 
 {stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium &&  (
       <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{lastValueWeatherStationTemperature} °C  </span><span> | </span><span style={{ color: "rgba(153, 102, 255, 1)" }}>{weatherStationGymnasiumTemperatureData[weatherStationGymnasiumTemperatureData.length - 1].value} °C</span>
+        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{lastValueWeatherStationTemperature} °C  </span><span> | </span><span style={{ color: "rgba(153, 102, 255, 1)" }}>{normalizedDataTemperature[1][normalizedDataTemperature[1].length - 1].value} °C</span>
       </Typography>
     )}
 
@@ -658,7 +650,7 @@ const getCardinalDirection = (degree) => {
       </Typography>
     )}
                   <Typography variant="body2" color="lightgray">
-                  Am: {format(new Date(weatherStationGymnasiumTemperatureData[weatherStationGymnasiumTemperatureData.length - 1].time), "dd/MM/yyyy 'um' HH:mm")}
+                  Am: {format(new Date(normalizedDataTemperature[1][normalizedDataTemperature[1].length - 1].time), "dd/MM/yyyy 'um' HH:mm")}
                   </Typography>
                 </CardContent>
               </Card>
@@ -677,14 +669,14 @@ const getCardinalDirection = (degree) => {
 
 {!stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium && (
       <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(153, 102, 255, 1)" }}>{weatherStationGymnasiumPrecipitationData[weatherStationGymnasiumPrecipitationData.length - 1].value
+        Aktueller Wert: <span style={{ color: "rgba(153, 102, 255, 1)" }}>{normalizedDataPrecipitation[1][normalizedDataPrecipitation[1].length - 1].value
         } mm/h</span>
       </Typography>
     )}
 
 {stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium &&   (
       <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{lastPrecipitationValue} mm/h  </span><span> | </span><span style={{ color: "rgba(153, 102, 255, 1)" }}>{weatherStationGymnasiumPrecipitationData[weatherStationGymnasiumPrecipitationData.length - 1].value} mm/h</span>
+        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{lastPrecipitationValue} mm/h  </span><span> | </span><span style={{ color: "rgba(153, 102, 255, 1)" }}>{normalizedDataPrecipitation[1][normalizedDataPrecipitation[1].length - 1].value} mm/h</span>
       </Typography>
     )}
 
@@ -695,7 +687,7 @@ const getCardinalDirection = (degree) => {
       </Typography>
     )}
                   <Typography variant="body2" color="lightgray">
-                  Am: {format(new Date(weatherStationGymnasiumTemperatureData[weatherStationGymnasiumTemperatureData.length - 1].time), "dd/MM/yyyy 'um' HH:mm")}
+                  Am: {format(new Date(normalizedDataTemperature[1][normalizedDataTemperature[1].length - 1].time), "dd/MM/yyyy 'um' HH:mm")}
                   </Typography>
                 </CardContent>
               </Card>
@@ -714,14 +706,14 @@ const getCardinalDirection = (degree) => {
 
 {!stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium && (
       <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(153, 102, 255, 1)" }}>{weatherStationGymnasiumHumidityData[weatherStationGymnasiumHumidityData.length - 1].value
+        Aktueller Wert: <span style={{ color: "rgba(153, 102, 255, 1)" }}>{normalizedDataHumidity[1][normalizedDataHumidity[1].length - 1].value
         } %</span>
       </Typography>
     )}
 
 {stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium &&   (
       <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{lastValueWeatherStationHumidity} %  </span><span> | </span><span style={{ color: "rgba(153, 102, 255, 1)" }}>{weatherStationGymnasiumHumidityData[weatherStationGymnasiumHumidityData.length - 1].value} %</span>
+        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{lastValueWeatherStationHumidity} %  </span><span> | </span><span style={{ color: "rgba(153, 102, 255, 1)" }}>{normalizedDataHumidity[1][normalizedDataHumidity[1].length - 1].value} %</span>
       </Typography>
     )}
 
@@ -732,7 +724,7 @@ const getCardinalDirection = (degree) => {
       </Typography>
     )}
                   <Typography variant="body2" color="lightgray">
-                  Am: {format(new Date(weatherStationGymnasiumTemperatureData[weatherStationGymnasiumTemperatureData.length - 1].time), "dd/MM/yyyy 'um' HH:mm")}
+                  Am: {format(new Date(normalizedDataTemperature[1][normalizedDataTemperature[1].length - 1].time), "dd/MM/yyyy 'um' HH:mm")}
                   </Typography>
                 </CardContent>
               </Card>
@@ -751,14 +743,14 @@ const getCardinalDirection = (degree) => {
 
 {!stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium && (
       <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(153, 102, 255, 1)" }}>{weatherStationGymnasiumAirPressureData[weatherStationGymnasiumAirPressureData.length - 1].value
+        Aktueller Wert: <span style={{ color: "rgba(153, 102, 255, 1)" }}>{normalizedDataAirPressure[1][normalizedDataAirPressure[1].length - 1].value
         } hPa</span>
       </Typography>
     )}
 
 {stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium &&   (
       <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{lastValueWeatherStationAirPressure} hPa  </span><span> | </span><span style={{ color: "rgba(153, 102, 255, 1)" }}>{weatherStationGymnasiumAirPressureData[weatherStationGymnasiumAirPressureData.length - 1].value} hPa</span>
+        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{lastValueWeatherStationAirPressure} hPa  </span><span> | </span><span style={{ color: "rgba(153, 102, 255, 1)" }}>{normalizedDataAirPressure[1][normalizedDataAirPressure[1].length - 1].value} hPa</span>
       </Typography>
     )}
 
@@ -769,7 +761,7 @@ const getCardinalDirection = (degree) => {
       </Typography>
     )}
                   <Typography variant="body2" color="lightgray">
-                  Am: {format(new Date(weatherStationGymnasiumTemperatureData[weatherStationGymnasiumTemperatureData.length - 1].time), "dd/MM/yyyy 'um' HH:mm")}
+                  Am: {format(new Date(normalizedDataTemperature[1][normalizedDataTemperature[1].length - 1].time), "dd/MM/yyyy 'um' HH:mm")}
                   </Typography>
                 </CardContent>
               </Card>
@@ -795,7 +787,7 @@ const getCardinalDirection = (degree) => {
 
 {stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium &&   (
       <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{windSpeed} hPa  </span><span> | </span><span style={{ color: "rgba(153, 102, 255, 1)" }}>{weatherStationGymnasiumWindSpeedData[weatherStationGymnasiumWindSpeedData.length - 1].value} m/s</span>
+        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{windSpeed} m/s  </span><span> | </span><span style={{ color: "rgba(153, 102, 255, 1)" }}>{weatherStationGymnasiumWindSpeedData[weatherStationGymnasiumWindSpeedData.length - 1].value} m/s</span>
       </Typography>
     )}
 
@@ -806,7 +798,7 @@ const getCardinalDirection = (degree) => {
       </Typography>
     )}
                   <Typography variant="body2" color="lightgray">
-                  Am: {format(new Date(weatherStationGymnasiumTemperatureData[weatherStationGymnasiumTemperatureData.length - 1].time), "dd/MM/yyyy 'um' HH:mm")}
+                  Am: {format(new Date(normalizedDataTemperature[1][normalizedDataTemperature[1].length - 1].time), "dd/MM/yyyy 'um' HH:mm")}
                   </Typography>
                 </CardContent>
               </Card>
@@ -843,7 +835,7 @@ const getCardinalDirection = (degree) => {
       </Typography>
     )}
                   <Typography variant="body2" color="lightgray">
-                  Am: {format(new Date(weatherStationGymnasiumTemperatureData[weatherStationGymnasiumTemperatureData.length - 1].time), "dd/MM/yyyy 'um' HH:mm")}
+                  Am: {format(new Date(normalizedDataTemperature[1][normalizedDataTemperature[1].length - 1].time), "dd/MM/yyyy 'um' HH:mm")}
                   </Typography>
                 </CardContent>
               </Card>
