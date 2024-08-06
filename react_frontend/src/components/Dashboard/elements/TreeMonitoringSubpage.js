@@ -242,13 +242,11 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
       treeSenseGeneralHealthDataList[1] && treeSenseGeneralHealthDataList[1].length > 0 &&
       treeSenseGeneralHealthDataList[2] && treeSenseGeneralHealthDataList[2].length > 0
     ) {
-      console.log("List with general health, first item: ", treeSenseGeneralHealthDataList[0]);
 
       
     // You can access the latest (newest) status here if needed
     const healthStatusList = treeSenseGeneralHealthDataList.map(dataset => dataset[0].status);
     
-    console.log("List with general health, newest statuses: ", healthStatusList);
 
     setGeneralTreeHealthList(healthStatusList);
 

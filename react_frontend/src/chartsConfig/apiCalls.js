@@ -17,7 +17,6 @@ export const fetchWeatherStationData = async (queryType) => {
     try {
         const response = await axios.get(`${API_URL}/weather-station-data/?query_type=${queryType}`);
         const parsedData = JSON.parse(response.data);
-        console.log(parsedData)
         return parsedData;
     } catch (error) {
         console.error("Error fetching weather station data:", error);

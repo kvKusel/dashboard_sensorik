@@ -4,7 +4,6 @@ import { format } from 'date-fns';
 
 const BarChart = ({ barChartConfig, barChartData }) => {
 
-  console.log(barChartData)
 
   //const firstTimeValue = barChartData.length > 0 ? new Date(barChartData[1].time) : new Date();
 
@@ -27,7 +26,6 @@ const BarChart = ({ barChartConfig, barChartData }) => {
       return ;
     }
 
-    console.log ("current bar chart data: ", barChartData)
 
       // Normalize the barChartData format
       const normalizedBarChartData = Array.isArray(barChartData[0])
@@ -39,9 +37,7 @@ const BarChart = ({ barChartConfig, barChartData }) => {
       let date = new Date(dataPoint.time);
       return date;
   });
-  console.log("Current data (bar chart):", normalizedBarChartData);
 
-    console.log("Current LABELS (bar chart):", labels);
 
     // Extract datasets
     const datasets = Array.isArray(barChartData[0])
@@ -62,7 +58,6 @@ const BarChart = ({ barChartConfig, barChartData }) => {
           },
         ];
 
-    console.log("Current datasets (bar chart):", datasets);
 
     const barChartConfiguration = {
       type: "bar",
@@ -166,9 +161,7 @@ const BarChart = ({ barChartConfig, barChartData }) => {
 
             // display the text 'kein Niederschlag im dargestellten Zeitraum' only if there is no precipitation to show (maxValue = 0)
             // const { datasets } = chart.options.data;
-            console.log(barChartData)
             const maxValue = Math.max(...barChartData.map(dataPoint => dataPoint.value));
-            console.log("max Value: ", maxValue)
      // Check if the maximum value is 0
      if (maxValue === 0) {
       ctx.save();

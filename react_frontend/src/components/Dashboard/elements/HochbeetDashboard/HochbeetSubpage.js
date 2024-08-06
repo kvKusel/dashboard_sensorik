@@ -138,31 +138,23 @@ const HochbeetDashboard = () => {
   }, []);
 
   useEffect(() => {
-    console.log("All soil moisture gymnasium data:", allSoilMoistureDataGymnasium);
   }, [allSoilMoistureDataGymnasium]);
 
   useEffect(() => {
-    console.log("All pH data:", allPHData);
   }, [allPHData]);
 
   useEffect(() => {
-    console.log("Selected Dataset: ", selectedDataset);
   }, [selectedDataset]);
 
   useEffect(() => {
-    console.log("Last pH Value: ", lastPHValue);
   }, [lastPHValue]);
 
   const handleRowClick = (queryType) => {
-    console.log('Row clicked with queryType:', queryType);
 
     const selectedData = allSoilMoistureDataGymnasium.find(item => item.queryType === queryType);
-    console.log('Found Selected Data:', selectedData);
     setSelectedDataset(selectedData ? selectedData.data : null);
 
     const selectedPHData = allPHData.find(item => item.queryType === queryType);
-    console.log("All PH Data: ", allPHData);  // Log the entire PH data array
-    console.log("Selected pH Data: ", selectedPHData);  // Log the selected PH data
     
     if (selectedPHData && selectedPHData.data.length > 0) {
       const lastPHDataPoint = selectedPHData.data[selectedPHData.data.length - 1];

@@ -6,11 +6,6 @@ import { format } from 'date-fns';
 const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) => {
   
 
-  useEffect(() => {
-    console.log("current data: ", lineData);
-    console.log("current data type: ", typeof(lineData));
-
-  }, [lineData  ]);
 
   
   const lineChartRef = useRef(null);
@@ -38,7 +33,6 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) =
           return timeValue;
         });
 
-        console.log("Current LABELS:  ", labels)
 
         
     const datasets = Array.isArray(lineData[0])
@@ -638,7 +632,6 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) =
       lineChartConfiguration = lineChartConfigurationStandard;
     }
 
-    console.log("line chart config: ", lineChartConfiguration);
 
     const lineChart = new Chart(lineChartRef.current, lineChartConfiguration);
 

@@ -11,7 +11,6 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
 
   // set up for the needles of the  gauge charts 
   const currentValue = soilMoistureData? soilMoistureData[soilMoistureData.length - 1].value : 0
-  console.log("current value: ", currentValue)
 
   const healthStateRaw = treeSenseGeneralHealthData;
 
@@ -34,8 +33,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
   
 
   const healthStateNeedleValues = treeSenseGeneralHealth(healthStateRaw);
-  console.log("tree container healt state list: ", healthStateNeedleValues)
-  console.log("tree container healt state  RAW list: ", healthStateRaw)
+
 
 
 

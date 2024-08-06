@@ -6,7 +6,6 @@ import MarkerIcon from "./LeafletTreeIconSvg";
 
 const MarkerComponent = ({ position, selectedTree, currentValueSoilMoisture, treeSenseHealth, popup, treeID }) => {
 
-    console.log("value soil moisture for markers:", currentValueSoilMoisture)
 
   // Check if the position matches the selected tree latitude and longitude - used to render the bigger sized and focused icon for the selected tree
   const isSelectedTreePosition = selectedTree && position[0] === selectedTree.latitude && position[1] === selectedTree.longitude;

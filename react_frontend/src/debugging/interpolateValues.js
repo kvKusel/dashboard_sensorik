@@ -7,10 +7,6 @@ const datasetA = [
   const xValueToInterpolate = new Date('2024-08-04T15:52:58').getTime();
   
 
-    
-  console.log(datasetA);
-console.log(xValueToInterpolate);
-
 
   const interpolate = (x0, y0, x1, y1, x) => {
     return y0 + ((y1 - y0) * (x - x0)) / (x1 - x0);
@@ -21,5 +17,4 @@ console.log(xValueToInterpolate);
   
   const interpolatedValue = interpolate(prev.time, prev.value, next.time, next.value, xValueToInterpolate);
   
-  console.log(interpolatedValue); // This should print 80.5
   

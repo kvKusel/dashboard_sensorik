@@ -12,8 +12,7 @@ const LeafletMap = ({
   const [mapCenter, setMapCenter] = useState([49.55769, 7.3613]);
   const [mapZoom, setMapZoom] = useState(18);
 
-  console.log(treeSenseHealth);
-  console.log(selectedTree);
+
 
   const geojsonDataBurgLichtenberg = {
     type: "FeatureCollection",

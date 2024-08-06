@@ -46,7 +46,6 @@ const WaterLevelDashboard = () => {
   //only create the DOM when data is ready
   useEffect(() => {
     if (waterLevelKreisverwaltung.length > 0) {
-      console.log("water level kv:", waterLevelKreisverwaltung);
 
       setIsLoading(false); // Set loading to false once data is fetched
     }
