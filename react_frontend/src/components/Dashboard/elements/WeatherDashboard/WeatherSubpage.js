@@ -500,23 +500,23 @@ const getCardinalDirection = (degree) => {
     //only create the DOM when data is ready
     useEffect(() => {
       if (
-        weatherStationTemperatureData !== null &&
-        weatherStationPrecipitationData !== null &&
+        weatherStationTemperatureData !== undefined &&
+        weatherStationPrecipitationData !== undefined &&
         weatherDataGymnasium.length > 0 &&
         weatherStationGymnasiumTemperatureData.length > 0 && 
         weatherStationGymnasiumPrecipitationData.length > 0 &&
-        weatherStationHumidityData &&
+        weatherStationHumidityData !== undefined &&
         weatherStationGymnasiumHumidityData.length > 0 &&
         weatherStationAirPressureData.length > 0 &&
         weatherStationGymnasiumAirPressureData.length > 0 &&
-        lastValueWeatherStationAirPressure &&
+        lastValueWeatherStationAirPressure !== undefined &&
         lastPrecipitationValue !== undefined &&
-        lastValueWeatherStationHumidity && 
+        lastValueWeatherStationHumidity !== undefined && 
         weatherStationGymnasiumWindSpeedData.length > 0 &&
         weatherStationGymnasiumWindDirectionData.length > 0 &&
         normalizedDataPrecipitation.length > 0 &&
-        normalizedDataTemperature.length > 0 &&
-        lastValueWeatherStationTemperature  !== null 
+        normalizedDataTemperature.length > 0  &&
+        lastValueWeatherStationTemperature  !== undefined 
       ) {
   
             setIsLoading(false); // Set loading to false once data is fetched
