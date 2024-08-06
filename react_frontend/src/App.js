@@ -8,12 +8,16 @@ import Ziele from './components/ProjektZiele';
 import Dashboard from './components/Dashboard/Dashboard';
 import { Chart, registerables } from 'chart.js';
 import 'chartjs-adapter-date-fns';
+import ImpressumLayout from './components/Impressum';
+import Datenschutz from './components/Datenschutz';
+import OrientationLock from './tools/OrientationLock';
 
 // Register the necessary modules and adapters with Chart.js to handle timeseries data better
 Chart.register(...registerables);
 
 const App = () => {
-    return (
+  return (
+    <OrientationLock>
       <Router>
         {/* <CreateNavbar /> */}
         <Routes>
@@ -22,9 +26,11 @@ const App = () => {
           <Route path="/maps" element={<MapOverview />} />
           <Route path="/projektziele" element={<Ziele />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/impressum" element={<ImpressumLayout />} />
+          <Route path="/datenschutzbestimmungen" element={<Datenschutz />} />
         </Routes>
       </Router>
-    );
-  };
-
+    </OrientationLock>
+  );
+};
 export default App;

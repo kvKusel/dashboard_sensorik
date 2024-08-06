@@ -11,7 +11,7 @@ const MyJumbotron = () => {
   const [isVisible, setIsVisible] = useState(true);
 
   const [backgroundStyle, setBackgroundStyle] = useState({
-    background: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${headerImage}) no-repeat center bottom fixed`,
+    background: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${headerImage}) no-repeat center center fixed`,
     backgroundSize: "cover",
     //backgroundSize: "absolute",
 
@@ -63,6 +63,36 @@ const MyJumbotron = () => {
     </motion.div>
     <div id='project-description'>
     <ProjectDescription />
+    <div className="row d-flex mt-5 mx-0 " style={{width: "100%",}}>
+ 
+    <div
+              className="col-12 col-md-6 d-flex justify-content-center "
+              style={{
+                flex: "1 1 auto",
+
+           
+              }}
+            >
+      <Link to="/impressum" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <p>Impressum</p>
+      </Link>
+            </div>
+
+
+
+            <div
+              className="col-12 col-md-6 d-flex justify-content-center"
+              style={{
+                flex: "1 1 auto",
+
+           
+              }}
+            >
+      <Link to="/datenschutzbestimmungen" style={{ textDecoration: 'none', color: 'inherit' }}>
+        <p>Datenschutzbestimmungen</p>
+      </Link>            </div>
+
+</div>
     </div>
     </div>
     </AnimatePresence>

@@ -11,15 +11,15 @@ class Device(models.Model):
 class WeatherData(models.Model):
     device = models.ForeignKey(Device, on_delete=models.CASCADE, related_name='weather_data')
     timestamp = models.DateTimeField(auto_now_add=True)
-    temperature = models.FloatField()
-    humidity = models.FloatField()
-    wind_speed = models.FloatField()
-    wind_direction = models.FloatField()
-    precipitation = models.FloatField()
-    air_pressure = models.FloatField()
+    temperature = models.FloatField(null=True, blank=True)
+    humidity = models.FloatField(null=True, blank=True)
+    wind_speed = models.FloatField(null=True, blank=True)
+    wind_direction = models.FloatField(null=True, blank=True)
+    precipitation = models.FloatField(null=True, blank=True)
+    air_pressure = models.FloatField(null=True, blank=True)
     uv = models.FloatField(null=True, blank=True)  # Optional field
     luminosity = models.FloatField(null=True, blank=True)  # Optional field
-    rainfall_counter = models.FloatField()  
+    rainfall_counter = models.FloatField(null=True, blank=True)
 
     class Meta:
         ordering = ['-timestamp']
