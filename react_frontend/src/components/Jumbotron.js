@@ -1,21 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import MyButton from "./Button";
 import DownArrow from "./DownArrow";
 import ProjectDescription from "./ProjectDescription";
 import headerImage from '../assets/header_image.webp';
+import headerImageMobile from '../assets/header_image_mobile.jpg';
 
 
 const MyJumbotron = () => {
   const [isVisible, setIsVisible] = useState(true);
 
-  const [backgroundStyle, setBackgroundStyle] = useState({
-    background: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${headerImage}) no-repeat center center fixed`,
-    backgroundSize: "cover",
-    //backgroundSize: "absolute",
+  const [backgroundStyle, setBackgroundStyle] = useState({});
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-  });
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    const image = windowWidth < 576 ? headerImageMobile : headerImage;
+    setBackgroundStyle({
+      background: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${image}) no-repeat center bottom fixed`,
+      backgroundSize: "cover",
+    });
+  }, [windowWidth, headerImage, headerImageMobile]);
 
   const fadeIn = {
     hidden: { opacity: 0, },
