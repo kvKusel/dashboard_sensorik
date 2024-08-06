@@ -8,6 +8,9 @@ import headerImage from '../assets/header_image.webp';
 import headerImageMobile from '../assets/header_image_mobile.jpg';
 
 
+const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
+
 const MyJumbotron = () => {
   const [isVisible, setIsVisible] = useState(true);
 
@@ -28,11 +31,14 @@ const MyJumbotron = () => {
 
   useEffect(() => {
     const image = windowWidth < 576 ? headerImageMobile : headerImage;
+    const backgroundAttachment = isSafari ? 'scroll' : 'fixed';
+
     setBackgroundStyle({
-      background: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${image}) no-repeat center bottom fixed`,
+      background: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(${image}) no-repeat center bottom ${backgroundAttachment}`,
       backgroundSize: "cover",
     });
   }, [windowWidth, headerImage, headerImageMobile]);
+
 
   const fadeIn = {
     hidden: { opacity: 0, },
