@@ -347,6 +347,151 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) =
         ],
       };
     } 
+
+
+
+    //configuration for trees that don't have the TreeSense sensors
+    else if ((selectedTree && (selectedTree.id === 5 || selectedTree.id === 3)) && id === 'treesense') {
+      lineChartConfiguration = {
+        type: "line",
+        data: {
+          labels: [],
+          datasets: [],
+        },
+
+        options: {
+          responsive: true,
+          spanGaps: true,
+
+          maintainAspectRatio: false,
+          layout: {
+            // padding: {
+            //   left: 50,
+            //   right: 50,
+            //   top: 5,
+            //   bottom: 5,
+            // },
+          },
+          scales: {
+            x: {
+              grid: {
+                color: "lightgrey",
+              },
+              type: "timeseries",
+              time: {
+                unit: "day",
+                displayFormats: {
+                  hour: "MMM d, HH:00",
+                },
+              },
+              ticks: {
+                
+                maxTicksLimit: 3,
+                // minTicksLimit: 5, // Set a minimum number of ticks
+                // stepSize: 150,
+                // autoSkip: false,
+                color: "lightgrey",
+                font: {
+                  size: 14,
+                },
+              },
+            },
+            y: {
+              grid: {
+                color: "lightgrey",
+              },
+              min: 0,
+              max: 60,
+              ticks: {
+                precision:0,
+                maxTicksLimit: 4,
+                // stepSize: 25, // Adjust the step size as needed
+                color: "lightgrey",
+                font: {
+                  size: 14,
+                },
+              },
+            },
+          },
+
+          plugins: {
+            title: {
+              text: lineChartConfig.plugins.title.text,
+              display: "yes",
+              color: "lightgrey",
+              font: {
+                size: "18rem",
+              },
+            },
+            legend: {
+              display: false,
+              labels: {
+                color: "lightgrey",
+                font: {
+                  size: "18rem",
+                },
+              },
+              position: "bottom",
+            },
+          },
+        },
+        plugins: [
+          {
+            beforeDraw: (chart, args, options) => {
+              const {
+                ctx,
+                chartArea: { top, right, bottom, left, width, height },
+                scales: { x, y },
+              } = chart;
+              ctx.save();
+
+              const text =
+                "Sensor nicht vorhanden";
+              const maxWidth = width - 20; // Adjust according to your needs
+              const lineHeight = 20; // Adjust according to your needs
+              const xCenter = left + (right - left) / 2;
+              const yCenter = top + (bottom - top) / 2;
+
+              ctx.font = "1rem Poppins, sans-serif";
+              ctx.fillStyle = "lightgrey";
+              ctx.textAlign = "center";
+
+              // Function to wrap text
+              function wrapText(text, x, y, maxWidth, lineHeight) {
+                const words = text.split(" ");
+                let line = "";
+                let yPosition = y;
+
+                for (let word of words) {
+                  const testLine = line + word + " ";
+                  const metrics = ctx.measureText(testLine);
+                  const testWidth = metrics.width;
+                  if (testWidth > maxWidth && line !== "") {
+                    ctx.fillText(line, x, yPosition);
+                    line = word + " ";
+                    yPosition += lineHeight;
+                  } else {
+                    line = testLine;
+                  }
+                }
+                ctx.fillText(line, x, yPosition);
+              }
+
+              // Call wrapText function
+              wrapText(text, xCenter, yCenter, maxWidth, lineHeight);
+
+              ctx.restore();
+            },
+          },
+        ],
+      };
+    } 
+
+
+
+
+
+
     
     else if ( lineData.length === 0 && (activeTab == "hochbeet" || activeTab == "Wetter")) {
       lineChartConfiguration = {

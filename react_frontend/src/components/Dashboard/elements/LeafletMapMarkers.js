@@ -34,7 +34,7 @@ const MarkerComponent = ({ position, selectedTree, currentValueSoilMoisture, tre
 
   //Pleiner Mostbirne:
   if (treeID === 1 || treeID === 2 || treeID === 3 || treeID === 4 || treeID === 5) {
-  if (currentValueSoilMoisture < 10 && currentValueSoilMoisture) {
+  if (currentValueSoilMoisture < 10 ) {
     colorRight = "red";
   } else if (currentValueSoilMoisture >= 10 && currentValueSoilMoisture < 20) {
     colorRight = "yellow";

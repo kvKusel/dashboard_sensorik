@@ -388,6 +388,7 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
                   lineData={treeMoistureContentDataCoxOrangenrenette}
                   trees={trees}
                   selectedTree={selectedTree}
+                  id="treesense"
                 />
               </div>
             </div>
@@ -413,6 +414,8 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
                   lineData={resistanceDataCoxOrangenrenette}
                   trees={trees}
                   selectedTree={selectedTree}
+                  id="treesense"
+
                 />
               </div>
             </div>
