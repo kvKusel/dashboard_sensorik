@@ -10,7 +10,7 @@ const OrientationLock = ({ children }) => {
     const handleResize = () => {
       setIsPortrait(window.innerHeight > window.innerWidth);
       setIsSmallDevice(
-        (window.innerWidth <= 576) || (window.innerWidth > window.innerHeight && window.innerHeight < 576)
+        (window.innerWidth <= 576) || ((window.innerWidth > window.innerHeight) && window.innerHeight < 576)
       );
     };
 
