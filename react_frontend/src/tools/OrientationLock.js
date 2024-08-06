@@ -3,14 +3,14 @@ import React, { useState, useEffect } from 'react';
 const OrientationLock = ({ children }) => {
   const [isPortrait, setIsPortrait] = useState(window.innerHeight > window.innerWidth);
   const [isSmallDevice, setIsSmallDevice] = useState(
-    (window.innerWidth <= 576) || (window.innerWidth > window.innerHeight && window.innerHeight < 768)
+    (window.innerWidth <= 576) 
   );
 
   useEffect(() => {
     const handleResize = () => {
       setIsPortrait(window.innerHeight > window.innerWidth);
       setIsSmallDevice(
-        (window.innerWidth <= 576) || ((window.innerWidth > window.innerHeight) && window.innerHeight < 768)
+        (window.innerWidth <= 576) 
       );
     };
 
