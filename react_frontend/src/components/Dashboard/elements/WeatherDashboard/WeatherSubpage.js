@@ -516,13 +516,16 @@ const getCardinalDirection = (degree) => {
         weatherStationGymnasiumWindDirectionData.length > 0 &&
         normalizedDataPrecipitation[0].length > 0 &&
         normalizedDataTemperature[0].length > 0  &&
-        lastValueWeatherStationTemperature  !== null 
+        normalizedDataPrecipitation[1].length > 0 &&
+        normalizedDataTemperature[1].length > 0  &&
+        lastValueWeatherStationTemperature  !== null &&
+        lastTimestampFormatted !== null
       ) {
    
             setIsLoading(false); // Set loading to false once data is fetched
           } 
     }, [
-      lastValueWeatherStationTemperature, normalizedDataTemperature, normalizedDataPrecipitation, weatherStationPrecipitationData,weatherStationAirPressureData,  weatherStationHumidityData, weatherStationGymnasiumAirPressureData, lastPrecipitationValue, weatherStationTemperatureData, weatherStationGymnasiumTemperatureData, weatherDataGymnasium, weatherStationGymnasiumPrecipitationData, weatherStationGymnasiumHumidityData, weatherStationGymnasiumWindSpeedData, lastValueWeatherStationAirPressure, lastValueWeatherStationHumidity, weatherStationGymnasiumWindDirectionData
+      lastTimestampFormatted, lastValueWeatherStationTemperature, normalizedDataTemperature, normalizedDataPrecipitation, weatherStationPrecipitationData,weatherStationAirPressureData,  weatherStationHumidityData, weatherStationGymnasiumAirPressureData, lastPrecipitationValue, weatherStationTemperatureData, weatherStationGymnasiumTemperatureData, weatherDataGymnasium, weatherStationGymnasiumPrecipitationData, weatherStationGymnasiumHumidityData, weatherStationGymnasiumWindSpeedData, lastValueWeatherStationAirPressure, lastValueWeatherStationHumidity, weatherStationGymnasiumWindDirectionData
     ]);
 
     
