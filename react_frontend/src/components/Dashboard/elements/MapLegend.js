@@ -111,7 +111,7 @@ feucht</div>
               <IconTree color={"yellow-right"}/>
             </div>
             <div className="d-flex align-items-center ps-1">
-mäßig            </div>
+mäßig feucht            </div>
           </div>
 
 

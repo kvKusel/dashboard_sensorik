@@ -172,7 +172,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
     {!selectedTree || selectedTree.id === 6 || selectedTree.id === 7 ? '-' : (
       !currentValue ? 'Keine Daten' : (
         currentValue < 10 ? 'trocken' : (
-          currentValue < 20 ? 'mäßig' : 'feucht'
+          currentValue < 20 ? 'mäßig feucht' : 'feucht'
         )
       )
     )}
