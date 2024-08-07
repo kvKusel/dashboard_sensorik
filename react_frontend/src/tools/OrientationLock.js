@@ -10,7 +10,6 @@ const OrientationLock = ({ children }) => {
     const handleResize = () => {
       setIsPortrait(getOrientation());
       setIsSmallDevice(window.innerWidth <= 950);
-      console.log("Resize detected:", window.innerWidth, window.innerHeight, getOrientation());
     };
 
     window.addEventListener('resize', handleResize);
