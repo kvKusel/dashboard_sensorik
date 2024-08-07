@@ -1,51 +1,41 @@
 import React, { useState, useEffect } from 'react';
 
 const OrientationLock = ({ children }) => {
-  const [isPortrait, setIsPortrait] = useState(window.innerHeight > window.innerWidth);
-  const [isSmallDevice, setIsSmallDevice] = useState(
-    (window.innerWidth <= 576) 
-  );
+  const getOrientation = () => window.matchMedia("(orientation: portrait)").matches;
+
+  const [isPortrait, setIsPortrait] = useState(getOrientation());
+  const [isSmallDevice, setIsSmallDevice] = useState(window.innerWidth <= 950);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsPortrait(window.innerHeight > window.innerWidth);
-      setIsSmallDevice(
-        (window.innerWidth <= 576) 
-      );
+      setIsPortrait(getOrientation());
+      setIsSmallDevice(window.innerWidth <= 950);
+      console.log("Resize detected:", window.innerWidth, window.innerHeight, getOrientation());
     };
 
     window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+
+    // Initial check    
+    handleResize();
+
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
     };
   }, []);
 
   return (
     <div>
       {isSmallDevice && !isPortrait ? (
-        <div style={styles.landscapeWarning}>
+        <div className='landscapeWarning'>
           Die Anwendung wurde für die Hochformatansicht optimiert. Bitte drehen Sie Ihr Gerät.
-          </div>
+        </div>
       ) : (
         <div>{children}</div>
       )}
     </div>
   );
-};
-
-const styles = {
-  landscapeWarning: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100vh',
-    textAlign: 'center',
-    backgroundColor: '#5D7280',
-    color: 'lightgray',
-    padding: '20px',
-    fontSize: '18px',
-    fontWeight: 'bold',
-  },
 };
 
 export default OrientationLock;

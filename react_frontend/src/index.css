@@ -452,4 +452,19 @@ input:checked + .slider:before {
     }
   }
 }
+
+.landscapeWarning {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  background-color: #5D7280;
+  color: lightgray;
+  padding: 20px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+
 /* END OF LOCK IN PORTRAIT ORIENTATION */

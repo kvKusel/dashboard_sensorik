@@ -11,10 +11,12 @@ ALLOWED_HOSTS = [
 
 # Allow for requests from the react server
 CORS_ALLOWED_ORIGINS = [
+    "https://www.landschaft-lieben.de",
     "https://master.d289olbq1w6lrz.amplifyapp.com",
 ]
 
 CORS_ORIGIN_WHITELIST = [
+    "https://www.landschaft-lieben.de",
     "https://master.d289olbq1w6lrz.amplifyapp.com",
 ]
 

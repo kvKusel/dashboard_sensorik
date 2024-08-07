@@ -519,7 +519,6 @@ const getCardinalDirection = (degree) => {
         lastValueWeatherStationTemperature  !== null 
       ) {
    
-          console.log(normalizedDataTemperature)
             setIsLoading(false); // Set loading to false once data is fetched
           } 
     }, [
