@@ -13,13 +13,13 @@ from django.utils.timezone import now as tz_now, make_aware, utc
 from django.db import connections, connection
 
 # Add the project root to the Python path - uncomment for production environment!
-# path = '/home/scdash/django_project/dashboard_smartcity/django_backend'
-# if path not in sys.path:
-#     sys.path.append(path)
-#     print(f"Added {path} to sys.path")
+path = '/home/scdash/django_project/dashboard_smartcity/django_backend'
+if path not in sys.path:
+    sys.path.append(path)
+    print(f"Added {path} to sys.path")
     
 # Ensure the Django settings module is set, set to production in production environment!
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_backend.settings.base')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_backend.settings.production')
 
 # Add the project root to the Python path
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..'))

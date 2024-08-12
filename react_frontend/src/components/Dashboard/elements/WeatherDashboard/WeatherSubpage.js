@@ -62,7 +62,7 @@ const WeatherDashboard = () => {
   const [
     stateSliderSiebenpfeifferGymnasium,
     setStateSliderSiebenpfeifferGymnasium,
-  ] = useState(true);
+  ] = useState(false);
 
   // Handler functions for the sliders
   const handleSliderBurgLichtenbergChange = (event) => {
