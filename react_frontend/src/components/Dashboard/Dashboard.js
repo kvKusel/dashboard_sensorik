@@ -54,38 +54,6 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
     };
 
   
-
-  //define steps for onboarding process
-  const steps = [
-    {
-      target: ".first-step",
-      content:
-        "Willkommen zu unserem Dashboard! In den nächsten 60 Sekunden zeigen wir Dir welche Informationen die Seite für Dich bereithält.",
-      placement: "center",
-    },
-    {
-      target: ".second-step",
-      content: "Die Karte stellt den aktuell ausgewählten Ansicht dar.",
-      placement: "bottom",
-    },
-    {
-      target: ".third-step",
-      content: "Die Karte stellt den aktuell ausgewählten Ansicht dar.",
-      placement: "bottom",
-    },
-    {
-      target: ".step-4",
-      content: "Hier wird die Bodenfeuchte des ausgewählten Bäumes in den letzten 24h angezeigt.",
-      placement: "bottom",
-    },
-    {
-      target: ".step-5",
-      content: "Hier wird die Bodenfeuchte des ausgewählten Bäumes in den letzten 24h angezeigt.",
-      placement: "bottom",
-    },
-    // Define more steps as needed
-  ];
-
   const [activeTab, setActiveTab] = useState("Baummonitoring");
 
   const [navbarExpanded, setNavbarExpanded] = useState(false);
@@ -111,7 +79,7 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
       <div className="row mx-xl-5 mt-2 ">
         <div className="d-flex  align-items-center justify-content-between">
           <div className=" pt-2" style={{ flexGrow: 1 }}>
-          <div className="d-none d-lg-block"> {/* Hide on small screens, show on medium and larger */}
+          <div className="d-none d-xl-block"> {/* Hide on small screens, show on medium and larger */}
           <h2>
   <Link to="/" className="text-decoration-none text-white">
     
@@ -139,7 +107,7 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
 
 <Button
                       variant="danger"
-                      className="mt-2  rounded px-2 text-center custom-dropdown me-3  d-none d-lg-block"
+                      className="mt-2  rounded px-2 text-center custom-dropdown me-3  d-none d-xl-block"
                       style={{ backgroundColor: "rgb(220, 53, 69)" }}
                       onClick={() => handleInfoText()}
                     >
@@ -147,7 +115,32 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
                     </Button>
 
 
-          <div className="pt-2  d-none d-lg-block">
+                    {activeTab === "hidden" && (
+  <div className="pt-2  d-none d-xl-block me-3">
+    <Dropdown onSelect={handleSelect}>
+      <Dropdown.Toggle variant="danger" id="dropdown-basic">
+        Daten herunterladen
+      </Dropdown.Toggle>
+
+      <Dropdown.Menu>
+      <div className='p-1 ps-3 fw-bold'>Hochbeete:</div>
+
+        <Dropdown.Item eventKey="Baummonitoring">Wachstnix</Dropdown.Item>
+        <Dropdown.Item eventKey="Baummonitoring">Shoppingqueen</Dropdown.Item>
+        <Dropdown.Item eventKey="Baummonitoring">Kompostplatz 1</Dropdown.Item>
+        <Dropdown.Item eventKey="Baummonitoring">Übersee</Dropdown.Item>
+        <Dropdown.Item eventKey="Baummonitoring">Beethoven</Dropdown.Item>
+        <Dropdown.Item eventKey="Baummonitoring">Kohlarabi</Dropdown.Item>
+        <hr />
+        <Dropdown.Item eventKey="Wetter">Wetterstation</Dropdown.Item>
+      </Dropdown.Menu>
+    </Dropdown>
+  </div>
+)}
+
+
+
+          <div className="pt-2  d-none d-xl-block">
   <Dropdown onSelect={handleSelect}>
     <Dropdown.Toggle variant="danger" id="dropdown-basic">
       Dashboard auswählen
@@ -165,7 +158,7 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
 
 
 
-<div className="d-lg-none  mt-1 d-flex w-100 justify-content-between"> {/* Hide on medium and larger screens, show only on small screens */}
+<div className="d-xl-none  mt-1 d-flex w-100 justify-content-between"> {/* Hide on medium and larger screens, show only on small screens */}
   <Link to="/" className="text-decoration-none text-dark mt-md-3 mt-2 ">
     <img className="logo" src={Logo} alt="Logo" />
   </Link>
@@ -174,7 +167,7 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
           <Navbar
               style={{ backgroundColor: "rgb(53, 79, 97)" }}
               expand="sm"
-              className="d-lg-none  navbar-dark"
+              className="d-xl-none  navbar-dark"
               expanded={navbarExpanded}
               onToggle={() => setNavbarExpanded(!navbarExpanded)}
             >
@@ -203,6 +196,42 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
                     >
                       Mehr erfahren
                     </Button>
+
+                    {activeTab === "hidden" && (
+
+                    <NavDropdown
+                      title="Daten herunterladen"
+                      id="basic-nav-dropdown"
+                      className="mt-2 me-3 w-100 rounded p-0 text-center custom-dropdown"
+                      style={{ backgroundColor: "rgb(220, 53, 69)" }}
+                      onSelect={handleSelect}
+                    >
+                            <div className='p-1 ps-3 fw-bold'>Hochbeete:</div>
+
+                      <NavDropdown.Item as="button" eventKey="Baummonitoring">
+                        Wachstnix
+                      </NavDropdown.Item>
+                      <NavDropdown.Item as="button" eventKey="Baummonitoring">
+                        Shoppingqueen
+                      </NavDropdown.Item>
+                      <NavDropdown.Item as="button" eventKey="Baummonitoring">
+                        Kompostplatz 1
+                      </NavDropdown.Item>
+                      <NavDropdown.Item as="button" eventKey="Baummonitoring">
+                        Übersee
+                      </NavDropdown.Item>
+                      <NavDropdown.Item as="button" eventKey="Baummonitoring">
+                        Beethoven
+                      </NavDropdown.Item>
+                      <NavDropdown.Item as="button" eventKey="Baummonitoring">
+                        Kohlarabi
+                      </NavDropdown.Item>
+                      <hr/>
+                      <NavDropdown.Item as="button" eventKey="Wetter">
+                        Wetterstation
+                      </NavDropdown.Item>
+                    </NavDropdown>
+                    )}
 
                     
                     <NavDropdown

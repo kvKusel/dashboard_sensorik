@@ -35,8 +35,8 @@ const HochbeetTable = ({ onRowClick, moistureValues }) => {
     <table style={{ width: '100%', height: "100%", color: '#FFFFFF', borderCollapse: 'collapse' }}>
       <thead >
         <tr >
-          <th style={{ borderBottom: '1px solid #FFFFFF', borderRight: '1px solid #FFFFFF', padding: '8px' }}>Name</th>
-          <th style={{ borderBottom: '1px solid #FFFFFF', padding: '8px' }}>Status</th>
+          <th style={{ borderBottom: '1px solid #FFFFFF', borderRight: '1px solid #FFFFFF', padding: '2px' }}>Name</th>
+          <th style={{ borderBottom: '1px solid #FFFFFF', padding: '2px' }}>Status</th>
         </tr>
       </thead>
       <tbody>
@@ -48,7 +48,7 @@ const HochbeetTable = ({ onRowClick, moistureValues }) => {
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = rowHoverStyle.backgroundColor}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
           >
-            <td style={{ borderBottom: '1px solid #FFFFFF', borderRight: '1px solid #FFFFFF', padding: '8px' }}>{item.name}</td>
+            <td style={{ borderBottom: '1px solid #FFFFFF', borderRight: '1px solid #FFFFFF', padding: '2px' }}>{item.name}</td>
             <td style={{ borderBottom: '1px solid #FFFFFF', padding: '8px', textAlign: 'center' }}>
               <div style={{ ...getStatusStyle(findMoistureValue(item.queryType)), width: '20px', height: '20px', borderRadius: '50%', display: 'inline-block' }}></div>
             </td>

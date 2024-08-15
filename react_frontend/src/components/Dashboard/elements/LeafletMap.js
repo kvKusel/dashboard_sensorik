@@ -258,7 +258,7 @@ const LeafletMap = ({
             <MarkerComponent
               position={[49.55765249375624, 7.361099770403598]}
               selectedTree={selectedTree}
-              currentValueSoilMoisture={currentValueSoilMoisture[1]}
+              currentValueSoilMoisture={currentValueSoilMoisture[2]}
               treeSenseHealth={treeSenseHealth[0]}
               popup={"Roter Boskoop"}
               treeID={3}

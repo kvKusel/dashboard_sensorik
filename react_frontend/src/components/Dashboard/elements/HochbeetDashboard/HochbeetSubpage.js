@@ -101,10 +101,10 @@ const HochbeetDashboard = () => {
       const response4 = await axios.get(`${API_URL}ph-data/?query_type=ph_sensecap_1`);
 
       setAllPHData([
-        { queryType: 'hochbeet_moisture1', data: response1.data }, //'ph_dragino_1'
-        { queryType: 'moisture_dragino_2', data: response2.data },//'ph_dragino_2'
-        { queryType: 'moisture_dragino_3', data: response3.data },//'ph_sensecap_2'
-        { queryType: 'moisture_dragino_4', data: response4.data },//'ph_sensecap_1'
+        { queryType: 'moisture_dragino_6', data: response1.data }, //'ph_dragino_1'
+        { queryType: 'moisture_dragino_5', data: response2.data },//'ph_dragino_2'
+        { queryType: 'hochbeet_moisture1', data: response3.data },//'ph_sensecap_2'
+        { queryType: 'moisture_dragino_3', data: response4.data },//'ph_sensecap_1'
       ]);
 
       setIsLoading(false);

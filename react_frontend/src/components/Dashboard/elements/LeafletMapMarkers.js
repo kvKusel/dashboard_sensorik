@@ -40,8 +40,7 @@ const MarkerComponent = ({ position, selectedTree, currentValueSoilMoisture, tre
     colorRight = "yellow";
   } else if (currentValueSoilMoisture >= 20) {
     colorRight = "green";
-  } else if (currentValueSoilMoisture >= 20) {
-    colorRight = "green";
+
   } else if (!currentValueSoilMoisture) {
     colorRight = "white";
   } 
