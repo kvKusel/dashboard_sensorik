@@ -71,7 +71,7 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
   const selectAssetToDownload = async (eventKey) => {
     if (eventKey === "Wetter") {
       try {
-        const response = await axios.get(`${API_URL}/api/export-weather-data/`, {
+        const response = await axios.get(`${API_URL}api/export-weather-data/`, {
           responseType: 'blob',
         });
   
@@ -87,7 +87,7 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
         // Handle error (e.g., show an error message to the user)
       }    } else {
       try {
-        const response = await axios.get(`${API_URL}/api/export-asset-data/`, {
+        const response = await axios.get(`${API_URL}api/export-asset-data/`, {
           params: { asset_name: eventKey },
           responseType: 'blob',
         });
