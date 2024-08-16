@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import pHDataHochbeetProject, waterLevelDataView, SoilDataView, WeatherStationDataView, ElectricalResistanceDataView, TreeHealthDataView, index, TreeMoistureContentDataView, TTNWebhookView, WeatherDataView, SoilMoistureDataHochbeetProject
+from .views import ExportWeatherDataView, ExportAssetDataView, pHDataHochbeetProject, waterLevelDataView, SoilDataView, WeatherStationDataView, ElectricalResistanceDataView, TreeHealthDataView, index, TreeMoistureContentDataView, TTNWebhookView, WeatherDataView, SoilMoistureDataHochbeetProject
 
 urlpatterns = [
     path('soil-data/', SoilDataView.as_view(), name='soil_data'),
@@ -12,6 +12,8 @@ urlpatterns = [
     path('soil-moisture-data-hochbeet-project/', SoilMoistureDataHochbeetProject.as_view(), name='soil-moisture-data-hochbeet-project'),
     path('ph-data/', pHDataHochbeetProject.as_view(), name='ph-data'),
     path('water-level-data/', waterLevelDataView.as_view(), name='water-level'),
+    path('api/export-asset-data/', ExportAssetDataView.as_view(), name='export_asset_data'),
+    path('api/export-weather-data/', ExportWeatherDataView.as_view(), name='export_weather_data'),
     path('', index, name='index')
 
 ] 

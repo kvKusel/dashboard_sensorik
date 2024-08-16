@@ -7,9 +7,12 @@ import Logo from "../../assets/logo_landlieben.png";
 import { Navbar, Nav, NavDropdown, Button, Dropdown } from 'react-bootstrap';
 import HochbeetSubpage from "./elements/HochbeetDashboard/HochbeetSubpage";
 import WaterLevelSubpage from "./elements/WaterLevelDashboard/WaterLevelSubpage";
+import axios from "axios";
+
+const API_URL = process.env.REACT_APP_API_URL; // This will switch based on the environment - dev env will point to local Django, prod env to the proper domain
+
 
 const Dashboard = () => {
-  const [runTutorial, setRunTutorial] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [popupText, setPopupText] = useState("");
 
@@ -61,6 +64,46 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
   const handleSelect = (eventKey) => {
     setActiveTab(eventKey);
     setNavbarExpanded(false); // Collapse the navbar after selection
+  };
+
+
+  // function to download the selected asset's data
+  const selectAssetToDownload = async (eventKey) => {
+    if (eventKey === "Wetter") {
+      try {
+        const response = await axios.get(`${API_URL}/api/export-weather-data/`, {
+          responseType: 'blob',
+        });
+  
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `weather_data.csv`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      } catch (error) {
+        console.error('Error downloading CSV:', error);
+        // Handle error (e.g., show an error message to the user)
+      }    } else {
+      try {
+        const response = await axios.get(`${API_URL}/api/export-asset-data/`, {
+          params: { asset_name: eventKey },
+          responseType: 'blob',
+        });
+  
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `${eventKey}_data.csv`);
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      } catch (error) {
+        console.error('Error downloading CSV:', error);
+        // Handle error (e.g., show an error message to the user)
+      }
+    }
   };
 
   return (
@@ -115,9 +158,9 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
                     </Button>
 
 
-                    {activeTab === "hidden" && (
+                    {activeTab === "Hochbeet" && (
   <div className="pt-2  d-none d-xl-block me-3">
-    <Dropdown onSelect={handleSelect}>
+    <Dropdown onSelect={selectAssetToDownload}>
       <Dropdown.Toggle variant="danger" id="dropdown-basic">
         Daten herunterladen
       </Dropdown.Toggle>
@@ -125,12 +168,12 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
       <Dropdown.Menu>
       <div className='p-1 ps-3 fw-bold'>Hochbeete:</div>
 
-        <Dropdown.Item eventKey="Baummonitoring">Wachstnix</Dropdown.Item>
-        <Dropdown.Item eventKey="Baummonitoring">Shoppingqueen</Dropdown.Item>
-        <Dropdown.Item eventKey="Baummonitoring">Kompostplatz 1</Dropdown.Item>
-        <Dropdown.Item eventKey="Baummonitoring">Übersee</Dropdown.Item>
-        <Dropdown.Item eventKey="Baummonitoring">Beethoven</Dropdown.Item>
-        <Dropdown.Item eventKey="Baummonitoring">Kohlarabi</Dropdown.Item>
+      <Dropdown.Item eventKey="Wachstnix">Wachstnix</Dropdown.Item>
+  <Dropdown.Item eventKey="Shoppingqueen">Shoppingqueen</Dropdown.Item>
+  <Dropdown.Item eventKey="Kompostplatz 1">Kompostplatz 1</Dropdown.Item>
+  <Dropdown.Item eventKey="Übersee">Übersee</Dropdown.Item>
+  <Dropdown.Item eventKey="Beethoven">Beethoven</Dropdown.Item>
+  <Dropdown.Item eventKey="Kohlarabi">Kohlarabi</Dropdown.Item>
         <hr />
         <Dropdown.Item eventKey="Wetter">Wetterstation</Dropdown.Item>
       </Dropdown.Menu>
@@ -197,33 +240,33 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
                       Mehr erfahren
                     </Button>
 
-                    {activeTab === "hidden" && (
+                    {activeTab === "Hochbeet" && (
 
                     <NavDropdown
                       title="Daten herunterladen"
                       id="basic-nav-dropdown"
                       className="mt-2 me-3 w-100 rounded p-0 text-center custom-dropdown"
                       style={{ backgroundColor: "rgb(220, 53, 69)" }}
-                      onSelect={handleSelect}
+                      onSelect={selectAssetToDownload}
                     >
                             <div className='p-1 ps-3 fw-bold'>Hochbeete:</div>
 
-                      <NavDropdown.Item as="button" eventKey="Baummonitoring">
+                      <NavDropdown.Item as="button" eventKey="Wachstnix">
                         Wachstnix
                       </NavDropdown.Item>
-                      <NavDropdown.Item as="button" eventKey="Baummonitoring">
+                      <NavDropdown.Item as="button" eventKey="Shoppingqueen">
                         Shoppingqueen
                       </NavDropdown.Item>
-                      <NavDropdown.Item as="button" eventKey="Baummonitoring">
+                      <NavDropdown.Item as="button" eventKey="Kompostplatz 1">
                         Kompostplatz 1
                       </NavDropdown.Item>
-                      <NavDropdown.Item as="button" eventKey="Baummonitoring">
+                      <NavDropdown.Item as="button" eventKey="Übersee">
                         Übersee
                       </NavDropdown.Item>
-                      <NavDropdown.Item as="button" eventKey="Baummonitoring">
+                      <NavDropdown.Item as="button" eventKey="Beethoven">
                         Beethoven
                       </NavDropdown.Item>
-                      <NavDropdown.Item as="button" eventKey="Baummonitoring">
+                      <NavDropdown.Item as="button" eventKey="Kohlarabi">
                         Kohlarabi
                       </NavDropdown.Item>
                       <hr/>

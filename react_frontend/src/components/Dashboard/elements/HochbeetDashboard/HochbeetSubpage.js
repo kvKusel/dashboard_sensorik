@@ -67,12 +67,12 @@ const HochbeetDashboard = () => {
 
   const fetchAllSoilMoistureGymnasiumData = async () => {
     try {
-      const response1 = await axios.get(`${API_URL}soil-moisture-data-hochbeet-project/?query_type=hochbeet_moisture1`);
-      const response2 = await axios.get(`${API_URL}soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_2`);
-      const response3 = await axios.get(`${API_URL}soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_3`);
-      const response4 = await axios.get(`${API_URL}soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_4`);
-      const response5 = await axios.get(`${API_URL}soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_5`);
-      const response6 = await axios.get(`${API_URL}soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_6`);
+      const response1 = await axios.get(`${API_URL}/soil-moisture-data-hochbeet-project/?query_type=hochbeet_moisture1`);
+      const response2 = await axios.get(`${API_URL}/soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_2`);
+      const response3 = await axios.get(`${API_URL}/soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_3`);
+      const response4 = await axios.get(`${API_URL}/soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_4`);
+      const response5 = await axios.get(`${API_URL}/soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_5`);
+      const response6 = await axios.get(`${API_URL}/soil-moisture-data-hochbeet-project/?query_type=moisture_dragino_6`);
       
       setAllSoilMoistureDataGymnasium([
         { queryType: 'hochbeet_moisture1', data: response1.data },
@@ -85,20 +85,18 @@ const HochbeetDashboard = () => {
 
  
       
-      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching soil moisture data:", error);
-      setIsLoading(false);
     }
   };
 
 
   const fetchAllPHData = async () => {
     try {
-      const response1 = await axios.get(`${API_URL}ph-data/?query_type=ph_dragino_1`);
-      const response2 = await axios.get(`${API_URL}ph-data/?query_type=ph_dragino_2`);
-      const response3 = await axios.get(`${API_URL}ph-data/?query_type=ph_sensecap_2`);
-      const response4 = await axios.get(`${API_URL}ph-data/?query_type=ph_sensecap_1`);
+      const response1 = await axios.get(`${API_URL}/ph-data/?query_type=ph_dragino_1`);
+      const response2 = await axios.get(`${API_URL}/ph-data/?query_type=ph_dragino_2`);
+      const response3 = await axios.get(`${API_URL}/ph-data/?query_type=ph_sensecap_2`);
+      const response4 = await axios.get(`${API_URL}/ph-data/?query_type=ph_sensecap_1`);
 
       setAllPHData([
         { queryType: 'moisture_dragino_6', data: response1.data }, //'ph_dragino_1'
@@ -107,10 +105,8 @@ const HochbeetDashboard = () => {
         { queryType: 'moisture_dragino_3', data: response4.data },//'ph_sensecap_1'
       ]);
 
-      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching pH data:", error);
-      setIsLoading(false);
     }
   };
 
