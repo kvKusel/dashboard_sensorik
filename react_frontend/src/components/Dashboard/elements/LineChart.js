@@ -787,7 +787,7 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) =
 
   if (!lineData) {
     return (
-      <div style={{ textAlign: "center", paddingTop: "20px" }}>
+      <div style={{ textAlign: "center", paddingTop: "20px", color: "lightgray" }}>
         <p>Daten momentan nicht verfügbar. Wir arbeiten bereits an ihrer Wiederherstellung...</p>
       </div>
     );
