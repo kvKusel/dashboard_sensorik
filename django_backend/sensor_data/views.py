@@ -751,7 +751,23 @@ class ExportAssetDataView(View):
         with connection.cursor() as cursor:
             cursor.execute(query, [last_30_days, last_30_days, asset_name])
             results = cursor.fetchall()
+            
+        
+        # Check if JSON format is requested
+        if request.GET.get('format') == 'json':
+            # Prepare data for JSON response
+            data = []
+            for row in results:
+                data.append({
+                    'timestamp': row[0].isoformat() if row[0] else None,
+                    'hochbeet': row[1],
+                    'ph': row[2],
+                    'bodenfeuchte': row[3]
+                })
+            return JsonResponse(data, safe=False)
 
+
+        #if not, csv is prepared
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = f'attachment; filename="{asset_name}_data.csv"'
 
@@ -783,6 +799,24 @@ class ExportWeatherDataView(View):
             cursor.execute(query, [last_30_days])
             results = cursor.fetchall()
 
+        # Check if JSON format is requested
+        if request.GET.get('format') == 'json':
+            # Prepare data for JSON response
+            data = []
+            for row in results:
+                data.append({
+                    'timestamp': row[0].isoformat() if row[0] else None,
+                    'temperature': row[1],
+                    'humidity': row[2],
+                    'wind_speed': row[3],
+                    'wind_direction': row[4],
+                    'precipitation': row[5],
+                    'rainfall_counter': row[6],
+                    'air_pressure': row[7]
+                })
+            return JsonResponse(data, safe=False)
+
+        # If not JSON, proceed with CSV response
         response = HttpResponse(content_type='text/csv')
         response['Content-Disposition'] = 'attachment; filename="weather_data.csv"'
 
