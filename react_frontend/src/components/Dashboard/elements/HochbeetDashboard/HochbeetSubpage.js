@@ -178,8 +178,9 @@ const HochbeetDashboard = () => {
     weatherStationTemperatureData !== null &&
     weatherStationPrecipitationData !== null &&
     allSoilMoistureDataGymnasium !== null &&
-    allPHData !== null
-
+    allPHData !== null &&
+    moistureValues !== null &&
+    phValues !== null 
  )  {
 
       try {        
@@ -195,7 +196,8 @@ const HochbeetDashboard = () => {
   weatherStationPrecipitationData,
   allSoilMoistureDataGymnasium,
   allPHData,
-
+  moistureValues,
+  phValues
 ]);
 
 
