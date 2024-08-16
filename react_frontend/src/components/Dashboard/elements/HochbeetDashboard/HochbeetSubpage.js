@@ -293,11 +293,11 @@ useEffect(() => {
           <p className="d-flex flex-column align-items-center justify-content-center text-center px-2 " style={{flex: "0.1 0.1 auto", color: "lightgrey"}}>
   Bodenfeuchte:<br />
   <strong>
-  {selectedDataset.length == 0 ? '-' : (
+  {
   lastValue <= 10 ? 'Trockenstress' : (
     lastValue > 10 && lastValue < 20 ? 'Leichter Trockenstress' : 'kein Trockenstress'
   )
-)}
+}
 
   </strong>
 </p>

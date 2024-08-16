@@ -749,7 +749,7 @@ class ExportAssetDataView(View):
         """
 
         with connection.cursor() as cursor:
-            cursor.execute(query, [last_30_days, last_30_days, kwargs['asset_name']])
+            cursor.execute(query, [last_30_days, last_30_days, asset_name])
             results = cursor.fetchall()
 
         response = HttpResponse(content_type='text/csv')
