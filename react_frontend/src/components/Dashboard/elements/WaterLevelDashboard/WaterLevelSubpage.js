@@ -86,7 +86,7 @@ const WaterLevelDashboard = () => {
               }}
             >
               <img
-                src="/pegelsensor_kusel.jpg"
+                src="/pegelsensor_kusel2.jpg"
                 alt="Distance sensor for water level measurement installed in Kusel"
                 style={{
                   width: "100%",

@@ -755,11 +755,15 @@ class ExportAssetDataView(View):
         
         # Check if JSON format is requested
         if request.GET.get('format') == 'json':
-            # Prepare data for JSON response
             data = []
             for row in results:
+                # Convert timestamp to string if it's a datetime object
+                timestamp = row[0]
+                if isinstance(timestamp, datetime):
+                    timestamp = timestamp.isoformat()
+                
                 data.append({
-                    'timestamp': row[0].isoformat() if row[0] else None,
+                    'timestamp': timestamp,
                     'hochbeet': row[1],
                     'ph': row[2],
                     'bodenfeuchte': row[3]
