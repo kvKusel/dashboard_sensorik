@@ -68,6 +68,17 @@ const MapLegend = () => {
             </div>
           </div>
 
+                                                 {/*             "keine Daten" icon */}
+
+                                                 <div className=" d-flex  ">
+            <div className="d-flex align-items-center legend-icons">
+              <IconTree color={"gray"}/>
+            </div>
+            <div className="d-flex align-items-center ps-1">
+            keine Daten
+            </div>
+          </div>
+
 
                               {/*             "kein Sensor eingebaut" icon */}
 
@@ -79,7 +90,9 @@ const MapLegend = () => {
             kein Sensor
             </div>
           </div>
+          
 
+ 
 
 
 

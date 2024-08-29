@@ -217,6 +217,10 @@ code {
   fill: white;
 }
 
+.legend-icons .gray svg .cls-2 {
+  fill: gray;
+}
+
 .legend-icons .green-left svg .cls-2 {
   fill: rgb(25, 135, 84);
 }
