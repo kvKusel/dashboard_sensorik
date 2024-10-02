@@ -475,16 +475,6 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
             </div>
           </div>
 
-          {/* <WeatherSubpage
-            lastMeasurementTime={lastTimestampFormatted}
-            precipitation={lastPrecipitationValue}
-            temperature={lastValueWeatherStationTemperature}
-            UV={uVIndex}
-            humidity={humidity}
-            airPressure={airPressure}
-            windSpeed={windSpeed}
-            windDirection={windDirection}
-          /> */}
         </React.Fragment>
       )}
     </div>

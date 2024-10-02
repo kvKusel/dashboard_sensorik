@@ -56,6 +56,8 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) =
           },
         ];
 
+  // setting up default values, which in some cases will be overwritten
+  const yAxisReverseEnabled = lineChartConfig.options?.scales?.y?.reverse || false;
 
     
   const lineChartConfigurationStandard = {
@@ -93,6 +95,7 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) =
           },
         },
         y: {
+          reverse: yAxisReverseEnabled, // Set reverse based on the property
           grid: {
             color: "lightgrey",
           },
@@ -170,7 +173,6 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) =
           },
         },
         y: {
-          reverse: true,
           grid: {
             color: "lightgrey",
           },
@@ -628,7 +630,7 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) =
     }
 
 
-    else if ( id == "Pegelmonitoring") {
+    else if ( activeTab == "Pegelmonitoring") {
       lineChartConfiguration = lineChartConfigurationWaterLevel;
 
     }

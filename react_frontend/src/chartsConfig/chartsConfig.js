@@ -2,22 +2,54 @@
 
 ///////////////////////      Charts for the tree monitoring dashboard       ////////////////////////////////
 
-//Water Level Monitoring Chart
+// Water Level Monitoring Chart
 export const waterLevelConfig = {
+  
   datasets: [
     {
       fill: true,
       borderColor: "#03C988",
       tension: 0.1,
-      backgroundColor: "#92C7A5", // Fill color
+      backgroundColor: "transparent", // Fill color
     },
   ],
+  
+  options: {
+    scales: {
+      y: {
+        reverse: true, // Flip the y-axis so highest values are at the bottom
+        grid: {
+          color: "lightgrey",
+        },
+        ticks: {
+          precision: 0,
+          color: "lightgrey",
+          font: {
+            size: 14,
+          },
+        },
+      },
+      x: {
+        grid: {
+          color: "lightgrey",
+        },
+        ticks: {
+          color: "lightgrey",
+          font: {
+            size: 14,
+          },
+        },
+      },
+    },
+  },
+  
   plugins: {
     title: {
       text: "Kuselbach - Abstand zum Sensor [cm]",
     },
   },
 };
+
 
 
 //Soil Moisture Chart

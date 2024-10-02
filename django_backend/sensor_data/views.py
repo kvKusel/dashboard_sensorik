@@ -165,7 +165,7 @@ class WeatherStationDataView(View):
             elif query_type == "air_pressure":
                 df = query_weather_station_air_pressure(client, org=influxdb_org)    
                 df.drop(df.tail(1).index, inplace=True)
-                df["value"] = (df["value"] / 100) + 40  # Divide each value by 100
+                df["value"] = (df["value"] / 100)   # Divide each value by 100
 
 
             elif query_type == "wind_speed":
@@ -260,7 +260,7 @@ class TreeHealthDataView(View):
             return JsonResponse({'error': 'Device not found'}, status=404)
         
 
-#############################              TTN Webhooks - weathers station Siebenpfeiffer Gymnasium        ###########################################
+#############################              TTN Webhooks - weather station Siebenpfeiffer Gymnasium        ###########################################
 logger = logging.getLogger(__name__)
 
 ALLOWED_DEVICE_IDS = {
@@ -409,8 +409,13 @@ class TTNWebhookView(View):
                     'rainfall_counter': float(payload[field_mapping['rainfall_counter']])
                 }
 
-                WeatherData.objects.create(**weather_data)
-                logger.info(f"Successfully created WeatherData entry for device {device_id}")
+                # Only create entry if precipitation is less than 650 - weather station's hardware bug
+                if weather_data['precipitation'] < 650:
+                    WeatherData.objects.create(**weather_data)
+                    logger.info(f"Successfully created WeatherData entry for device {device_id}")
+                else:
+                    logger.info(f"Ignored WeatherData entry for device {device_id} due to high precipitation")
+
 
 
 

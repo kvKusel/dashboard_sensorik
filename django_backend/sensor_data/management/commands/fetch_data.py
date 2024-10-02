@@ -37,7 +37,7 @@ except ModuleNotFoundError as e:
     print(f"Error importing sensor_data.models: {e}")
 
 class Command(BaseCommand):
-    help = 'Fetches data from Treesense and ThingsBoard APIs and stores it'
+    help = 'Fetches data from Treesense and stores it'
 
     def authenticate(self):
         try:
