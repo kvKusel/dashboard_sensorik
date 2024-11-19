@@ -18,6 +18,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 import logging
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+from .utils import ConstrainedDataAnalyzer
 
 
 # render the index page
@@ -26,6 +28,57 @@ def index(request):
 
 
 #right now the data is not saved into the database (models.py), fix it in the future (using worker?) 
+
+
+##################################################              chatbot endpoint        #########################################################################
+
+analyzer = ConstrainedDataAnalyzer()
+
+@method_decorator(csrf_exempt, name='dispatch')
+class ChatEndpointView(View):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        # Initialize the analyzer once when the view is created
+        self.analyzer = ConstrainedDataAnalyzer()
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            data = json.loads(request.body)
+            user_message = data.get('message')
+            
+            if not user_message:
+                return JsonResponse({
+                    'error': 'Message is required'
+                }, status=400)
+            
+            result = self.analyzer.analyze_data(user_message)
+            
+            if result.get("success", False):
+                return JsonResponse({
+                    'message': result['analysis'],
+                    'dataset': result['dataset_used']
+                })
+            else:
+                return JsonResponse({
+                    'error': result.get('error', 'Analysis failed')
+                }, status=500)
+                
+        except json.JSONDecodeError:
+            return JsonResponse({
+                'error': 'Invalid JSON in request body'
+            }, status=400)
+        except Exception as e:
+            return JsonResponse({
+                'error': str(e)
+            }, status=500)
+    
+    def get(self, request, *args, **kwargs):
+        return JsonResponse({
+            'error': 'Only POST requests are allowed'
+        }, status=405)
+
+
+
 
 ##################################################              soil moisture sensors endpoint        #########################################################################
 
@@ -496,7 +549,97 @@ class TTNWebhookView(View):
         except Exception as e:
             logger.exception("Error processing webhook data")
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+        
 
+
+
+
+#############################             water level sensors data - NB Iot Milesight Sensors - from AWS Core via AWS Lambda        ###########################################
+
+ALLOWED_DEVICE_IDS = {
+"6749D19422850054": {
+    'type': 'water_level_sensor',
+    'field_mapping': {
+        'water_level': 'distance',
+        'battery': 'battery'
+    }
+}
+}
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class AWSIotCore_Milesight_Sensors(View):
+
+    def post(self, request, *args, **kwargs):
+        try:
+            logger.info(f"Received webhook data: {request.body}")
+            data = json.loads(request.body)
+
+            # Extract device_id from the correct location in the payload
+            device_id = data['sn']
+
+            # Check if the device ID is allowed
+            if device_id not in ALLOWED_DEVICE_IDS:
+                logger.warning(f"Received data from unauthorized device: {device_id}")
+                return JsonResponse({'status': 'ignored', 'message': 'Device not recognized'}, status=200)
+
+            device_info = ALLOWED_DEVICE_IDS[device_id]
+            device, created = Device.objects.get_or_create(device_id=device_id)
+
+            # Extract payload from the correct location
+            payload = data['sensor_data']
+            device_type = device_info['type']
+            field_mapping = device_info['field_mapping']
+
+            logger.debug(f"Device type: {device_type}")
+            logger.debug(f"Payload: {payload}")
+
+            if device_type == 'water_level_sensor':
+                if field_mapping['water_level'] not in payload:
+                    logger.error(f"Missing field {field_mapping['water_level']} in payload: {payload}")
+                    return JsonResponse({'status': 'error', 'message': f"Missing field {field_mapping['water_level']} in payload"}, status=400)
+
+                # Extract and clean the water level value and battery
+                water_level_str = payload[field_mapping['water_level']]
+                battery_value = payload[field_mapping['battery']]
+
+                # Remove non-numeric characters (except for '.' and '-')
+                #water_level_str_clean = ''.join(c for c in water_level_str if c.isdigit() or c in ['.', '-'])
+
+                # Convert to float and convert mm to cm
+                # try:
+                #     water_level_mm = float(water_level_str_clean)
+                #     water_level_cm = water_level_mm / 10
+                # except ValueError:
+                #     logger.error(f"Invalid water level value: {water_level_str} in payload: {payload}")
+                #     return JsonResponse({'status': 'error', 'message': f"Invalid water level value: {water_level_str}"}, status=400)
+
+                water_level_data = {
+                    'device': device,
+                    'timestamp': timezone.now(),  # Use timezone-aware datetime
+                    'water_level_value': water_level_str
+                }
+                if battery_value is not None:
+                    water_level_data['battery'] = battery_value
+
+                waterLevelReading.objects.create(**water_level_data)
+                logger.info(f"Successfully created waterLevelReading entry for device {device_id}")
+
+
+            return JsonResponse({'status': 'success'})
+
+        except json.JSONDecodeError:
+            logger.error("Invalid JSON in webhook payload")
+            return JsonResponse({'status': 'error', 'message': 'Invalid JSON'}, status=400)
+        except KeyError as e:
+            logger.error(f"Missing required field in webhook payload: {str(e)}")
+            return JsonResponse({'status': 'error', 'message': f'Missing required field: {str(e)}'}, status=400)
+        except Exception as e:
+            logger.exception("Error processing webhook data")
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+        
+        
+        
         
 #############################             weather station data Siebenpfeiffer Gymnasium        ###########################################
 class WeatherDataView(View):

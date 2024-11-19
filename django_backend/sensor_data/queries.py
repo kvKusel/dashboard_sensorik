@@ -24,7 +24,7 @@ def execute_and_process_query(client, org, query):
 def query_soil_moisture_pleiner_mostbirne(client, org):
     query = f'''
         from(bucket: "Kusel")
-            |> range(start: -1d)
+            |> range(start: -27h)
             |> filter(fn: (r) => 
                 r._measurement == "mqtt_consumer" and
                 (r._field == "water_SOIL") and
@@ -37,7 +37,7 @@ def query_soil_moisture_pleiner_mostbirne(client, org):
 def query_soil_moisture_roter_boskoop(client, org):
     query = f'''
         from(bucket: "Kusel")
-            |> range(start: -1d)
+            |> range(start: -27h)
             |> filter(fn: (r) => 
                 r._measurement == "mqtt_consumer" and
                 (r._field == "water_SOIL") and
@@ -51,7 +51,7 @@ def query_soil_moisture_roter_boskoop(client, org):
 def query_soil_moisture_schoener_von_nordhausen(client, org):
     query = f'''
         from(bucket: "Kusel")
-            |> range(start: -1d)
+            |> range(start: -27h)
             |> filter(fn: (r) => 
                 r._measurement == "mqtt_consumer" and
                 (r._field == "water_SOIL") and
@@ -64,7 +64,7 @@ def query_soil_moisture_schoener_von_nordhausen(client, org):
 def query_soil_moisture_cox_orangenrenette(client, org):
     query = f'''
         from(bucket: "Kusel")
-            |> range(start: -1d)
+            |> range(start: -27h)
             |> filter(fn: (r) => 
                 r._measurement == "mqtt_consumer" and
                 (r._field == "water_SOIL") and
@@ -76,7 +76,7 @@ def query_soil_moisture_cox_orangenrenette(client, org):
 def query_soil_moisture_jonathan(client, org):
     query = f'''
         from(bucket: "Kusel")
-            |> range(start: -1d)
+            |> range(start: -27h)
             |> filter(fn: (r) => 
                 r._measurement == "mqtt_consumer" and
                 (r._field == "water_SOIL") and
@@ -92,7 +92,7 @@ def query_soil_moisture_jonathan(client, org):
 def query_weather_station_precipitation(client, org):
     query = f'''
         from(bucket: "Kusel")
-        |> range(start: -1d)
+        |> range(start: -27h)
         |> filter(fn: (r) =>
             r._measurement == "mqtt_consumer" and
             r._field == "measurementValue" and
@@ -106,7 +106,7 @@ def query_weather_station_precipitation(client, org):
 def query_weather_station_temperature(client, org):
     query = f'''
 from(bucket: "Kusel")
-  |> range(start: -1d)
+  |> range(start: -27h)
   |> filter(fn: (r) =>
       r._measurement == "mqtt_consumer" and
       r._field == "measurementValue" and
@@ -121,7 +121,7 @@ from(bucket: "Kusel")
 def query_weather_station_uv_index(client, org):
     query = f'''
 from(bucket: "Kusel")
-  |> range(start: -1d)
+  |> range(start: -27h)
   |> filter(fn: (r) =>
       r._measurement == "mqtt_consumer" and
       r._field == "measurementValue" and
@@ -136,7 +136,7 @@ from(bucket: "Kusel")
 def query_weather_station_humidity(client, org):
     query = f'''
 from(bucket: "Kusel")
-  |> range(start: -1d)
+  |> range(start: -27h)
   |> filter(fn: (r) =>
       r._measurement == "mqtt_consumer" and
       r._field == "measurementValue" and
@@ -151,7 +151,7 @@ from(bucket: "Kusel")
 def query_weather_station_air_pressure(client, org):
     query = f'''
 from(bucket: "Kusel")
-  |> range(start: -1d)
+  |> range(start: -27h)
   |> filter(fn: (r) =>
       r._measurement == "mqtt_consumer" and
       r._field == "measurementValue" and
@@ -166,7 +166,7 @@ from(bucket: "Kusel")
 def query_weather_station_wind_speed(client, org):
     query = f'''
 from(bucket: "Kusel")
-  |> range(start: -1d)
+  |> range(start: -27h)
   |> filter(fn: (r) =>
       r._measurement == "mqtt_consumer" and
       r._field == "measurementValue" and
@@ -181,7 +181,7 @@ from(bucket: "Kusel")
 def query_weather_station_wind_direction(client, org):
     query = f'''
 from(bucket: "Kusel")
-  |> range(start: -1d)
+  |> range(start: -27h)
   |> filter(fn: (r) =>
       r._measurement == "mqtt_consumer" and
       r._field == "measurementValue" and

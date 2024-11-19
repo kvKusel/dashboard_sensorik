@@ -2,8 +2,8 @@
 
 import React, { useState } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
-import WeatherMarkerComponent from "./WaterLevelMapMarkers";
-import WeatherLegend from "./WaterLevelLegend";
+import WeatherMarkerComponent from "../WaterLevelMapMarkers";
+import WeatherLegend from "../WaterLevelLegend";
 import "leaflet/dist/leaflet.css";
 
 const HochbeetMap = () => {

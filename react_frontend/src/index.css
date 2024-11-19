@@ -472,3 +472,63 @@ input:checked + .slider:before {
 
 
 /* END OF LOCK IN PORTRAIT ORIENTATION */
+
+
+
+
+/* CHATBOT CONFIGURATION */
+.chatbot-container {
+  max-width: 20%; /* Ensure it doesn't overflow on smaller screens */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  position: fixed; /* Position it fixed */
+  bottom: 20px; /* Distance from bottom */
+  right: 20px; /* Distance from right */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Optional shadow for better visibility */
+  z-index: 1000; /* Ensure it stays on top */
+}
+
+
+
+
+.chatbot-header {
+  background-color: rgb(220, 53, 69)
+  ;
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+.chatbot-messages {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  max-height: 300px; /* Adjust as needed */
+}
+
+.message {
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 10px;
+  max-width: 70%; /* Limit width */
+  word-wrap: break-word; /* Break long words */
+}
+
+.user-message {
+  background-color: #d1e5ff; /* User message background */
+  align-self: flex-end; /* Align user messages to the right */
+}
+
+.bot-message {
+  background-color: #f1f1f1; /* Bot message background */
+  align-self: flex-start; /* Align bot messages to the left */
+}
+
+
+/* END OF CHATBOT CONFIGURATION */

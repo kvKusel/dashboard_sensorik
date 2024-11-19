@@ -1,0 +1,35 @@
+import React from 'react';
+import { GaugeComponent } from 'react-gauge-component';
+
+const GaugeWaterLevel = ({ value, arcs }) => {
+
+  const toCm = (value) => {
+    return Number.isInteger(value) ? value.toFixed(0) + ' cm' : value.toFixed(1) + ' cm';
+  };
+
+  return (
+    <GaugeComponent
+      arc={{ subArcs: arcs }}
+      value={value}
+      labels={{
+        valueLabel: {
+          formatTextValue: toCm,
+          style: { fontSize: 30, fill: "lightgray" },  // Set color for the current value
+
+        },
+        tickLabels: {
+          type: "outer",
+          ticks: [
+            { value: 100 },
+          ],
+          defaultTickValueConfig: {
+            formatTextValue: toCm,
+            style: { fontSize: 14, color: 'lightgray' },  // Set color for tick labels
+          },
+        },
+      }}
+    />
+  );
+};
+
+export default GaugeWaterLevel;

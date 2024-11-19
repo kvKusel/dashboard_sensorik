@@ -2,7 +2,7 @@
 
 ///////////////////////      Charts for the tree monitoring dashboard       ////////////////////////////////
 
-// Water Level Monitoring Chart
+// Water Level Monitoring Chart - Kuselbach
 export const waterLevelConfig = {
   
   datasets: [
@@ -21,6 +21,7 @@ export const waterLevelConfig = {
         grid: {
           color: "lightgrey",
         },
+        
         ticks: {
           precision: 0,
           color: "lightgrey",
@@ -44,8 +45,104 @@ export const waterLevelConfig = {
   },
   
   plugins: {
+    annotation: {
+      annotations: {
+        line1: {
+          type: "line",
+          yMin: 0,
+          yMax: 0,
+          borderColor: "red",
+          borderWidth: 2, // Adjusted width
+          label: {
+            content: "Sensorhöhe",
+            display: true,
+            position: "center", // Adjusted position
+            color: "red",
+            font: {
+              size: "13rem",
+            },
+            backgroundColor: "",
+          },
+        },
+      },
+    },
     title: {
       text: "Kuselbach - Abstand zum Sensor [cm]",
+    },
+  },
+};
+
+
+// Water Level Monitoring Chart - Wolfstein
+export const waterLevelConfigWolfstein = {
+  
+  datasets: [
+    {
+      fill: true,
+      borderColor: "#03C988",
+      tension: 0.1,
+      backgroundColor: "transparent", // Fill color
+    },
+  ],
+  
+  options: {
+    scales: {
+      y: {
+        //reverse: true, // Flip the y-axis so highest values are at the bottom
+        grid: {
+          color: "lightgrey",
+        },
+        
+        ticks: {
+          precision: 0,
+          color: "lightgrey",
+          font: {
+            size: 14,
+          },
+                    // Add 'cm' to each y-axis tick value
+                    callback: function(value) {
+                      return value + " cm";
+                    },
+        },
+      },
+      x: {
+        grid: {
+          color: "lightgrey",
+        },
+        ticks: {
+          color: "lightgrey",
+          font: {
+            size: 14,
+          },
+        },
+      },
+    },
+  },
+  
+  plugins: {
+    annotation: {
+      // annotations: {
+      //   line1: {
+      //     type: "line",
+      //     yMin: 100,
+      //     yMax: 100,
+      //     borderColor: "red",
+      //     borderWidth: 2, // Adjusted width
+      //     label: {
+      //       content: "Oberkante Gelände",
+      //       display: true,
+      //       position: "center", // Adjusted position
+      //       color: "red",
+      //       font: {
+      //         size: "13rem",
+      //       },
+      //       backgroundColor: "",
+      //     },
+      //   },
+      // },
+    },
+    title: {
+      text: "Pegelstände",
     },
   },
 };
@@ -256,7 +353,7 @@ export const uvIndexConfig = {
   colors: ["rgba(75, 192, 192, 0.2)", "rgb(192, 192, 192)"], // Array of colors
 };
 
-//Doughnut Chart - barometere
+//Doughnut Chart - barometer
 export const barometerConfig = {
   // arcsLength: [0.075, 0.525], // Array of arc lengths, adjusted for 270 degrees
   colors: ["rgba(75, 192, 192, 0.2)", "rgb(192, 192, 192)"], // Array of colors
@@ -266,3 +363,4 @@ export const pHConfig = {
   arcsLength: [5 / 14, 1 / 14, 2 / 14, 1 / 14, 5 / 14], // Adjusted array of arc lengths
   colors: ["#FF0060", "#F6FA70", "#00DFA2", "#F6FA70", "#FF0060"], // Array of colors matching the arc lengths
 };
+

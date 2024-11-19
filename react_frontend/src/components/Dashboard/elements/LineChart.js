@@ -1,7 +1,9 @@
 import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto"; // Import only Chart, not plugins
 import { format } from 'date-fns';
+import annotationPlugin from 'chartjs-plugin-annotation';
 
+Chart.register(annotationPlugin);
 
 const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) => {
   
@@ -58,7 +60,7 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) =
 
   // setting up default values, which in some cases will be overwritten
   const yAxisReverseEnabled = lineChartConfig.options?.scales?.y?.reverse || false;
-
+  
     
   const lineChartConfigurationStandard = {
     type: "line",
@@ -99,6 +101,7 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) =
           grid: {
             color: "lightgrey",
           },
+                        min: 0,
           
           ticks: {
             precision: 0,
@@ -108,12 +111,24 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) =
               size: 14,
             },
             callback: function (value) {
-              return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "");
+              // First apply the standard thousand separator
+              const formattedValue = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "");
+              
+              // If there's a specific callback defined in the chart config, apply it
+              if (lineChartConfig.options?.scales?.y?.ticks?.callback) {
+                return lineChartConfig.options.scales.y.ticks.callback(formattedValue);
+              }
+              
+              // Otherwise return just the formatted value
+              return formattedValue;
             },
           },
         },
       },
       plugins: {
+        annotation: {
+          annotations: lineChartConfig.plugins?.annotation?.annotations || {}, // Only include annotations if defined
+        },
         title: {
           text: lineChartConfig.plugins.title.text,
           display: "yes",
@@ -137,82 +152,6 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) =
   };
 
 
-
-  const lineChartConfigurationWaterLevel = {
-    type: "line",
-    data: {
-      labels: labels,
-      datasets: datasets,
-    },
-    options: {
-      responsive: true,
-      spanGaps: true,
-      maintainAspectRatio: false,
-      layout: {},
-      scales: {
-        x: {
-          grid: {
-            color: "lightgrey",
-          },
-          type: "timeseries",
-          offset: false,
-          min: new Date(twentyFourHoursAgoTimestamp),
-          max: Date.now(),
-          ticks: {
-            autoSkip: false,
-            callback: function (label, index, labels) {
-              const parsedDate = new Date(label);
-              const formattedDate = format(parsedDate, "MMM d, HH:00").split(", ");
-              return [formattedDate[0], formattedDate[1]];
-            },
-            maxTicksLimit: 4,
-            color: "lightgrey",
-            font: {
-              size: 14,
-            },
-          },
-        },
-        y: {
-          grid: {
-            color: "lightgrey",
-          },
-          
-          ticks: {
-            precision: 0,
-            maxTicksLimit: 4,
-            color: "lightgrey",
-            font: {
-              size: 14,
-            },
-            callback: function (value) {
-              return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "");
-            },
-          },
-        },
-      },
-      plugins: {
-        title: {
-          text: lineChartConfig.plugins.title.text,
-          display: "yes",
-          color: "lightgrey",
-          font: {
-            size: "18rem",
-          },
-        },
-        legend: {
-          display: false,
-          labels: {
-            color: "lightgrey",
-            font: {
-              size: "18rem",
-            },
-          },
-          position: "bottom",
-        },
-      },
-    },
-  };
-  
 
     if ((!selectedTree || selectedTree.id === 6 || selectedTree.id === 7) && id !== 'temperatureChart' && activeTab !== "hochbeet" && activeTab !== "Wetter" && activeTab !== "Pegelmonitoring") {
       lineChartConfiguration = {
@@ -629,11 +568,6 @@ const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) =
       };
     }
 
-
-    else if ( activeTab == "Pegelmonitoring") {
-      lineChartConfiguration = lineChartConfigurationWaterLevel;
-
-    }
 
 
         else if ( lineData.length == 0 && activeTab == "hochbeet") {

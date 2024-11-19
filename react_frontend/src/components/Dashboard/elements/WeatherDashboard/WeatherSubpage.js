@@ -182,11 +182,33 @@ const getCardinalDirection = (degree) => {
           value: entry.temperature,
         }));
 
-        // Extract precipitation data
-        const precipitationData = data.weather_data.map((entry) => ({
-          time: entry.timestamp,
-          value: entry.precipitation,
-        }));
+    // Coalesce precipitation data by hour
+    const coalescePrecipitationData = (weatherData) => {
+      const coalescedPrecipitation = {};
+
+      weatherData.forEach((entry) => {
+        const date = new Date(entry.timestamp);
+        const roundedHour = new Date(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), 30, 0); // Round to the nearest :30 of the hour
+
+        const roundedTimeString = roundedHour.toISOString();
+
+        // Coalesce precipitation by hour
+        if (coalescedPrecipitation[roundedTimeString]) {
+          coalescedPrecipitation[roundedTimeString] += entry.precipitation;
+        } else {
+          coalescedPrecipitation[roundedTimeString] = entry.precipitation;
+        }
+      });
+
+      return Object.keys(coalescedPrecipitation).map((time) => ({
+        time: time,
+        value: coalescedPrecipitation[time],
+      }));
+    };
+
+    // Extract coalesced precipitation data
+    const precipitationData = coalescePrecipitationData(data.weather_data);
+
 
                 // Extract humidity data
                 const humidityData = data.weather_data.map((entry) => ({
