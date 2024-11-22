@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
 import { Weight } from 'lucide-react';
+import { format } from 'date-fns';
 
 ChartJS.register(
   CategoryScale,
@@ -13,46 +14,52 @@ ChartJS.register(
   Legend
 );
 
-// Utility functions for generating random data and colors
-const Utils = {
-  numbers: ({ count, min, max }) => Array.from({ length: count }, () => Math.floor(Math.random() * (max - min + 1)) + min),
-  months: ({ count }) => ['January', 'February', 'March', 'April', 'May', 'June', 'July'].slice(0, count),
-  CHART_COLORS: { red: 'rgb(255, 99, 132)', blue: 'rgb(54, 162, 235)', green: 'rgb(140, 253, 48)' },
-  transparentize: (color, opacity) => color.replace('rgb', 'rgba').replace(')', `, ${opacity})`)
-};
+  // creates a timestamp thats 23 hours earlier than current time - used to set the min boundary of x-axis 
+  const twentyFourHoursAgoTimestamp = Date.now() - (22 * 60 * 60 * 1000);
 
-const MultiLineChart = () => {
-  // Initial labels and data
-  const labels = Utils.months({ count: 7 });
-  const NUMBER_CFG = { count: 7, min: 0, max: 20 };
-  const initialData = {
-    labels,
-    datasets: [
-      {
-        label: 'Pegel Wolfstein',
-        data: Utils.numbers(NUMBER_CFG),
-        borderColor: Utils.CHART_COLORS.red,
-        backgroundColor: Utils.transparentize(Utils.CHART_COLORS.red, 0.5),
-        yAxisID: 'y',
-      },
-      {
-        label: 'Pegel Rutsweiler a.d. Lauter',
-        data: Utils.numbers(NUMBER_CFG),
-        borderColor: Utils.CHART_COLORS.blue,
-        backgroundColor: Utils.transparentize(Utils.CHART_COLORS.blue, 0.5),
-        yAxisID: 'y1',
-      },
-      {
-        label: 'Pegel Kreimbach-Kaulbach',
-        data: Utils.numbers(NUMBER_CFG),
-        borderColor: Utils.CHART_COLORS.green,
-        backgroundColor: Utils.transparentize(Utils.CHART_COLORS.green, 0.5),
-        yAxisID: 'y1',
-      }
-    ],
-  };
 
-  const [chartData, setChartData] = useState(initialData);
+
+
+
+
+  const MultiLineChart = ({ waterLevelRutsweiler }) => {
+
+
+    // Extract labels (timestamps) and data (values) from waterLevelRutsweiler
+    const labels = waterLevelRutsweiler.map((item) => new Date(item.time));
+
+    const rutsweilerData = waterLevelRutsweiler.map((item) => item.value);
+
+ 
+
+    // Chart data configuration
+    const chartData = {
+      labels, // Use the timestamps as labels
+      datasets: [
+        {
+          label: 'Pegel Rutsweiler a.d. Lauter', // Dataset for waterLevelRutsweiler
+          data: rutsweilerData,
+          borderColor: 'rgba(75, 192, 192, 1)', // Line color for Rutsweiler
+          backgroundColor: 'rgba(75, 192, 192, 0.2)', // Fill color for Rutsweiler
+          yAxisID: 'y',
+        },
+        {
+          label: 'Pegel Wolfstein', // Placeholder dataset
+          data: [200, 500, 200, 100, 200, 100, 300], // Example data
+          borderColor: 'rgba(255, 99, 132, 1)', // Line color for Wolfstein
+          backgroundColor: 'rgba(255, 99, 132, 0.2)', // Fill color for Wolfstein
+          yAxisID: 'y',
+        },
+        {
+          label: 'Pegel Kreimbach-Kaulbach', // Placeholder dataset
+          data: [100, 200, 300, 400, 300, 200, 300], // Example data
+          borderColor: 'rgba(54, 162, 235, 1)', // Line color for Kreimbach-Kaulbach
+          backgroundColor: 'rgba(54, 162, 235, 0.2)', // Fill color for Kreimbach-Kaulbach
+          yAxisID: 'y',
+        },
+      ],
+    };
+
 
   // Calculate the maximum y value dynamically
   const calculateMaxY = () => {
@@ -104,13 +111,25 @@ const MultiLineChart = () => {
         grid: {
           color: "lightgrey",
         },
+
+        type: "timeseries",
+        offset: false,
+        min: new Date(twentyFourHoursAgoTimestamp),
+        max: Date.now(),
         ticks: {
+          autoSkip: false,
+          callback: function (label, index, labels) {
+            const parsedDate = new Date(label);
+            const formattedDate = format(parsedDate, "MMM d, HH:00").split(", ");
+            return [formattedDate[0], formattedDate[1]];
+          },
           maxTicksLimit: 4,
           color: "lightgrey",
           font: {
             size: 14,
           },
         },
+
       },
       y: {
         title: {
@@ -143,38 +162,25 @@ const MultiLineChart = () => {
       y1: {
         grid: {
           color: "lightgrey",
+          drawOnChartArea: false,
+
         },
         type: 'linear',
         min: 0,
         max: calculateMaxY(), // Same max for secondary axis if needed
         display: false,
         position: 'left',
-        grid: {
-          drawOnChartArea: false,
-        },
+
       },
     },
   };
 
-  // Action to randomize data
-  const randomizeData = () => {
-    const newData = {
-      ...chartData,
-      datasets: chartData.datasets.map(dataset => ({
-        ...dataset,
-        data: Utils.numbers(NUMBER_CFG),
-      })),
-    };
-    setChartData(newData);
-  };
+
 
   return (
     <div className='w-100 h-100'>
       <Line data={chartData} options={options} />
-      {/* Uncomment to randomize data */}
-      {/* <button onClick={randomizeData} style={{ marginTop: '20px' }}>
-        Randomize
-      </button> */}
+
     </div>
   );
 };

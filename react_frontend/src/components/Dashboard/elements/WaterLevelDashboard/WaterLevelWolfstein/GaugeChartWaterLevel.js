@@ -11,6 +11,8 @@ const GaugeWaterLevel = ({ value, arcs }) => {
     <GaugeComponent
       arc={{ subArcs: arcs }}
       value={value}
+      minValue={0} // Set the minimum value
+      maxValue={300} // Set the maximum value
       labels={{
         valueLabel: {
           formatTextValue: toCm,
@@ -20,7 +22,7 @@ const GaugeWaterLevel = ({ value, arcs }) => {
         tickLabels: {
           type: "outer",
           ticks: [
-            { value: 100 },
+            { value: 300 },
           ],
           defaultTickValueConfig: {
             formatTextValue: toCm,

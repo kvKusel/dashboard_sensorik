@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ChatEndpointView, AWSIotCore_Milesight_Sensors, ExportWeatherDataView, ExportAssetDataView, pHDataHochbeetProject, waterLevelDataView, SoilDataView, WeatherStationDataView, ElectricalResistanceDataView, TreeHealthDataView, index, TreeMoistureContentDataView, TTNWebhookView, WeatherDataView, SoilMoistureDataHochbeetProject
+from .views import AWSIotCore_Milesight_Sensors, ExportWeatherDataView, ExportAssetDataView, pHDataHochbeetProject, waterLevelDataView, SoilDataView, WeatherStationDataView, ElectricalResistanceDataView, TreeHealthDataView, index, TreeMoistureContentDataView, TTNWebhookView, WeatherDataView, SoilMoistureDataHochbeetProject
 
 urlpatterns = [
     path('soil-data/', SoilDataView.as_view(), name='soil_data'),
@@ -16,6 +16,6 @@ urlpatterns = [
     path('api/export-asset-data/', ExportAssetDataView.as_view(), name='export_asset_data'),
     path('api/export-weather-data/', ExportWeatherDataView.as_view(), name='export_weather_data'),
     path('', index, name='index'),
-    path('api/chat/', ChatEndpointView.as_view(), name='chat_endpoint'),
+    #path('api/chat/', ChatEndpointView.as_view(), name='chat_endpoint'),
 ]
 

@@ -8,33 +8,66 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 const WaterLevelDashboard = () => {
   const [isLoading, setIsLoading] = useState(true); // Start as loading
+
   const [waterLevelKreisverwaltung, setWaterLevelKreisverwaltung] = useState(
     []
   );
 
+  const [waterLevelRutsweiler, setWaterLevelRutsweiler] = useState(
+    []
+  );
+
+  const [waterLevelKreimbachKaulbach, setWaterLevelKreimbachKaulbach] = useState(
+    []
+  );
+
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(
+        // Fetch data from all three endpoints separately
+        const responseKreisverwaltung = await axios.get(
           `${API_URL}/water-level-data/?query_type=water_level_kv`
         );
-        const data = response.data;
-
-        const transformedData = data.map((item) => ({
+        const responseRutsweiler = await axios.get(
+          `${API_URL}/water-level-data/?query_type=water_level_rutsweiler`
+        );
+        const responseKreimbachKaulbach = await axios.get(
+          `${API_URL}/water-level-data/?query_type=water_level_kreimbach_kaulbach`
+        );
+  
+        // Transform data for each dataset
+        const transformedKreisverwaltung = responseKreisverwaltung.data.map((item) => ({
+          time: item.timestamp,
+          value: item.water_level_value,
+        }));
+  
+        const transformedRutsweiler = responseRutsweiler.data.map((item) => ({
+          time: item.timestamp,
+          value: item.water_level_value,
+        }));
+  
+        const transformedKreimbachKaulbach = responseKreimbachKaulbach.data.map((item) => ({
           time: item.timestamp,
           value: item.water_level_value,
         }));
 
-        setWaterLevelKreisverwaltung(transformedData);
+  
+        // Set the individual state for each dataset
+        setWaterLevelKreisverwaltung(transformedKreisverwaltung);
+        setWaterLevelRutsweiler(transformedRutsweiler);
+        setWaterLevelKreimbachKaulbach(transformedKreimbachKaulbach);
+  
       } catch (error) {
-        console.error("Error fetching the weather data:", error);
+        console.error("Error fetching the water level data:", error);
       } finally {
         setIsLoading(false); // Set loading to false after data fetch
       }
     };
-
+  
     fetchData();
   }, []);
+  
 
   return (
     <div style={{ minHeight: "80vh" }}>
@@ -54,6 +87,7 @@ const WaterLevelDashboard = () => {
         <React.Fragment>
           <WolfsteinSubpage
             waterLevelKreisverwaltung={waterLevelKreisverwaltung}
+            waterLevelRutsweiler={waterLevelRutsweiler}
           />
 
           <KuselbachSubpage

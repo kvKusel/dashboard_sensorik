@@ -19,7 +19,7 @@ from django.utils.decorators import method_decorator
 import logging
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-from .utils import ConstrainedDataAnalyzer
+#from .utils import ConstrainedDataAnalyzer
 
 
 # render the index page
@@ -32,50 +32,50 @@ def index(request):
 
 ##################################################              chatbot endpoint        #########################################################################
 
-analyzer = ConstrainedDataAnalyzer()
+# analyzer = ConstrainedDataAnalyzer()
 
-@method_decorator(csrf_exempt, name='dispatch')
-class ChatEndpointView(View):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        # Initialize the analyzer once when the view is created
-        self.analyzer = ConstrainedDataAnalyzer()
+# @method_decorator(csrf_exempt, name='dispatch')
+# class ChatEndpointView(View):
+#     def __init__(self, **kwargs):
+#         super().__init__(**kwargs)
+#         # Initialize the analyzer once when the view is created
+#         self.analyzer = ConstrainedDataAnalyzer()
     
-    def post(self, request, *args, **kwargs):
-        try:
-            data = json.loads(request.body)
-            user_message = data.get('message')
+#     def post(self, request, *args, **kwargs):
+#         try:
+#             data = json.loads(request.body)
+#             user_message = data.get('message')
             
-            if not user_message:
-                return JsonResponse({
-                    'error': 'Message is required'
-                }, status=400)
+#             if not user_message:
+#                 return JsonResponse({
+#                     'error': 'Message is required'
+#                 }, status=400)
             
-            result = self.analyzer.analyze_data(user_message)
+#             result = self.analyzer.analyze_data(user_message)
             
-            if result.get("success", False):
-                return JsonResponse({
-                    'message': result['analysis'],
-                    'dataset': result['dataset_used']
-                })
-            else:
-                return JsonResponse({
-                    'error': result.get('error', 'Analysis failed')
-                }, status=500)
+#             if result.get("success", False):
+#                 return JsonResponse({
+#                     'message': result['analysis'],
+#                     'dataset': result['dataset_used']
+#                 })
+#             else:
+#                 return JsonResponse({
+#                     'error': result.get('error', 'Analysis failed')
+#                 }, status=500)
                 
-        except json.JSONDecodeError:
-            return JsonResponse({
-                'error': 'Invalid JSON in request body'
-            }, status=400)
-        except Exception as e:
-            return JsonResponse({
-                'error': str(e)
-            }, status=500)
+#         except json.JSONDecodeError:
+#             return JsonResponse({
+#                 'error': 'Invalid JSON in request body'
+#             }, status=400)
+#         except Exception as e:
+#             return JsonResponse({
+#                 'error': str(e)
+#             }, status=500)
     
-    def get(self, request, *args, **kwargs):
-        return JsonResponse({
-            'error': 'Only POST requests are allowed'
-        }, status=405)
+#     def get(self, request, *args, **kwargs):
+#         return JsonResponse({
+#             'error': 'Only POST requests are allowed'
+#         }, status=405)
 
 
 
@@ -556,8 +556,15 @@ class TTNWebhookView(View):
 
 #############################             water level sensors data - NB Iot Milesight Sensors - from AWS Core via AWS Lambda        ###########################################
 
-ALLOWED_DEVICE_IDS = {
+ALLOWED_DEVICE_IDS_AWS = {
 "6749D19422850054": {
+    'type': 'water_level_sensor',
+    'field_mapping': {
+        'water_level': 'distance',
+        'battery': 'battery'
+    }
+},
+"6749D19385550035": {
     'type': 'water_level_sensor',
     'field_mapping': {
         'water_level': 'distance',
@@ -579,11 +586,11 @@ class AWSIotCore_Milesight_Sensors(View):
             device_id = data['sn']
 
             # Check if the device ID is allowed
-            if device_id not in ALLOWED_DEVICE_IDS:
+            if device_id not in ALLOWED_DEVICE_IDS_AWS:
                 logger.warning(f"Received data from unauthorized device: {device_id}")
                 return JsonResponse({'status': 'ignored', 'message': 'Device not recognized'}, status=200)
 
-            device_info = ALLOWED_DEVICE_IDS[device_id]
+            device_info = ALLOWED_DEVICE_IDS_AWS[device_id]
             device, created = Device.objects.get_or_create(device_id=device_id)
 
             # Extract payload from the correct location
@@ -794,6 +801,8 @@ class waterLevelDataView(View):
 
             device_ids = {
                 "water_level_kv": "eui-a8404169c187e059-water-lvl-kv",
+                "water_level_rutsweiler": "6749D19385550035",
+                "water_level_kreimbach_kaulbach": "6749D19422850054",
 
             }
 
