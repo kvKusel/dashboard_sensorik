@@ -27,13 +27,13 @@ const WaterLevelDashboard = () => {
       try {
         // Fetch data from all three endpoints separately
         const responseKreisverwaltung = await axios.get(
-          `${API_URL}/water-level-data/?query_type=water_level_kv`
+          `${API_URL}water-level-data/?query_type=water_level_kv`
         );
         const responseRutsweiler = await axios.get(
-          `${API_URL}/water-level-data/?query_type=water_level_rutsweiler`
+          `${API_URL}water-level-data/?query_type=water_level_rutsweiler`
         );
         const responseKreimbachKaulbach = await axios.get(
-          `${API_URL}/water-level-data/?query_type=water_level_kreimbach_kaulbach`
+          `${API_URL}water-level-data/?query_type=water_level_kreimbach_kaulbach`
         );
   
         // Transform data for each dataset
