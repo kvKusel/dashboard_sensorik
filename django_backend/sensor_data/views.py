@@ -564,16 +564,30 @@ def send_alert_email(device_id, timestamp, water_level):
     mailgun_api_url = os.getenv('MAILGUN_API_URL')
     mailgun_api_key = os.getenv('MAILGUN_API_KEY')
 
-    return requests.post(
-        mailgun_api_url,
-        auth=("api", mailgun_api_key),
-        data={
-            "from": "Smart City Kusel <mailgun@sandboxc7ebde0b60544445a6f147c44033518f.mailgun.org>",
-            "to": ["karol.porebski89(@gmail.com"],  # Add recipients here
-            "subject": "Wasserstandsmeldung",
-            "text": f"Ein Wasserstand von {water_level} cm wurde vom Gerät {device_id} am {timestamp} festgestellt. Bitte die Situation beobachten."
-        },
-    )
+    try:
+        # Send the request to Mailgun API
+        response = requests.post(
+            str(mailgun_api_url),
+            auth=("api", mailgun_api_key),
+            data={
+                "from": "Smart City Kusel <mailgun@sandboxc7ebde0b60544445a6f147c44033518f.mailgun.org>",
+                "to": ["karol.porebski89@gmail.com"],  # Add recipients here
+                "subject": "Wasserstandsmeldung",
+                "text": f"Ein Wasserstand von {water_level} cm wurde vom Gerät {device_id} am {timestamp} festgestellt. Bitte die Situation beobachten."
+            },
+        )
+
+        # Log the response from Mailgun
+        if response.status_code == 200:
+            logger.info(f"Email successfully sent to karol.porebski89@gmail.com: {response.text}")
+        else:
+            logger.error(f"Failed to send email: {response.status_code}, {response.text}")
+
+        return response
+
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Error sending email: {e}")
+        return None
     
     
     

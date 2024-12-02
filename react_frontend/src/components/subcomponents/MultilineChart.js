@@ -134,7 +134,7 @@ ChartJS.register(
       y: {
         title: {
           display: true,
-          text: 'Wasserstand (m)', // Y-axis title
+          text: 'Wasserstand (cm)', // Y-axis title
           color: 'lightgrey',
           font: {
             size: 16,
@@ -155,7 +155,8 @@ ChartJS.register(
         },
         type: 'linear',
         min: 0,
-        max: calculateMaxY(), // Dynamically calculated max
+        max: 300, // Dynamically calculated max
+        //max: calculateMaxY(), // Dynamically calculated max
         display: true,
         position: 'left',
       },

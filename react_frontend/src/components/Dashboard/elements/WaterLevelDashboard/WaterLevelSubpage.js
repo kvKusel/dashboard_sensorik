@@ -22,6 +22,7 @@ const WaterLevelDashboard = () => {
   );
 
 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -51,6 +52,7 @@ const WaterLevelDashboard = () => {
           time: item.timestamp,
           value: item.water_level_value,
         }));
+
 
   
         // Set the individual state for each dataset

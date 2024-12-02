@@ -29,6 +29,7 @@ const WolfsteinSubpage = ({
 
   const lastValueRutsweiler =
     waterLevelRutsweiler[waterLevelRutsweiler.length - 1];
+    
 
   //arc settings for the water level gauge chart component
   const arcs = [
