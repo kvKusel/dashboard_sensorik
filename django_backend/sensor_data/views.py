@@ -19,15 +19,17 @@ from django.utils.decorators import method_decorator
 import logging
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
+from dotenv import load_dotenv
+import os
 #from .utils import ConstrainedDataAnalyzer
 
+
+#load environment variables
+load_dotenv()
 
 # render the index page
 def index(request):
     return render(request, 'index.html')
-
-
-#right now the data is not saved into the database (models.py), fix it in the future (using worker?) 
 
 
 ##################################################              chatbot endpoint        #########################################################################
@@ -556,6 +558,25 @@ class TTNWebhookView(View):
 
 #############################             water level sensors data - NB Iot Milesight Sensors - from AWS Core via AWS Lambda        ###########################################
 
+#function to send automated emails (currently using the service "Mailgun")
+def send_alert_email(device_id, timestamp, water_level):
+    """Send an email alert via Mailgun."""
+    mailgun_api_url = os.getenv('MAILGUN_API_URL')
+    mailgun_api_key = os.getenv('MAILGUN_API_KEY')
+
+    return requests.post(
+        mailgun_api_url,
+        auth=("api", mailgun_api_key),
+        data={
+            "from": "Smart City Kusel <mailgun@sandboxc7ebde0b60544445a6f147c44033518f.mailgun.org>",
+            "to": ["karol.porebski89(@gmail.com"],  # Add recipients here
+            "subject": "Wasserstandsmeldung",
+            "text": f"Ein Wasserstand von {water_level} cm wurde vom Gerät {device_id} am {timestamp} festgestellt. Bitte die Situation beobachten."
+        },
+    )
+    
+    
+    
 ALLOWED_DEVICE_IDS_AWS = {
 "6749D19422850054": {
     'type': 'water_level_sensor',
@@ -628,8 +649,16 @@ class AWSIotCore_Milesight_Sensors(View):
                 }
                 if battery_value is not None:
                     water_level_data['battery'] = battery_value
-
+                
                 waterLevelReading.objects.create(**water_level_data)
+
+                # Trigger email alert if water level is below threshold
+                if int(water_level_str) < 150:
+                    timestamp = timezone.now()
+                    send_alert_email(device_id, timestamp, water_level_str)
+                    logger.info(f"Email alert sent for device {device_id} with water level {water_level_str} cm.")
+
+
                 logger.info(f"Successfully created waterLevelReading entry for device {device_id}")
 
 
