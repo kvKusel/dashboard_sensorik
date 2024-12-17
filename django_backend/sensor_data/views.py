@@ -556,24 +556,49 @@ class TTNWebhookView(View):
 
 
 
-#############################             water level sensors data - NB Iot Milesight Sensors - from AWS Core via AWS Lambda        ###########################################
+#############################             water level sensors data - Milesight - POST method     ###########################################
 
-#function to send automated emails (currently using the service "Mailgun")
+
+# Device location mapping, change later to proper locations!
+DEVICE_LOCATIONS = {
+    "6749D19385550035": "an der Messstelle 'Rutsweiler a.d. Lauter'",
+    "6749D19422850054": "an der Messstelle 'Wolfstein'",
+    "6749D19427550061": "an der Messstelle 'Kreimbach-Kaulbach'",
+
+}
+
 def send_alert_email(device_id, timestamp, water_level):
     """Send an email alert via Mailgun."""
     mailgun_api_url = os.getenv('MAILGUN_API_URL')
     mailgun_api_key = os.getenv('MAILGUN_API_KEY')
 
+    # Check for missing environment variables
+    if not mailgun_api_url or not mailgun_api_key:
+        logger.error("Mailgun API URL or key is missing.")
+        return None
+
     try:
-        # Send the request to Mailgun API
+        # Format the timestamp
+        formatted_timestamp = (timestamp + timedelta(hours=1)).strftime("%d-%m-%Y um %H:%M Uhr")
+        
+        # Map device ID to location
+        device_location = DEVICE_LOCATIONS.get(device_id, f"vom Gerät {device_id}")
+
+        # Format the email content
+        email_text = (
+            f"Ein Wasserstand von {water_level} cm wurde {device_location} "
+            f"am {formatted_timestamp} festgestellt. Bitte die Situation beobachten."
+        )
+
+        # Send the email using Mailgun API
         response = requests.post(
-            str(mailgun_api_url),
+            mailgun_api_url,
             auth=("api", mailgun_api_key),
             data={
                 "from": "Smart City Kusel <mailgun@sandboxc7ebde0b60544445a6f147c44033518f.mailgun.org>",
                 "to": ["karol.porebski89@gmail.com"],  # Add recipients here
                 "subject": "Wasserstandsmeldung",
-                "text": f"Ein Wasserstand von {water_level} cm wurde vom Gerät {device_id} am {timestamp} festgestellt. Bitte die Situation beobachten."
+                "text": email_text
             },
         )
 
@@ -600,6 +625,13 @@ ALLOWED_DEVICE_IDS_AWS = {
     }
 },
 "6749D19385550035": {
+    'type': 'water_level_sensor',
+    'field_mapping': {
+        'water_level': 'distance',
+        'battery': 'battery'
+    }
+},
+"6749D19427550061": {
     'type': 'water_level_sensor',
     'field_mapping': {
         'water_level': 'distance',
@@ -687,6 +719,55 @@ class AWSIotCore_Milesight_Sensors(View):
         except Exception as e:
             logger.exception("Error processing webhook data")
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+        
+        
+
+        
+      
+#############################             water level data  - GET method    ###########################################
+
+
+class waterLevelDataView(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            query_type = request.GET.get("query_type")
+            if not query_type:
+                return JsonResponse({"error": "Query type is required"}, status=400)
+
+            device_ids = {
+                "water_level_kv": "eui-a8404169c187e059-water-lvl-kv",
+                "water_level_rutsweiler": "6749D19385550035",
+                "water_level_kreimbach_kaulbach": "6749D19427550061",
+                "water_level_wolfstein": "6749D19422850054",
+
+            }
+
+            device_id = device_ids.get(query_type)
+            if not device_id:
+                return JsonResponse({"error": "Invalid query type"}, status=400)
+
+            try:
+                device = Device.objects.get(device_id=device_id)
+            except Device.DoesNotExist:
+                return JsonResponse({"error": "Device not found"}, status=404)
+
+            readings = waterLevelReading.objects.filter(device=device).order_by('timestamp')
+
+            if readings.exists():
+                response_data = list(readings.values('timestamp', 'water_level_value'))
+                logger.info(f"Response data: {response_data}")
+
+                return JsonResponse(response_data, safe=False)
+            else:
+                return JsonResponse({"error": "Query result is empty"}, status=404)
+
+        except Exception as e:
+            logger.error(f"Error in water level data: {str(e)}")
+            return JsonResponse({"error": str(e)}, status=500)
+        
+        
+        
+
         
         
         
@@ -829,50 +910,6 @@ class pHDataHochbeetProject(View):
         except Exception as e:
             logger.error(f"Error in pHDataHochbeetProject: {str(e)}")
             return JsonResponse({"error": str(e)}, status=500)
-        
-        
-      
-#############################             water level data         ###########################################
-
-
-class waterLevelDataView(View):
-    def get(self, request, *args, **kwargs):
-        try:
-            query_type = request.GET.get("query_type")
-            if not query_type:
-                return JsonResponse({"error": "Query type is required"}, status=400)
-
-            device_ids = {
-                "water_level_kv": "eui-a8404169c187e059-water-lvl-kv",
-                "water_level_rutsweiler": "6749D19385550035",
-                "water_level_kreimbach_kaulbach": "6749D19422850054",
-
-            }
-
-            device_id = device_ids.get(query_type)
-            if not device_id:
-                return JsonResponse({"error": "Invalid query type"}, status=400)
-
-            try:
-                device = Device.objects.get(device_id=device_id)
-            except Device.DoesNotExist:
-                return JsonResponse({"error": "Device not found"}, status=404)
-
-            readings = waterLevelReading.objects.filter(device=device).order_by('timestamp')
-
-            if readings.exists():
-                response_data = list(readings.values('timestamp', 'water_level_value'))
-                logger.info(f"Response data: {response_data}")
-
-                return JsonResponse(response_data, safe=False)
-            else:
-                return JsonResponse({"error": "Query result is empty"}, status=404)
-
-        except Exception as e:
-            logger.error(f"Error in water level data: {str(e)}")
-            return JsonResponse({"error": str(e)}, status=500)
-        
-        
         
 
 

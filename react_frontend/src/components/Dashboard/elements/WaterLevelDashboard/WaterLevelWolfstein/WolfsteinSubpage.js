@@ -8,8 +8,9 @@ import { pegelWolfsteinGaugeChartConfig } from "../../../../../chartsConfig/char
 import MultiLineChart from "../../../../subcomponents/MultilineChart";
 
 const WolfsteinSubpage = ({
-  waterLevelKreisverwaltung,
+  waterLevelWolfstein,
   waterLevelRutsweiler,
+  waterLevelKreimbach
 }) => {
   // function to format timestamps into desired format
   const formatTimestamp = (timestamp) => {
@@ -29,7 +30,13 @@ const WolfsteinSubpage = ({
 
   const lastValueRutsweiler =
     waterLevelRutsweiler[waterLevelRutsweiler.length - 1];
-    
+
+  const lastValueKreimbach =
+    waterLevelKreimbach[waterLevelKreimbach.length - 1];
+
+    const lastValueWolfstein =
+    waterLevelWolfstein[waterLevelWolfstein.length - 1];
+  
 
   //arc settings for the water level gauge chart component
   const arcs = [
@@ -116,11 +123,11 @@ const WolfsteinSubpage = ({
               Status Pegel Wolfstein
             </p>
             <p className=" fw-bold mb-3" style={{ color: "lightgray" }}>
-              Letzte Messung:{" "}
+            Letzte Messung: {formatTimestamp(lastValueWolfstein.time)}{" "}
             </p>
           </div>
 
-          <GaugeWaterLevel value={50} arcs={arcs} />
+          <GaugeWaterLevel value={lastValueWolfstein.value} arcs={arcs} />
         </div>
 
         <div
@@ -172,11 +179,11 @@ const WolfsteinSubpage = ({
               Status Pegel Kreimbach-Kaulbach
             </p>
             <p className=" fw-bold mb-3" style={{ color: "lightgray" }}>
-              Letzte Messung:{" "}
+            Letzte Messung: {formatTimestamp(lastValueKreimbach.time)}{" "}
             </p>
           </div>
 
-          <GaugeWaterLevel value={25} arcs={arcs} />
+          <GaugeWaterLevel value={lastValueKreimbach.value} arcs={arcsRutsweiler} />
         </div>
       </div>
 
@@ -197,7 +204,7 @@ const WolfsteinSubpage = ({
               borderColor: "#5D7280",
             }}
           >
-            <MultiLineChart waterLevelRutsweiler={waterLevelRutsweiler} />
+            <MultiLineChart waterLevelRutsweiler={waterLevelRutsweiler} waterLevelKreimbach={ waterLevelKreimbach } waterLevelWolfstein = { waterLevelWolfstein }/>
           </div>
         </div>
       </div>

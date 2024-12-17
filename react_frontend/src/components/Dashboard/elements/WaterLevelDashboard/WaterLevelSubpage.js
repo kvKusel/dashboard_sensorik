@@ -4,8 +4,10 @@ import KuselbachSubpage from "./WaterLevelKusel/KuselbachSubpage";
 import WolfsteinSubpage from "./WaterLevelWolfstein/WolfsteinSubpage";
 import Chatbot from "../../../../tools/Chatbot";
 
-const API_URL = process.env.REACT_APP_API_URL;
-
+const API_URL = process.env.REACT_APP_API_URL.endsWith('/') 
+  ? process.env.REACT_APP_API_URL 
+  : `${process.env.REACT_APP_API_URL}/`;
+  
 const WaterLevelDashboard = () => {
   const [isLoading, setIsLoading] = useState(true); // Start as loading
 
@@ -18,6 +20,10 @@ const WaterLevelDashboard = () => {
   );
 
   const [waterLevelKreimbachKaulbach, setWaterLevelKreimbachKaulbach] = useState(
+    []
+  );
+
+  const [waterLevelWolfstein, setWaterLevelWolfstein] = useState(
     []
   );
 
@@ -36,6 +42,10 @@ const WaterLevelDashboard = () => {
         const responseKreimbachKaulbach = await axios.get(
           `${API_URL}water-level-data/?query_type=water_level_kreimbach_kaulbach`
         );
+
+        const responseWolfstein = await axios.get(
+          `${API_URL}water-level-data/?query_type=water_level_wolfstein`
+        );
   
         // Transform data for each dataset
         const transformedKreisverwaltung = responseKreisverwaltung.data.map((item) => ({
@@ -53,12 +63,18 @@ const WaterLevelDashboard = () => {
           value: item.water_level_value,
         }));
 
+        const transformedWolfstein = responseWolfstein.data.map((item) => ({
+          time: item.timestamp,
+          value: item.water_level_value,
+        }));
 
   
         // Set the individual state for each dataset
         setWaterLevelKreisverwaltung(transformedKreisverwaltung);
         setWaterLevelRutsweiler(transformedRutsweiler);
         setWaterLevelKreimbachKaulbach(transformedKreimbachKaulbach);
+        setWaterLevelWolfstein(transformedWolfstein);
+
   
       } catch (error) {
         console.error("Error fetching the water level data:", error);
@@ -88,8 +104,9 @@ const WaterLevelDashboard = () => {
       ) : (
         <React.Fragment>
           <WolfsteinSubpage
-            waterLevelKreisverwaltung={waterLevelKreisverwaltung}
+            waterLevelWolfstein={waterLevelWolfstein}
             waterLevelRutsweiler={waterLevelRutsweiler}
+            waterLevelKreimbach={waterLevelKreimbachKaulbach}
           />
 
           <KuselbachSubpage
