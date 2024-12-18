@@ -532,3 +532,18 @@ input:checked + .slider:before {
 
 
 /* END OF CHATBOT CONFIGURATION */
+
+
+.icon {
+  height: 100%; /* Set height to 100% to match the dropdown */
+  width: auto; /* Maintain aspect ratio */
+  max-height: 30px; /* Set a max height to control size */
+  margin-right: 8px; /* Space between the icon and the dropdown */
+
+}
+
+.custom-dropdown2 {
+  background-color: transparent!important;
+  border-color:  lightgray!important;
+  color:  lightgray!important;
+}

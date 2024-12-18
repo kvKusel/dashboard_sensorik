@@ -6,12 +6,27 @@ import Gauge from "../../DoughnutChart";
 import GaugeWaterLevel from "./GaugeChartWaterLevel";
 import { pegelWolfsteinGaugeChartConfig } from "../../../../../chartsConfig/chartsConfig";
 import MultiLineChart from "../../../../subcomponents/MultilineChart";
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+import time_icon from '../../../../../assets/time_icon_white.svg'; // Adjust the path as needed
 
 const WolfsteinSubpage = ({
   waterLevelWolfstein,
   waterLevelRutsweiler,
-  waterLevelKreimbach
+  waterLevelKreimbach,
+  currentPeriod,
+  onPeriodChange,
 }) => {
+
+    // Map for readable time period names
+    const timePeriodLabels = {
+      "24h": "Letzte 24 Stunden",
+      "7d": "Letzte 7 Tage",
+      "30d": "Letzte 30 Tage",
+      "365d": "Letzte 365 Tage",
+    };
+
+
   // function to format timestamps into desired format
   const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -36,6 +51,7 @@ const WolfsteinSubpage = ({
 
     const lastValueWolfstein =
     waterLevelWolfstein[waterLevelWolfstein.length - 1];
+
   
 
   //arc settings for the water level gauge chart component
@@ -190,7 +206,7 @@ const WolfsteinSubpage = ({
       {/* row with the line chart */}
 
       <div className="row " style={{ flex: "1 1 auto" }}>
-        <div className="col-xs-12 d-flex p-2">
+        <div className="col-xs-12 d-flex p-2 pb-0">
           <div
             className="chart-container"
             style={{
@@ -204,7 +220,56 @@ const WolfsteinSubpage = ({
               borderColor: "#5D7280",
             }}
           >
-            <MultiLineChart waterLevelRutsweiler={waterLevelRutsweiler} waterLevelKreimbach={ waterLevelKreimbach } waterLevelWolfstein = { waterLevelWolfstein }/>
+
+            <MultiLineChart waterLevelRutsweiler={waterLevelRutsweiler} waterLevelKreimbach={ waterLevelKreimbach } waterLevelWolfstein = { waterLevelWolfstein } currentPeriod={ currentPeriod }/>
+
+
+
+          </div>
+        </div>
+      </div>
+
+            {/* row with sliders for choosing time span */}
+
+            <div className="row" style={{ flex: "1 1 auto" }}>
+        <div className="col-xs-12 d-flex p-2 pt-0">
+          <div
+            className="chart-container d-flex pb-2"
+            style={{
+              flex: "1 1 auto",
+              borderRadius: "0px",
+              backgroundColor: "#5D7280",
+              borderStyle: "solid",
+              borderWidth: "1px",
+              borderColor: "#5D7280",
+            }}
+          >
+     <Dropdown className="pt-3 ps-2">
+        <Dropdown.Toggle
+          variant="danger"
+          id="dropdown-basic"
+          className="ps-1 d-flex align-items-center custom-dropdown2"
+        >
+          <img src={time_icon} alt="Time Icon" className="icon" />
+          {timePeriodLabels[currentPeriod] || "Zeitraum auswählen"}
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu>
+          <Dropdown.Item onClick={() => onPeriodChange("24h")}>
+            Letzte 24 Stunden
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => onPeriodChange("7d")}>
+            Letzte 7 Tage
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => onPeriodChange("30d")}>
+            Letzte 30 Tage
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => onPeriodChange("365d")}>
+            Letzte 365 Tage
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+
           </div>
         </div>
       </div>

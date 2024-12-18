@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -23,96 +23,118 @@ ChartJS.register(
   Legend
 );
 
-// creates a timestamp thats 23 hours earlier than current time - used to set the min boundary of x-axis
-const twentyFourHoursAgoTimestamp = Date.now() - 22 * 60 * 60 * 1000;
 
-const MultiLineChart = ({ waterLevelRutsweiler, waterLevelKreimbach, waterLevelWolfstein }) => {
- 
-
-  // Combine and sort all unique labels
-const allLabels = Array.from(
-  new Set([
-    ...waterLevelRutsweiler.map((item) => new Date(item.time).toISOString()),
-    ...waterLevelKreimbach.map((item) => new Date(item.time).toISOString()),
-    ...waterLevelWolfstein.map((item) => new Date(item.time).toISOString()),
-
-  ])
-).sort((a, b) => new Date(a) - new Date(b));
-
-// Helper function to fill missing values with the last known value
-const alignDataWithLastValue = (data, labels) => {
-  let lastValue = null;
-  return labels.map((label) => {
-    const dataPoint = data.find(
-      (item) => new Date(item.time).toISOString() === label
-    );
-    if (dataPoint) {
-      lastValue = dataPoint.value; // Update last known value
-    }
-    return lastValue; // Return last known value (even if unchanged)
-  });
+// Helper to calculate timestamp boundaries
+const calculateTimePeriodBoundary = (period) => {
+  const now = Date.now(); // Current time in milliseconds
+  switch (period) {
+    case "24h":
+      return now - 24 * 60 * 60 * 1000; // Last 24 hours
+    case "7d":
+      return now - 7 * 24 * 60 * 60 * 1000; // Last 7 days
+    case "30d":
+      return now - 30 * 24 * 60 * 60 * 1000; // Last 30 days
+    case "365d":
+      return now - 365 * 24 * 60 * 60 * 1000; // Last 365 days
+    default:
+      return now - 24 * 60 * 60 * 1000; // Default to 24 hours
+  }
 };
 
-// Align data for both datasets
-const alignedRutsweilerData = alignDataWithLastValue(
-  waterLevelRutsweiler,
-  allLabels
-);
+// Example of filtering data
+const filterDataByPeriod = (data, periodBoundary) => {
+  return data.filter((item) => new Date(item.time).getTime() >= periodBoundary);
+};
 
-const alignedKreimbachData = alignDataWithLastValue(
-  waterLevelKreimbach,
-  allLabels
-);
 
-const alignedWolfsteinData = alignDataWithLastValue(
-  waterLevelWolfstein,
-  allLabels
-);
+const MultiLineChart = ({ waterLevelRutsweiler, waterLevelKreimbach, waterLevelWolfstein, currentPeriod }) => {
+  // Helper to calculate timestamp boundaries
+  const calculateTimePeriodBoundary = (period) => {
+    const now = Date.now(); // Current time in milliseconds
+    console.log("current period: ", currentPeriod)
+    switch (period) {
+      case "24h":
+        return now - 24 * 60 * 60 * 1000; // Last 24 hours
+      case "7d":
+        return now - 7 * 24 * 60 * 60 * 1000; // Last 7 days
+      case "30d":
+        return now - 30 * 24 * 60 * 60 * 1000; // Last 30 days
+      case "365d":
+        return now - 365 * 24 * 60 * 60 * 1000; // Last 365 days
+      default:
+        return now - 24 * 60 * 60 * 1000; // Default to 24 hours
+    }
+  };
 
+  const periodBoundary = calculateTimePeriodBoundary(currentPeriod);
+
+  // Filter data by time period
+  const filterDataByPeriod = (data, periodBoundary) => {
+    return data.filter((item) => new Date(item.time).getTime() >= periodBoundary);
+  };
+
+  // Filter the data for each dataset
+  const filteredRutsweilerData = filterDataByPeriod(waterLevelRutsweiler, periodBoundary);
+  const filteredKreimbachData = filterDataByPeriod(waterLevelKreimbach, periodBoundary);
+  const filteredWolfsteinData = filterDataByPeriod(waterLevelWolfstein, periodBoundary);
+
+  // Combine and sort all unique labels for x-axis
+  const allLabels = Array.from(
+    new Set([
+      ...filteredRutsweilerData.map((item) => new Date(item.time).toISOString()),
+      ...filteredKreimbachData.map((item) => new Date(item.time).toISOString()),
+      ...filteredWolfsteinData.map((item) => new Date(item.time).toISOString()),
+    ])
+  ).sort((a, b) => new Date(a) - new Date(b));
+
+  // Align data with the labels (to handle missing values)
+  const alignDataWithLastValue = (data, labels) => {
+    let lastValue = null;
+    return labels.map((label) => {
+      const dataPoint = data.find((item) => new Date(item.time).toISOString() === label);
+      if (dataPoint) {
+        lastValue = dataPoint.value;
+      }
+      return lastValue;
+    });
+  };
+
+  // Align data for each filtered dataset
+  const alignedRutsweilerData = alignDataWithLastValue(filteredRutsweilerData, allLabels);
+  const alignedKreimbachData = alignDataWithLastValue(filteredKreimbachData, allLabels);
+  const alignedWolfsteinData = alignDataWithLastValue(filteredWolfsteinData, allLabels);
+
+  console.log("current labels: ", allLabels )
 
   // Chart data configuration
   const chartData = {
-    labels: allLabels.map((label) => new Date(label)), // Convert back to Date objects for better formatting if needed
+    labels: allLabels.map((label) => new Date(label)), // Convert back to Date objects
     datasets: [
       {
-        label: "Pegel Rutsweiler a.d. Lauter", // Dataset for waterLevelRutsweiler
+        label: "Pegel Rutsweiler a.d. Lauter",
         data: alignedRutsweilerData,
-        borderColor: "rgba(75, 192, 192, 1)", // Line color for Rutsweiler
-        backgroundColor: "rgba(75, 192, 192, 0.2)", // Fill color for Rutsweiler
-        yAxisID: "y",
+        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
       },
       {
-        label: "Pegel Wolfstein", // Placeholder dataset
+        label: "Pegel Wolfstein",
         data: alignedWolfsteinData,
-        borderColor: "rgba(255, 99, 132, 1)", // Line color for Wolfstein
-        backgroundColor: "rgba(255, 99, 132, 0.2)", // Fill color for Wolfstein
-        yAxisID: "y",
+        borderColor: "rgba(255, 99, 132, 1)",
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
       },
       {
         label: "Pegel Kreimbach-Kaulbach",
         data: alignedKreimbachData,
-        borderColor: "rgba(54, 162, 235, 1)", // Line color for Kreimbach-Kaulbach
-        backgroundColor: "rgba(54, 162, 235, 0.2)", // Fill color for Kreimbach-Kaulbach
-        yAxisID: "y",
+        borderColor: "rgba(54, 162, 235, 1)",
+        backgroundColor: "rgba(54, 162, 235, 0.2)",
       },
     ],
-  };
-
-  // Calculate the maximum y value dynamically
-  const calculateMaxY = () => {
-    const allData = chartData.datasets.flatMap((dataset) => dataset.data);
-    return Math.max(...allData) + 10; // Add buffer of 10
   };
 
   // Chart configuration options
   const options = {
     responsive: true,
     maintainAspectRatio: false,
-    interaction: {
-      mode: "index",
-      intersect: false,
-    },
-    stacked: false,
     plugins: {
       title: {
         display: true,
@@ -140,7 +162,7 @@ const alignedWolfsteinData = alignDataWithLastValue(
         title: {
           display: false,
           text: "Zeitstempel", // X-axis title
-          color: "lightgrey",
+          color: "lightgrey", // Title color
           font: {
             size: 16,
           },
@@ -148,19 +170,14 @@ const alignedWolfsteinData = alignDataWithLastValue(
         grid: {
           color: "lightgrey",
         },
-
         type: "timeseries",
-        offset: false,
-        min: new Date(twentyFourHoursAgoTimestamp),
+        min: new Date(periodBoundary),
         max: Date.now(),
         ticks: {
-          autoSkip: false,
-          callback: function (label, index, labels) {
+          color: "lightgrey", // Set tick label color to lightgrey
+          callback: function (label) {
             const parsedDate = new Date(label);
-            const formattedDate = format(parsedDate, "MMM d, HH:00").split(
-              ", "
-            );
-            return [formattedDate[0], formattedDate[1]];
+            return format(parsedDate, "MMM d, HH:00");
           },
           maxTicksLimit: 4,
           color: "lightgrey",
@@ -168,12 +185,13 @@ const alignedWolfsteinData = alignDataWithLastValue(
             size: 14,
           },
         },
+
       },
       y: {
         title: {
           display: true,
           text: "Wasserstand (cm)", // Y-axis title
-          color: "lightgrey",
+          color: "lightgrey", // Title color
           font: {
             size: 16,
           },
@@ -186,28 +204,11 @@ const alignedWolfsteinData = alignDataWithLastValue(
         },
         ticks: {
           maxTicksLimit: 4,
-          color: "lightgrey",
+          color: "lightgrey", // Set tick label color to lightgrey
           font: {
             size: 14,
           },
         },
-        type: "linear",
-        min: 0,
-        max: 300, // Dynamically calculated max
-        //max: calculateMaxY(), // Dynamically calculated max
-        display: true,
-        position: "left",
-      },
-      y1: {
-        grid: {
-          color: "lightgrey",
-          drawOnChartArea: false,
-        },
-        type: "linear",
-        min: 0,
-        max: calculateMaxY(), // Same max for secondary axis if needed
-        display: false,
-        position: "left",
       },
     },
   };

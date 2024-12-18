@@ -726,7 +726,6 @@ class AWSIotCore_Milesight_Sensors(View):
       
 #############################             water level data  - GET method    ###########################################
 
-
 class waterLevelDataView(View):
     def get(self, request, *args, **kwargs):
         try:
@@ -739,7 +738,6 @@ class waterLevelDataView(View):
                 "water_level_rutsweiler": "6749D19385550035",
                 "water_level_kreimbach_kaulbach": "6749D19427550061",
                 "water_level_wolfstein": "6749D19422850054",
-
             }
 
             device_id = device_ids.get(query_type)
@@ -751,25 +749,35 @@ class waterLevelDataView(View):
             except Device.DoesNotExist:
                 return JsonResponse({"error": "Device not found"}, status=404)
 
-            readings = waterLevelReading.objects.filter(device=device).order_by('timestamp')
+            # Get the time range from the request
+            time_range = request.GET.get("time_range", "24h")  # Default to '24h'
+            now = timezone.now()
+
+            # Calculate the time boundary
+            if time_range == "24h":
+                time_boundary = now - timezone.timedelta(hours=24)
+            elif time_range == "7d":
+                time_boundary = now - timezone.timedelta(days=7)
+            elif time_range == "30d":
+                time_boundary = now - timezone.timedelta(days=30)
+            elif time_range == "365d":
+                time_boundary = now - timezone.timedelta(days=365)
+            else:
+                time_boundary = now - timezone.timedelta(hours=24)  # Default to '24h' if invalid
+
+            # Filter readings by timestamp
+            readings = waterLevelReading.objects.filter(device=device, timestamp__gte=time_boundary).order_by('timestamp')
 
             if readings.exists():
                 response_data = list(readings.values('timestamp', 'water_level_value'))
                 logger.info(f"Response data: {response_data}")
-
                 return JsonResponse(response_data, safe=False)
             else:
-                return JsonResponse({"error": "Query result is empty"}, status=404)
+                return JsonResponse({"message": "No data available for the selected time period."}, status=204)
 
         except Exception as e:
             logger.error(f"Error in water level data: {str(e)}")
             return JsonResponse({"error": str(e)}, status=500)
-        
-        
-        
-
-        
-        
         
         
 #############################             weather station data Siebenpfeiffer Gymnasium        ###########################################
