@@ -12,6 +12,7 @@ import {
 } from "chart.js";
 import { Weight } from "lucide-react";
 import { format } from "date-fns";
+import { bounds } from "leaflet";
 
 ChartJS.register(
   CategoryScale,
@@ -23,115 +24,56 @@ ChartJS.register(
   Legend
 );
 
-
-// Helper to calculate timestamp boundaries
-const calculateTimePeriodBoundary = (period) => {
-  const now = Date.now(); // Current time in milliseconds
-  switch (period) {
-    case "24h":
-      return now - 24 * 60 * 60 * 1000; // Last 24 hours
-    case "7d":
-      return now - 7 * 24 * 60 * 60 * 1000; // Last 7 days
-    case "30d":
-      return now - 30 * 24 * 60 * 60 * 1000; // Last 30 days
-    case "365d":
-      return now - 365 * 24 * 60 * 60 * 1000; // Last 365 days
-    default:
-      return now - 24 * 60 * 60 * 1000; // Default to 24 hours
-  }
-};
-
-// Example of filtering data
-const filterDataByPeriod = (data, periodBoundary) => {
-  return data.filter((item) => new Date(item.time).getTime() >= periodBoundary);
-};
-
-
 const MultiLineChart = ({ waterLevelRutsweiler, waterLevelKreimbach, waterLevelWolfstein, currentPeriod }) => {
-  // Helper to calculate timestamp boundaries
   const calculateTimePeriodBoundary = (period) => {
-    const now = Date.now(); // Current time in milliseconds
-    console.log("current period: ", currentPeriod)
+    const now = Date.now();
     switch (period) {
       case "24h":
-        return now - 24 * 60 * 60 * 1000; // Last 24 hours
+        return now - 24 * 60 * 60 * 1000;
       case "7d":
-        return now - 7 * 24 * 60 * 60 * 1000; // Last 7 days
+        return now - 7 * 24 * 60 * 60 * 1000;
       case "30d":
-        return now - 30 * 24 * 60 * 60 * 1000; // Last 30 days
+        return now - 30 * 24 * 60 * 60 * 1000;
       case "365d":
-        return now - 365 * 24 * 60 * 60 * 1000; // Last 365 days
+        return now - 365 * 24 * 60 * 60 * 1000;
       default:
-        return now - 24 * 60 * 60 * 1000; // Default to 24 hours
+        return now - 24 * 60 * 60 * 1000;
     }
   };
 
   const periodBoundary = calculateTimePeriodBoundary(currentPeriod);
 
-  // Filter data by time period
-  const filterDataByPeriod = (data, periodBoundary) => {
-    return data.filter((item) => new Date(item.time).getTime() >= periodBoundary);
+  // Create datasets with actual timestamps
+  const createDataset = (data) => {
+    return data.map(item => ({
+      x: new Date(item.time).getTime(),
+      y: item.value
+    }));
   };
 
-  // Filter the data for each dataset
-  const filteredRutsweilerData = filterDataByPeriod(waterLevelRutsweiler, periodBoundary);
-  const filteredKreimbachData = filterDataByPeriod(waterLevelKreimbach, periodBoundary);
-  const filteredWolfsteinData = filterDataByPeriod(waterLevelWolfstein, periodBoundary);
-
-  // Combine and sort all unique labels for x-axis
-  const allLabels = Array.from(
-    new Set([
-      ...filteredRutsweilerData.map((item) => new Date(item.time).toISOString()),
-      ...filteredKreimbachData.map((item) => new Date(item.time).toISOString()),
-      ...filteredWolfsteinData.map((item) => new Date(item.time).toISOString()),
-    ])
-  ).sort((a, b) => new Date(a) - new Date(b));
-
-  // Align data with the labels (to handle missing values)
-  const alignDataWithLastValue = (data, labels) => {
-    let lastValue = null;
-    return labels.map((label) => {
-      const dataPoint = data.find((item) => new Date(item.time).toISOString() === label);
-      if (dataPoint) {
-        lastValue = dataPoint.value;
-      }
-      return lastValue;
-    });
-  };
-
-  // Align data for each filtered dataset
-  const alignedRutsweilerData = alignDataWithLastValue(filteredRutsweilerData, allLabels);
-  const alignedKreimbachData = alignDataWithLastValue(filteredKreimbachData, allLabels);
-  const alignedWolfsteinData = alignDataWithLastValue(filteredWolfsteinData, allLabels);
-
-  console.log("current labels: ", allLabels )
-
-  // Chart data configuration
   const chartData = {
-    labels: allLabels.map((label) => new Date(label)), // Convert back to Date objects
     datasets: [
       {
         label: "Pegel Rutsweiler a.d. Lauter",
-        data: alignedRutsweilerData,
+        data: createDataset(waterLevelRutsweiler),
         borderColor: "rgba(75, 192, 192, 1)",
         backgroundColor: "rgba(75, 192, 192, 0.2)",
       },
       {
         label: "Pegel Wolfstein",
-        data: alignedWolfsteinData,
+        data: createDataset(waterLevelWolfstein),
         borderColor: "rgba(255, 99, 132, 1)",
         backgroundColor: "rgba(255, 99, 132, 0.2)",
       },
       {
         label: "Pegel Kreimbach-Kaulbach",
-        data: alignedKreimbachData,
+        data: createDataset(waterLevelKreimbach),
         borderColor: "rgba(54, 162, 235, 1)",
         backgroundColor: "rgba(54, 162, 235, 0.2)",
       },
     ],
   };
 
-  // Chart configuration options
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -159,39 +101,42 @@ const MultiLineChart = ({ waterLevelRutsweiler, waterLevelKreimbach, waterLevelW
     },
     scales: {
       x: {
-        title: {
-          display: false,
-          text: "Zeitstempel", // X-axis title
-          color: "lightgrey", // Title color
-          font: {
-            size: 16,
+        type: 'timeseries',
+        time: {
+          unit: currentPeriod === "24h" ? 'hour' : 'day',
+          displayFormats: {
+            hour: 'MMM d, HH:00',
+            day: 'MMM d'
           },
+          //round: 'hour', // Round time intervals
+
         },
+        min: periodBoundary,
+        max: Date.now(),
         grid: {
           color: "lightgrey",
+          
         },
-        type: "timeseries",
-        min: new Date(periodBoundary),
-        max: Date.now(),
         ticks: {
-          color: "lightgrey", // Set tick label color to lightgrey
-          callback: function (label) {
-            const parsedDate = new Date(label);
-            return format(parsedDate, "MMM d, HH:00");
-          },
-          maxTicksLimit: 4,
           color: "lightgrey",
+          maxTicksLimit: 4,
           font: {
             size: 14,
           },
+          callback: function (label, index, labels) {
+            const parsedDate = new Date(label);
+            const formattedDate = format(parsedDate, "MMM d");
+            const secondLine =
+              currentPeriod === "24h" ? format(parsedDate, "HH:00") : format(parsedDate, "yyyy");
+            return [formattedDate, secondLine];
+          },
         },
-
       },
       y: {
         title: {
           display: true,
-          text: "Wasserstand (cm)", // Y-axis title
-          color: "lightgrey", // Title color
+          text: "Wasserstand (cm)",
+          color: "lightgrey",
           font: {
             size: 16,
           },
@@ -201,10 +146,11 @@ const MultiLineChart = ({ waterLevelRutsweiler, waterLevelKreimbach, waterLevelW
         },
         grid: {
           color: "lightgrey",
+
         },
         ticks: {
           maxTicksLimit: 4,
-          color: "lightgrey", // Set tick label color to lightgrey
+          color: "lightgrey",
           font: {
             size: 14,
           },

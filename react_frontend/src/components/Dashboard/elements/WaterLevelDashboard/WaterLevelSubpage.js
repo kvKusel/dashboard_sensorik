@@ -13,7 +13,7 @@ const WaterLevelDashboard = () => {
   const [waterLevelRutsweiler, setWaterLevelRutsweiler] = useState([]);
   const [waterLevelKreimbachKaulbach, setWaterLevelKreimbachKaulbach] = useState([]);
   const [waterLevelWolfstein, setWaterLevelWolfstein] = useState([]);
-  const [timePeriod, setTimePeriod] = useState("30d");
+  const [timePeriod, setTimePeriod] = useState("24h");
 
   const fetchData = async (timeRange) => {
     try {
@@ -33,7 +33,6 @@ const WaterLevelDashboard = () => {
         `${API_URL}water-level-data/?query_type=water_level_wolfstein${queryParam}`
       );
 
-      console.log("response kv: ", responseKreisverwaltung.data)
 
 
       // Transform data for each dataset
