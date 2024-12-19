@@ -58,18 +58,24 @@ const MultiLineChart = ({ waterLevelRutsweiler, waterLevelKreimbach, waterLevelW
         data: createDataset(waterLevelRutsweiler),
         borderColor: "rgba(75, 192, 192, 1)",
         backgroundColor: "rgba(75, 192, 192, 0.2)",
+        tension: 0.2, // Adjust this value for more or less smoothing
+
       },
       {
         label: "Pegel Wolfstein",
         data: createDataset(waterLevelWolfstein),
         borderColor: "rgba(255, 99, 132, 1)",
         backgroundColor: "rgba(255, 99, 132, 0.2)",
+        tension: 0.2, // Adjust this value for more or less smoothing
+
       },
       {
         label: "Pegel Kreimbach-Kaulbach",
         data: createDataset(waterLevelKreimbach),
         borderColor: "rgba(54, 162, 235, 1)",
         backgroundColor: "rgba(54, 162, 235, 0.2)",
+        tension: 0.2, // Adjust this value for more or less smoothing
+
       },
     ],
   };
