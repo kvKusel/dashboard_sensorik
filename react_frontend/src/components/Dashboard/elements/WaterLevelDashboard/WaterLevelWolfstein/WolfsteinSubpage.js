@@ -1,5 +1,5 @@
 import React from "react";
-import PegelWolfsteinMap from "./WaterLevelMapWolfstein";
+import PegelWolfsteinMap from "./WaterLevelWolfsteinMap/WaterLevelMapWolfstein";
 import LineChart from "../../LineChart";
 import { waterLevelConfigWolfstein } from "../../../../../chartsConfig/chartsConfig";
 import Gauge from "../../DoughnutChart";

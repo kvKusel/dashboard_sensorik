@@ -96,9 +96,9 @@ const WaterLevelDashboard = () => {
             onPeriodChange={handleTimePeriodChange}
           />
 
-          <KuselbachSubpage
+          {/* <KuselbachSubpage
             waterLevelKreisverwaltung={waterLevelKreisverwaltung}
-          />
+          /> */}
         </React.Fragment>
       )}
     </div>
