@@ -32,7 +32,7 @@ const PegelWolfsteinMap = () => {
 
 
 
-  const tileLayerUrl = "https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}.png";
+  const tileLayerUrl = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 
   return (
     <MapContainer
