@@ -7,13 +7,75 @@ import { toZonedTime } from 'date-fns-tz';
 import axios from 'axios'; 
 
 
-// Register the necessary components
-ChartJS.register(TimeScale, LinearScale, BarElement, Title, Tooltip, Legend);
-
 
 const API_URL = process.env.REACT_APP_API_URL.endsWith('/')
   ? process.env.REACT_APP_API_URL
   : `${process.env.REACT_APP_API_URL}/`;
+
+
+// Define the custom plugin before registering it
+const noPrecipitationPlugin = {
+    id: 'noPrecipitationPlugin',
+    beforeDraw: (chart) => {
+        const {
+            ctx,
+            chartArea: { top, right, bottom, left, width, height },
+            scales: { x, y },
+        } = chart;
+
+        // Ensure chart.data is defined
+        if (!chart.data || !chart.data.datasets || !chart.data.datasets[0]) {
+            return;  // Early exit if data is not ready
+        }
+
+        const maxValue = Math.max(...chart.data.datasets[0].data);
+
+        // Check if the maximum value is 0
+        if (maxValue === 0) {
+            ctx.save();
+
+            const text = "kein Niederschlag im dargestellten Zeitraum!";
+            const maxWidth = width - 20;
+            const lineHeight = 20;
+            const xCenter = left + (right - left) / 2;
+            const yCenter = top + (bottom - top) / 2;
+
+            ctx.font = "bold 1rem Poppins , sans-serif";
+            ctx.fillStyle = "lightgrey";
+            ctx.textAlign = "center";
+
+            // Function to wrap text
+            function wrapText(text, x, y, maxWidth, lineHeight) {
+                const words = text.split(" ");
+                let line = "";
+                let yPosition = y;
+
+                for (let word of words) {
+                    const testLine = line + word + " ";
+                    const metrics = ctx.measureText(testLine);
+                    const testWidth = metrics.width;
+                    if (testWidth > maxWidth && line !== "") {
+                        ctx.fillText(line, x, yPosition);
+                        line = word + " ";
+                        yPosition += lineHeight;
+                    } else {
+                        line = testLine;
+                    }
+                }
+                ctx.fillText(line, x, yPosition);
+            }
+
+            // Call wrapText function to draw the text
+            wrapText(text, xCenter, yCenter, maxWidth, lineHeight);
+
+            ctx.restore();
+        }
+    },
+};
+
+// Now register the necessary components and the plugin
+ChartJS.register(TimeScale, LinearScale, BarElement, Title, Tooltip, Legend, noPrecipitationPlugin);
+
 
 
 
@@ -137,6 +199,8 @@ const WolfsteinForecastBarChart = () => {
             legend: {
                 display: false,
             },
+            noPrecipitationPlugin: true
+
         },
     };
 

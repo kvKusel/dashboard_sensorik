@@ -676,6 +676,10 @@ class AWSIotCore_Milesight_Sensors(View):
                 # Extract and clean the water level value and battery
                 water_level_str = payload[field_mapping['water_level']]
                 battery_value = payload[field_mapping['battery']]
+                
+                # If water level is greater than 6000, set it to 190
+                if int(water_level_str) > 6000:
+                    water_level_str = '190'
 
                 # Remove non-numeric characters (except for '.' and '-')
                 #water_level_str_clean = ''.join(c for c in water_level_str if c.isdigit() or c in ['.', '-'])

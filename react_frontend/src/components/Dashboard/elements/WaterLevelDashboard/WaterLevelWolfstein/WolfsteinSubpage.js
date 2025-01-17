@@ -115,7 +115,7 @@ const WolfsteinSubpage = ({
           }}
         >
           <h2 className="fw-bold my-2" style={{ color: "lightgray" }}>
-            Pegelmesssystem Wolfstein (System im Aufbau)
+            Pegelmesssystem Wolfstein
           </h2>
         </div>
       </div>
