@@ -9,6 +9,8 @@ import MultiLineChart from "../../../../subcomponents/MultilineChart";
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 import time_icon from '../../../../../assets/time_icon_white.svg'; // Adjust the path as needed
+import WolfsteinForecastBarChart from "./WolfsteinPrecipitationForecastBarChart";
+import WolfsteinHistoricalBarChart from "./WolfsteinPrecipitationHistoricalBarChart";
 
 const WolfsteinSubpage = ({
   waterLevelWolfstein,
@@ -16,6 +18,9 @@ const WolfsteinSubpage = ({
   waterLevelKreimbach,
   currentPeriod,
   onPeriodChange,
+  historicalPrecipitationWolfstein,
+  onPeriodChangeHistoricalPrecipitation,
+  currentPeriodHistoricalPrecipitation
 }) => {
 
     // Map for readable time period names
@@ -274,7 +279,110 @@ const WolfsteinSubpage = ({
         </div>
       </div>
 
+
+ {/* row with the bar chart showing the past precipitation  */}
+
+ <div className="row " style={{ flex: "1 1 auto" }}>
+        <div className="col-xs-12 d-flex p-2 pb-0">
+          <div
+            className="chart-container"
+            style={{
+              flex: "1 1 auto",
+              minHeight: "40vh",
+              // maxHeight: "60vh",
+              borderRadius: "0px",
+              backgroundColor: "#5D7280",
+              borderStyle: "solid",
+              borderWidth: "1px",
+              borderColor: "#5D7280",
+            }}
+          >
+
+< WolfsteinHistoricalBarChart currentPeriodHistoricalPrecipitation={currentPeriodHistoricalPrecipitation} historicalPrecipitationWolfstein={historicalPrecipitationWolfstein}/>
+
+
+
+          </div>
+        </div>
+      </div>
+
+            {/* row with sliders for choosing time span */}
+
+            <div className="row" style={{ flex: "1 1 auto" }}>
+        <div className="col-xs-12 d-flex p-2 pt-0">
+          <div
+            className="chart-container d-flex pb-2"
+            style={{
+              flex: "1 1 auto",
+              borderRadius: "0px",
+              backgroundColor: "#5D7280",
+              borderStyle: "solid",
+              borderWidth: "1px",
+              borderColor: "#5D7280",
+            }}
+          >
+     <Dropdown className="pt-3 ps-2">
+        <Dropdown.Toggle
+          variant="danger"
+          id="dropdown-basic"
+          className="ps-1 d-flex align-items-center custom-dropdown2"
+        >
+          <img src={time_icon} alt="Time Icon" className="icon" />
+          {timePeriodLabels[currentPeriodHistoricalPrecipitation] || "Zeitraum auswählen"}
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu>
+          <Dropdown.Item onClick={() => onPeriodChangeHistoricalPrecipitation("24h")}>
+            Letzte 24 Stunden
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => onPeriodChangeHistoricalPrecipitation("7d")}>
+            Letzte 7 Tage
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => onPeriodChangeHistoricalPrecipitation("30d")}>
+            Letzte 30 Tage
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => onPeriodChangeHistoricalPrecipitation("365d")}>
+            Letzte 365 Tage
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+
+          </div>
+        </div>
+      </div>
+
+
+       {/* row with the bar chart for the 5 day forecast */}
+
+       <div className="row " style={{ flex: "1 1 auto" }}>
+        <div className="col-xs-12 d-flex p-2 pb-0">
+          <div
+            className="chart-container"
+            style={{
+              flex: "1 1 auto",
+              minHeight: "40vh",
+              maxHeight: "60vh",
+              borderRadius: "0px",
+              backgroundColor: "#5D7280",
+              borderStyle: "solid",
+              borderWidth: "1px",
+              borderColor: "#5D7280",
+            }}
+          >
+
+< WolfsteinForecastBarChart />
+
+
+          </div>
+        </div>
+      </div>
+
+
+
       {/* row with the picture of the sensor and the map */}
+
+
+
 
       <div className="row mt-3" style={{ flex: "1 1 auto" }}>
         <div

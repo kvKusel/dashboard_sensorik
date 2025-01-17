@@ -8,6 +8,7 @@ import { Navbar, Nav, NavDropdown, Button, Dropdown } from 'react-bootstrap';
 import HochbeetSubpage from "./elements/HochbeetDashboard/HochbeetSubpage";
 import WaterLevelSubpage from "./elements/WaterLevelDashboard/WaterLevelSubpage";
 import axios from "axios";
+import EtschbergDashboard from "./elements/EtschbergTreeDashboard/EtschbergMainPage";
 
 const API_URL = process.env.REACT_APP_API_URL; // This will switch based on the environment - dev env will point to local Django, prod env to the proper domain
 
@@ -315,6 +316,9 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
               <TreeMonitoringSubpage
        
               />
+              // <EtschbergDashboard
+       
+              // />
             ) : activeTab === "Wetter" ? (
               <WeatherSubpage  /> ) : activeTab === "Hochbeet" ? (
                 <HochbeetSubpage  />

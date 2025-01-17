@@ -93,3 +93,24 @@ class waterLevelReading(models.Model):
 
     class Meta:
         ordering = ['-timestamp']
+        
+class ForecastedPrecipitation(models.Model):
+    timestamp = models.BigIntegerField()  # UNIX timestamp
+    precipitation = models.FloatField(default=0)  # Default to 0 if no data available
+
+    class Meta:
+        ordering = ['timestamp']
+
+    def __str__(self):
+        return f"Timestamp: {self.timestamp}, Precipitation: {self.precipitation}"
+    
+    
+class HistoricalPrecipitation(models.Model):
+    timestamp = models.BigIntegerField()  # UNIX timestamp
+    precipitation = models.FloatField(default=0)  # Default to 0 if no data available
+
+    class Meta:
+        ordering = ['timestamp']
+
+    def __str__(self):
+        return f"Timestamp: {self.timestamp}, Precipitation: {self.precipitation}"
