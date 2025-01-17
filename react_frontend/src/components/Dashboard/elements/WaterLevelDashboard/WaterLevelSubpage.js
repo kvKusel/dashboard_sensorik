@@ -17,8 +17,8 @@ const WaterLevelDashboard = () => {
   const [waterLevelWolfstein, setWaterLevelWolfstein] = useState([]);
   const [precipitationWolfsteinHistorical, setPrecipitationWolfsteinHistorical] = useState([]);
 
-  const [timePeriod, setTimePeriod] = useState("30d");
-  const [timePeriodHistoricalPrecipitation, setTimePeriodHistoricalPrecipitation] = useState("30d");
+  const [timePeriod, setTimePeriod] = useState("24h");
+  const [timePeriodHistoricalPrecipitation, setTimePeriodHistoricalPrecipitation] = useState("24h");
 
   const fetchAllData = async () => {
     try {

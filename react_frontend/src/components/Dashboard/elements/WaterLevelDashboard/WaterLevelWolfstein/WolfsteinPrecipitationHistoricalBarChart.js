@@ -45,14 +45,13 @@ const WolfsteinHistoricalBarChart = ({ currentPeriodHistoricalPrecipitation, his
             x: {
                 type: 'time', // Use time scale
                 time: {
-                    unit: currentPeriodHistoricalPrecipitation === '24h' ? 'hour' : 
-                          (currentPeriodHistoricalPrecipitation === '7d' || currentPeriodHistoricalPrecipitation === '30d') ? 'day' : 
-                          'month', // Adjust time unit based on the selected period
+                    unit: currentPeriodHistoricalPrecipitation === '24h' ? 'hour' : 'day',
                     tooltipFormat: 'yyyy-MM-dd HH:mm', // Tooltip format
                     displayFormats: {
-                        hour: 'yyyy-MM-dd HH:mm', // Format for x-axis labels for hours
-                        day: 'yyyy-MM-dd', // Format for x-axis labels for days
-                        month: 'yyyy-MM', // Format for x-axis labels for months
+                        displayFormats: {
+                            hour: 'MMM d, HH:00',
+                            day: 'MMM d'
+                          },
                     },
                 },
             grid: {
@@ -76,6 +75,13 @@ const WolfsteinHistoricalBarChart = ({ currentPeriodHistoricalPrecipitation, his
                 font: {
                     size: 14,
                 },
+                          callback: function (label, index, labels) {
+                            const parsedDate = new Date(label);
+                            const formattedDate = format(parsedDate, "MMM d");
+                            const secondLine =
+                              currentPeriodHistoricalPrecipitation === "24h" ? format(parsedDate, "HH:00") : format(parsedDate, "yyyy");
+                            return [formattedDate, secondLine];
+                          },
             },
         },
             y: {

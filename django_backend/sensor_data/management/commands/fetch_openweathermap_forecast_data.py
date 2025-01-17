@@ -1,8 +1,24 @@
+#!/home/scdash/.virtualenvs/venv/bin/python
+
 import os
-import requests
-from django.core.management.base import BaseCommand
-from django.utils import timezone
+import sys
+import django
+
+# Add the path to the Django project
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+sys.path.append(BASE_DIR)
+
+# Set the environment variable for Django settings
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_backend.settings.production')
+
+# Set up Django
+django.setup()
+
+# Now import your models and other Django components
 from sensor_data.models import ForecastedPrecipitation, HistoricalPrecipitation
+from django.core.management.base import BaseCommand
+import requests
+from django.utils import timezone
 from django.utils.timezone import now
 
 

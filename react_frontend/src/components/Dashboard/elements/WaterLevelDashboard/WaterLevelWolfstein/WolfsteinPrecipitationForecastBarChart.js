@@ -46,6 +46,7 @@ const WolfsteinForecastBarChart = () => {
                             backgroundColor: 'rgba(75, 192, 192, 1)',
                             borderColor: 'rgba(75, 192, 192, 1)',
                             borderWidth: 1,
+                            
                         },
                     ],
                 });
@@ -66,8 +67,7 @@ const WolfsteinForecastBarChart = () => {
                 unit: 'day', // Show each day on the x-axis
                 tooltipFormat: 'yyyy-MM-dd HH:mm', // Tooltip format
                 displayFormats: {
-                    day: 'yyyy-MM-dd', // Format for x-axis labels
-                },
+                    day: 'MMM d'                },
             },
             grid: {
               offset: false,
@@ -80,6 +80,7 @@ const WolfsteinForecastBarChart = () => {
                 tickMarkLength: 5, // Adjust grid line length for ticks
                 offsetGridLines: false, // Don't offset grid lines
             },
+            
             ticks: {
 
               stepSize: 1, // Ensure one tick per day
@@ -89,12 +90,19 @@ const WolfsteinForecastBarChart = () => {
                 font: {
                     size: 14,
                 },
+                          callback: function (label, index, labels) {
+                            const parsedDate = new Date(label);
+                            const formattedDate = format(parsedDate, "MMM d");
+                            const secondLine = format(parsedDate, "yyyy");
+                            return [formattedDate, secondLine];
+                          },
             },
         },
             y: {
                 beginAtZero: true,
                 grid: {
                     color: 'lightgrey',
+                    
                 },
                 ticks: {
                     maxTicksLimit: 4,
