@@ -62,17 +62,17 @@ const WolfsteinSubpage = ({
   //arc settings for the water level gauge chart component
   const arcs = [
     {
-      limit: 60,
+      limit: 200,
       color: "#00DFA2",
       showTick: true,
     },
     {
-      limit: 80,
+      limit: 250,
       color: "#F6FA70",
       showTick: true,
     },
     {
-      limit: 100,
+      limit: 300,
       color: "#FF0060",
       showTick: true,
     },
@@ -81,7 +81,7 @@ const WolfsteinSubpage = ({
 
   const arcsRutsweiler = [
     {
-      limit: 100,
+      limit: 200,
       color: "#00DFA2",
       showTick: true,
     },
