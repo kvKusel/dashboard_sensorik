@@ -58,7 +58,7 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
     };
 
   
-  const [activeTab, setActiveTab] = useState("Baummonitoring");
+  const [activeTab, setActiveTab] = useState("Pegelmonitoring");
 
   const [navbarExpanded, setNavbarExpanded] = useState(false);
 
@@ -191,10 +191,10 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
     </Dropdown.Toggle>
 
     <Dropdown.Menu>
+    <Dropdown.Item eventKey="Pegelmonitoring">Pegelmonitoring</Dropdown.Item>
       <Dropdown.Item eventKey="Baummonitoring">Baummonitoring</Dropdown.Item>
       <Dropdown.Item eventKey="Wetter">Wetter</Dropdown.Item>
       <Dropdown.Item eventKey="Hochbeet">Hochbeet-Projekt</Dropdown.Item>
-      <Dropdown.Item eventKey="Pegelmonitoring">Pegelmonitoring</Dropdown.Item>
 
     </Dropdown.Menu>
   </Dropdown>

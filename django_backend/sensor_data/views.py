@@ -562,8 +562,8 @@ class TTNWebhookView(View):
 # Device location mapping, change later to proper locations!
 DEVICE_LOCATIONS = {
     "6749D19385550035": "an der Messstelle 'Rutsweiler a.d. Lauter'",
-    "6749D19422850054": "an der Messstelle 'Wolfstein'",
-    "6749D19427550061": "an der Messstelle 'Kreimbach-Kaulbach'",
+    "6749D19427550061": "an der Messstelle 'Wolfstein'",
+    "6749D19422850054": "an der Messstelle 'Kreimbach-Kaulbach'",
 
 }
 
@@ -640,6 +640,12 @@ ALLOWED_DEVICE_IDS_AWS = {
 }
 }
 
+# Define the fixed sensor-to-bottom distances for each device
+SENSOR_TO_BOTTOM_DISTANCES = {
+    "6749D19422850054": 336,
+    "6749D19385550035": 355,
+    "6749D19427550061": 355
+}
 
 @method_decorator(csrf_exempt, name='dispatch')
 class AWSIotCore_Milesight_Sensors(View):
@@ -676,41 +682,43 @@ class AWSIotCore_Milesight_Sensors(View):
                 # Extract and clean the water level value and battery
                 water_level_str = payload[field_mapping['water_level']]
                 battery_value = payload[field_mapping['battery']]
-                
-                # If water level is greater than 6000, set it to 190
-                if int(water_level_str) > 6000:
-                    water_level_str = '190'
 
-                # Remove non-numeric characters (except for '.' and '-')
-                #water_level_str_clean = ''.join(c for c in water_level_str if c.isdigit() or c in ['.', '-'])
+                try:
+                    # Convert water level string to float
+                    sensor_to_water_level = float(water_level_str)
 
-                # Convert to float and convert mm to cm
-                # try:
-                #     water_level_mm = float(water_level_str_clean)
-                #     water_level_cm = water_level_mm / 10
-                # except ValueError:
-                #     logger.error(f"Invalid water level value: {water_level_str} in payload: {payload}")
-                #     return JsonResponse({'status': 'error', 'message': f"Invalid water level value: {water_level_str}"}, status=400)
+                    # Get the fixed sensor-to-bottom distance
+                    sensor_to_bottom = SENSOR_TO_BOTTOM_DISTANCES.get(device_id)
+
+                    if sensor_to_bottom is None:
+                        logger.error(f"Unknown sensor-to-bottom distance for device {device_id}")
+                        return JsonResponse({'status': 'error', 'message': 'Unknown sensor calibration'}, status=400)
+
+                    # Calculate actual water level and ensure it's a whole number
+                    actual_water_level = int(round(sensor_to_bottom - sensor_to_water_level))
+
+                except ValueError:
+                    logger.error(f"Invalid water level value: {water_level_str} in payload: {payload}")
+                    return JsonResponse({'status': 'error', 'message': f"Invalid water level value: {water_level_str}"}, status=400)
 
                 water_level_data = {
                     'device': device,
                     'timestamp': timezone.now(),  # Use timezone-aware datetime
-                    'water_level_value': water_level_str
+                    'water_level_value': actual_water_level  # Store the calculated whole number water level
                 }
+
                 if battery_value is not None:
                     water_level_data['battery'] = battery_value
-                
+
                 waterLevelReading.objects.create(**water_level_data)
 
                 # Trigger email alert if water level is below threshold
-                if int(water_level_str) < 150:
-                    timestamp = timezone.now()
-                    send_alert_email(device_id, timestamp, water_level_str)
-                    logger.info(f"Email alert sent for device {device_id} with water level {water_level_str} cm.")
+                # if int(water_level_str) < 150:
+                #     timestamp = timezone.now()
+                #     send_alert_email(device_id, timestamp, water_level_str)
+                #     logger.info(f"Email alert sent for device {device_id} with water level {water_level_str} cm.")
 
-
-                logger.info(f"Successfully created waterLevelReading entry for device {device_id}")
-
+                logger.info(f"Successfully created waterLevelReading entry for device {device_id} with actual water level {actual_water_level} cm.")
 
             return JsonResponse({'status': 'success'})
 
@@ -723,8 +731,6 @@ class AWSIotCore_Milesight_Sensors(View):
         except Exception as e:
             logger.exception("Error processing webhook data")
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
-        
-        
 
         
       
@@ -740,8 +746,8 @@ class waterLevelDataView(View):
             device_ids = {
                 "water_level_kv": "eui-a8404169c187e059-water-lvl-kv",
                 "water_level_rutsweiler": "6749D19385550035",
-                "water_level_kreimbach_kaulbach": "6749D19427550061",
-                "water_level_wolfstein": "6749D19422850054",
+                "water_level_kreimbach_kaulbach": "6749D19422850054",
+                "water_level_wolfstein": "6749D19427550061",
             }
 
             device_id = device_ids.get(query_type)
