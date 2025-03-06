@@ -10,14 +10,18 @@ const SensorTable = ({
   lastValueRutsweiler,
   lastValueWolfstein,
 }) => {
+
+  
+
+  
   const data = [
-    { name: "Wolfstein", queryType: "lastValueWolfstein", value: Number(lastValueWolfstein.value) },
-    { name: "Rutsweiler a.d. Lauter", queryType: "lastValueRutsweiler", value: Number(lastValueRutsweiler.value) },
-    { name: "Kreimbach 1", queryType: "lastValueKreimbach1", value: Number(lastValueKreimbach1.value) },
-    { name: "Kreimbach 3", queryType: "lastValueKreimbach3", value: Number(lastValueKreimbach3.value) },
-    { name: "Kreimbach 4", queryType: "lastValueKreimbach4", value: Number(lastValueKreimbach4.value) },
-    { name: "Lauterecken", queryType: "lastValueLauterecken1", value: Number(lastValueLauterecken1.value) },
-    { name: "Kusel", queryType: "lastValueKreisverwaltung", value: Number(lastValueKreisverwaltung.value) },
+    { name: "Wolfstein", queryType: "lastValueWolfstein", value: lastValueWolfstein?.value ? Number(lastValueWolfstein.value) : 0 },
+    { name: "Rutsweiler a.d. Lauter", queryType: "lastValueRutsweiler", value: lastValueRutsweiler?.value ? Number(lastValueRutsweiler.value) : 0 },
+    { name: "Kreimbach 1", queryType: "lastValueKreimbach1", value: lastValueKreimbach1?.value ? Number(lastValueKreimbach1.value) : 0 },
+    { name: "Kreimbach 3", queryType: "lastValueKreimbach3", value: lastValueKreimbach3?.value ? Number(lastValueKreimbach3.value) : 0 },
+    { name: "Kreimbach 4", queryType: "lastValueKreimbach4", value: lastValueKreimbach4?.value ? Number(lastValueKreimbach4.value) : 0 },
+    { name: "Lauterecken", queryType: "lastValueLauterecken1", value: lastValueLauterecken1?.value ? Number(lastValueLauterecken1.value) : 0 },
+    { name: "Kusel", queryType: "lastValueKreisverwaltung", value: lastValueKreisverwaltung?.value ? Number(lastValueKreisverwaltung.value) : 0 },
   ];
 
   
@@ -36,6 +40,8 @@ const SensorTable = ({
     if (value >= 200 && value <= 250) return "#F6FA70";
     return "#FF0060";
   };
+
+  
 
   return (
     <table

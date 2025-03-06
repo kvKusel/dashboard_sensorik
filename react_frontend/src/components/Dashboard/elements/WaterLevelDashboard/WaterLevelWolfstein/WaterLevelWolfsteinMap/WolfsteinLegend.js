@@ -104,8 +104,9 @@ const handlePreviousFrame = () => {
 
   useEffect(() => {
     const handleResize = () => {
-      setBottomPosition(window.innerWidth <= 768 ? 25 : 20);
+      setBottomPosition(window.innerWidth <= 400 ? 35 : window.innerWidth <= 768 ? 25 : 20);
     };
+    
 
     window.addEventListener("resize", handleResize);
     handleResize(); // Initial check
