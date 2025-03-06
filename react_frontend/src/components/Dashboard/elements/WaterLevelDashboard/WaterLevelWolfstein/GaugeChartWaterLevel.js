@@ -9,6 +9,7 @@ const GaugeWaterLevel = ({ value, arcs }) => {
 
   return (
     <GaugeComponent
+    style={{ width: '100%', height: '100%' }}
       arc={{ subArcs: arcs }}
       value={value}
       minValue={0} // Set the minimum value

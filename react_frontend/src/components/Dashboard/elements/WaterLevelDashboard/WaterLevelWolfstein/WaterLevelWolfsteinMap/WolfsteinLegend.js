@@ -132,50 +132,20 @@ const handlePreviousFrame = () => {
           backgroundColor: "rgba(255, 255, 255, 0.8)",
         }}
       >
-        <p className="h6">Niederschlagsintensität</p>
+        <p className="h6 text-center fs-5 fw-medium">Niederschlagsintensität</p>
         {/* Add rain gradient */}
 
-        <div>
         <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            width: "300px",
-            height: "10px",
-            background: `linear-gradient(to right, ${rainColors
-              .map(
-                (color, index) =>
-                  `${color.color} ${index * (100 / (rainColors.length - 1))}%`
-              )
-              .join(", ")})`
-          }}
-        ></div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginTop: "5px"
-          }}
-        >
-          <p className="">leicht</p>
-          <p className="">stark</p>
-        </div>
-      </div>
-
-      </div>
-
-      {/* Control Panel */}
-      <div
-        className="px-2 pt-2 d-flex flex-column"
+        className="px-2  d-flex flex-column"
         style={{
           fontFamily: "Poppins, Arial, sans-serif",
-          position: "absolute",
-          right: "0px",
-          top: "0px",
-          background: "white",
+          // position: "absolute",
+          // left: "0px",
+          // top: "0px",
+          // background: "white",
           borderRadius: "0px",
           zIndex: "1000",
-          backgroundColor: "rgba(255, 255, 255, 0.8)",
+          // backgroundColor: "rgba(255, 255, 255, 0.8)",
         }}
       >
         <div className="d-flex align-items-center justify-content-between">
@@ -228,6 +198,37 @@ const handlePreviousFrame = () => {
 
         </div>
       </div>
+
+        <div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "300px",
+            height: "10px",
+            background: `linear-gradient(to right, ${rainColors
+              .map(
+                (color, index) =>
+                  `${color.color} ${index * (100 / (rainColors.length - 1))}%`
+              )
+              .join(", ")})`
+          }}
+        ></div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            marginTop: "5px"
+          }}
+        >
+          <p className="">leicht</p>
+          <p className="">stark</p>
+        </div>
+      </div>
+
+      </div>
+
+     
     </>
   );
 };

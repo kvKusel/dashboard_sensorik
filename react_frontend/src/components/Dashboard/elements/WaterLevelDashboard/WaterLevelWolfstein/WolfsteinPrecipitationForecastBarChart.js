@@ -40,7 +40,7 @@ const noPrecipitationPlugin = {
             const xCenter = left + (right - left) / 2;
             const yCenter = top + (bottom - top) / 2;
 
-            ctx.font = "bold 1rem Poppins , sans-serif";
+            ctx.font = " 1rem Poppins , sans-serif";
             ctx.fillStyle = "lightgrey";
             ctx.textAlign = "center";
 

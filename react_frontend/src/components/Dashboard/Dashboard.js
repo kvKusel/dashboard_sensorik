@@ -37,14 +37,7 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
  der Schüler an MINT-Fächern.";
         break;
         case "Pegelmonitoring":
-          alertText = "Das Wasserstandüberwachungs-Projekt nutzt die IoT-Technologie, um Wasserstände in Echtzeit zu überwachen. \
-        Derzeit haben wir einen experimentellen Wasserstandssensor im Einsatz, der vor der Kreisverwaltung Kusel eingebaut wurde. \
-        Weitere Sensoren sind bereits in Planung und werden bald installiert. \
-        Diese Sensoren liefern wichtige Daten zur Vorhersage von Hochwasserereignissen und zur effizienten Wasserwirtschaft. \
-        Mit diesen Informationen können wir potenzielle Überschwemmungen frühzeitig erkennen und entsprechende Maßnahmen ergreifen. \
-        Dieses Projekt ist ein wichtiger Schritt zur Verbesserung des Hochwasserschutzes und zur Gewährleistung der Sicherheit unserer Gemeinden. \
-        Es fördert zudem das Bewusstsein für Umweltschutz und die Bedeutung von nachhaltigem Wassermanagement. \
-        Durch die Integration dieser Technologie schaffen wir eine sichere und zukunftsorientierte Infrastruktur für alle Bewohner.";
+          alertText = "Wir haben mehrere Pegelmesstellen an strategisch relevanten Punkten im Landkreis installiert, um die Messpunkte dichter und effizienter zu gestalten. Diese neuen Sensoren verbessern unsere Vorbereitung auf Hochwasserereignisse erheblich und liefern wertvolle Daten für das Hochwasserschutzkonzept. Mit diesen Informationen sind wir in der Lage, potenzielle Überschwemmungen frühzeitig zu erkennen und gezielte Maßnahmen zur Gefahrenabwehr zu ergreifen. Das Projekt ist ein entscheidender Schritt zur Verbesserung des Hochwasserschutzes und zur Sicherheit unserer Gemeinden. Zusätzlich fördert es das Bewusstsein für Umweltschutz und die Notwendigkeit eines nachhaltigen Wassermanagements. Durch die Integration dieser fortschrittlichen Technologie schaffen wir eine sichere und zukunftsorientierte Infrastruktur für alle Bewohner.";
           break;
         default:
           alertText = "No selection made.";

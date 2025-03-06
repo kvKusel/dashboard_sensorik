@@ -24,7 +24,16 @@ ChartJS.register(
   Legend
 );
 
-const MultiLineChart = ({ waterLevelRutsweiler, waterLevelKreimbach, waterLevelWolfstein, currentPeriod }) => {
+const MultiLineChart = ({
+  waterLevelKreisverwaltung,
+  waterLevelRutsweiler,
+  waterLevelKreimbach,
+  waterLevelWolfstein,
+  waterLevelLauterecken1,
+  waterLevelKreimbach1,
+  waterLevelKreimbach3,
+  currentPeriod,
+}) => {
   const calculateTimePeriodBoundary = (period) => {
     const now = Date.now();
     switch (period) {
@@ -45,37 +54,65 @@ const MultiLineChart = ({ waterLevelRutsweiler, waterLevelKreimbach, waterLevelW
 
   // Create datasets with actual timestamps
   const createDataset = (data) => {
-    return data.map(item => ({
+    return data.map((item) => ({
       x: new Date(item.time).getTime(),
-      y: item.value
+      y: item.value,
     }));
   };
 
   const chartData = {
     datasets: [
-      {
-        label: "Pegel Rutsweiler a.d. Lauter",
-        data: createDataset(waterLevelRutsweiler),
-        borderColor: "rgba(75, 192, 192, 1)",
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
-        tension: 0.2, // Adjust this value for more or less smoothing
 
-      },
+
       {
         label: "Pegel Wolfstein",
         data: createDataset(waterLevelWolfstein),
         borderColor: "rgba(255, 99, 132, 1)",
         backgroundColor: "rgba(255, 99, 132, 0.2)",
         tension: 0.2, // Adjust this value for more or less smoothing
-
       },
       {
-        label: "Pegel Kreimbach-Kaulbach",
+        label: "Pegel Rutsweiler a.d. Lauter",
+        data: createDataset(waterLevelRutsweiler),
+        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        tension: 0.2, // Adjust this value for more or less smoothing
+      },
+
+      {
+        label: "Pegel Kreimbach 1",
+        data: createDataset(waterLevelKreimbach1),
+        borderColor: "rgb(255, 0, 255)",
+        backgroundColor: "rgba(255, 0, 255, 0.2)",
+        tension: 0.2, // Adjust this value for more or less smoothing
+      },
+      {
+        label: "Pegel Kreimbach 3",
+        data: createDataset(waterLevelKreimbach3),
+        borderColor: "rgb(219, 6, 77)",
+        backgroundColor: "rgba(219, 6, 77, 0.2)",
+        tension: 0.2, // Adjust this value for more or less smoothing
+      },
+      {
+        label: "Pegel Kreimbach 4",
         data: createDataset(waterLevelKreimbach),
         borderColor: "rgba(54, 162, 235, 1)",
         backgroundColor: "rgba(54, 162, 235, 0.2)",
         tension: 0.2, // Adjust this value for more or less smoothing
-
+      },
+      {
+        label: "Pegel Lauterecken 1",
+        data: createDataset(waterLevelLauterecken1),
+        borderColor: "rgb(238, 255, 0)",
+        backgroundColor: "rgba(238, 255, 0, 0.2)",
+        tension: 0.2, // Adjust this value for more or less smoothing
+      },
+      {
+        label: "Pegel Kusel",
+        data: createDataset(waterLevelKreisverwaltung),
+        borderColor: "rgb(37, 190, 70)",
+        backgroundColor: "rgba(37, 190, 70, 0.2)",
+        tension: 0.2, // Adjust this value for more or less smoothing
       },
     ],
   };
@@ -98,7 +135,7 @@ const MultiLineChart = ({ waterLevelRutsweiler, waterLevelKreimbach, waterLevelW
         labels: {
           color: "lightgrey",
           font: {
-            size: "18rem",
+            size: "16rem",
           },
         },
         position: "bottom",
@@ -107,21 +144,19 @@ const MultiLineChart = ({ waterLevelRutsweiler, waterLevelKreimbach, waterLevelW
     },
     scales: {
       x: {
-        type: 'timeseries',
+        type: "timeseries",
         time: {
-          unit: currentPeriod === "24h" ? 'hour' : 'day',
+          unit: currentPeriod === "24h" ? "hour" : "day",
           displayFormats: {
-            hour: 'MMM d, HH:00',
-            day: 'MMM d'
+            hour: "MMM d, HH:00",
+            day: "MMM d",
           },
           //round: 'hour', // Round time intervals
-
         },
         min: periodBoundary,
         max: Date.now(),
         grid: {
           color: "lightgrey",
-          
         },
         ticks: {
           color: "lightgrey",
@@ -133,7 +168,9 @@ const MultiLineChart = ({ waterLevelRutsweiler, waterLevelKreimbach, waterLevelW
             const parsedDate = new Date(label);
             const formattedDate = format(parsedDate, "MMM d");
             const secondLine =
-              currentPeriod === "24h" ? format(parsedDate, "HH:00") : format(parsedDate, "yyyy");
+              currentPeriod === "24h"
+                ? format(parsedDate, "HH:00")
+                : format(parsedDate, "yyyy");
             return [formattedDate, secondLine];
           },
         },
@@ -152,7 +189,6 @@ const MultiLineChart = ({ waterLevelRutsweiler, waterLevelKreimbach, waterLevelW
         },
         grid: {
           color: "lightgrey",
-
         },
         ticks: {
           maxTicksLimit: 4,

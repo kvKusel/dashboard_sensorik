@@ -15,6 +15,10 @@ const WaterLevelDashboard = () => {
   const [waterLevelRutsweiler, setWaterLevelRutsweiler] = useState([]);
   const [waterLevelKreimbachKaulbach, setWaterLevelKreimbachKaulbach] = useState([]);
   const [waterLevelWolfstein, setWaterLevelWolfstein] = useState([]);
+  const [waterLevelLauterecken1, setWaterLevelLauterecken1] = useState([]);
+  const [waterLevelKreimbach1, setWaterLevelKreimbach1] = useState([]);
+  const [waterLevelKreimbach3, setWaterLevelKreimbach3] = useState([]);
+
   const [precipitationWolfsteinHistorical, setPrecipitationWolfsteinHistorical] = useState([]);
 
   const [timePeriod, setTimePeriod] = useState("30d");
@@ -39,7 +43,16 @@ const WaterLevelDashboard = () => {
         const responseWolfstein = await axios.get(
           `${API_URL}water-level-data/?query_type=water_level_wolfstein${queryParam}`
         );
-  
+        const responseLauterecken1 = await axios.get(
+          `${API_URL}water-level-data/?query_type=water_level_lauterecken_1${queryParam}`
+        );
+        const responseKreimbach1 = await axios.get(
+          `${API_URL}water-level-data/?query_type=water_level_kreimbach_1${queryParam}`
+        );
+        const responseKreimbach3 = await axios.get(
+          `${API_URL}water-level-data/?query_type=water_level_kreimbach_3${queryParam}`
+        );
+
         const transformData = (data) =>
           data.map((item) => ({
             time: item.timestamp,
@@ -50,6 +63,9 @@ const WaterLevelDashboard = () => {
         setWaterLevelRutsweiler(transformData(responseRutsweiler.data));
         setWaterLevelKreimbachKaulbach(transformData(responseKreimbachKaulbach.data));
         setWaterLevelWolfstein(transformData(responseWolfstein.data));
+        setWaterLevelLauterecken1(transformData(responseLauterecken1.data));
+        setWaterLevelKreimbach1(transformData(responseKreimbach1.data));
+        setWaterLevelKreimbach3(transformData(responseKreimbach3.data));
       };
   
       // Fetch precipitation history data
@@ -118,9 +134,13 @@ const handleTimePeriodChangeHistoricalPrecipitation = (periodHistoricalPrecipita
       ) : (
         <React.Fragment>
           <WolfsteinSubpage
+          waterLevelKreisverwaltung={waterLevelKreisverwaltung}
             waterLevelWolfstein={waterLevelWolfstein}
             waterLevelRutsweiler={waterLevelRutsweiler}
             waterLevelKreimbach={waterLevelKreimbachKaulbach}
+            waterLevelLauterecken1={waterLevelLauterecken1}
+            waterLevelKreimbach1={waterLevelKreimbach1}
+            waterLevelKreimbach3={waterLevelKreimbach3}
             currentPeriod={timePeriod}
             onPeriodChange={handleTimePeriodChange}
             historicalPrecipitationWolfstein={precipitationWolfsteinHistorical}
