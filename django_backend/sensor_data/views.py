@@ -669,7 +669,7 @@ SENSOR_TO_BOTTOM_DISTANCES = {
     "6749D19422850054": 336,
     "6749D19385550035": 355,
     "6749D19427550061": 355,
-    "6749E09611440028": 126, 
+    "6749E09611440028": 126,                    ### subtract 30 cm still, because the canal itself is 30 cm lower!
     "6749E17530450043": 405, 
     "6749E09866560038": 453,
     # "ID_Logger_Kreisverwaltung": 453          ### add the sensor-to-bottom distance for the sensor by the Kreisverwaltung
