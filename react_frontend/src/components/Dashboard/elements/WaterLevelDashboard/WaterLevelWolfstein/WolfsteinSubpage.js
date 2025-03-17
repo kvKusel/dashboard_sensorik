@@ -90,28 +90,35 @@ const WolfsteinSubpage = ({
 
 
 
-///////////////////////////////////            set up for the table that displays all sensors         ///////////////////////////////////////////////
+///////////////////////////////////            set up for the table that displays all sensors and controls which data is displayed        ///////////////////////////////////////////////
+
+const [activeDataset, setActiveDataset] = useState(null);
+
 
     const [selectedRow, setSelectedRow] = useState("default");
 
     const [lastValue, setLastValue] = useState(lastValueWolfstein); // Default to Wolfstein's last value
 
-    const handleRowClick = (queryType) => {
-      setSelectedRow(queryType);
-      
-      // Update lastValue based on the selected queryType
-      const valueMap = {
-        lastValueWolfstein,
-        lastValueRutsweiler,
-        lastValueKreimbach1,
-        lastValueKreimbach3,
-        lastValueKreimbach4,
-        lastValueLauterecken1,
-        lastValueKreisverwaltung
-      };
+// Handle table row clicks
+const handleRowClick = (queryType) => {
+  setSelectedRow(queryType);
   
-      setLastValue(valueMap[queryType]);
-    };
+  // Update lastValue based on the selected queryType
+  const valueMap = {
+    lastValueWolfstein,
+    lastValueRutsweiler,
+    lastValueKreimbach1,
+    lastValueKreimbach3,
+    lastValueKreimbach4,
+    lastValueLauterecken1,
+    lastValueKreisverwaltung
+  };
+
+  setLastValue(valueMap[queryType]);
+  
+  // Update the active dataset
+  setActiveDataset(queryType);
+};
 
     const nameMapping = {
       lastValueWolfstein: "Wolfstein",
@@ -126,7 +133,7 @@ const WolfsteinSubpage = ({
       // Get the name from the mapping based on selectedRow
   const displayName = selectedRow !== "default"
   ? nameMapping[selectedRow] 
-  : "(Wählen Sie einen Pegel aus der Tabelle, um seine Details anzuzeigen.)";
+  : "(Pegel aus der Tabelle auswählen, um Details anzuzeigen.)";
 
     
     
@@ -308,16 +315,17 @@ const WolfsteinSubpage = ({
             borderColor: "#5D7280",
           }}
         >
-            <MultiLineChart
-              waterLevelKreisverwaltung={waterLevelKreisverwaltung}
-              waterLevelRutsweiler={waterLevelRutsweiler}
-              waterLevelKreimbach={waterLevelKreimbach}
-              waterLevelWolfstein={waterLevelWolfstein}
-              waterLevelLauterecken1={waterLevelLauterecken1}
-              waterLevelKreimbach1={waterLevelKreimbach1}
-              waterLevelKreimbach3={waterLevelKreimbach3}
-              currentPeriod={currentPeriod}
-            />
+<MultiLineChart
+  waterLevelKreisverwaltung={waterLevelKreisverwaltung}
+  waterLevelRutsweiler={waterLevelRutsweiler}
+  waterLevelKreimbach={waterLevelKreimbach}
+  waterLevelWolfstein={waterLevelWolfstein}
+  waterLevelLauterecken1={waterLevelLauterecken1}
+  waterLevelKreimbach1={waterLevelKreimbach1}
+  waterLevelKreimbach3={waterLevelKreimbach3}
+  currentPeriod={currentPeriod}
+  activeDataset={activeDataset}
+/>
           </div>
         </div>
       </div>

@@ -10,9 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Weight } from "lucide-react";
 import { format } from "date-fns";
-import { bounds } from "leaflet";
 
 ChartJS.register(
   CategoryScale,
@@ -33,7 +31,99 @@ const MultiLineChart = ({
   waterLevelKreimbach1,
   waterLevelKreimbach3,
   currentPeriod,
+  activeDataset = null // This will be the dataset we want to show
 }) => {
+  // Create a ref to the chart instance
+  const chartRef = React.useRef(null);
+
+  // Define the noDatasetPlugin
+  const noDatasetPlugin = {
+    id: 'noDatasetMessage',
+    beforeDraw: (chart) => {
+      const anyDatasetVisible = chart.data.datasets.some(
+        (dataset, index) => chart.isDatasetVisible(index)
+      );
+      
+      if (!anyDatasetVisible) {
+        const { ctx, chartArea } = chart;
+        if (chartArea) {
+          const { top, left, width, height } = chartArea;
+          
+          ctx.save();
+          const text = "Pegel aus Tabelle oder Legende auswählen, um die Daten anzuzeigen.";
+          const maxWidth = width - 20;
+          const lineHeight = 20;
+          const xCenter = left + (width / 2);
+          const yCenter = top + (height / 2) - 6;
+          
+          ctx.font = "1rem Poppins, sans-serif";
+          ctx.fillStyle = "lightgrey";
+          ctx.textAlign = "center";
+          
+          // Function to wrap text
+          function wrapText(text, x, y, maxWidth, lineHeight) {
+            const words = text.split(" ");
+            let line = "";
+            let yPosition = y;
+            
+            for (let word of words) {
+              const testLine = line + word + " ";
+              const metrics = ctx.measureText(testLine);
+              const testWidth = metrics.width;
+              
+              if (testWidth > maxWidth && line !== "") {
+                ctx.fillText(line, x, yPosition);
+                line = word + " ";
+                yPosition += lineHeight;
+              } else {
+                line = testLine;
+              }
+            }
+            
+            ctx.fillText(line, x, yPosition);
+          }
+          
+          // Call wrapText function
+          wrapText(text, xCenter, yCenter, maxWidth, lineHeight);
+          ctx.restore();
+        }
+      }
+    }
+  };
+
+  // Use effect to update dataset visibility when activeDataset changes
+  useEffect(() => {
+    if (chartRef.current) {
+      const chart = chartRef.current;
+      
+      // Map dataset name to index
+      const datasetIndices = {
+        lastValueWolfstein: 0,
+        lastValueRutsweiler: 1,
+        lastValueKreimbach1: 2,
+        lastValueKreimbach3: 3,
+        lastValueKreimbach4: 4,
+        lastValueLauterecken1: 5,
+        lastValueKreisverwaltung: 6
+      };
+      
+      // Hide all datasets
+      chart.data.datasets.forEach((dataset, index) => {
+        chart.setDatasetVisibility(index, false);
+      });
+      
+      // Show only the active dataset if it exists
+      if (activeDataset) {
+        const indexToShow = datasetIndices[activeDataset];
+        if (indexToShow !== undefined) {
+          chart.setDatasetVisibility(indexToShow, true);
+        }
+      }
+      
+      chart.update();
+    }
+  }, [activeDataset]);
+
   const calculateTimePeriodBoundary = (period) => {
     const now = Date.now();
     switch (period) {
@@ -62,57 +152,61 @@ const MultiLineChart = ({
 
   const chartData = {
     datasets: [
-
-
       {
         label: "Pegel Wolfstein",
         data: createDataset(waterLevelWolfstein),
         borderColor: "rgba(255, 99, 132, 1)",
         backgroundColor: "rgba(255, 99, 132, 0.2)",
-        tension: 0.2, // Adjust this value for more or less smoothing
+        tension: 0.2,
+        hidden: true
       },
       {
         label: "Pegel Rutsweiler a.d. Lauter",
         data: createDataset(waterLevelRutsweiler),
         borderColor: "rgba(75, 192, 192, 1)",
         backgroundColor: "rgba(75, 192, 192, 0.2)",
-        tension: 0.2, // Adjust this value for more or less smoothing
+        tension: 0.2,
+        hidden: true
       },
-
       {
         label: "Pegel Kreimbach 1",
         data: createDataset(waterLevelKreimbach1),
         borderColor: "rgb(255, 0, 255)",
         backgroundColor: "rgba(255, 0, 255, 0.2)",
-        tension: 0.2, // Adjust this value for more or less smoothing
+        tension: 0.2,
+        hidden: true
       },
       {
         label: "Pegel Kreimbach 3",
         data: createDataset(waterLevelKreimbach3),
         borderColor: "rgb(219, 6, 77)",
         backgroundColor: "rgba(219, 6, 77, 0.2)",
-        tension: 0.2, // Adjust this value for more or less smoothing
+        tension: 0.2,
+        hidden: true
       },
       {
         label: "Pegel Kreimbach 4",
         data: createDataset(waterLevelKreimbach),
         borderColor: "rgba(54, 162, 235, 1)",
         backgroundColor: "rgba(54, 162, 235, 0.2)",
-        tension: 0.2, // Adjust this value for more or less smoothing
+        tension: 0.2,
+        hidden: true
       },
       {
         label: "Pegel Lauterecken 1",
         data: createDataset(waterLevelLauterecken1),
         borderColor: "rgb(238, 255, 0)",
         backgroundColor: "rgba(238, 255, 0, 0.2)",
-        tension: 0.2, // Adjust this value for more or less smoothing
+        tension: 0.2,
+        hidden: true
       },
       {
         label: "Pegel Kusel",
         data: createDataset(waterLevelKreisverwaltung),
         borderColor: "rgb(37, 190, 70)",
         backgroundColor: "rgba(37, 190, 70, 0.2)",
-        tension: 0.2, // Adjust this value for more or less smoothing
+        tension: 0.2,
+        hidden: true
       },
     ],
   };
@@ -151,7 +245,6 @@ const MultiLineChart = ({
             hour: "MMM d, HH:00",
             day: "MMM d",
           },
-          //round: 'hour', // Round time intervals
         },
         min: periodBoundary,
         max: Date.now(),
@@ -203,7 +296,12 @@ const MultiLineChart = ({
 
   return (
     <div className="w-100 h-100">
-      <Line data={chartData} options={options} />
+      <Line 
+        ref={chartRef} 
+        data={chartData} 
+        options={options} 
+        plugins={[noDatasetPlugin]} 
+      />
     </div>
   );
 };
