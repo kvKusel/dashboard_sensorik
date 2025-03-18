@@ -57,7 +57,24 @@ const redIcon = new L.DivIcon({
   iconAnchor: [15, 15], // Anchor point (center of the marker)
 });
 
-const PegelWolfsteinMap = () => {
+
+
+
+const PegelWolfsteinMap = ({ hoveredMarkerId, selectedMarkerId }) => {
+
+  const markers = [
+    { id: "wolfstein", position: [49.581045, 7.619593], label: "Wolfstein" },
+    { id: "rutsweiler", position: [49.566297, 7.623804], label: "Rutsweiler a.d. Lauter" },
+    { id: "kreimbach4", position: [49.554087, 7.621883], label: "Kreimbach 4" },
+    { id: "lauterecken", position: [49.650507589739846, 7.590545488872102], label: "Lauterecken" },
+    { id: "kreimbach1", position: [49.54844915352638, 7.631175812962766], label: "Kreimbach 1" },
+    { id: "kreimbach2", position: [49.556388641429436, 7.636587365546659], label: "Kreimbach 2" },
+    { id: "kreimbach3", position: [49.552000, 7.628000], label: "Kreimbach 3" }, // ADD THIS
+    { id: "kusel", position: [49.539820952844316, 7.396752597634942], label: "Kusel" }
+  ];
+  
+
+
   const [mapCenter, setMapCenter] = useState(window.innerWidth < 768 ? [49.500444, 7.49246] : [49.560144, 7.49246]);
   const [mapZoom, setMapZoom] = useState(window.innerWidth < 768 ? 10 : 11); // Zoom based on screen size
 
@@ -101,15 +118,13 @@ const PegelWolfsteinMap = () => {
         attribution='&copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url={tileLayerUrl}
       />
-
-
+  
       {/* Add Mask */}
       <MaskLayer />
-
+  
       {/* Add the actual polygon outline */}
       <Polygon positions={polygonLandkreisKusel} color="transparent" fillOpacity={1} />
-
-
+  
       <RadarFetcher
         setRadarUrl={setRadarUrl}
         timeType={timeType}
@@ -123,31 +138,38 @@ const PegelWolfsteinMap = () => {
           opacity={0.5}
         />
       )}
+  
+      {/* Render markers conditionally */}
+      {markers.map((marker) => {
+  const isHovered = hoveredMarkerId === marker.id;
+  const isSelected = selectedMarkerId === marker.id;
 
-      <Marker position={[49.581045, 7.619593]}>
-        <Popup>Wolfstein</Popup>
-      </Marker>
-      <Marker position={[49.566297, 7.623804]}>
-        <Popup>Rutsweiler a.d. Lauter</Popup>
-      </Marker>
-      <Marker position={[49.554087, 7.621883]}>
-        <Popup>Kreimbach 4</Popup>
-      </Marker>
-      <Marker position={[49.650507589739846, 7.590545488872102]}>
-        <Popup>Lauterecken</Popup>
-      </Marker>
-      <Marker position={[49.54844915352638, 7.631175812962766]}>
-        <Popup>Kreimbach 1</Popup>
-      </Marker>
-      <Marker position={[      49.556388641429436, 7.636587365546659]}>
-        <Popup>Kreimbach 2</Popup>
-      </Marker>
-      <Marker position={[   49.539820952844316, 7.396752597634942]}>
-        <Popup>Kusel</Popup>
-      </Marker>
-
-      49.539820952844316, 7.396752597634942
-
+  // Define the marker size based on state
+  const markerSize = isSelected ? 32 : isHovered ? 32 : 24;
+  
+  return (
+    <Marker
+      key={marker.id}
+      position={marker.position}
+      icon={L.divIcon({
+        className: "custom-marker",
+        html: `<div style="
+          background-image: url('https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png');
+          background-size: contain;
+          background-repeat: no-repeat;
+          width: ${markerSize}px;
+          height: ${markerSize * 1.5}px;
+          filter: ${isSelected ? 'hue-rotate(170deg) saturate(5)' : 'none'};
+        "></div>`,
+        iconSize: [markerSize, markerSize * 1.5],
+        iconAnchor: [markerSize/2, markerSize * 1.5],
+      })}
+    >
+      <Popup>{marker.label}</Popup>
+    </Marker>
+  );
+})}
+  
       <RainIntensityLegend
         timeType={timeType}
         setTimeType={setTimeType}
@@ -156,6 +178,7 @@ const PegelWolfsteinMap = () => {
       />
     </MapContainer>
   );
+  
 };
 
 export default PegelWolfsteinMap;

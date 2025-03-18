@@ -1,5 +1,3 @@
-import React from "react";
-
 const SensorTable = ({
   onRowClick,
   lastValueKreisverwaltung,
@@ -9,39 +7,57 @@ const SensorTable = ({
   lastValueLauterecken1,
   lastValueRutsweiler,
   lastValueWolfstein,
+  setHoveredMarkerId,
+  setSelectedMarkerId,
 }) => {
-
-  
-
-  
   const data = [
-    { name: "Wolfstein", queryType: "lastValueWolfstein", value: lastValueWolfstein?.value ? Number(lastValueWolfstein.value) : 0 },
-    { name: "Rutsweiler a.d. Lauter", queryType: "lastValueRutsweiler", value: lastValueRutsweiler?.value ? Number(lastValueRutsweiler.value) : 0 },
-    { name: "Kreimbach 1", queryType: "lastValueKreimbach1", value: lastValueKreimbach1?.value ? Number(lastValueKreimbach1.value) : 0 },
-    { name: "Kreimbach 3", queryType: "lastValueKreimbach3", value: lastValueKreimbach3?.value ? Number(lastValueKreimbach3.value) : 0 },
-    { name: "Kreimbach 4", queryType: "lastValueKreimbach4", value: lastValueKreimbach4?.value ? Number(lastValueKreimbach4.value) : 0 },
-    { name: "Lauterecken", queryType: "lastValueLauterecken1", value: lastValueLauterecken1?.value ? Number(lastValueLauterecken1.value) : 0 },
-    { name: "Kusel", queryType: "lastValueKreisverwaltung", value: lastValueKreisverwaltung?.value ? Number(lastValueKreisverwaltung.value) : 0 },
+    {
+      id: "wolfstein",
+      name: "Wolfstein",
+      queryType: "lastValueWolfstein",
+      value: lastValueWolfstein?.value ? Number(lastValueWolfstein.value) : 0,
+    },
+    {
+      id: "rutsweiler",
+      name: "Rutsweiler a.d. Lauter",
+      queryType: "lastValueRutsweiler",
+      value: lastValueRutsweiler?.value ? Number(lastValueRutsweiler.value) : 0,
+    },
+    {
+      id: "kreimbach1",
+      name: "Kreimbach 1",
+      queryType: "lastValueKreimbach1",
+      value: lastValueKreimbach1?.value ? Number(lastValueKreimbach1.value) : 0,
+    },
+    {
+      id: "kreimbach3",
+      name: "Kreimbach 3",
+      queryType: "lastValueKreimbach3",
+      value: lastValueKreimbach3?.value ? Number(lastValueKreimbach3.value) : 0,
+    },
+    {
+      id: "kreimbach4",
+      name: "Kreimbach 4",
+      queryType: "lastValueKreimbach4",
+      value: lastValueKreimbach4?.value ? Number(lastValueKreimbach4.value) : 0,
+    },
+    {
+      id: "lauterecken",
+      name: "Lauterecken 1",
+      queryType: "lastValueLauterecken1",
+      value: lastValueLauterecken1?.value
+        ? Number(lastValueLauterecken1.value)
+        : 0,
+    },
+    {
+      id: "kusel",
+      name: "Kusel",
+      queryType: "lastValueKreisverwaltung",
+      value: lastValueKreisverwaltung?.value
+        ? Number(lastValueKreisverwaltung.value)
+        : 0,
+    },
   ];
-
-  
-
-  const rowStyle = {
-    cursor: "pointer",
-    transition: "background-color 0.3s",
-  };
-
-  const rowHoverStyle = {
-    backgroundColor: "rgba(255, 255, 255, 0.1)",
-  };
-
-  const getCircleColor = (value) => {
-    if (value < 200) return "#00DFA2";
-    if (value >= 200 && value <= 250) return "#F6FA70";
-    return "#FF0060";
-  };
-
-  
 
   return (
     <table
@@ -55,7 +71,6 @@ const SensorTable = ({
       <thead>
         <tr>
           <th
-            className="text-center"
             style={{
               borderBottom: "1px solid #FFFFFF",
               borderRight: "1px solid #FFFFFF",
@@ -67,7 +82,6 @@ const SensorTable = ({
             Pegel
           </th>
           <th
-            className="text-center"
             style={{
               borderBottom: "1px solid #FFFFFF",
               padding: "2px",
@@ -80,16 +94,16 @@ const SensorTable = ({
         </tr>
       </thead>
       <tbody>
-        {data.map((item, index) => (
+        {data.map((item) => (
           <tr
-            key={index}
-            onClick={() => onRowClick(item.queryType)}
-            style={rowStyle}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.backgroundColor =
-                rowHoverStyle.backgroundColor)
-            }
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "")}
+            key={item.id}
+            onClick={() => {
+              onRowClick(item.queryType);
+              setSelectedMarkerId(item.id); // Set selected marker
+            }}
+            onMouseEnter={() => setHoveredMarkerId(item.id)} // Set hovered marker
+            onMouseLeave={() => setHoveredMarkerId(null)} // Reset on leave
+            style={{ cursor: "pointer", transition: "background-color 0.3s" }}
           >
             <td
               style={{
@@ -114,9 +128,13 @@ const SensorTable = ({
                   height: "14px",
                   borderRadius: "50%",
                   display: "inline-block",
-                  backgroundColor: getCircleColor(item.value),
+                  backgroundColor:
+                    item.value < 200
+                      ? "#00DFA2"
+                      : item.value <= 250
+                      ? "#F6FA70"
+                      : "#FF0060",
                 }}
-                
               ></div>
             </td>
           </tr>

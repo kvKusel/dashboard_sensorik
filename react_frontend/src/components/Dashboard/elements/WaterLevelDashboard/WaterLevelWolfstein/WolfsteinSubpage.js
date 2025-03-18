@@ -90,6 +90,15 @@ const WolfsteinSubpage = ({
 
 
 
+
+///////////////////////////////////            set up for the dynamic markers on the open weather map        ///////////////////////////////////////////////
+
+
+const [hoveredMarkerId, setHoveredMarkerId] = useState(null);
+
+const [selectedMarkerId, setSelectedMarkerId] = useState(null);
+
+
 ///////////////////////////////////            set up for the table that displays all sensors and controls which data is displayed        ///////////////////////////////////////////////
 
 const [activeDataset, setActiveDataset] = useState(null);
@@ -239,6 +248,8 @@ const handleRowClick = (queryType) => {
               lastValueLauterecken1={lastValueLauterecken1}
               lastValueRutsweiler={lastValueRutsweiler}
               lastValueWolfstein={lastValueWolfstein}
+              setHoveredMarkerId={setHoveredMarkerId} 
+              setSelectedMarkerId={setSelectedMarkerId}
             />
           </div>
 
@@ -292,8 +303,8 @@ const handleRowClick = (queryType) => {
             zIndex: "0",
           }}
         >
-          <PegelWolfsteinMap />
-        </div>
+<PegelWolfsteinMap  hoveredMarkerId={hoveredMarkerId} selectedMarkerId={selectedMarkerId} />
+</div>
       </div>
 
     
