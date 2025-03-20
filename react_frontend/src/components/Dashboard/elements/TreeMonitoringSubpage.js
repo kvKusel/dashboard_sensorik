@@ -273,7 +273,7 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
         // setIsLoading(false);
         // alert("Loading data is taking longer than expected. Please try again later.");
       }
-    }, 5000); // 5 seconds timeout
+    }, 10000); // 10 seconds timeout
 
     return () => clearTimeout(loadingTimeout); // Clear the timeout if the component unmounts or isLoading changes
   }, [isLoading]);

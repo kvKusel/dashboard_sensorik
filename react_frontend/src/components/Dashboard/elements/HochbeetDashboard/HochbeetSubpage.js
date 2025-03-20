@@ -210,7 +210,6 @@ useEffect(() => {
   }
 }, [selectedDataset]);
 
-console.log(allSoilMoistureDataGymnasium)
 
   
   return (
