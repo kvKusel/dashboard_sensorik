@@ -143,13 +143,17 @@ const MultiLineChart = ({
 
   const periodBoundary = calculateTimePeriodBoundary(currentPeriod);
 
-  // Create datasets with actual timestamps
+  // Create datasets with actual timestamps AND filter datasets so that only every 10th data point is displayed
   const createDataset = (data) => {
-    return data.map((item) => ({
-      x: new Date(item.time).getTime(),
-      y: item.value,
-    }));
+    return data
+      .filter((_, index) => index % 10 === 0)  // Filter every 10th data point
+      .map((item) => ({
+        x: new Date(item.time).getTime(),
+        y: item.value,
+      }));
   };
+
+
 
   const chartData = {
     datasets: [
@@ -261,6 +265,9 @@ const MultiLineChart = ({
           color: "#BFC2DA",
         },
         ticks: {
+          callback: function(value, index) {
+            return index % 10 === 0 ? this.getLabelForValue(value) : '';
+          },
           color: "#6972A8",
           
           maxTicksLimit: 5,

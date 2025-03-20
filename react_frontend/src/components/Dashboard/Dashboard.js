@@ -344,6 +344,7 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
         <div>
       <Link to="/" 
                   style={{
+                    textDecoration: "none", // Correct way to remove underline
                     marginTop: "5px",
                     marginBottom: "5px",
                     padding: "5px 5px",
@@ -353,7 +354,6 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
                     cursor: "pointer", // Pointer cursor to indicate it's clickable
                     fontSize: "1.1em",
                     display: "inline-block",
-                    onClick: () => window.location.href = "/"
                     
                   }}
             className=" " 
