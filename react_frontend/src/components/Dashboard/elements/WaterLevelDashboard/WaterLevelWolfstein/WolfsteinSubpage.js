@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import PegelWolfsteinMap from "./WaterLevelWolfsteinMap/WaterLevelMapWolfstein";
 import LineChart from "../../LineChart";
 import { waterLevelConfigWolfstein } from "../../../../../chartsConfig/chartsConfig";
@@ -27,7 +27,6 @@ const WolfsteinSubpage = ({
   onPeriodChangeHistoricalPrecipitation,
   currentPeriodHistoricalPrecipitation,
 }) => {
-
   // check the screen size to render the multiline chart properly
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
 
@@ -36,13 +35,12 @@ const WolfsteinSubpage = ({
       setIsSmallScreen(window.innerWidth < 768);
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
-
 
   // Map for readable time period names
   const timePeriodLabels = {
@@ -88,114 +86,85 @@ const WolfsteinSubpage = ({
   const lastValueKreimbach3 =
     waterLevelKreimbach3[waterLevelKreimbach3.length - 1];
 
+  ///////////////////////////////////            set up for the dynamic markers on the open weather map        ///////////////////////////////////////////////
 
+  const [hoveredMarkerId, setHoveredMarkerId] = useState(null);
 
+  const [selectedMarkerId, setSelectedMarkerId] = useState(null);
 
-///////////////////////////////////            set up for the dynamic markers on the open weather map        ///////////////////////////////////////////////
+  ///////////////////////////////////            set up for the table that displays all sensors and controls which data is displayed        ///////////////////////////////////////////////
 
+  const [activeDataset, setActiveDataset] = useState(null);
 
-const [hoveredMarkerId, setHoveredMarkerId] = useState(null);
+  const [selectedRow, setSelectedRow] = useState("default");
 
-const [selectedMarkerId, setSelectedMarkerId] = useState(null);
+  const [lastValue, setLastValue] = useState(lastValueWolfstein); // Default to Wolfstein's last value
 
+  // Handle table row clicks
+  const handleRowClick = (queryType) => {
+    setSelectedRow(queryType);
 
-///////////////////////////////////            set up for the table that displays all sensors and controls which data is displayed        ///////////////////////////////////////////////
-
-const [activeDataset, setActiveDataset] = useState(null);
-
-
-    const [selectedRow, setSelectedRow] = useState("default");
-
-    const [lastValue, setLastValue] = useState(lastValueWolfstein); // Default to Wolfstein's last value
-
-// Handle table row clicks
-const handleRowClick = (queryType) => {
-  setSelectedRow(queryType);
-  
-  // Update lastValue based on the selected queryType
-  const valueMap = {
-    lastValueWolfstein,
-    lastValueRutsweiler,
-    lastValueKreimbach1,
-    lastValueKreimbach3,
-    lastValueKreimbach4,
-    lastValueLauterecken1,
-    lastValueKreisverwaltung
-  };
-
-  setLastValue(valueMap[queryType]);
-  
-  // Update the active dataset
-  setActiveDataset(queryType);
-};
-
-    const nameMapping = {
-      lastValueWolfstein: "Wolfstein",
-      lastValueRutsweiler: "Rutsweiler a.d. Lauter",
-      lastValueKreimbach1: "Kreimbach 1",
-      lastValueKreimbach3: "Kreimbach 3",
-      lastValueKreimbach4: "Kreimbach 4",
-      lastValueLauterecken1: "Lauterecken",
-      lastValueKreisverwaltung: "Kusel",
+    // Update lastValue based on the selected queryType
+    const valueMap = {
+      lastValueWolfstein,
+      lastValueRutsweiler,
+      lastValueKreimbach1,
+      lastValueKreimbach3,
+      lastValueKreimbach4,
+      lastValueLauterecken1,
+      lastValueKreisverwaltung,
     };
 
-      // Get the name from the mapping based on selectedRow
-  const displayName = selectedRow !== "default"
-  ? nameMapping[selectedRow] 
-  : "(Pegel aus der Tabelle auswählen, um Details anzuzeigen.)";
+    setLastValue(valueMap[queryType]);
 
-    
-    
+    // Update the active dataset
+    setActiveDataset(queryType);
+  };
 
+  const nameMapping = {
+    lastValueWolfstein: "Wolfstein",
+    lastValueRutsweiler: "Rutsweiler a.d. Lauter",
+    lastValueKreimbach1: "Kreimbach 1",
+    lastValueKreimbach3: "Kreimbach 3",
+    lastValueKreimbach4: "Kreimbach 4",
+    lastValueLauterecken1: "Lauterecken",
+    lastValueKreisverwaltung: "Kusel",
+  };
 
+  // Get the name from the mapping based on selectedRow
+  const displayName =
+    selectedRow !== "default"
+      ? nameMapping[selectedRow]
+      : "(Pegel aus der Tabelle auswählen, um Details anzuzeigen.)";
 
   //arc settings for the water level gauge chart component
   const arcsDefault = [
     {
       limit: 200,
-      color: "#00DFA2",
+      color: "#83C968",
       showTick: true,
     },
     {
       limit: 250,
-      color: "#F6FA70",
+      color: "#ECC85B",
       showTick: true,
     },
     {
       limit: 300,
-      color: "#FF0060",
+      color: "#E7844E",
       showTick: true,
     },
   ];
 
-
-  const arcsRutsweiler = [
-    {
-      limit: 200,
-      color: "#00DFA2",
-      showTick: true,
-    },
-    {
-      limit: 250,
-      color: "#F6FA70",
-      showTick: true,
-    },
-    {
-      limit: 300,
-      color: "#FF0060",
-      showTick: true,
-    },
-  ];
 
 
   ///////////////////////////////////        END OF set up for the table that displays all sensors         ///////////////////////////////////////////////
-
 
   return (
     <React.Fragment>
       {/* row with the title */}
 
-      <div className="row mt-4" style={{ flex: "1 1 auto" }}>
+      {/* <div className="row mt-4" style={{ flex: "1 1 auto" }}>
         <div
           className="col-12 p-2 mx-2 d-flex align-items-center justify-content-center"
           style={{
@@ -216,31 +185,32 @@ const handleRowClick = (queryType) => {
             <span className="d-block d-sm-inline">Landkreis Kusel</span>
           </h2>
         </div>
-      </div>
+      </div> */}
 
       {/* row with the map */}
 
-      <div className="row mt-3" style={{ flex: "1 1 auto" }}>
+      <div className="row mt-3 rounded-3" style={{ flex: "1 1 auto" }}>
         <div
-          className="col-12 col-md-3 d-flex flex-column mx-2"
+          className="col-12 col-md-3 d-flex flex-column rounded-3"
           style={{
             flex: "1 1 auto",
-            backgroundColor: "rgb(53, 79, 97)",
-            borderRadius: "0px",
-            borderStyle: "solid",
-            borderWidth: "1px",
-            borderColor: "rgb(53, 79, 97)",
-            zIndex: "0",
+            // backgroundColor: "transparent",
+            // borderRadius: "0px",
+            // borderStyle: "solid",
+            // borderWidth: "1px",
+            // borderColor: "transparent",
+            // zIndex: "0",
           }}
         >
           {/* SensorTable Section */}
           <div
-            className="row flex-grow-1"
-            style={{ backgroundColor: "#5D7280" }}
+            className="row flex-grow-1 rounded-3 mb-2"
+            style={{ backgroundColor: "#fff",             boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+            }}
           >
-
-            <SensorTable
-                    onRowClick={handleRowClick}
+            <SensorTable 
+            className="rounded-3"
+              onRowClick={handleRowClick}
               lastValueKreisverwaltung={lastValueKreisverwaltung}
               lastValueKreimbach1={lastValueKreimbach1}
               lastValueKreimbach3={lastValueKreimbach3}
@@ -248,125 +218,134 @@ const handleRowClick = (queryType) => {
               lastValueLauterecken1={lastValueLauterecken1}
               lastValueRutsweiler={lastValueRutsweiler}
               lastValueWolfstein={lastValueWolfstein}
-              setHoveredMarkerId={setHoveredMarkerId} 
+              setHoveredMarkerId={setHoveredMarkerId}
               setSelectedMarkerId={setSelectedMarkerId}
             />
           </div>
 
           {/* Status Section */}
           <div
-            className="row flex-grow-1 mt-3"
-            style={{ backgroundColor: "#5D7280" }}
+            className="row flex-grow-1 mt-3 rounded-3"
+            style={{ backgroundColor: "#fff",             boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+            }}
           >
             <div
-              className="col-12 d-flex flex-column flex-grow-1"
-              style={{
-                backgroundColor: "#5D7280",
-                borderRadius: "0px",
-                borderStyle: "solid",
-                borderWidth: "1px",
-                borderColor: "#5D7280",
-                position: "relative",
-                zIndex: "0",
-              }}
+              className="col-12 d-flex flex-column flex-grow-1 "
+              // style={{
+              //   backgroundColor: "#5D7280",
+              //   borderStyle: "solid",
+              //   borderWidth: "1px",
+              //   borderColor: "#5D7280",
+              //   position: "relative",
+              //   zIndex: "0",
+              // }}
             >
               <div>
-              <p className=" pt-1 fw-bold mb-0" style={{ color: "lightgray" }}>
-            {displayName}
-          </p>
-          {selectedRow !== "default" && (
-            <p className="fw-bold mb-0" style={{ color: "lightgray" }}>
-              Letzte Messung: {formatTimestamp(lastValue.time)}
-            </p>
-          )}
+                <p
+                  className=" pt-2 mb-0"
+                  style={{ color: "#18204F", fontSize: "1.1rem" }}
+                >
+                  {displayName}
+                </p>
+                {selectedRow !== "default" && (
+                  <p className=" mb-0" style={{ color: "#18204F", fontSize: "1.1rem" }}>
+                    Letzte Messung: {formatTimestamp(lastValue.time)}
+                  </p>
+                )}
               </div>
 
               {/* Ensure the gauge takes up the remaining space */}
               <div className="flex-grow-1 d-flex align-items-center justify-content-center pb-0">
-              <GaugeWaterLevel 
-            value={selectedRow === "default" ? "0" : lastValue.value} 
-            arcs={ arcsDefault } 
-          />              </div>
+                <GaugeWaterLevel
+                  value={selectedRow === "default" ? "0" : lastValue.value}
+                  arcs={arcsDefault}
+                />{" "}
+              </div>
             </div>
           </div>
         </div>
 
         <div
-          className="col-12 col-md-8  p-2  mx-2 mt-3 mt-sm-0"
+          className="col-12 col-md-8  p-2   mt-3 mt-sm-0 ms-md-4 rounded-3"
           style={{
             flex: "1 1 auto",
-            backgroundColor: "#5D7280",
+            backgroundColor: "#fff",
             borderRadius: "0px",
             borderStyle: "solid",
             borderWidth: "1px",
-            borderColor: "#5D7280",
+            borderColor: "#fff",
+            boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
             zIndex: "0",
           }}
         >
-<PegelWolfsteinMap  hoveredMarkerId={hoveredMarkerId} selectedMarkerId={selectedMarkerId} />
-</div>
+          <PegelWolfsteinMap
+            hoveredMarkerId={hoveredMarkerId}
+            selectedMarkerId={selectedMarkerId}
+          />
+        </div>
       </div>
-
-    
 
       {/* row with the line chart */}
 
-      <div className="row mt-2" style={{ flex: "1 1 auto" }}>
+      <div className="row mt-4 rounded-top-3" style={{ flex: "1 1 auto", backgroundColor: "#FFF", boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)"}}>
         <div className="col-xs-12 d-flex p-2 pb-0">
-        <div
-          className="chart-container"
-          style={{
-            flex: "1 1 auto",
-            minHeight: isSmallScreen ? "60vh" : "40vh", // Conditional minHeight
-            maxHeight: "60vh",
-            borderRadius: "0px",
-            backgroundColor: "#5D7280",
-            borderStyle: "solid",
-            borderWidth: "1px",
-            borderColor: "#5D7280",
-          }}
-        >
-<MultiLineChart
-  waterLevelKreisverwaltung={waterLevelKreisverwaltung}
-  waterLevelRutsweiler={waterLevelRutsweiler}
-  waterLevelKreimbach={waterLevelKreimbach}
-  waterLevelWolfstein={waterLevelWolfstein}
-  waterLevelLauterecken1={waterLevelLauterecken1}
-  waterLevelKreimbach1={waterLevelKreimbach1}
-  waterLevelKreimbach3={waterLevelKreimbach3}
-  currentPeriod={currentPeriod}
-  activeDataset={activeDataset}
-/>
+          <div
+            className=""
+            style={{
+              flex: "1 1 auto",
+              minHeight: isSmallScreen ? "60vh" : "40vh", // Conditional minHeight
+              maxHeight: "60vh",
+              // borderRadius: "0px",
+              // borderStyle: "solid",
+              // borderWidth: "1px",
+              // borderColor: "#5D7280",
+            }}
+          >
+            <MultiLineChart
+
+              waterLevelKreisverwaltung={waterLevelKreisverwaltung}
+              waterLevelRutsweiler={waterLevelRutsweiler}
+              waterLevelKreimbach={waterLevelKreimbach}
+              waterLevelWolfstein={waterLevelWolfstein}
+              waterLevelLauterecken1={waterLevelLauterecken1}
+              waterLevelKreimbach1={waterLevelKreimbach1}
+              waterLevelKreimbach3={waterLevelKreimbach3}
+              currentPeriod={currentPeriod}
+              activeDataset={activeDataset}
+            />
           </div>
         </div>
       </div>
 
       {/* row with sliders for choosing time span */}
 
-      <div className="row" style={{ flex: "1 1 auto" }}>
+      <div className="row rounded-bottom-3 mb-4" style={{ flex: "1 1 auto", backgroundColor: "#FFF",  }}>
         <div className="col-xs-12 d-flex p-2 pt-0">
           <div
-            className="chart-container d-flex pb-2"
+            className=" d-flex pb-2"
             style={{
               flex: "1 1 auto",
-              borderRadius: "0px",
-              backgroundColor: "#5D7280",
-              borderStyle: "solid",
-              borderWidth: "1px",
-              borderColor: "#5D7280",
+              
+              // borderStyle: "solid",
+              // borderWidth: "1px",
+              // borderColor: "#5D7280",
+              // borderRadius: "0px",
+
             }}
           >
-            <Dropdown className="pt-3 ps-2">
+            <Dropdown className="pt-3 ps-2"            >
               <Dropdown.Toggle
                 variant="danger"
                 id="dropdown-basic"
-                className="ps-1 d-flex align-items-center custom-dropdown2"
+                className="ps-1 d-flex align-items-center custom-dropdown2" 
+                style={{fontSize: "1.1rem"}}
+             
               >
                 <img src={time_icon} alt="Time Icon" className="icon" />
                 {timePeriodLabels[currentPeriod] || "Zeitraum auswählen"}
               </Dropdown.Toggle>
 
-              <Dropdown.Menu>
+              <Dropdown.Menu >
                 <Dropdown.Item onClick={() => onPeriodChange("24h")}>
                   Letzte 24 Stunden
                 </Dropdown.Item>
@@ -387,19 +366,20 @@ const handleRowClick = (queryType) => {
 
       {/* row with the bar chart showing the past precipitation  */}
 
-      <div className="row " style={{ flex: "1 1 auto" }}>
+      <div className="row rounded-top-3 " style={{ flex: "1 1 auto", backgroundColor: "#fff", boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)", }}>
         <div className="col-xs-12 d-flex p-2 pb-0">
           <div
-            className="chart-container"
+            className=""
             style={{
               flex: "1 1 auto",
               minHeight: "40vh",
               // maxHeight: "60vh",
-              borderRadius: "0px",
-              backgroundColor: "#5D7280",
-              borderStyle: "solid",
-              borderWidth: "1px",
-              borderColor: "#5D7280",
+              // backgroundColor: "#5D7280",
+              // borderStyle: "solid",
+              // borderWidth: "1px",
+              // borderRadius: "0px",
+
+              // borderColor: "#5D7280",
             }}
           >
             <WolfsteinHistoricalBarChart
@@ -416,24 +396,26 @@ const handleRowClick = (queryType) => {
 
       {/* row with sliders for choosing time span */}
 
-      <div className="row" style={{ flex: "1 1 auto" }}>
+      <div className="row rounded-bottom-3" style={{ flex: "1 1 auto", backgroundColor: "#fff"  }}>
         <div className="col-xs-12 d-flex p-2 pt-0">
           <div
-            className="chart-container d-flex pb-2"
-            style={{
-              flex: "1 1 auto",
-              borderRadius: "0px",
-              backgroundColor: "#5D7280",
-              borderStyle: "solid",
-              borderWidth: "1px",
-              borderColor: "#5D7280",
-            }}
+            className=" d-flex pb-2"
+            // style={{
+            //   flex: "1 1 auto",
+            //   borderRadius: "0px",
+            //   backgroundColor: "#5D7280",
+            //   borderStyle: "solid",
+            //   borderWidth: "1px",
+            //   borderColor: "#5D7280",
+            // }}
           >
-            <Dropdown className="pt-3 ps-2">
+            <Dropdown className="pt-3 ps-2 " > 
               <Dropdown.Toggle
                 variant="danger"
                 id="dropdown-basic"
                 className="ps-1 d-flex align-items-center custom-dropdown2"
+                style={{fontSize: "1.1rem"}}
+
               >
                 <img src={time_icon} alt="Time Icon" className="icon" />
                 {timePeriodLabels[currentPeriodHistoricalPrecipitation] ||
@@ -469,19 +451,19 @@ const handleRowClick = (queryType) => {
 
       {/* row with the bar chart for the 5 day forecast */}
 
-      <div className="row mb-4" style={{ flex: "1 1 auto" }}>
+      <div className="row mt-4 mb-2 rounded-3" style={{ flex: "1 1 auto",backgroundColor: "#fff", boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)", }}>
         <div className="col-xs-12 d-flex p-2 pb-0">
           <div
-            className="chart-container"
+            className=""
             style={{
               flex: "1 1 auto",
               minHeight: "40vh",
               maxHeight: "60vh",
-              borderRadius: "0px",
-              backgroundColor: "#5D7280",
-              borderStyle: "solid",
-              borderWidth: "1px",
-              borderColor: "#5D7280",
+              // borderRadius: "0px",
+              
+              // borderStyle: "solid",
+              // borderWidth: "1px",
+              // borderColor: "#5D7280",
             }}
           >
             <WolfsteinForecastBarChart />

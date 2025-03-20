@@ -154,9 +154,11 @@ export const soilMoistureConfig = {
   datasets: [
     {
       fill: true,
-      borderColor: "#03C988",
+      borderColor: "#88AF33",  // Simplified version with partial opacity
       tension: 0.1,
-      backgroundColor: "#92C7A5", // Fill color
+      backgroundColor: "rgba(170, 219, 64, 0.5)"  // Simplified version with partial opacity
+
+
     },
   ],
   plugins: {
@@ -171,7 +173,7 @@ export const treeMoistureContentLineChartConfig = {
   datasets: [
     {
       fill: true,
-      borderColor: "#263FCD",
+      borderColor: "#88AF33",
       tension: 0.1,
       backgroundColor: "#92C7A5", // Fill color
     },
@@ -188,7 +190,7 @@ export const electricalResistanceConfig = {
   datasets: [
     {
       fill: true,
-      borderColor: "#FFB84C",
+      borderColor: "#88AF33",
       tension: 0.1,
       backgroundColor: "#92C7A5", // Fill color
     },
@@ -205,7 +207,7 @@ export const temperatureConfig = {
   datasets: [
     {
       fill: true,
-      borderColor: "#E26EE5",
+      borderColor: "#88AF33",
       tension: 0.1,
       backgroundColor: "#92C7A5", // Fill color
     },
@@ -222,7 +224,7 @@ export const temperatureConfigBurgLichtenbergWeatherDashboard = {
   datasets: [
     {
       fill: true,
-      borderColor: "rgba(75, 192, 192, 1)",
+      borderColor: "#88AF33",
       tension: 0.1,
       backgroundColor: "#92C7A5", // Fill color
     },
@@ -240,7 +242,7 @@ export const temperatureConfigGymnasiumWeatherDashboard = {
   datasets: [
     {
       fill: true,
-      borderColor: "rgba(153, 102, 255, 1)",
+      borderColor: "#88AF33",
       tension: 0.1,
       backgroundColor: "#92C7A5", // Fill color
     },
@@ -256,7 +258,7 @@ export const airPressureConfig = {
   datasets: [
     {
       fill: true,
-      borderColor: "#39B5E0",
+      borderColor: "#88AF33",
       tension: 0.1,
       backgroundColor: "#92C7A5", // Fill color
     },
@@ -274,7 +276,7 @@ export const humidityConfig = {
   datasets: [
     {
       fill: true,
-      borderColor: "orange",
+      borderColor: "#88AF33",
       tension: 0.1,
       backgroundColor: "#92C7A5", // Fill color
     },
@@ -293,7 +295,7 @@ export const precipitationConfig = {
   datasets: [
     {
       fill: false,
-      backgroundColor: "#39B5E0",
+      backgroundColor: "#88AF33",
       tension: 0.1,
     },
   ],
@@ -309,7 +311,7 @@ export const precipitationConfigGymnasium = {
   datasets: [
     {
       fill: false,
-      backgroundColor: "rgba(153, 102, 255, 1)",
+      backgroundColor: "#88AF33",
     },
   ],
   plugins: {
@@ -323,7 +325,7 @@ export const precipitationConfigBurgLichtenberg = {
   datasets: [
     {
       fill: false,
-      backgroundColor: "rgba(75, 192, 192, 1)",
+      backgroundColor: "#88AF33",
       borderColor:"red",
 
     },
@@ -338,13 +340,13 @@ export const precipitationConfigBurgLichtenberg = {
 //Doughnut Chart - General Tree Condition
 export const treeHealthConfig = {
   arcsLength: [0.3, 0.3, 0.3, 0.3], // Array of arc lengths
-  colors: ["#0079FF", "#FF0060", "#F6FA70", "#00DFA2"], // Array of colors
+  colors: ["#7FC9D1","#E7844E", "#ECC85B", "#83C968"], // Array of colors
 };
 
 //Doughnut Chart - soil moisture
 export const soilMoistureGaugeChartConfig = {
   arcsLength: [0.1, 0.1, 0.8], // Array of arc lengths
-  colors: ["#FF0060", "#F6FA70", "#00DFA2"], // Array of colors
+  colors: ["#E7844E", "#ECC85B", "#83C968"], // Array of colors
 };
 
 //Doughnut Chart - UV Index
@@ -361,6 +363,6 @@ export const barometerConfig = {
 
 export const pHConfig = {
   arcsLength: [5 / 14, 1 / 14, 2 / 14, 1 / 14, 5 / 14], // Adjusted array of arc lengths
-  colors: ["#FF0060", "#F6FA70", "#00DFA2", "#F6FA70", "#FF0060"], // Array of colors matching the arc lengths
+  colors: ["#E7844E", "#ECC85B", "#83C968", "#ECC85B", "#E7844E"], // Array of colors matching the arc lengths
 };
 

@@ -32,15 +32,17 @@ const noPrecipitationPlugin = {
 
         // Check if the maximum value is 0
         if (maxValue === 0) {
+            const fontSize = window.innerWidth < 768 ? "1rem" : "1.2rem";
+
             ctx.save();
 
             const text = "kein Niederschlag im dargestellten Zeitraum!";
             const maxWidth = width - 20;
             const lineHeight = 20;
             const xCenter = left + (right - left) / 2;
-            const yCenter = top + (bottom - top) / 2;
+            const yCenter = top + (height / 2) - 8;
 
-            ctx.font = " 1rem Poppins , sans-serif";
+            ctx.font = `${fontSize} Poppins, sans-serif`;
             ctx.fillStyle = "lightgrey";
             ctx.textAlign = "center";
 
@@ -105,8 +107,8 @@ const WolfsteinForecastBarChart = () => {
                         {
                             label: 'Niederschlag (mm)',
                             data: precipitationValues,
-                            backgroundColor: 'rgba(75, 192, 192, 1)',
-                            borderColor: 'rgba(75, 192, 192, 1)',
+                            backgroundColor: '#AADB40',
+                            borderColor: '#AADB40',
                             borderWidth: 1,
                             
                         },
@@ -133,10 +135,10 @@ const WolfsteinForecastBarChart = () => {
             },
             grid: {
               offset: false,
-                color: 'lightgrey',
-                borderColor: 'lightgrey', // Color of the border gridline
+                color: '#BFC2DA',
+                borderColor: '#6972A8', // Color of the border gridline
                 borderWidth: 1,
-                lineWidth: 1, // Grid line width
+                lineWidth: 2,
                 drawOnChartArea: true, // Ensure grid lines are drawn within the chart area
                 drawTicks: true, // Ensure grid lines are drawn for ticks
                 tickMarkLength: 5, // Adjust grid line length for ticks
@@ -146,11 +148,12 @@ const WolfsteinForecastBarChart = () => {
             ticks: {
 
               stepSize: 1, // Ensure one tick per day
+              minTicksLimit: 5, // Limit the number of ticks (days in this case)
 
                 maxTicksLimit: 5, // Limit the number of ticks (days in this case)
-                color: 'lightgrey',
+                color: '#6972A8',
                 font: {
-                    size: 14,
+                    size: 16,
                 },
                           callback: function (label, index, labels) {
                             const parsedDate = new Date(label);
@@ -163,22 +166,24 @@ const WolfsteinForecastBarChart = () => {
             y: {
                 beginAtZero: true,
                 grid: {
-                    color: 'lightgrey',
+                    lineWidth: 2,
+
+                    color: '#BFC2DA',
                     
                 },
                 ticks: {
                     maxTicksLimit: 4,
-                    color: 'lightgrey',
+                    color: '#6972A8',
                     font: {
-                        size: 14,
+                        size: 16,
                     },
                 },
                 title: {
                     display: true,
                     text: 'Niederschlag (mm / 3h)',
-                    color: 'lightgrey',
+                    color: '#6972A8',
                     font: {
-                        size: 16,
+                        size: 18,
                     },
                     padding: {
                         top: 10,
@@ -190,9 +195,11 @@ const WolfsteinForecastBarChart = () => {
             title: {
                 display: true,
                 text: 'Niederschlagsvorhersage (5 Tage)',
-                color: 'lightgrey',
+                color: '#18204F',
+                padding: {bottom:20},
+
                 font: {
-                    size: 18,
+                    size: 20,
                     weight: 'bolder',
                 },
             },

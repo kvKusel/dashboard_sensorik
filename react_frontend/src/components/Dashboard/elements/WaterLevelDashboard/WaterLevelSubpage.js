@@ -126,7 +126,7 @@ const handleTimePeriodChangeHistoricalPrecipitation = (periodHistoricalPrecipita
             justifyContent: "center",
             alignItems: "center",
             minHeight: "80vh",
-            color: "lightgrey",
+            color: "#18204F",
           }}
         >
           <p className="fs-1">Sensordaten werden geladen...</p>

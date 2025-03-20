@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import WeatherSubpage from "./elements/WeatherDashboard/WeatherSubpage";
 import TreeMonitoringSubpage from "./elements/TreeMonitoringSubpage";
@@ -14,6 +14,12 @@ const API_URL = process.env.REACT_APP_API_URL; // This will switch based on the 
 
 
 const Dashboard = () => {
+
+  useEffect(() => {
+    // Scroll to the top of the page
+    window.scrollTo(0, 0);
+  }, []); // Empty dependency array ensures this runs only once when the component mounts
+
   const [showPopup, setShowPopup] = useState(false);
   const [popupText, setPopupText] = useState("");
 
@@ -102,32 +108,22 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
 
   return (
     /* main container */
-
-    <div
-      className="container-fluid d-flex flex-column justify-content-between"
-      style={{
-        background: "#354F61",
-        // "linear-gradient(to right, #232D3F, #4D4C7D, #4D4C7D, #4D4C7D, #232D3F)",
-        minHeight: "100vh",
-      }}
-    >
-      {/* create two columns, one for a side menu, the other for the main content */}
-
-      <div className="row mx-xl-5 mt-2 ">
-        <div className="d-flex  align-items-center justify-content-between">
-          <div className=" pt-2" style={{ flexGrow: 1 }}>
-          <div className="d-none d-xl-block"> {/* Hide on small screens, show on medium and larger */}
-          <h2>
+<>
+<div className="d-flex  align-items-center justify-content-between py-2" style={{ backgroundImage: "linear-gradient(0deg, #1A2146 0%, #1F2C61 100%)", }}>
+  <div className="container px-1 d-flex align-items-center justify-content-between">
+          <div className=" pt-2" style={{ flexGrow: 1,  }}>
+          <div className="d-none d-xl-block" > {/* Hide on small screens, show on medium and larger */}
+          <h4 className="">
   <Link to="/" className="text-decoration-none text-white">
     
-      SENSORNETZ LAND{" "}
-      <span style={{ whiteSpace: "nowrap" }}>
+      SENSORNETZ LANDL(I)EBEN{" "}
+      {/* <span style={{ whiteSpace: "nowrap" }}>
         L<img className="logo" src={Logo} alt="Logo" />
         EBEN
-      </span>
+      </span> */}
     
   </Link>
-  </h2>
+  </h4>
 </div>
 
 
@@ -142,17 +138,21 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
   </div>
 </div> */}
 
-<Button
-                      variant="danger"
-                      className="mt-2  rounded px-2 text-center custom-dropdown me-3  d-none d-xl-block"
-                      style={{ backgroundColor: "rgb(220, 53, 69)" }}
-                      onClick={() => handleInfoText()}
-                    >
-                      Mehr erfahren
-                    </Button>
+{/* <h5
+  className="mt-2 me-3 d-none d-xl-block text-white"
+  style={{
+    color: "inherit",
+    fontWeight: "normal",
+    cursor: "pointer",
+    // textDecoration: "underline"
+  }}
+  onClick={() => handleInfoText()}
+>
+  Mehr erfahren
+</h5> */}
 
 
-                    {activeTab === "Hochbeet" && (
+                    {/* {activeTab === "Hochbeet" && (
   <div className="pt-2  d-none d-xl-block me-3">
     <Dropdown onSelect={selectAssetToDownload}>
       <Dropdown.Toggle variant="danger" id="dropdown-basic">
@@ -173,134 +173,369 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
       </Dropdown.Menu>
     </Dropdown>
   </div>
-)}
+)} */}
 
+<div className="pt-2 d-none d-xl-block d-flex">
+  <h5
+    className={` nav-item `}
+    style={{ 
+      cursor: "pointer", 
+      display: "inline-block",
+      marginRight: "20px",
 
+      fontWeight: "normal", 
+      marginRight: "20px",
+      textDecoration: activeTab === "Pegelmonitoring" ? "underline" : "none",
+      color: activeTab === "Pegelmonitoring" ? "#AADB40" : "#fff"
 
-          <div className="pt-2  d-none d-xl-block">
-  <Dropdown onSelect={handleSelect}>
-    <Dropdown.Toggle variant="danger" id="dropdown-basic">
-      Dashboard auswählen
-    </Dropdown.Toggle>
+    }}
+    onClick={() => handleSelect("Pegelmonitoring")}
+  >
+    Pegelmonitoring
+  </h5>
+  <h5
+    className={` nav-item `}
+    style={{ 
+      cursor: "pointer", 
+      display: "inline-block",
+      marginRight: "20px",
+      fontWeight: "normal", 
+      marginRight: "20px",
+      textDecoration: activeTab === "Baummonitoring" ? "underline" : "none",
+      color: activeTab === "Baummonitoring" ? "#AADB40" : "#fff"
 
-    <Dropdown.Menu>
-    <Dropdown.Item eventKey="Pegelmonitoring">Pegelmonitoring</Dropdown.Item>
-      <Dropdown.Item eventKey="Baummonitoring">Baummonitoring</Dropdown.Item>
-      <Dropdown.Item eventKey="Wetter">Wetter</Dropdown.Item>
-      <Dropdown.Item eventKey="Hochbeet">Hochbeet-Projekt</Dropdown.Item>
+    }}
+    onClick={() => handleSelect("Baummonitoring")}
+  >
+    Baummonitoring
+  </h5>
+  <h5
+    className={` nav-item `}
+    style={{ 
+      cursor: "pointer", 
+      display: "inline-block",
+      marginRight: "20px",
+      fontWeight: "normal", 
+      marginRight: "20px",
+      textDecoration: activeTab === "Wetter" ? "underline" : "none",
+      color: activeTab === "Wetter" ? "#AADB40" : "#fff"
 
-    </Dropdown.Menu>
-  </Dropdown>
+    }}
+    onClick={() => handleSelect("Wetter")}
+  >
+    Wetter
+  </h5>
+  <h5
+    className={`nav-item `}
+    style={{ 
+      cursor: "pointer", 
+      display: "inline-block",
+      marginRight: "20px",
+      fontWeight: "normal", 
+      marginRight: "20px",
+      textDecoration: activeTab === "Hochbeet" ? "underline" : "none",
+      color: activeTab === "Hochbeet" ? "#AADB40" : "#fff"
+
+    }}
+    onClick={() => handleSelect("Hochbeet")}
+  >
+    Hochbeet-Projekt
+  </h5>
 </div>
 
 
 
-<div className="d-xl-none  mt-1 d-flex w-100 justify-content-between"> {/* Hide on medium and larger screens, show only on small screens */}
-  <Link to="/" className="text-decoration-none text-dark mt-md-3 mt-2 ">
-    <img className="logo" src={Logo} alt="Logo" />
+<div className="d-xl-none   d-flex w-100 align-items-center justify-content-between"> {/* Hide on medium and larger screens, show only on small screens */}
+<span className="">
+  <Link to="/" className="text-decoration-none text-white">
+    
+      SENSORNETZ LANDL(I)EBEN{" "}
+      {/* <span style={{ whiteSpace: "nowrap" }}>
+        L<img className="logo" src={Logo} alt="Logo" />
+        EBEN
+      </span> */}
+    
   </Link>
+  </span>
 
           {/* Hamburger menu for small screens */}
-          <Navbar
-              style={{ backgroundColor: "rgb(53, 79, 97)" }}
-              expand="sm"
-              className="d-xl-none  navbar-dark"
-              expanded={navbarExpanded}
-              onToggle={() => setNavbarExpanded(!navbarExpanded)}
-            >
+          <div style={{ backgroundImage: "linear-gradient(0deg, #1A2146 0%, #1F2C61 100%)", 
+    zIndex: 1050,         // Higher z-index to keep it on top
+           }} className="d-xl-none">
+  <div className="container-fluid p-0">
+    <div className="d-flex justify-content-end">
+      {/* Hamburger Menu Toggle Button */}
+      <button 
+        className="navbar-toggler custom-toggler p-2 m-2" 
+        onClick={() => setNavbarExpanded(!navbarExpanded)}
+        style={{
+          background: 'none',
+          border: 'none',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          width: '30px',
+          height: '35px',
+          padding: '0',
+          zIndex: '10',
+        }}
+      >
+        <div
+                className="mb-1 pt-1"
+                style={{
+            width: '20px',
+            height: '30px',
+            backgroundColor: '#fff',
+            borderRadius: '5px',
+          }}
+        ></div>
+        <div
+                className="mb-1 pt-1"
 
- 
+          style={{
+            width: '20px',
+            height: '30px',
+            backgroundColor: '#fff',
+            borderRadius: '5px',
+          }}
+        ></div>
+        <div
+                        className=" pt-1"
 
-              <div className="container-fluid p-0">
+          style={{
+            
+            width: '20px',
+            height: '30px',
+            backgroundColor: '#fff',
+            borderRadius: '5px',
+          }}
+        ></div>
+      </button>
+    </div>
+    
+    {/* Full width dropdown menu */}
+    {navbarExpanded && (
+  <div className="dropdown-menu-full-width py-2" style={{ width: "100%", background: "#1A2146" }}>
+    <div className="container-fluid" style={{ textAlign: "right" }}>
+      {/* <p
+        onClick={() => {
+          handleInfoText();
+          setNavbarExpanded(false);
+        }}
+        style={{
+          marginTop: "5px",
+          marginBottom: "5px",
+          padding: "5px 5px",
+          color: "white",
+          textAlign: "right",
+          borderRadius: "5px", // Rounded corners like a button
+          cursor: "pointer", // Pointer cursor to indicate it's clickable
+          fontSize: "1.1em",
+          display: "inline-block",
+        }}
+      >
+        Mehr erfahren
+      </p> */}
 
+      
 
-
-                <Navbar.Brand className="invisible">Placeholder</Navbar.Brand>
-
-                <Navbar.Toggle
-                  aria-controls="basic-navbar-nav"
-                  className="custom-toggler"
-                  onClick={() => setNavbarExpanded(!navbarExpanded)}
-                />
-                <Navbar.Collapse id="basic-navbar-nav">
-                  
-                  <Nav className="w-100">
-                  <Button
-                      variant="danger"
-                      className="mt-2 w-100 rounded px-2 text-center custom-dropdown me-3"
-                      style={{ backgroundColor: "rgb(220, 53, 69)" }}
-                      onClick={() => handleInfoText()}
-                    >
-                      Mehr erfahren
-                    </Button>
-
-                    {activeTab === "Hochbeet" && (
-
-                    <NavDropdown
-                      title="Daten herunterladen"
-                      id="basic-nav-dropdown"
-                      className="mt-2 me-3 w-100 rounded p-0 text-center custom-dropdown"
-                      style={{ backgroundColor: "rgb(220, 53, 69)" }}
-                      onSelect={selectAssetToDownload}
-                    >
-                            <div className='p-1 ps-3 fw-bold'>Hochbeete:</div>
-
-                      <NavDropdown.Item as="button" eventKey="Wachstnix">
-                        Wachstnix
-                      </NavDropdown.Item>
-                      <NavDropdown.Item as="button" eventKey="Shoppingqueen">
-                        Shoppingqueen
-                      </NavDropdown.Item>
-                      <NavDropdown.Item as="button" eventKey="Kompostplatz 1">
-                        Kompostplatz 1
-                      </NavDropdown.Item>
-                      <NavDropdown.Item as="button" eventKey="Übersee">
-                        Übersee
-                      </NavDropdown.Item>
-                      <NavDropdown.Item as="button" eventKey="Beethoven">
-                        Beethoven
-                      </NavDropdown.Item>
-                      <NavDropdown.Item as="button" eventKey="Kohlarabi">
-                        Kohlarabi
-                      </NavDropdown.Item>
-                      <hr/>
-                      <NavDropdown.Item as="button" eventKey="Wetter">
-                        Wetterstation
-                      </NavDropdown.Item>
-                    </NavDropdown>
-                    )}
-
+      <div>
+        <div>
+      <Link to="/" 
+                  style={{
+                    marginTop: "5px",
+                    marginBottom: "5px",
+                    padding: "5px 5px",
+                    color: "white",
+                    textAlign: "right",
+                    borderRadius: "5px", // Rounded corners like a button
+                    cursor: "pointer", // Pointer cursor to indicate it's clickable
+                    fontSize: "1.1em",
+                    display: "inline-block",
+                    onClick: () => window.location.href = "/"
                     
-                    <NavDropdown
-                      title="Dashboard auswählen"
-                      id="basic-nav-dropdown"
-                      className="mt-2 w-100 rounded p-0 text-center custom-dropdown"
-                      style={{ backgroundColor: "rgb(220, 53, 69)" }}
-                      onSelect={handleSelect}
-                    >
-                      <NavDropdown.Item as="button" eventKey="Baummonitoring">
-                        Baummonitoring
-                      </NavDropdown.Item>
-                      <NavDropdown.Item as="button" eventKey="Wetter">
-                        Wetter
-                      </NavDropdown.Item>
-                      <NavDropdown.Item as="button" eventKey="Hochbeet">
-                        Hochbeet-Projekt
-                      </NavDropdown.Item>
-                      <NavDropdown.Item as="button" eventKey="Pegelmonitoring">
-                        Pegelmonitoring
-                      </NavDropdown.Item>
-                    </NavDropdown>
-                  </Nav>
-                </Navbar.Collapse>
-              </div>
-            </Navbar>
+                  }}
+            className=" " 
+            type="button" 
+            id="" 
+            data-bs-toggle="dropdown" 
+            aria-expanded="false"
+          >
+            Startseite
+          </Link>
+          </div>
+
+      <p 
+                  style={{
+                    marginTop: "5px",
+                    marginBottom: "5px",
+                    padding: "5px 5px",
+                    color: "white",
+                    textAlign: "right",
+                    borderRadius: "5px", // Rounded corners like a button
+                    cursor: "pointer", // Pointer cursor to indicate it's clickable
+                    fontSize: "1.1em",
+                    display: "inline-block",
+                    textDecoration: activeTab === "Pegelmonitoring" ? "underline" : "none",
+                    color: activeTab === "Pegelmonitoring" ? "#AADB40" : "#fff",
+                
+                  }}
+                  onClick={() => handleSelect("Pegelmonitoring")}
+
+            className=" " 
+            type="button" 
+            id="downloadDropdown" 
+            data-bs-toggle="dropdown" 
+            aria-expanded="false"
+          >
+            Pegelmonitoring
+          </p>
+          </div>
+<div>
+                <p 
+                  style={{
+                    marginTop: "5px",
+                    marginBottom: "5px",
+                    padding: "5px 5px",
+                    color: "white",
+                    textAlign: "right",
+                    borderRadius: "5px", // Rounded corners like a button
+                    cursor: "pointer", // Pointer cursor to indicate it's clickable
+                    fontSize: "1.1em",
+                    display: "inline-block",
+                    textDecoration: activeTab === "Baummonitoring" ? "underline" : "none",
+                    color: activeTab === "Baummonitoring" ? "#AADB40" : "#fff",
+                  }}
+                  onClick={() => handleSelect("Baummonitoring")}
+
+            className=" " 
+            type="button" 
+            id="downloadDropdown" 
+            data-bs-toggle="dropdown" 
+            aria-expanded="false"
+          >
+            Baummonitoring
+          </p>
+          </div>
+          <div>
+                <p 
+                  style={{
+                    marginTop: "5px",
+                    marginBottom: "5px",
+                    padding: "5px 5px",
+                    color: "white",
+                    textAlign: "right",
+                    borderRadius: "5px", // Rounded corners like a button
+                    cursor: "pointer", // Pointer cursor to indicate it's clickable
+                    fontSize: "1.1em",
+                    display: "inline-block",
+                    textDecoration: activeTab === "Wetter" ? "underline" : "none",
+                    color: activeTab === "Wetter" ? "#AADB40" : "#fff",
+                  }}
+                  onClick={() => handleSelect("Wetter")}
+
+            className=" " 
+            type="button" 
+            id="downloadDropdown" 
+            data-bs-toggle="dropdown" 
+            aria-expanded="false"
+          >
+            Wetter
+          </p>
+          </div>
+          <div>
+                <p 
+                  style={{
+                    marginTop: "5px",
+                    marginBottom: "5px",
+                    padding: "5px 5px",
+                    color: "white",
+                    textAlign: "right",
+                    borderRadius: "5px", // Rounded corners like a button
+                    cursor: "pointer", // Pointer cursor to indicate it's clickable
+                    fontSize: "1.1em",
+                    display: "inline-block",
+                    textDecoration: activeTab === "Hochbeet" ? "underline" : "none",
+                    color: activeTab === "Hochbeet" ? "#AADB40" : "#fff",
+                  }}
+                  onClick={() => handleSelect("Hochbeet")}
+
+            className=" " 
+            type="button" 
+            id="downloadDropdown" 
+            data-bs-toggle="dropdown" 
+            aria-expanded="false"
+          >
+            Hochbeet-Projekt
+          </p>
+          </div>
+          {/* {activeTab === "Hochbeet" && (
+        <div className="dropdown mb-2">
+          <p 
+                  style={{
+                    marginTop: "5px",
+                    marginBottom: "5px",
+                    padding: "5px 5px",
+                    color: "white",
+                    textAlign: "right",
+                    borderRadius: "5px", // Rounded corners like a button
+                    cursor: "pointer", // Pointer cursor to indicate it's clickable
+                    fontSize: "1.1em",
+                    display: "inline-block",
+                  }}
+            className=" dropdown-toggle" 
+            type="button" 
+            id="downloadDropdown" 
+            data-bs-toggle="dropdown" 
+            aria-expanded="false"
+          >
+            Daten herunterladen
+          </p>
+          <ul className="dropdown-menu w-100" aria-labelledby="downloadDropdown">
+            <li><div className='p-1 ps-3 fw-bold'>Hochbeete:</div></li>
+            <li><button className="dropdown-item" onClick={() => {selectAssetToDownload("Wachstnix"); setNavbarExpanded(false);}}>Wachstnix</button></li>
+            <li><button className="dropdown-item" onClick={() => {selectAssetToDownload("Shoppingqueen"); setNavbarExpanded(false);}}>Shoppingqueen</button></li>
+            <li><button className="dropdown-item" onClick={() => {selectAssetToDownload("Kompostplatz 1"); setNavbarExpanded(false);}}>Kompostplatz 1</button></li>
+            <li><button className="dropdown-item" onClick={() => {selectAssetToDownload("Übersee"); setNavbarExpanded(false);}}>Übersee</button></li>
+            <li><button className="dropdown-item" onClick={() => {selectAssetToDownload("Beethoven"); setNavbarExpanded(false);}}>Beethoven</button></li>
+            <li><button className="dropdown-item" onClick={() => {selectAssetToDownload("Kohlarabi"); setNavbarExpanded(false);}}>Kohlarabi</button></li>
+            <li><hr className="dropdown-divider"/></li>
+            <li><button className="dropdown-item" onClick={() => {selectAssetToDownload("Wetter"); setNavbarExpanded(false);}}>Wetterstation</button></li>
+          </ul>
+        </div>
+      )} */}
+    </div>
+  </div>
+)}
+
+  </div>
+</div>
 </div>
 
 
 
+</div>
 
         </div>
+
+
+        
+    <div
+      className="container-fluid d-flex flex-column justify-content-between" //container-fluid to make the page responsive?
+      style={{
+        background: "linear-gradient(180deg, #E2EBF7 86.43%, #FFF 100%)",
+        minHeight: "100vh",
+      }}
+    >
+      
+      
+      <div className="container">
+        
+      {/* create two columns, one for a side menu, the other for the main content */}
+
+      <div className="row  mt-2 "  >
+       
         {/*MAIN CONTENT  */}
         <div className="col-lg-12 ">
           {/* charts and content generated dynamically */}
@@ -353,7 +588,16 @@ Dank dieser Kombination können die Jugendlichen nun die Entwicklung ihrer Pflan
           </Button>
         </div>
       )}
+
+</div>
     </div>
+
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="auto"  fill="none">
+<path d="M-24.0981 93.347C-24.0981 93.347 27.3563 55.8054 87.3829 71.4753C147.414 87.1452 158.32 63.6411 207.322 45.3604C256.324 27.0796 275.301 59.8558 379.927 93.347C484.554 126.838 569.799 32.4347 674.422 61.9348C779.044 91.4366 829.418 81.848 906.918 26.5334C984.419 -28.7813 1081.29 10.3076 1176.23 81.1105C1271.16 151.913 1449.41 137.9 1507.54 75.9483C1565.66 13.9965 1598.6 52.245 1683.85 64.4654C1769.1 76.6857 1766.19 -61.3341 1946.37 64.4654L1946.37 875.664L-24.0981 875.664L-24.0981 93.347Z" fill="#05A550"/>
+<path d="M-24.0981 93.347C-24.0981 93.347 27.3563 55.8054 87.3829 71.4753C147.414 87.1452 158.32 63.6411 207.322 45.3604C256.324 27.0796 275.301 59.8558 379.927 93.347C484.554 126.838 569.799 32.4347 674.422 61.9348C779.044 91.4366 829.418 81.848 906.918 26.5334C984.419 -28.7813 1081.29 10.3076 1176.23 81.1105C1271.16 151.913 1449.41 137.9 1507.54 75.9483C1565.66 13.9965 1598.6 52.245 1683.85 64.4654C1769.1 76.6857 1766.19 -61.3341 1946.37 64.4654L1946.37 875.664L-24.0981 875.664L-24.0981 93.347Z" fill="#A3D933"/>
+</svg>
+
+</>
   );
 };
 

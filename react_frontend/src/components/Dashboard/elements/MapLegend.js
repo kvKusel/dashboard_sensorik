@@ -185,7 +185,7 @@ const MapLegend = () => {
     };
   
     return (
-      <div className="w-100 h-100" style={{ color: "lightgrey" }}>
+      <div className="w-100 h-100" style={{ color: "#18204F" }}>
                 <h5 className="fw-bold mb-2">Legende</h5>
 
         <div className="fw-bold ">{sections[currentSection]}</div>

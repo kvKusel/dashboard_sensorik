@@ -66,7 +66,7 @@ const PegelWolfsteinMap = ({ hoveredMarkerId, selectedMarkerId }) => {
     { id: "wolfstein", position: [49.581045, 7.619593], label: "Wolfstein" },
     { id: "rutsweiler", position: [49.566297, 7.623804], label: "Rutsweiler a.d. Lauter" },
     { id: "kreimbach4", position: [49.554087, 7.621883], label: "Kreimbach 4" },
-    { id: "lauterecken", position: [49.650507589739846, 7.590545488872102], label: "Lauterecken" },
+    { id: "lauterecken", position: [49.650507589739846, 7.590545488872102], label: "Lauterecken 1" },
     { id: "kreimbach1", position: [49.54844915352638, 7.631175812962766], label: "Kreimbach 1" },
     { id: "kreimbach2", position: [49.556388641429436, 7.636587365546659], label: "Kreimbach 2" },
     { id: "kreimbach3", position: [49.552000, 7.628000], label: "Kreimbach 3" }, // ADD THIS
@@ -145,7 +145,7 @@ const PegelWolfsteinMap = ({ hoveredMarkerId, selectedMarkerId }) => {
   const isSelected = selectedMarkerId === marker.id;
 
   // Define the marker size based on state
-  const markerSize = isSelected ? 32 : isHovered ? 32 : 24;
+  const markerSize = isSelected ? 34 : isHovered ? 34 : 24;
   
   return (
     <Marker
@@ -159,7 +159,7 @@ const PegelWolfsteinMap = ({ hoveredMarkerId, selectedMarkerId }) => {
           background-repeat: no-repeat;
           width: ${markerSize}px;
           height: ${markerSize * 1.5}px;
-          filter: ${isSelected ? 'hue-rotate(170deg) saturate(5)' : 'none'};
+filter: ${isSelected ? 'hue-rotate(170deg) saturate(2) brightness(1.1)' : isHovered ? 'hue-rotate(160deg) saturate(2) brightness(1.1)' : 'hue-rotate(10deg) saturate(1) brightness(1.2)'};
         "></div>`,
         iconSize: [markerSize, markerSize * 1.5],
         iconAnchor: [markerSize/2, markerSize * 1.5],

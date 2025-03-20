@@ -19,13 +19,14 @@ const MyButton = ({ to, buttonText, action }) => {
       <Link to={to} className="text-decoration-none">
         <motion.button
           type="button"
-          className="btn btn-light btn-lg "
+          className="btn btn-light btn-lg rounded-5 p-2"
           style={{
             width: "8em",
             backgroundColor: 'white',
             color: 'black',
             borderRadius: '0',
-            borderWidth:"0.1rem"
+            borderWidth:"0.1rem",
+            boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
           }}
           variants={buttonVariants}
           whileHover="hover"

@@ -206,7 +206,7 @@ code {
  /* class "cls-2" controls the left side background of the tree icons */
 
 .legend-icons .blue svg .cls-2 {
-  fill: #79E0EE;
+  fill: #7FC9D1;
 }
 
 .legend-icons .transparent svg .cls-2 {
@@ -218,34 +218,34 @@ code {
 }
 
 .legend-icons .gray svg .cls-2 {
-  fill: gray;
+  fill: #CDCDCD;
 }
 
 .legend-icons .green-left svg .cls-2 {
-  fill: rgb(25, 135, 84);
+  fill: #83C968;
 }
 
 .legend-icons .yellow-left svg .cls-2 {
-  fill: #FDFF00;
+  fill: #ECC85B;
 }
 
 .legend-icons .red-left svg .cls-2 {
-  fill: red;
+  fill: #E7844E;
 }
 
  /* class "cls-1" controls the left side background of the tree icons */
 
 
  .legend-icons .green-right svg .cls-1 {
-  fill: rgb(25, 135, 84);
+  fill: #83C968;
 }
 
 .legend-icons .yellow-right svg .cls-1 {
-  fill: #FDFF00;
+  fill: #ECC85B;
 }
 
 .legend-icons .red-right svg .cls-1 {
-  fill: red;
+  fill: #E7844E;
 }
 
 
@@ -342,19 +342,19 @@ code {
 }
 
 input:checked + .slider-burg {
-  background-color: rgba(75, 192, 192, 1);
+  background-color: #83C968;
 }
 
 input:focus + .slider-burg {
-  box-shadow: 0 0 1px rgba(75, 192, 192, 1);
+  box-shadow: 0 0 1px #83C968;
 }
 
 input:checked + .slider-gymnasium {
-  background-color: rgba(153, 102, 255, 1);
+  background-color: #E7844E;
 }
 
 input:focus + .slider-gymnasium {
-  box-shadow: 0 0 1px rgba(153, 102, 255, 1);
+  box-shadow: 0 0 1px #E7844E;
 }
 
 input:checked + .slider:before {
@@ -414,13 +414,25 @@ input:checked + .slider:before {
 }
 
 .navbar-toggler {
-  border: solid !important;
-  border-color: #5D7280 !important;
-  outline-color: white;
+  border: none;
+
 }
 
 .navbar-toggler:focus {
   outline: none !important;
+}
+
+.dropdown-menu-full-width {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+}
+
+/* Make sure dropdown menus are full width */
+.dropdown-menu {
+  width: 100% !important;
 }
 
 
@@ -543,10 +555,52 @@ input:checked + .slider:before {
 }
 
 .custom-dropdown2 {
-  background-color: transparent!important;
-  border-color:  lightgray!important;
-  color:  lightgray!important;
+  background-color: #fff!important;
+  border-color:  #6972A8!important;
+  color:  #6972A8!important;
 }
 
 
 
+@media (min-width: 1400px) {  /* Target XXL screens */
+  .container {
+    min-width: 80%; /* Adjust this to your preference */
+  }
+}
+
+
+
+/* For small devices, only round the top-left and top-right corners */
+@media (max-width: 768px) {
+
+.rounded-top-small {
+  border-top-right-radius: 0.75rem;
+
+  border-top-left-radius: 0.75rem;
+}
+}
+
+/* For medium devices and larger, round the top-left, top-right, and bottom-left corners */
+@media (min-width: 768px) {
+  .rounded-top-small {
+    border-bottom-left-radius: 0.75rem;
+    border-top-left-radius: 0.75rem;
+
+  }
+}
+
+@media (max-width: 768px) {
+
+.rounded-bottom-small {
+  border-bottom-left-radius: 0.75rem;
+
+  border-bottom-right-radius: 0.75rem;
+}
+}
+/* For medium devices and larger, round the top-right and bottom-right corners */
+@media (min-width: 768px) {
+  .rounded-bottom-small {
+    border-top-right-radius: 0.75rem;
+    border-bottom-right-radius: 0.75rem;
+  }
+}

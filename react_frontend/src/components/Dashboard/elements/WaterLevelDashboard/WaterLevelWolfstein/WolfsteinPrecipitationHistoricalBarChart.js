@@ -20,7 +20,7 @@ const API_URL = process.env.REACT_APP_API_URL.endsWith('/')
 // Define the custom plugin before registering it
 const noPrecipitationPluginHistorical = {
     id: 'noPrecipitationPluginHistorical',
-    beforeDraw: (chart) => {
+    afterDraw: (chart) => {
         const {
             ctx,
             chartArea: { top, right, bottom, left, width, height },
@@ -36,16 +36,18 @@ const noPrecipitationPluginHistorical = {
 
         // Check if the maximum value is 0
         if (maxValue === 0) {
+            const fontSize = window.innerWidth < 768 ? "1rem" : "1.2rem";
+
             ctx.save();
 
             const text = "kein Niederschlag im dargestellten Zeitraum!";
             const maxWidth = width - 20;
             const lineHeight = 20;
             const xCenter = left + (right - left) / 2;
-            const yCenter = top + (bottom - top) / 2;
+            const yCenter = top + (height / 2) - 8;
 
-            ctx.font = " 1rem Poppins , sans-serif";
-            ctx.fillStyle = "lightgrey";
+            ctx.font = `${fontSize} Poppins, sans-serif`;
+            ctx.fillStyle = "#6972A8";
             ctx.textAlign = "center";
 
             // Function to wrap text
@@ -122,10 +124,10 @@ const WolfsteinHistoricalBarChart = ({ currentPeriodHistoricalPrecipitation, his
                 },
             grid: {
               offset: false,
-                color: 'lightgrey',
-                borderColor: 'lightgrey', // Color of the border gridline
+                color: '#BFC2DA',
+                borderColor: '#6972A8', // Color of the border gridline
                 borderWidth: 1,
-                lineWidth: 1, // Grid line width
+                lineWidth: 2, // Grid line width
                 drawOnChartArea: true, // Ensure grid lines are drawn within the chart area
                 drawTicks: true, // Ensure grid lines are drawn for ticks
                 tickMarkLength: 5, // Adjust grid line length for ticks
@@ -137,9 +139,9 @@ const WolfsteinHistoricalBarChart = ({ currentPeriodHistoricalPrecipitation, his
               minTicksLimit: 5, // Ensure at least 5 ticks on the axis
 
                 maxTicksLimit: 5, // Limit the number of ticks (days in this case)
-                color: 'lightgrey',
+                color: '#6972A8',
                 font: {
-                    size: 14,
+                    size: 16,
                 },
                           callback: function (label, index, labels) {
                             const parsedDate = new Date(label);
@@ -153,21 +155,22 @@ const WolfsteinHistoricalBarChart = ({ currentPeriodHistoricalPrecipitation, his
             y: {
                 beginAtZero: true,
                 grid: {
-                    color: 'lightgrey',
+                    lineWidth: 2,
+                    color: '#BFC2DA',
                 },
                 ticks: {
                     maxTicksLimit: 4,
-                    color: 'lightgrey',
+                    color: '#6972A8',
                     font: {
-                        size: 14,
+                        size: 16,
                     },
                 },
                 title: {
                     display: true,
                     text: 'Niederschlag (mm/h)',
-                    color: 'lightgrey',
+                    color: '#6972A8',
                     font: {
-                        size: 16,
+                        size: 18,
                     },
                     padding: {
                         top: 10,
@@ -179,9 +182,11 @@ const WolfsteinHistoricalBarChart = ({ currentPeriodHistoricalPrecipitation, his
             title: {
                 display: true,
                 text: 'Niederschlag - Rückblick',
-                color: 'lightgrey',
+                padding: {bottom:20},
+
+                color: '#18204F',
                 font: {
-                    size: 18,
+                    size: 20,
                     weight: 'bolder',
                 },
             },

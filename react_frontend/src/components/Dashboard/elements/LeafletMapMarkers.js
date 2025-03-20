@@ -21,18 +21,18 @@ const MarkerComponent = ({ position, selectedTree, currentValueSoilMoisture, tre
 
     // status unknown / no data
     if (treeSenseHealth === 3 && (treeID === 1 || treeID === 2 || treeID === 4 ) ) {
-      colorLeft = "gray";
+      colorLeft = "#CDCDCD";
     }
   
     if (treeSenseHealth === 2 && (treeID === 1 || treeID === 2 || treeID === 4 ) ) {
-      colorLeft = "red";
+      colorLeft = "#E7844E";
     }
     if (treeSenseHealth === 1 && (treeID === 1 || treeID === 2 || treeID === 4 ) ) {
-      colorLeft = "yellow";
+      colorLeft = "#ECC85B";
     }
 
     if (treeSenseHealth === 0 && (treeID === 1 || treeID === 2 || treeID === 4 ) ) {
-      colorLeft = "green";
+      colorLeft = "#83C968";
     }
      else if ((treeID === 3 )|| treeID === 5) {
       colorLeft = "white";
@@ -45,11 +45,11 @@ const MarkerComponent = ({ position, selectedTree, currentValueSoilMoisture, tre
   //Pleiner Mostbirne:
   if (treeID === 1 || treeID === 2 || treeID === 3 || treeID === 4 || treeID === 5) {
   if (currentValueSoilMoisture < 10 ) {
-    colorRight = "red";
+    colorRight = "#E7844E";
   } else if (currentValueSoilMoisture >= 10 && currentValueSoilMoisture < 20) {
-    colorRight = "yellow";
+    colorRight = "#ECC85B";
   } else if (currentValueSoilMoisture >= 20) {
-    colorRight = "green";
+    colorRight = "#83C968";
 
   } else if (!currentValueSoilMoisture) {
     colorRight = "white";

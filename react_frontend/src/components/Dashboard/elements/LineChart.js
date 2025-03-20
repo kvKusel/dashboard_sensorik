@@ -6,6 +6,24 @@ import annotationPlugin from 'chartjs-plugin-annotation';
 Chart.register(annotationPlugin);
 
 const LineChart = ({ lineChartConfig, lineData, selectedTree, id, activeTab }) => {
+
+
+  // gradient
+  let width, height, gradient;
+function getGradient(ctx, chartArea) {
+  const chartWidth = chartArea.right - chartArea.left;
+  const chartHeight = chartArea.bottom - chartArea.top;
+  if (!gradient || width !== chartWidth || height !== chartHeight) {
+    // Create the gradient because this is either the first render
+    // or the size of the chart has changed
+    width = chartWidth;
+    height = chartHeight;
+    gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+    gradient.addColorStop(0, "rgba(170, 219, 64, 0.00)");
+    gradient.addColorStop(1, "#AADB40");
+  }
+  return gradient;
+}
   
 
 
@@ -80,7 +98,19 @@ const minDatasetValue = Array.isArray(lineData[0])
     type: "line",
     data: {
       labels: labels,
-      datasets: datasets,
+      datasets: datasets.map(dataset => ({
+        ...dataset,
+        fill: true,
+        backgroundColor: function(context) {
+          const chart = context.chart;
+          const {ctx, chartArea} = chart;
+          if (!chartArea) {
+            // This case happens on initial chart load
+            return null;
+          }
+          return getGradient(ctx, chartArea);
+        }
+      })),
     },
     options: {
       responsive: true,
@@ -90,7 +120,7 @@ const minDatasetValue = Array.isArray(lineData[0])
       scales: {
         x: {
           grid: {
-            color: "lightgrey",
+            color: "#BFC2DA",
           },
           type: "timeseries",
           offset: false,
@@ -104,7 +134,7 @@ const minDatasetValue = Array.isArray(lineData[0])
               return [formattedDate[0], formattedDate[1]];
             },
             maxTicksLimit: 4,
-            color: "lightgrey",
+            color: "#6972A8",
             font: {
               size: 14,
             },
@@ -113,16 +143,16 @@ const minDatasetValue = Array.isArray(lineData[0])
         y: {
           reverse: yAxisReverseEnabled, // Set reverse based on the property
           grid: {
-            color: "lightgrey",
+            color: "#BFC2DA",
           },
         min: Math.floor(minDatasetValue) - 10, // Set minimum dynamically
           
           ticks: {
             precision: 0,
             maxTicksLimit: 4,
-            color: "lightgrey",
+            color: "#6972A8",
             font: {
-              size: 14,
+              size: 16,
             },
             callback: function (value) {
               // First apply the standard thousand separator
@@ -145,10 +175,13 @@ const minDatasetValue = Array.isArray(lineData[0])
         },
         title: {
           text: lineChartConfig.plugins.title.text,
+          padding: {
+            top:10,
+            bottom:20},
           display: "yes",
-          color: "lightgrey",
+          color: "#18204F",
           font: {
-            size: "18rem",
+            size: "20",
           },
         },
         legend: {
@@ -163,6 +196,7 @@ const minDatasetValue = Array.isArray(lineData[0])
         },
       },
     },
+    
   };
 
 
@@ -191,7 +225,7 @@ const minDatasetValue = Array.isArray(lineData[0])
           scales: {
             x: {
               grid: {
-                color: "lightgrey",
+                color: "#BFC2DA",
               },
               type: "timeseries",
               time: {
@@ -206,15 +240,15 @@ const minDatasetValue = Array.isArray(lineData[0])
                 // minTicksLimit: 5, // Set a minimum number of ticks
                 // stepSize: 150,
                 // autoSkip: false,
-                color: "lightgrey",
+                color: "#6972A8",
                 font: {
-                  size: 14,
+                  size: 16,
                 },
               },
             },
             y: {
               grid: {
-                color: "lightgrey",
+                color: "#BFC2DA",
               },
               min: 0,
               max: 60,
@@ -222,9 +256,9 @@ const minDatasetValue = Array.isArray(lineData[0])
                 precision:0,
                 maxTicksLimit: 4,
                 // stepSize: 25, // Adjust the step size as needed
-                color: "lightgrey",
+                color: "#6972A8",
                 font: {
-                  size: 14,
+                  size: 16,
                 },
               },
             },
@@ -233,10 +267,13 @@ const minDatasetValue = Array.isArray(lineData[0])
           plugins: {
             title: {
               text: lineChartConfig.plugins.title.text,
+              padding: {
+                top:10,
+                bottom:20},
               display: "yes",
-              color: "lightgrey",
+              color: "#18204F",
               font: {
-                size: "18rem",
+                size: "20",
               },
             },
             legend: {
@@ -252,6 +289,7 @@ const minDatasetValue = Array.isArray(lineData[0])
           },
         },
         plugins: [
+          
           {
             beforeDraw: (chart, args, options) => {
               const {
@@ -260,16 +298,17 @@ const minDatasetValue = Array.isArray(lineData[0])
                 scales: { x, y },
               } = chart;
               ctx.save();
+              const fontSize = window.innerWidth < 768 ? "1rem" : "1.2rem";
 
               const text =
                 "Bitte einen Datensatz auswählen, um die Daten anzuzeigen";
               const maxWidth = width - 20; // Adjust according to your needs
               const lineHeight = 20; // Adjust according to your needs
               const xCenter = left + (right - left) / 2;
-              const yCenter = top + (bottom - top) / 2;
+              const yCenter = top + (height / 2) - 8;
 
-              ctx.font = "1rem Poppins, sans-serif";
-              ctx.fillStyle = "lightgrey";
+              ctx.font = `${fontSize} Poppins, sans-serif`;
+              ctx.fillStyle = "#6972A8";
               ctx.textAlign = "center";
 
               // Function to wrap text
@@ -330,7 +369,7 @@ const minDatasetValue = Array.isArray(lineData[0])
           scales: {
             x: {
               grid: {
-                color: "lightgrey",
+                color: "#BFC2DA",
               },
               type: "timeseries",
               time: {
@@ -345,15 +384,15 @@ const minDatasetValue = Array.isArray(lineData[0])
                 // minTicksLimit: 5, // Set a minimum number of ticks
                 // stepSize: 150,
                 // autoSkip: false,
-                color: "lightgrey",
+                color: "#6972A8",
                 font: {
-                  size: 14,
+                  size: 16,
                 },
               },
             },
             y: {
               grid: {
-                color: "lightgrey",
+                color: "#BFC2DA",
               },
               min: 0,
               max: 60,
@@ -361,9 +400,9 @@ const minDatasetValue = Array.isArray(lineData[0])
                 precision:0,
                 maxTicksLimit: 4,
                 // stepSize: 25, // Adjust the step size as needed
-                color: "lightgrey",
+                color: "#6972A8",
                 font: {
-                  size: 14,
+                  size: 16,
                 },
               },
             },
@@ -372,10 +411,13 @@ const minDatasetValue = Array.isArray(lineData[0])
           plugins: {
             title: {
               text: lineChartConfig.plugins.title.text,
+              padding: {
+                top:10,
+                bottom:20},
               display: "yes",
-              color: "lightgrey",
+              color: "#18204F",
               font: {
-                size: "18rem",
+                size: "20",
               },
             },
             legend: {
@@ -408,7 +450,7 @@ const minDatasetValue = Array.isArray(lineData[0])
               const yCenter = top + (bottom - top) / 2;
 
               ctx.font = "1rem Poppins, sans-serif";
-              ctx.fillStyle = "lightgrey";
+              ctx.fillStyle = "#6972A8";
               ctx.textAlign = "center";
 
               // Function to wrap text
@@ -470,7 +512,7 @@ const minDatasetValue = Array.isArray(lineData[0])
           scales: {
             x: {
               grid: {
-                color: "lightgrey",
+                color: "#BFC2DA",
               },
               type: "timeseries",
               time: {
@@ -485,15 +527,15 @@ const minDatasetValue = Array.isArray(lineData[0])
                 // minTicksLimit: 5, // Set a minimum number of ticks
                 // stepSize: 150,
                 // autoSkip: false,
-                color: "lightgrey",
+                color: "#6972A8",
                 font: {
-                  size: 14,
+                  size: 16,
                 },
               },
             },
             y: {
               grid: {
-                color: "lightgrey",
+                color: "#BFC2DA",
               },
               min: 0,
               max: 60,
@@ -501,9 +543,9 @@ const minDatasetValue = Array.isArray(lineData[0])
                 precision:0,
                 maxTicksLimit: 4,
                 // stepSize: 25, // Adjust the step size as needed
-                color: "lightgrey",
+                color: "#6972A8",
                 font: {
-                  size: 14,
+                  size: 16,
                 },
               },
             },
@@ -512,10 +554,13 @@ const minDatasetValue = Array.isArray(lineData[0])
           plugins: {
             title: {
               text: lineChartConfig.plugins.title.text,
+              padding: {
+                top:10,
+                bottom:20},
               display: "yes",
-              color: "lightgrey",
+              color: "#18204F",
               font: {
-                size: "18rem",
+                size: "20",
               },
             },
             legend: {
@@ -548,7 +593,7 @@ const minDatasetValue = Array.isArray(lineData[0])
               const yCenter = top + (bottom - top) / 2;
 
               ctx.font = "1rem Poppins, sans-serif";
-              ctx.fillStyle = "lightgrey";
+              ctx.fillStyle = "#6972A8";
               ctx.textAlign = "center";
 
               // Function to wrap text
@@ -608,7 +653,7 @@ const minDatasetValue = Array.isArray(lineData[0])
           scales: {
             x: {
               grid: {
-                color: "lightgrey",
+                color: "#BFC2DA",
               },
               type: "timeseries",
               time: {
@@ -623,15 +668,15 @@ const minDatasetValue = Array.isArray(lineData[0])
                 // minTicksLimit: 5, // Set a minimum number of ticks
                 // stepSize: 150,
                 // autoSkip: false,
-                color: "lightgrey",
+                color: "#6972A8",
                 font: {
-                  size: 14,
+                  size: 16,
                 },
               },
             },
             y: {
               grid: {
-                color: "lightgrey",
+                color: "#BFC2DA",
               },
               min: 0,
               max: 60,
@@ -639,9 +684,9 @@ const minDatasetValue = Array.isArray(lineData[0])
                 precision:0,
                 maxTicksLimit: 4,
                 // stepSize: 25, // Adjust the step size as needed
-                color: "lightgrey",
+                color: "#6972A8",
                 font: {
-                  size: 14,
+                  size: 16,
                 },
               },
             },
@@ -650,10 +695,13 @@ const minDatasetValue = Array.isArray(lineData[0])
           plugins: {
             title: {
               text: lineChartConfig.plugins.title.text,
+              padding: {
+                top:10,
+                bottom:20},
               display: "yes",
-              color: "lightgrey",
+              color: "#18204F",
               font: {
-                size: "18rem",
+                size: "20",
               },
             },
             legend: {
@@ -686,7 +734,7 @@ const minDatasetValue = Array.isArray(lineData[0])
               const yCenter = top + (bottom - top) / 2;
 
               ctx.font = "1rem Poppins, sans-serif";
-              ctx.fillStyle = "lightgrey";
+              ctx.fillStyle = "#6972A8";
               ctx.textAlign = "center";
 
               // Function to wrap text
@@ -748,7 +796,7 @@ const minDatasetValue = Array.isArray(lineData[0])
           scales: {
             x: {
               grid: {
-                color: "lightgrey",
+                color: "#BFC2DA",
               },
               type: "timeseries",
               time: {
@@ -763,15 +811,15 @@ const minDatasetValue = Array.isArray(lineData[0])
                 // minTicksLimit: 5, // Set a minimum number of ticks
                 // stepSize: 150,
                 // autoSkip: false,
-                color: "lightgrey",
+                color: "#6972A8",
                 font: {
-                  size: 14,
+                  size: 16,
                 },
               },
             },
             y: {
               grid: {
-                color: "lightgrey",
+                color: "#BFC2DA",
               },
               min: 0,
               max: 60,
@@ -779,9 +827,9 @@ const minDatasetValue = Array.isArray(lineData[0])
                 precision:0,
                 maxTicksLimit: 4,
                 // stepSize: 25, // Adjust the step size as needed
-                color: "lightgrey",
+                color: "#6972A8",
                 font: {
-                  size: 14,
+                  size: 16,
                 },
               },
             },
@@ -790,10 +838,13 @@ const minDatasetValue = Array.isArray(lineData[0])
           plugins: {
             title: {
               text: lineChartConfig.plugins.title.text,
+              padding: {
+                top:10,
+                bottom:20},
               display: "yes",
-              color: "lightgrey",
+              color: "#18204F",
               font: {
-                size: "18rem",
+                size: "20",
               },
             },
             legend: {
@@ -812,21 +863,23 @@ const minDatasetValue = Array.isArray(lineData[0])
           {
             beforeDraw: (chart, args, options) => {
               const {
+                
                 ctx,
                 chartArea: { top, right, bottom, left, width, height },
                 scales: { x, y },
               } = chart;
               ctx.save();
+        const fontSize = window.innerWidth < 768 ? "1rem" : "1.2rem";
 
               const text =
                 "Bitte einen Datensatz auswählen, um die Daten anzuzeigen";
               const maxWidth = width - 20; // Adjust according to your needs
               const lineHeight = 20; // Adjust according to your needs
               const xCenter = left + (right - left) / 2;
-              const yCenter = top + (bottom - top) / 2;
+              const yCenter = top + (height / 2) - 8;
 
-              ctx.font = "1rem Poppins, sans-serif";
-              ctx.fillStyle = "lightgrey";
+              ctx.font = `${fontSize} Poppins, sans-serif`;
+              ctx.fillStyle = "#6972A8";
               ctx.textAlign = "center";
 
               // Function to wrap text

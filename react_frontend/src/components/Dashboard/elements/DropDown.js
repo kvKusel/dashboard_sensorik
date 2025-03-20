@@ -7,7 +7,7 @@ function DropdownButton({ trees, onSelectTree }) {
   
   return (
     <Dropdown className='dropdown-center '>
-      <Dropdown.Toggle className='text-center lead fs-5 px-0 fw-normal'  variant="success" id="dropdown-basic" style={{ width: '100%', borderRadius:1, backgroundColor: "#003065", borderColor:"#003065"}}>
+      <Dropdown.Toggle className='text-center lead fs-5 px-0 fw-normal rounded-3'  variant="success" id="dropdown-basic" style={{ width: '100%', borderRadius:1, backgroundImage: "linear-gradient(0deg, #1A2146 0%, #1F2C61 100%)", borderColor:"#1A2146"}}>
         Ansicht wählen
       </Dropdown.Toggle>
 

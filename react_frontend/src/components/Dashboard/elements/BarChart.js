@@ -107,9 +107,9 @@ const BarChart = ({ barChartConfig, barChartData }) => {
                 return [formattedDate[0], formattedDate[1]];
             },
               maxTicksLimit: 4,
-              color: "lightgrey",
+              color: "#6972A8",
               font: {
-                size: 14,
+                size: 16,
               },
               
             },
@@ -122,9 +122,9 @@ const BarChart = ({ barChartConfig, barChartData }) => {
             ticks: {
               precision:0,      //display integers instead of floats
               maxTicksLimit: 4,
-              color: "lightgrey",
+              color: "#6972A8",
               font: {
-                size: 14,
+                size: 16,
               },
             },
           },
@@ -132,10 +132,14 @@ const BarChart = ({ barChartConfig, barChartData }) => {
         plugins: {
           title: {
             text: barChartConfig.plugins.title.text,
+            padding: {
+              top:10,
+              bottom:20},
+
             display: "yes",
-            color: "lightgrey",
+            color: "#18204F",
             font: {
-              size: "18rem",
+              size: "20",
             },
           },
           legend: {
@@ -171,10 +175,11 @@ const BarChart = ({ barChartConfig, barChartData }) => {
       const maxWidth = width - 20; // Adjust according to your needs
       const lineHeight = 20; // Adjust according to your needs
       const xCenter = left + (right - left) / 2;
-      const yCenter = top + (bottom - top) / 2;
+      const yCenter = top + (height / 2) - 8;
+      const fontSize = window.innerWidth < 768 ? "1rem" : "1.2rem";
 
-      ctx.font = "1rem Poppins, sans-serif";
-      ctx.fillStyle = "lightgrey";
+      ctx.font = `${fontSize} Poppins, sans-serif`;
+      ctx.fillStyle = "#6972A8";
       ctx.textAlign = "center";
 
       // Function to wrap text

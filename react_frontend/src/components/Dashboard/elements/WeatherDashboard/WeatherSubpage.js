@@ -391,15 +391,15 @@ const getCardinalDirection = (degree) => {
     datasets: [
       {
         label: "Weather Station Burg Lichtenberg Air Pressure",
-        borderColor: "rgba(75, 192, 192, 1)",
+        borderColor: "#88AF33",
         fill: false,
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        backgroundColor: "#83C968",
       },
       {
         label: "Weather Station Siebenpfeiffer-Gymnasium Air Pressure",
-        borderColor: "rgba(153, 102, 255, 1)",
+        borderColor: "#e7794e",
         fill: false,
-        backgroundColor: "rgba(153, 102, 255, 0.2)",
+        backgroundColor: "#E7844E",
       },
     ],
     plugins: {
@@ -430,15 +430,15 @@ const getCardinalDirection = (degree) => {
      datasets: [
        {
          label: "Wetterstation Burg Lichtenberg, Niederschlag",
-         borderColor: "rgba(75, 192, 192, 1)",
+         borderColor: "#88AF33",
          fill: false,
-         backgroundColor: "rgba(75, 192, 192, 1)",
+         backgroundColor: "#83C968",
        },
        {
          label: "Wetterstation Siebenpfeiffer-Gymnasium, Niederschlag",
-         borderColor: "rgba(153, 102, 255, 1)",
+         borderColor: "#e7794e",
          fill: false,
-         backgroundColor: "rgba(153, 102, 255, 1)",
+         backgroundColor: "#E7844E",
        },
      ],
      plugins: {
@@ -466,15 +466,15 @@ const getCardinalDirection = (degree) => {
     datasets: [
       {
         label: "Weather Station Air Pressure",
-        borderColor: "rgba(75, 192, 192, 1)",
+        borderColor: "#88AF33",
         fill: false,
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        backgroundColor: "#83C968",
       },
       {
         label: "Gymnasium Air Pressure",
-        borderColor: "rgba(153, 102, 255, 1)",
+        borderColor: "#e7794e",
         fill: false,
-        backgroundColor: "rgba(153, 102, 255, 0.2)",
+        backgroundColor: "#E7844E",
       },
     ],
     plugins: {
@@ -493,15 +493,15 @@ const getCardinalDirection = (degree) => {
     datasets: [
       {
         label: "Weather Station Burg Lichtenberg Humidity",
-        borderColor: "rgba(75, 192, 192, 1)",
+        borderColor: "#88AF33",
         fill: false,
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        backgroundColor: "#83C968",
       },
       {
         label: "Weather Station Siebenpfeiffer-Gymnasium Humidity",
-        borderColor: "rgba(153, 102, 255, 1)",
+        borderColor: "#e7794e",
         fill: false,
-        backgroundColor: "rgba(153, 102, 255, 0.2)",
+        backgroundColor: "#E7844E",
       },
     ],
     plugins: {
@@ -562,7 +562,7 @@ const getCardinalDirection = (degree) => {
           justifyContent: "center",
           alignItems: "center",
           minHeight: "80vh",
-          color: "lightgrey",
+          color: "#18204F",
         }}
       >
         <p className="fs-1">Sensordaten werden geladen...</p>
@@ -570,17 +570,17 @@ const getCardinalDirection = (degree) => {
     )}
     {!isLoading && (
         <React.Fragment>
-      <div className="row mt-4" style={{ flex: "1 1 auto" }}>
+      <div className="row mt-4 " style={{ flex: "1 1 auto" }}>
         <div
-          className="col-12 p-2 mb-3 mx-2"
+          className="col-12 p-2 mb-3 mx-2 rounded-3"
           style={{
             flex: "1 1 auto",
-
-            backgroundColor: "#5D7280",
+boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+            backgroundColor: "#FFFFFF",
             borderRadius: "0px",
             borderStyle: "solid",
             borderWidth: "1px",
-            borderColor: "#5D7280",
+            borderColor: "#FFFFFF",
             zIndex: "0", //add this to make sure the controls of the map are underneath the dropdown elements (Dropdown is directly above the map)
           }}
         >
@@ -588,13 +588,17 @@ const getCardinalDirection = (degree) => {
         </div>
       </div>
 
-      <div className="row mb-3" style={{ flex: "1 1 auto" }}>
+      <div className="row mb-3 " style={{ flex: "1 1 auto",  }}>
         <div className="col-12 d-flex flex-wrap px-2">
           <div
-            className="col-12 col-md-6 col-lg-4 col-xl-5 d-flex align-items-center p-5"
+            className="col-12 col-md-6 col-lg-4 col-xl-5 d-flex align-items-center p-2 rounded-top-small"
             style={{
-              backgroundColor: "#5D7280",
-              color: "lightgray",
+
+
+              boxShadow: "-4px 4px 24px rgba(40, 53, 131, 0.10), 0px -4px 24px rgba(40, 53, 131, 0.10)",
+
+              backgroundColor: "#FFFFFF",
+              color: "#18204F",
             }}
           >
             <div className="px-4">Wetterstation Burg Lichtenberg</div>
@@ -611,10 +615,12 @@ const getCardinalDirection = (degree) => {
           </div>
 
           <div
-            className="col-12 col-md-6 col-lg-8 col-xl-7 d-flex align-items-center p-5"
+            className="col-12 col-md-6 col-lg-8 col-xl-7 d-flex align-items-center px-2 py-4 rounded-bottom-small"
             style={{
-              backgroundColor: "#5D7280",
-              color: "lightgray",
+    
+
+              backgroundColor: "#FFFFFF",
+              color: "#18204F",
             }}
           >
             <div className="px-4">Wetterstation Siebenpfeiffer-Gymnasium</div>
@@ -636,222 +642,222 @@ const getCardinalDirection = (degree) => {
         <div className="col-12 d-flex flex-wrap px-2">
           <Grid container spacing={2}>
             <Grid item xs={12} md={6} lg={4}>
-              <Card style={{ backgroundColor: "#5D7280", color: "lightgray"}}>
+              <Card className="rounded-3"style={{ backgroundColor: "#FFFFFF", color: "#18204F", boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)"}}>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                     <strong>Temperatur</strong>
                   </Typography>
                   {stateSliderBurgLichtenberg && !stateSliderSiebenpfeifferGymnasium && (
-      <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{lastValueWeatherStationTemperature} °C</span>
+      <Typography variant="body2" color="#18204F">
+        Aktueller Wert: <span style={{ color: "#18204F" }}>{lastValueWeatherStationTemperature} °C</span>
       </Typography>
     )}
 
 {!stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium && (
-      <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(153, 102, 255, 1)" }}>{normalizedDataTemperature[1][normalizedDataTemperature[1].length - 1].value
+      <Typography variant="body2" color="#18204F">
+        Aktueller Wert: <span style={{ color: "#18204F" }}>{normalizedDataTemperature[1][normalizedDataTemperature[1].length - 1].value
         } °C</span>
       </Typography>
     )}
 
 {stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium &&  (
-      <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{lastValueWeatherStationTemperature} °C  </span><span> | </span><span style={{ color: "rgba(153, 102, 255, 1)" }}>{normalizedDataTemperature[1][normalizedDataTemperature[1].length - 1].value} °C</span>
+      <Typography variant="body2" color="#18204F">
+        Aktueller Wert: <span style={{ color: "#18204F" }}>{lastValueWeatherStationTemperature} °C  </span><span> | </span><span style={{ color: "#18204F" }}>{normalizedDataTemperature[1][normalizedDataTemperature[1].length - 1].value} °C</span>
       </Typography>
     )}
 
 {!stateSliderBurgLichtenberg && !stateSliderSiebenpfeifferGymnasium && (
-      <Typography variant="body2" color="lightgray">
+      <Typography variant="body2" color="#18204F">
         Aktueller Wert:
  
       </Typography>
     )}
-                  <Typography variant="body2" color="lightgray">
+                  <Typography variant="body2" color="#18204F">
                   Am: {format(new Date(normalizedDataTemperature[1][normalizedDataTemperature[1].length - 1].time), "dd/MM/yyyy 'um' HH:mm")}
                   </Typography>
                 </CardContent>
               </Card>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
-              <Card style={{ backgroundColor: "#5D7280", color: "lightgray" }}>
+              <Card className="rounded-3"style={{ backgroundColor: "#FFFFFF", color: "#18204F" , boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)"}}>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                     <strong>Niederschlag</strong>
                   </Typography>
                  {stateSliderBurgLichtenberg && !stateSliderSiebenpfeifferGymnasium && (
-      <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{lastPrecipitationValue} mm/h</span>
+      <Typography variant="body2" color="#18204F">
+        Aktueller Wert: <span style={{ color: "#18204F" }}>{lastPrecipitationValue} mm/h</span>
       </Typography>
     )}
 
 {!stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium && (
-      <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(153, 102, 255, 1)" }}>{normalizedDataPrecipitation[1][normalizedDataPrecipitation[1].length - 1].value
+      <Typography variant="body2" color="#18204F">
+        Aktueller Wert: <span style={{ color: "#18204F" }}>{normalizedDataPrecipitation[1][normalizedDataPrecipitation[1].length - 1].value
         } mm/h</span>
       </Typography>
     )}
 
 {stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium &&   (
-      <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{lastPrecipitationValue} mm/h  </span><span> | </span><span style={{ color: "rgba(153, 102, 255, 1)" }}>{normalizedDataPrecipitation[1][normalizedDataPrecipitation[1].length - 1].value} mm/h</span>
+      <Typography variant="body2" color="#18204F">
+        Aktueller Wert: <span style={{ color: "#18204F" }}>{lastPrecipitationValue} mm/h  </span><span> | </span><span style={{ color: "#18204F" }}>{normalizedDataPrecipitation[1][normalizedDataPrecipitation[1].length - 1].value} mm/h</span>
       </Typography>
     )}
 
 {!stateSliderBurgLichtenberg && !stateSliderSiebenpfeifferGymnasium && (
-      <Typography variant="body2" color="lightgray">
+      <Typography variant="body2" color="#18204F">
         Aktueller Wert:
  
       </Typography>
     )}
-                  <Typography variant="body2" color="lightgray">
+                  <Typography variant="body2" color="#18204F">
                   Am: {format(new Date(normalizedDataTemperature[1][normalizedDataTemperature[1].length - 1].time), "dd/MM/yyyy 'um' HH:mm")}
                   </Typography>
                 </CardContent>
               </Card>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
-              <Card style={{ backgroundColor: "#5D7280", color: "lightgray" }}>
+              <Card className="rounded-3"style={{ backgroundColor: "#FFFFFF", color: "#18204F", boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)" }}>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                     <strong>Luftfeuchte</strong>
                   </Typography>
                   {stateSliderBurgLichtenberg && !stateSliderSiebenpfeifferGymnasium && (
-      <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{lastValueWeatherStationHumidity} %</span>
+      <Typography variant="body2" color="#18204F">
+        Aktueller Wert: <span style={{ color: "#18204F" }}>{lastValueWeatherStationHumidity} %</span>
       </Typography>
     )}
 
 {!stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium && (
-      <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(153, 102, 255, 1)" }}>{normalizedDataHumidity[1][normalizedDataHumidity[1].length - 1].value
+      <Typography variant="body2" color="#18204F">
+        Aktueller Wert: <span style={{ color: "#18204F" }}>{normalizedDataHumidity[1][normalizedDataHumidity[1].length - 1].value
         } %</span>
       </Typography>
     )}
 
 {stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium &&   (
-      <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{lastValueWeatherStationHumidity} %  </span><span> | </span><span style={{ color: "rgba(153, 102, 255, 1)" }}>{normalizedDataHumidity[1][normalizedDataHumidity[1].length - 1].value} %</span>
+      <Typography variant="body2" color="#18204F">
+        Aktueller Wert: <span style={{ color: "#18204F" }}>{lastValueWeatherStationHumidity} %  </span><span> | </span><span style={{ color: "#18204F" }}>{normalizedDataHumidity[1][normalizedDataHumidity[1].length - 1].value} %</span>
       </Typography>
     )}
 
 {!stateSliderBurgLichtenberg && !stateSliderSiebenpfeifferGymnasium && (
-      <Typography variant="body2" color="lightgray">
+      <Typography variant="body2" color="#18204F">
         Aktueller Wert:
  
       </Typography>
     )}
-                  <Typography variant="body2" color="lightgray">
+                  <Typography variant="body2" color="#18204F">
                   Am: {format(new Date(normalizedDataTemperature[1][normalizedDataTemperature[1].length - 1].time), "dd/MM/yyyy 'um' HH:mm")}
                   </Typography>
                 </CardContent>
               </Card>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
-              <Card style={{ backgroundColor: "#5D7280", color: "lightgray" }}>
+              <Card className="rounded-3"style={{ backgroundColor: "#FFFFFF", color: "#18204F" , boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)"}}>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                     <strong>Luftdruck</strong>
                   </Typography>
                   {stateSliderBurgLichtenberg && !stateSliderSiebenpfeifferGymnasium && (
-      <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{lastValueWeatherStationAirPressure} hPa</span>
+      <Typography variant="body2" color="#18204F">
+        Aktueller Wert: <span style={{ color: "#18204F" }}>{lastValueWeatherStationAirPressure} hPa</span>
       </Typography>
     )}
 
 {!stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium && (
-      <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(153, 102, 255, 1)" }}>{normalizedDataAirPressure[1][normalizedDataAirPressure[1].length - 1].value
+      <Typography variant="body2" color="#18204F">
+        Aktueller Wert: <span style={{ color: "#18204F" }}>{normalizedDataAirPressure[1][normalizedDataAirPressure[1].length - 1].value
         } hPa</span>
       </Typography>
     )}
 
 {stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium &&   (
-      <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{lastValueWeatherStationAirPressure} hPa  </span><span> | </span><span style={{ color: "rgba(153, 102, 255, 1)" }}>{normalizedDataAirPressure[1][normalizedDataAirPressure[1].length - 1].value} hPa</span>
+      <Typography variant="body2" color="#18204F">
+        Aktueller Wert: <span style={{ color: "#18204F" }}>{lastValueWeatherStationAirPressure} hPa  </span><span> | </span><span style={{ color: "#18204F" }}>{normalizedDataAirPressure[1][normalizedDataAirPressure[1].length - 1].value} hPa</span>
       </Typography>
     )}
 
 {!stateSliderBurgLichtenberg && !stateSliderSiebenpfeifferGymnasium && (
-      <Typography variant="body2" color="lightgray">
+      <Typography variant="body2" color="#18204F">
         Aktueller Wert:
  
       </Typography>
     )}
-                  <Typography variant="body2" color="lightgray">
+                  <Typography variant="body2" color="#18204F">
                   Am: {format(new Date(normalizedDataTemperature[1][normalizedDataTemperature[1].length - 1].time), "dd/MM/yyyy 'um' HH:mm")}
                   </Typography>
                 </CardContent>
               </Card>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
-              <Card style={{ backgroundColor: "#5D7280", color: "lightgray" }}>
+              <Card className="rounded-3"style={{ backgroundColor: "#FFFFFF", color: "#18204F", boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)" }}>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                     <strong>Windgeschw.</strong>
                   </Typography>
                   {stateSliderBurgLichtenberg && !stateSliderSiebenpfeifferGymnasium && (
-      <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{windSpeed} m/s</span>
+      <Typography variant="body2" color="#18204F">
+        Aktueller Wert: <span style={{ color: "#18204F" }}>{windSpeed} m/s</span>
       </Typography>
     )}
 
 {!stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium && (
-      <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(153, 102, 255, 1)" }}>{weatherStationGymnasiumWindSpeedData[weatherStationGymnasiumWindSpeedData.length - 1].value
+      <Typography variant="body2" color="#18204F">
+        Aktueller Wert: <span style={{ color: "#18204F" }}>{weatherStationGymnasiumWindSpeedData[weatherStationGymnasiumWindSpeedData.length - 1].value
         } m/s</span>
       </Typography>
     )}
 
 {stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium &&   (
-      <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{windSpeed} m/s  </span><span> | </span><span style={{ color: "rgba(153, 102, 255, 1)" }}>{weatherStationGymnasiumWindSpeedData[weatherStationGymnasiumWindSpeedData.length - 1].value} m/s</span>
+      <Typography variant="body2" color="#18204F">
+        Aktueller Wert: <span style={{ color: "#18204F" }}>{windSpeed} m/s  </span><span> | </span><span style={{ color: "#18204F" }}>{weatherStationGymnasiumWindSpeedData[weatherStationGymnasiumWindSpeedData.length - 1].value} m/s</span>
       </Typography>
     )}
 
 {!stateSliderBurgLichtenberg && !stateSliderSiebenpfeifferGymnasium && (
-      <Typography variant="body2" color="lightgray">
+      <Typography variant="body2" color="#18204F">
         Aktueller Wert:
  
       </Typography>
     )}
-                  <Typography variant="body2" color="lightgray">
+                  <Typography variant="body2" color="#18204F">
                   Am: {format(new Date(normalizedDataTemperature[1][normalizedDataTemperature[1].length - 1].time), "dd/MM/yyyy 'um' HH:mm")}
                   </Typography>
                 </CardContent>
               </Card>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>
-              <Card style={{ backgroundColor: "#5D7280", color: "lightgray" }}>
+              <Card className="rounded-3" style={{ backgroundColor: "#FFFFFF", color: "#18204F", boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)" }}>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
                     <strong>Windrichtung</strong>
                   </Typography>
                   {stateSliderBurgLichtenberg && !stateSliderSiebenpfeifferGymnasium && (
-      <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{windDirection}</span>
+      <Typography variant="body2" color="#18204F">
+        Aktueller Wert: <span style={{ color: "#18204F" }}>{windDirection}</span>
       </Typography>
     )}
 
 {!stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium && (
-      <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(153, 102, 255, 1)" }}>{weatherStationGymnasiumWindDirectionData[weatherStationGymnasiumWindDirectionData.length - 1].value
+      <Typography variant="body2" color="#18204F">
+        Aktueller Wert: <span style={{ color: "#18204F" }}>{weatherStationGymnasiumWindDirectionData[weatherStationGymnasiumWindDirectionData.length - 1].value
         } </span>
       </Typography>
     )}
 
 {stateSliderBurgLichtenberg && stateSliderSiebenpfeifferGymnasium &&   (
-      <Typography variant="body2" color="lightgray">
-        Aktueller Wert: <span style={{ color: "rgba(75, 192, 192, 1)" }}>{windDirection} </span><span> | </span><span style={{ color: "rgba(153, 102, 255, 1)" }}>{weatherStationGymnasiumWindDirectionData[weatherStationGymnasiumWindDirectionData.length - 1].value} </span>
+      <Typography variant="body2" color="#18204F">
+        Aktueller Wert: <span style={{ color: "#18204F" }}>{windDirection} </span><span> | </span><span style={{ color: "#18204F" }}>{weatherStationGymnasiumWindDirectionData[weatherStationGymnasiumWindDirectionData.length - 1].value} </span>
       </Typography>
     )}
 
 {!stateSliderBurgLichtenberg && !stateSliderSiebenpfeifferGymnasium && (
-      <Typography variant="body2" color="lightgray">
+      <Typography variant="body2" color="#18204F">
         Aktueller Wert:
  
       </Typography>
     )}
-                  <Typography variant="body2" color="lightgray">
+                  <Typography variant="body2" color="#18204F">
                   Am: {format(new Date(normalizedDataTemperature[1][normalizedDataTemperature[1].length - 1].time), "dd/MM/yyyy 'um' HH:mm")}
                   </Typography>
                 </CardContent>
@@ -864,14 +870,15 @@ const getCardinalDirection = (degree) => {
       <div className="row " style={{ flex: "1 1 auto" }}>
         <div className="col-12 d-flex px-2 ">
           <div
-            className="chart-container d-flex "
+            className="chart-container d-flex rounded-3"
             style={{
+              boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
               flex: "1 1 auto",
               maxHeight: "30vh",
-              backgroundColor: "#5D7280",
+              backgroundColor: "#FFFFFF",
               borderStyle: "solid",
               borderWidth: "1px",
-              borderColor: "#5D7280",
+              borderColor: "#FFFFFF",
             }}
           >
 
@@ -925,12 +932,12 @@ const getCardinalDirection = (degree) => {
       <div className="row mt-3 mb-3" style={{ flex: "1 1 auto" }}>
         <div className="col-12 d-flex px-2 ">
           <div
-            className="chart-container d-flex "
+            className="chart-container d-flex rounded-3"
             style={{
               flex: "1 1 auto",
               maxHeight: "30vh",
-
-              backgroundColor: "#5D7280",
+boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+              backgroundColor: "#FFFFFF",
             }}
           >
 
@@ -983,12 +990,12 @@ const getCardinalDirection = (degree) => {
       <div className="row mt-3 mb-3" style={{ flex: "1 1 auto" }}>
         <div className="col-12 d-flex px-2 ">
           <div
-            className="chart-container d-flex "
+            className="chart-container d-flex rounded-3"
             style={{
               flex: "1 1 auto",
               maxHeight: "30vh",
-
-              backgroundColor: "#5D7280",
+boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+              backgroundColor: "#FFFFFF",
             }}
           >
             {/* air pressure line chart */}
@@ -1039,12 +1046,12 @@ const getCardinalDirection = (degree) => {
       <div className="row mt-3 mb-3" style={{ flex: "1 1 auto" }}>
         <div className="col-12 d-flex px-2 ">
           <div
-            className="chart-container d-flex "
+            className="chart-container d-flex rounded-3"
             style={{
               flex: "1 1 auto",
               maxHeight: "30vh",
-
-              backgroundColor: "#5D7280",
+boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+              backgroundColor: "#FFFFFF",
             }}
           >
 

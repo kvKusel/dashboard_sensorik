@@ -17,7 +17,7 @@ const GaugeWaterLevel = ({ value, arcs }) => {
       labels={{
         valueLabel: {
           formatTextValue: toCm,
-          style: { fontSize: 30, fill: "lightgray" },  // Set color for the current value
+          style: { fontSize: 30, fill: "#18204F" },  // Set color for the current value
 
         },
         tickLabels: {
@@ -27,7 +27,7 @@ const GaugeWaterLevel = ({ value, arcs }) => {
           ],
           defaultTickValueConfig: {
             formatTextValue: toCm,
-            style: { fontSize: 14, color: 'lightgray' },  // Set color for tick labels
+            style: { fontSize: 15, fill: '#18204F' },  // Set color for tick labels
           },
         },
       }}

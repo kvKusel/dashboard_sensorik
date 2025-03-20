@@ -1,5 +1,3 @@
-import React from 'react';
-
 const HochbeetTable = ({ onRowClick, moistureValues }) => {
   const data = [
     { name: 'Wachstnix', queryType: 'hochbeet_moisture1' },
@@ -16,13 +14,13 @@ const HochbeetTable = ({ onRowClick, moistureValues }) => {
   };
 
   const rowHoverStyle = {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'lightgray',
   };
 
   const getStatusStyle = (value) => {
-    if (value < 10) return { backgroundColor: 'red' };
-    if (value >= 10 && value < 20) return { backgroundColor: 'yellow' };
-    if (value >= 20) return { backgroundColor: 'green' };
+    if (value < 10) return { backgroundColor: '#E7844E' };
+    if (value >= 10 && value < 20) return { backgroundColor: '#ECC85B' };
+    if (value >= 20) return { backgroundColor: '#83C968' };
     return {}; // default style
   };
 
@@ -32,11 +30,35 @@ const HochbeetTable = ({ onRowClick, moistureValues }) => {
   };
 
   return (
-    <table style={{ width: '100%', height: "100%", color: '#FFFFFF', borderCollapse: 'collapse' }}>
-      <thead >
-        <tr >
-          <th style={{ borderBottom: '1px solid #FFFFFF', borderRight: '1px solid #FFFFFF', padding: '2px' }}>Name</th>
-          <th style={{ borderBottom: '1px solid #FFFFFF', padding: '2px' }}>Status</th>
+    <table className=""
+      style={{
+        width: '100%',
+        height: '100%',
+        color: '#18204F',
+        borderCollapse: 'collapse',
+        borderRadius: "0.75rem", // Equivalent to Bootstrap's rounded-3
+
+        overflow: 'hidden'
+      }}
+    >
+      <thead>
+      <tr style={{ backgroundImage: "linear-gradient(0deg, #1A2146 0%, #1F2C61 100%)", color: "white" }}>
+      <th
+          style={{
+            padding: "10px",
+            fontSize: "1.1em",
+            textAlign: "left",
+          }}
+        >
+            Name
+          </th>
+          <th className="text-center"
+            style={{
+              padding: '2px',
+            }}
+          >
+            Status
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -44,13 +66,41 @@ const HochbeetTable = ({ onRowClick, moistureValues }) => {
           <tr
             key={index}
             onClick={() => onRowClick(item.queryType)}
-            style={rowStyle}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = rowHoverStyle.backgroundColor}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = ''}
+            style={{
+              ...rowStyle,
+              backgroundColor: index % 2 === 0 ? '#F8F9FA' : '#fff', // Alternating row colors
+            }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.backgroundColor = rowHoverStyle.backgroundColor)
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.backgroundColor = index % 2 === 0 ? '#F8F9FA' : '#fff')
+            }
           >
-            <td style={{ borderBottom: '1px solid #FFFFFF', borderRight: '1px solid #FFFFFF', padding: '2px' }}>{item.name}</td>
-            <td style={{ borderBottom: '1px solid #FFFFFF', padding: '8px', textAlign: 'center' }}>
-              <div style={{ ...getStatusStyle(findMoistureValue(item.queryType)), width: '20px', height: '20px', borderRadius: '50%', display: 'inline-block' }}></div>
+            <td
+              style={{
+                borderBottom: '1px solid #FFFFFF',
+                padding: '5px',
+              }}
+            >
+              {item.name}
+            </td>
+            <td
+              style={{
+                borderBottom: '1px solid #FFFFFF',
+                padding: '8px',
+                textAlign: 'center',
+              }}
+            >
+              <div
+                style={{
+                  ...getStatusStyle(findMoistureValue(item.queryType)),
+                  width: '20px',
+                  height: '20px',
+                  borderRadius: '50%',
+                  display: 'inline-block',
+                }}
+              ></div>
             </td>
           </tr>
         ))}

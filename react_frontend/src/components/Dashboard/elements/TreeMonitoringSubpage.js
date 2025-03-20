@@ -288,7 +288,7 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
             justifyContent: "center",
             alignItems: "center",
             minHeight: "80vh",
-            color: "lightgrey",
+            color: "#18204F",
           }}
         >
           <p className="fs-1">Sensordaten werden geladen...</p>
@@ -333,15 +333,17 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
           <div className="row " style={{ flex: "1 1 auto" }}>
             <div className="col-xs-12 d-flex p-2 ">
               <div
-                className="chart-container step-4 "
+                className="chart-container step-4 rounded-3"
                 style={{
                   flex: "1 1 auto",
                   maxHeight: "30vh",
                   borderRadius: "0px",
-                  backgroundColor: "#5D7280",
+                  backgroundColor: "#FFFFFF",
                   borderStyle: "solid",
                   borderWidth: "1px",
-                  borderColor: "#5D7280",
+                  borderColor: "#FFFFFF",
+                  boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+
                 }}
               >
                 {/* {soilMoistureDataPleinerMostbirne && soilMoistureDataJonathan &&( */}
@@ -372,15 +374,17 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
           <div className="row " style={{ flex: "1 1 auto" }}>
             <div className="col-xs-12 d-flex p-2">
               <div
-                className="chart-container"
+                className="chart-container rounded-3"
                 style={{
                   flex: "1 1 auto",
                   maxHeight: "30vh",
                   borderRadius: "0px",
-                  backgroundColor: "#5D7280",
+                  backgroundColor: "#FFFFFF",
                   borderStyle: "solid",
                   borderWidth: "1px",
-                  borderColor: "#5D7280",
+                  borderColor: "#FFFFFF",
+                  boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+
                 }}
               >
                 <LineChart
@@ -398,15 +402,17 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
           <div className="row " style={{ flex: "1 1 auto" }}>
             <div className="col-xs-12 d-flex p-2">
               <div
-                className="chart-container"
+                className="chart-container rounded-3"
                 style={{
                   flex: "1 1 auto",
                   maxHeight: "30vh",
                   borderRadius: "0px",
-                  backgroundColor: "#5D7280",
+                  backgroundColor: "#FFFFFF",
                   borderStyle: "solid",
                   borderWidth: "1px",
-                  borderColor: "#5D7280",
+                  borderColor: "#FFFFFF",
+                  boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+
                 }}
               >
                 <LineChart
@@ -425,15 +431,17 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
           <div className="row " style={{ flex: "1 1 auto" }}>
             <div className="col-xs-12 d-flex p-2">
               <div
-                className="chart-container"
+                className="chart-container rounded-3"
                 style={{
                   flex: "1 1 auto",
                   maxHeight: "30vh",
                   borderRadius: "0px",
-                  backgroundColor: "#5D7280",
+                  backgroundColor: "#FFFFFF",
                   borderStyle: "solid",
                   borderWidth: "1px",
-                  borderColor: "#5D7280",
+                  borderColor: "#FFFFFF",
+                  boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+
                 }}
               >
                 {weatherStationPrecipitationData && (
@@ -453,15 +461,17 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
           >
             <div className="col-xs-12 d-flex p-2 ">
               <div
-                className="chart-container"
+                className="chart-container rounded-3"
                 style={{
                   flex: "1 1 auto",
                   maxHeight: "30vh",
                   borderRadius: "0px",
-                  backgroundColor: "#5D7280",
+                  backgroundColor: "#FFFFFF",
                   borderStyle: "solid",
                   borderWidth: "1px",
-                  borderColor: "#5D7280",
+                  borderColor: "#FFFFFF",
+                  boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+
                 }}
               >
                 {weatherStationTemperatureData && (

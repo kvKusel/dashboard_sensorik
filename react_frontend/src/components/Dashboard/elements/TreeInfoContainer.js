@@ -52,6 +52,8 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
             flex: "1 1 auto",
             justifyContent: 'center',
             borderWidth:'1px',
+            boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+
 
           }}
         >
@@ -62,16 +64,15 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
         </div>
           
         <div
-          className="col-12 d-flex flex-column mb-3 order-2" 
+          className="col-12 d-flex flex-column mb-3 order-2 rounded-3" 
           style={{
             backgroundColor: "white",
 
             borderRadius: "0px",
             flex: "0 1 10%",
             justifyContent: 'center',
-            borderStyle: 'solid',
-            borderWidth:'1px',
-            borderColor: 'silver'
+            boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+
 
           }}
         >
@@ -94,23 +95,25 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
         >
 
         <div
-          className="col-sm-6 col-md-12 d-flex   order-5 tree-gauge-child-md-and-larger" 
+          className="col-sm-6 col-md-12 d-flex   order-5 tree-gauge-child-md-and-larger rounded-3" 
           style={{
-            backgroundColor: "#5D7280",
+            backgroundColor: "#FFFFFF",
             borderRadius: "0px",
             borderStyle: 'solid',
             borderWidth:'1px',
-            borderColor: '#5D7280',
+            borderColor: '#FFFFFF',
+            boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+
           }}
         >
 
 
 
 
-               <div className="col-12  d-flex flex-column align-items-center justify-content-center pt-5 pb-3 mb-2" >
+               <div className="col-12  d-flex flex-column align-items-center justify-content-center pt-5 pb-3 mb-2 rounded-3" >
                {/* it's a "special chart" because the gauge's needle will be resting at 0 if undefined */}
             <Gauge  classAsProp="gaugeChartsTrees" currentValue={healthStateNeedleValues} config={treeHealthConfig} selectedTree={selectedTree} id={"specialChartGeneral"}/> 
-            <p className="d-flex flex-column align-items-center justify-content-center text-center px-2 " style={{flex: "1 1 auto", color: "lightgrey"}}>
+            <p className="d-flex flex-column align-items-center justify-content-center text-center px-2 " style={{flex: "1 1 auto", color: "#18204F"}}>
   Wasserbilanz Baum:<br />
   <strong>
   {!selectedTree || selectedTree.id === 6 || selectedTree.id === 7 ? '-' : (
@@ -150,13 +153,14 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
         
           
         <div
-          className="col-sm-6 col-md-12 d-flex  order-5 tree-gauge-child-md-and-larger " 
+          className="col-sm-6 col-md-12 d-flex  order-5 tree-gauge-child-md-and-larger rounded-3 " 
           style={{
-            backgroundColor: "#5D7280",
+            backgroundColor: "#FFFFFF",
             borderRadius: "0px",
             borderStyle: 'solid',
             borderWidth:'1px',
-            borderColor: '#5D7280',
+            borderColor: '#FFFFFF',
+            boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
 
 
           }}
@@ -166,7 +170,7 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
                {/* it's a "special chart" because it will be grayed out if undefined */}
                
             <Gauge classAsProp="gaugeChartsTrees" currentValue={currentValue} config={soilMoistureGaugeChartConfig} selectedTree={selectedTree} id={"specialChartSoilMoisture"} /> 
-            <p className="d-flex flex-column align-items-center justify-content-center text-center px-2" style={{flex: "1 1 auto", color: "lightgrey"}}>
+            <p className="d-flex flex-column align-items-center justify-content-center text-center px-2" style={{flex: "1 1 auto", color: "#18204F"}}>
   Bodenfeuchte:<br />
   <strong>
     {!selectedTree || selectedTree.id === 6 || selectedTree.id === 7 ? '-' : (
@@ -187,13 +191,15 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
         
 
         <div
-          className="col-12 p-2 mb-3 order-3 mobile-only second-step"
+          className="col-12 p-2 mb-3 order-3 mobile-only second-step rounded-3"
           style={{
             flex: "1 1 auto",
 
-            backgroundColor: "#5D7280",
+            backgroundColor: "#FFFFFF",
+            boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+
             borderRadius: "0px",
-            borderStyle: 'solid',
+            borderStyle: '#FFFFFF',
             borderWidth:'1px',
             borderColor: '#5D7280',
             zIndex: '0', //add this to make sure the controls of the map are underneath the dropdown elements (Dropdown is directly above the map)
@@ -205,15 +211,17 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
         </div>
 
         <div
-          className="col-12 p-2 mb-3 order-4 mobile-only "
+          className="col-12 p-2 mb-3 order-4 mobile-only rounded-3 "
           style={{
                           flex: "1 1 auto",
             maxHeight:"70%",
-            backgroundColor: "#5D7280",
+            backgroundColor: "#FFFFFF",
+            boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+
             borderRadius: "0px",
             borderStyle: 'solid',
             borderWidth:'1px',
-            borderColor: '#5D7280',
+            borderColor: '#FFFFFF',
             zIndex: '0', //add this to make sure the controls of the map are underneath the dropdown elements (Dropdown is directly above the map)
 
             
@@ -225,33 +233,37 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
         
       </div>
           
-      <div className="col-md-9 p-2 medium-and-larger-screens-only " >
+      <div className="col-md-9 p-2 medium-and-larger-screens-only rounded-3" >
         
         <div
-          className="col-12 p-2 third-step"
+          className="col-12 p-2 third-step rounded-3"
           style={{
             flex: "1 1 80%",
 
-            backgroundColor: "#5D7280",
+            backgroundColor: "#FFFFFF",
+            boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+
             borderRadius: "0px",
             borderStyle: 'solid',
             borderWidth:'1px',
-            borderColor: '#5D7280'
+            borderColor: '#FFFFFF'
           }}
         >
           <LeafletMap selectedTree={selectedTree} currentValueSoilMoisture={lastValuesSoilMoisture} treeSenseHealth={healthStateRaw}/>
         </div>
           
         <div
-          className="col-12 p-2 mt-3 "
+          className="col-12 p-2 mt-3 rounded-3 "
           style={{
                           flex: "1 1 20%",
             // maxHeight:"90%",
-            backgroundColor: "#5D7280",
+            backgroundColor: "#FFFFFF",
+            boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+
             borderRadius: "0px",
             borderStyle: 'solid',
             borderWidth:'1px',
-            borderColor: '#5D7280'
+            borderColor: '#FFFFFF'
           }}
         >
           <MapLegend />

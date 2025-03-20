@@ -178,6 +178,7 @@ const HochbeetDashboard = () => {
     weatherStationTemperatureData !== null &&
     weatherStationPrecipitationData !== null &&
     allSoilMoistureDataGymnasium !== null &&
+    allSoilMoistureDataGymnasium.length > 5 &&
     allPHData !== null &&
     moistureValues !== null &&
     phValues !== null 
@@ -209,6 +210,7 @@ useEffect(() => {
   }
 }, [selectedDataset]);
 
+console.log(allSoilMoistureDataGymnasium)
 
   
   return (
@@ -221,7 +223,7 @@ useEffect(() => {
             justifyContent: "center",
             alignItems: "center",
             minHeight: "80vh",
-            color: "lightgrey"
+            color: "#18204F"
           }}
         >
           <p className="fs-1">Sensordaten werden geladen...</p>
@@ -234,15 +236,15 @@ useEffect(() => {
 
       <div className="row mt-4" style={{ flex: "1 1 auto" }}>
         <div
-          className="col-12 col-md-3 p-2 mb-3 mx-2 "
+          className="col-12 col-md-3 p-0 mb-3 mx-2 rounded-3"
           style={{
             flex: "1 1 auto",
-
-            backgroundColor: "#5D7280",
-            borderRadius: "0px",
-            borderStyle: "solid",
-            borderWidth: "1px",
-            borderColor: "#5D7280",
+boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+            backgroundColor: "#FFF",
+            // borderRadius: "0px",
+            // borderStyle: "solid",
+            // borderWidth: "1px",
+            // borderColor: "#5D7280",
             zIndex: "0", //add this to make sure the controls of the map are underneath the dropdown elements (Dropdown is directly above the map)
           }}
         >
@@ -250,15 +252,16 @@ useEffect(() => {
         </div>
 
         <div
-          className="col-12 col-md-8 p-2 mb-3 mx-2  "
+          className="col-12 col-md-8 p-2 mb-3 mx-2  rounded-3"
           style={{
             flex: "1 1 auto",
+            boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
 
-            backgroundColor: "#5D7280",
-            borderRadius: "0px",
-            borderStyle: "solid",
-            borderWidth: "1px",
-            borderColor: "#5D7280",
+            backgroundColor: "#FFF",
+            // borderRadius: "0px",
+            // borderStyle: "solid",
+            // borderWidth: "1px",
+            // borderColor: "#5D7280",
             
             zIndex: "0", //add this to make sure the controls of the map are underneath the dropdown elements (Dropdown is directly above the map)
           }}
@@ -273,24 +276,22 @@ useEffect(() => {
 
 
 
-      <div className="row " style={{ flex: "1 1 auto" }}>
+      <div className="row mb-0" style={{ flex: "1 1 auto" }}>
         <div
-          className="col-12 col-md-3 p-0 mb-3 mx-2 order-3 order-md-1 d-flex flex-column align-items-center justify-content-center"
+          className="col-12 col-md-3 p-0 mb-3 mx-2 order-3 order-md-1 d-flex flex-column align-items-center justify-content-center rounded-3"
           style={{
             flex: "1 1 auto",
+            boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
 
-            backgroundColor: "#5D7280",
-            borderRadius: "0px",
-            borderStyle: "solid",
-            borderWidth: "1px",
-            borderColor: "#5D7280",
+            backgroundColor: "#FFF",
+      
             maxHeight:"30vh",
             // minHeight: "300px",
             zIndex: "0", //add this to make sure the controls of the map are underneath the dropdown elements (Dropdown is directly above the map)
           }}
         >
           <Gauge config={ soilMoistureGaugeChartConfig} currentValue={lastValue} classAsProp="gaugeChartsTrees"/>
-          <p className="d-flex flex-column align-items-center justify-content-center text-center px-2 " style={{flex: "0.1 0.1 auto", color: "lightgrey"}}>
+          <p className="d-flex flex-column align-items-center justify-content-center text-center px-2 " style={{flex: "0.1 0.1 auto", color: "#18204F"}}>
   Bodenfeuchte:<br />
   <strong>
   {
@@ -304,15 +305,12 @@ useEffect(() => {
         </div>
 
         <div
-          className="col-12 col-md-8 p-2 mb-3 mx-2 order-1 order-md-2 "
+          className="col-12 col-md-8 p-2 mb-3 mx-2 order-1 order-md-2 rounded-3"
           style={{
             flex: "1 1 auto",
+            boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
 
-            backgroundColor: "#5D7280",
-            borderRadius: "0px",
-            borderStyle: "solid",
-            borderWidth: "1px",
-            borderColor: "#5D7280",
+            backgroundColor: "#FFF",
             // minHeight: "300px",
             maxHeight: "30vh"
           }}
@@ -328,22 +326,20 @@ useEffect(() => {
 
 
         <div
-          className="col-12 col-md-3 p-0 mb-3 mx-2 order-4 order-md-3 d-flex flex-column align-items-center justify-content-center" 
+          className="col-12 col-md-3 p-0 mb-3 mx-2 order-4 order-md-3 d-flex flex-column align-items-center justify-content-center rounded-3" 
           style={{
             flex: "1 1 auto",
+            boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
 
-            backgroundColor: "#5D7280",
-            borderRadius: "0px",
-            borderStyle: "solid",
-            borderWidth: "1px",
-            borderColor: "#5D7280",
+            backgroundColor: "#FFF",
+ 
             maxHeight:"30vh",
             // minHeight: "300px",
             zIndex: "0", //add this to make sure the controls of the map are underneath the dropdown elements (Dropdown is directly above the map)
           }}
         >
           <Gauge config={ pHConfig} currentValue={lastPHValue} classAsProp="gaugeChartsTrees" id={"pH"} />
-          <p className="d-flex flex-column align-items-center justify-content-center text-center px-2 " style={{flex: "0.1 0.1 auto", color: "lightgrey"}}>
+          <p className="d-flex flex-column align-items-center justify-content-center text-center px-2 " style={{flex: "0.1 0.1 auto", color: "#18204F"}}>
   pH:
   <strong>
   <strong>{lastPHValue !== null ? lastPHValue : "-"}</strong>
@@ -353,15 +349,13 @@ useEffect(() => {
         </div>
 
         <div
-          className="col-12 col-md-8 p-2 mb-3 mx-2 order-2 order-md-4"
+          className="col-12 col-md-8 p-2 mb-3 mx-2 order-2 order-md-4 rounded-3"
           style={{
             flex: "1 1 auto",
+            boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
 
-            backgroundColor: "#5D7280",
-            borderRadius: "0px",
-            borderStyle: "solid",
-            borderWidth: "1px",
-            borderColor: "#5D7280",
+            backgroundColor: "#FFF",
+
             maxHeight:"30vh",
             // minHeight: "300px",
 

@@ -59,34 +59,46 @@ const SensorTable = ({
     },
   ];
 
+  const rowStyle = {
+    cursor: "pointer",
+    transition: "background-color 0.3s",
+  };
+
+  const rowHoverStyle = {
+    backgroundColor: "lightgray", // Hover background color
+  };
+
   return (
     <table
+      className="rounded-3"
       style={{
         width: "100%",
         height: "100%",
-        color: "#FFFFFF",
-        borderCollapse: "collapse",
+        borderRadius: "0.75rem", // Equivalent to Bootstrap's rounded-3
+        overflow: "hidden", // Ensures child elements respect the border radius
       }}
     >
       <thead>
-        <tr>
+        <tr
+          style={{
+            backgroundImage: "linear-gradient(0deg, #1A2146 0%, #1F2C61 100%)",
+            color: "white",
+          }}
+        >
           <th
             style={{
-              borderBottom: "1px solid #FFFFFF",
-              borderRight: "1px solid #FFFFFF",
-              padding: "2px",
-              paddingLeft: "10px",
+              padding: "10px",
               fontSize: "1.1em",
+              textAlign: "left",
             }}
           >
             Pegel
           </th>
           <th
             style={{
-              borderBottom: "1px solid #FFFFFF",
-              padding: "2px",
-              paddingLeft: "10px",
+              padding: "10px",
               fontSize: "1.1em",
+              textAlign: "center",
             }}
           >
             Wasserstand
@@ -94,46 +106,50 @@ const SensorTable = ({
         </tr>
       </thead>
       <tbody>
-        {data.map((item) => (
+        {data.map((item, index) => (
           <tr
             key={item.id}
             onClick={() => {
               onRowClick(item.queryType);
-              setSelectedMarkerId(item.id); // Set selected marker
+              setSelectedMarkerId(item.id);
             }}
-            onMouseEnter={() => setHoveredMarkerId(item.id)} // Set hovered marker
-            onMouseLeave={() => setHoveredMarkerId(null)} // Reset on leave
-            style={{ cursor: "pointer", transition: "background-color 0.3s" }}
+            onMouseEnter={() => {
+              setHoveredMarkerId(item.id);
+              // Update background color when hovered
+              document.getElementById(item.id).style.backgroundColor =
+                rowHoverStyle.backgroundColor;
+            }}
+            onMouseLeave={() => {
+              setHoveredMarkerId(null);
+              // Revert background color when hover ends
+              document.getElementById(item.id).style.backgroundColor =
+                index % 2 === 0 ? "#F8F9FA" : "#fff";
+            }}
+            id={item.id}
+            style={{
+              ...rowStyle,
+              backgroundColor: index % 2 === 0 ? "#F8F9FA" : "#fff", // Alternating row colors
+            }}
           >
+            <td style={{ padding: "10px", paddingLeft: "10px" }}>{item.name}</td>
             <td
               style={{
-                borderBottom: "1px solid #FFFFFF",
-                borderRight: "1px solid #FFFFFF",
-                padding: "2px",
-                paddingLeft: "10px",
-              }}
-            >
-              {item.name}
-            </td>
-            <td
-              style={{
-                borderBottom: "1px solid #FFFFFF",
-                padding: "8px",
+                padding: "10px",
                 textAlign: "center",
               }}
             >
               <div
                 style={{
-                  width: "14px",
-                  height: "14px",
+                  width: "16px",
+                  height: "16px",
                   borderRadius: "50%",
                   display: "inline-block",
                   backgroundColor:
                     item.value < 200
-                      ? "#00DFA2"
+                      ? "#83C968"
                       : item.value <= 250
-                      ? "#F6FA70"
-                      : "#FF0060",
+                      ? "#ECC85B"
+                      : "#E7844E",
                 }}
               ></div>
             </td>

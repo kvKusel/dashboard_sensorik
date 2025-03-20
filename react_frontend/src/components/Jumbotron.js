@@ -71,7 +71,7 @@ const MyJumbotron = () => {
     >
       {/* <motion.hr variants={fadeIn} className="border-dark" /> */}
       <motion.h1 variants={fadeIn} style={{ fontWeight: "500" }} initial="hidden" animate="visible">
-        <div className="row fs-1 text-center" > SENSOREN LAND L(i)EBEN</div>
+        <div className="row fs-1 text-center" > SENSORNETZ LAND L(i)EBEN</div>
       </motion.h1>
 
 

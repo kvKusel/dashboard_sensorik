@@ -39,12 +39,13 @@ const MultiLineChart = ({
   // Define the noDatasetPlugin
   const noDatasetPlugin = {
     id: 'noDatasetMessage',
-    beforeDraw: (chart) => {
+    afterDraw: (chart) => {
       const anyDatasetVisible = chart.data.datasets.some(
         (dataset, index) => chart.isDatasetVisible(index)
       );
       
       if (!anyDatasetVisible) {
+        const fontSize = window.innerWidth < 768 ? "1rem" : "1.2rem";
         const { ctx, chartArea } = chart;
         if (chartArea) {
           const { top, left, width, height } = chartArea;
@@ -54,10 +55,10 @@ const MultiLineChart = ({
           const maxWidth = width - 20;
           const lineHeight = 20;
           const xCenter = left + (width / 2);
-          const yCenter = top + (height / 2) - 6;
+          const yCenter = top + (height / 2) - 8;
           
-          ctx.font = "1rem Poppins, sans-serif";
-          ctx.fillStyle = "lightgrey";
+          ctx.font = `${fontSize} Poppins, sans-serif`;
+          ctx.fillStyle = "#6972A8";
           ctx.textAlign = "center";
           
           // Function to wrap text
@@ -155,56 +156,56 @@ const MultiLineChart = ({
       {
         label: "Pegel Wolfstein",
         data: createDataset(waterLevelWolfstein),
-        borderColor: "rgba(255, 99, 132, 1)",
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        borderColor: "rgba(231, 132, 78, 1)",
+        backgroundColor: "rgba(231, 132, 78, 1)",
         tension: 0.2,
         hidden: true
       },
       {
         label: "Pegel Rutsweiler a.d. Lauter",
         data: createDataset(waterLevelRutsweiler),
-        borderColor: "rgba(75, 192, 192, 1)",
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        borderColor: "rgba(236, 200, 91, 1)",
+        backgroundColor: "rgba(236, 200, 91, 1)",
         tension: 0.2,
         hidden: true
       },
       {
         label: "Pegel Kreimbach 1",
         data: createDataset(waterLevelKreimbach1),
-        borderColor: "rgb(255, 0, 255)",
-        backgroundColor: "rgba(255, 0, 255, 0.2)",
+        borderColor: "rgba(131, 201, 104, 1)",
+        backgroundColor: "rgba(131, 201, 104, 1)",
         tension: 0.2,
         hidden: true
       },
       {
         label: "Pegel Kreimbach 3",
         data: createDataset(waterLevelKreimbach3),
-        borderColor: "rgb(219, 6, 77)",
-        backgroundColor: "rgba(219, 6, 77, 0.2)",
+        borderColor: "rgba(209, 67, 91, 1)",
+        backgroundColor: "rgba(209, 67, 91, 1)",
         tension: 0.2,
         hidden: true
       },
       {
         label: "Pegel Kreimbach 4",
         data: createDataset(waterLevelKreimbach),
-        borderColor: "rgba(54, 162, 235, 1)",
-        backgroundColor: "rgba(54, 162, 235, 0.2)",
+        borderColor: "rgba(78, 159, 188, 1)",
+        backgroundColor: "rgba(78, 159, 188, 1)",
         tension: 0.2,
         hidden: true
       },
       {
         label: "Pegel Lauterecken 1",
         data: createDataset(waterLevelLauterecken1),
-        borderColor: "rgb(238, 255, 0)",
-        backgroundColor: "rgba(238, 255, 0, 0.2)",
+        borderColor: "rgba(74, 104, 212, 1)",
+        backgroundColor: "rgba(74, 104, 212, 1)",
         tension: 0.2,
         hidden: true
       },
       {
         label: "Pegel Kusel",
         data: createDataset(waterLevelKreisverwaltung),
-        borderColor: "rgb(37, 190, 70)",
-        backgroundColor: "rgba(37, 190, 70, 0.2)",
+        borderColor: "	rgba(166, 109, 212, 1)",
+        backgroundColor: "	rgba(166, 109, 212, 1)",
         tension: 0.2,
         hidden: true
       },
@@ -217,19 +218,22 @@ const MultiLineChart = ({
     plugins: {
       title: {
         display: true,
-        text: "Pegelstände - zeitlicher Verlauf",
-        color: "lightgrey",
+        padding: {
+          top:10,
+          bottom:20},        text: "Pegelstände - zeitlicher Verlauf",
+        color: "#18204F",
+        
         font: {
-          size: "18rem",
+          size: "20",
           weight: "bolder",
         },
       },
       legend: {
         display: true,
         labels: {
-          color: "lightgrey",
+          color: "#6972A8",
           font: {
-            size: "16rem",
+            size: "16",
           },
         },
         position: "bottom",
@@ -238,7 +242,9 @@ const MultiLineChart = ({
     },
     scales: {
       x: {
-        type: "timeseries",
+        offset: false,
+
+        type: "time",
         time: {
           unit: currentPeriod === "24h" ? "hour" : "day",
           displayFormats: {
@@ -249,13 +255,17 @@ const MultiLineChart = ({
         min: periodBoundary,
         max: Date.now(),
         grid: {
-          color: "lightgrey",
+          minTicksLimit: 5, // Ensure at least 5 ticks on the axis
+          
+          lineWidth: 2,
+          color: "#BFC2DA",
         },
         ticks: {
-          color: "lightgrey",
-          maxTicksLimit: 4,
+          color: "#6972A8",
+          
+          maxTicksLimit: 5,
           font: {
-            size: 14,
+            size: 16,
           },
           callback: function (label, index, labels) {
             const parsedDate = new Date(label);
@@ -272,22 +282,24 @@ const MultiLineChart = ({
         title: {
           display: true,
           text: "Wasserstand (cm)",
-          color: "lightgrey",
+          color: "#6972A8",
           font: {
-            size: 16,
+            size: 18,
           },
           padding: {
             top: 10,
           },
         },
         grid: {
-          color: "lightgrey",
+          lineWidth: 2,
+
+          color: "#BFC2DA",
         },
         ticks: {
           maxTicksLimit: 4,
-          color: "lightgrey",
+          color: "#6972A8",
           font: {
-            size: 14,
+            size: 16,
           },
         },
       },
