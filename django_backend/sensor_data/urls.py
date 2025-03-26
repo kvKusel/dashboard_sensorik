@@ -1,5 +1,46 @@
 from django.urls import path
-from .views import HistoricalPrecipitationView, ForecastDataViewWolfstein, AWSIotCore_Milesight_Sensors, ExportWeatherDataView, ExportAssetDataView, pHDataHochbeetProject, waterLevelDataView, SoilDataView, WeatherStationDataView, ElectricalResistanceDataView, TreeHealthDataView, index, TreeMoistureContentDataView, TTNWebhookView, WeatherDataView, SoilMoistureDataHochbeetProject
+from .views.views import index, HistoricalPrecipitationView, ForecastDataViewWolfstein
+from .views.treesense_views import (
+    ElectricalResistanceDataView, 
+    TreeHealthDataView, 
+    TreeMoistureContentDataView
+)
+
+from .views.soil_moisture_burg_lichtenberg_views import (
+    SoilDataView
+)
+
+from .views.weather_stations_views.siebenpfeiffer_gymnasium_views import (
+    WeatherDataView
+)
+
+from .views.weather_stations_views.burg_lichtenberg_views import (
+    WeatherStationDataView
+)
+
+from .views.post_method_views.nb_iot_aws import (
+    AWSIotCore_Milesight_Sensors
+)
+
+from .views.post_method_views.things_network_devices_views import (
+    TTNWebhookView
+)
+
+from .views.water_level_views import (
+    waterLevelDataView
+)
+
+from .views.generate_csv_views.csv_hochbeete_soil_and_ph_views import (
+    ExportAssetDataView
+)   
+
+from .views.generate_csv_views.csv_hochbeete_weather_station import (
+    ExportWeatherDataView
+)
+
+from .views.soil_moisture_and_ph_hochbeete_views import (
+    pHDataHochbeetProject, SoilMoistureDataHochbeetProject
+)
 
 urlpatterns = [
     path('soil-data/', SoilDataView.as_view(), name='soil_data'),

@@ -264,34 +264,6 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.ERROR(f'Failed to fetch tree moisture data for device {device_id}. Status code: {response.status_code}'))
      
   
-    # def handle(self, *args, **kwargs):
-    #     while True:
-    #         try:
-    #             self.stdout.write(self.style.NOTICE('Attempting to run fetch_data command...'))
-
-    #             access_token = self.authenticate()
-
-    #             if access_token:
-    #                 self.fetch_tree_moisture_data(access_token)
-    #                 self.fetch_electrical_resistance_data(access_token)
-    #                 self.fetch_tree_health_data(access_token)
-
-
-    #                 self.stdout.write(f"Next execution in 20 minutes at {tz_now() + timedelta(minutes=20)}")
-
-    #             else:
-    #                 self.stdout.write(self.style.ERROR('Authentication failed or access token not available'))
-
-    #         except Exception as e:
-    #             self.stdout.write(self.style.ERROR(f'Error: {str(e)}'))
-
-    #         # Close connections after operations
-    #         connections.close_all()
-
-    #         # Wait for 20 minutes before the next execution
-    #         time.sleep(20 * 60)  # No name conflict now
-            
-
 
 # Run the command if this script is executed directly
 if __name__ == "__main__":
