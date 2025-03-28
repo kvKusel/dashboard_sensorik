@@ -61,7 +61,7 @@ class SoilMoistureDataHochbeetProject(View):
 
             # Query the soil moisture readings for the device
             readings = SoilMoistureReading.objects.filter(device=device) \
-                .order_by('-timestamp')[:25]  # Get the last 25 readings
+                .order_by('-timestamp')[:100]  # Get the last 100 readings
                 
             if readings.exists():
                 # Convert queryset to DataFrame
