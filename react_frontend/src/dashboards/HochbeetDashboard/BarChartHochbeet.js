@@ -153,67 +153,67 @@ const BarChartHochbeet = ({ barChartConfig, barChartData }) => {
           },
         },
       },
-      plugins: [
-          {
-          afterDraw: (chart, args, options) => {
-            const {
-              ctx,
-              chartArea: { top, right, bottom, left, width, height },
-              scales: { x, y },
-            } = chart;
+//       plugins: [
+//           {
+//           afterDraw: (chart, args, options) => {
+//             const {
+//               ctx,
+//               chartArea: { top, right, bottom, left, width, height },
+//               scales: { x, y },
+//             } = chart;
 
-            // display the text 'kein Niederschlag im dargestellten Zeitraum' only if there is no precipitation to show (maxValue = 0)
-            // const { datasets } = chart.options.data;
-            const maxValue = Math.max(
-                ...barChartData
-                  .filter(dataPoint => new Date(dataPoint.time).getTime() >= twentyFourHoursAgoTimestamp)
-                  .map(dataPoint => dataPoint.value)
-              );     // Check if the maximum value is 0
-     if (maxValue === 0) {
-      ctx.save();
+//             // display the text 'kein Niederschlag im dargestellten Zeitraum' only if there is no precipitation to show (maxValue = 0)
+//             // const { datasets } = chart.options.data;
+//             const maxValue = Math.max(
+//                 ...barChartData
+//                   .filter(dataPoint => new Date(dataPoint.time).getTime() >= twentyFourHoursAgoTimestamp)
+//                   .map(dataPoint => dataPoint.value)
+//               );     // Check if the maximum value is 0
+//      if (maxValue === 0) {
+//       ctx.save();
 
-      const text =
-        "kein Niederschlag im dargestellten Zeitraum!";
-      const maxWidth = width - 20; // Adjust according to your needs
-      const lineHeight = 20; // Adjust according to your needs
-      const xCenter = left + (right - left) / 2;
-      const yCenter = top + (height / 2) - 8;
-      const fontSize = window.innerWidth < 768 ? "1rem" : "1.2rem";
+//       const text =
+//         "kein Niederschlag im dargestellten Zeitraum!";
+//       const maxWidth = width - 20; // Adjust according to your needs
+//       const lineHeight = 20; // Adjust according to your needs
+//       const xCenter = left + (right - left) / 2;
+//       const yCenter = top + (height / 2) - 8;
+//       const fontSize = window.innerWidth < 768 ? "1rem" : "1.2rem";
 
-      ctx.font = `${fontSize} Poppins, sans-serif`;
-      ctx.fillStyle = "#6972A8";
-      ctx.textAlign = "center";
+//       ctx.font = `${fontSize} Poppins, sans-serif`;
+//       ctx.fillStyle = "#6972A8";
+//       ctx.textAlign = "center";
 
-      // Function to wrap text
-      function wrapText(text, x, y, maxWidth, lineHeight) {
-        const words = text.split(" ");
-        let line = "";
-        let yPosition = y;
+//       // Function to wrap text
+//       function wrapText(text, x, y, maxWidth, lineHeight) {
+//         const words = text.split(" ");
+//         let line = "";
+//         let yPosition = y;
 
-        for (let word of words) {
-          const testLine = line + word + " ";
-          const metrics = ctx.measureText(testLine);
-          const testWidth = metrics.width;
-          if (testWidth > maxWidth && line !== "") {
-            ctx.fillText(line, x, yPosition);
-            line = word + " ";
-            yPosition += lineHeight;
-          } else {
-            line = testLine;
-          }
-        }
-        ctx.fillText(line, x, yPosition);
-      }
+//         for (let word of words) {
+//           const testLine = line + word + " ";
+//           const metrics = ctx.measureText(testLine);
+//           const testWidth = metrics.width;
+//           if (testWidth > maxWidth && line !== "") {
+//             ctx.fillText(line, x, yPosition);
+//             line = word + " ";
+//             yPosition += lineHeight;
+//           } else {
+//             line = testLine;
+//           }
+//         }
+//         ctx.fillText(line, x, yPosition);
+//       }
 
-      // Call wrapText function
-      wrapText(text, xCenter, yCenter, maxWidth, lineHeight);
+//       // Call wrapText function
+//       wrapText(text, xCenter, yCenter, maxWidth, lineHeight);
 
-      ctx.restore();
-    }
+//       ctx.restore();
+//     }
 
-   },
-        },
-      ],
+//    },
+//         },
+//       ],
     };
 
     // Add barThickness, maxBarThickness, and barPercentage properties to the datasets

@@ -6,9 +6,9 @@ import {
   soilMoistureConfig,
   soilMoistureGaugeChartConfig,
 } from "../../chartsConfig/chartsConfig";
-import BarChart from "../../components/BarChart";
+import BarChartHochbeet from "./BarChartHochbeet";
 import Gauge from "../../components/DoughnutChart";
-import LineChart from "../../components/LineChart";
+import LineChartHochbeet from "./LineChartHochbeet";
 import { useWeatherStationPrecipitation } from "../../hooks/weatherStation/WeatherStationPrecipitation ";
 import { useWeatherStationTemperature } from "../../hooks/weatherStation/WeatherStationTemperatureData";
 import HochbeetTable from "./HochbeetTable";
@@ -243,10 +243,9 @@ const HochbeetDashboard = () => {
                 maxHeight: "30vh",
               }}
             >
-              <LineChart
+              <LineChartHochbeet
                 lineChartConfig={soilMoistureConfig}
                 lineData={selectedDataset}
-                activeTab={"hochbeet"}
               />
             </div>
 
@@ -293,7 +292,7 @@ const HochbeetDashboard = () => {
               }}
             >
               {weatherStationGymnasiumPrecipitationData && (
-                <BarChart
+                <BarChartHochbeet
                   barChartConfig={precipitationConfig}
                   barChartData={weatherStationGymnasiumPrecipitationData}
                 />
