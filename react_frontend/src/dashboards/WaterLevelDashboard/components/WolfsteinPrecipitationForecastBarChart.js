@@ -36,7 +36,7 @@ const noPrecipitationPlugin = {
 
             ctx.save();
 
-            const text = "kein Niederschlag im dargestellten Zeitraum!";
+            const text = "kein Niederschlag im dargestellten Zeitraum.";
             const maxWidth = width - 20;
             const lineHeight = 20;
             const xCenter = left + (right - left) / 2;

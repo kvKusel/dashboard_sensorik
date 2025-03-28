@@ -171,7 +171,7 @@ const BarChart = ({ barChartConfig, barChartData }) => {
       ctx.save();
 
       const text =
-        "kein Niederschlag im dargestellten Zeitraum!";
+        "kein Niederschlag im dargestellten Zeitraum";
       const maxWidth = width - 20; // Adjust according to your needs
       const lineHeight = 20; // Adjust according to your needs
       const xCenter = left + (right - left) / 2;
