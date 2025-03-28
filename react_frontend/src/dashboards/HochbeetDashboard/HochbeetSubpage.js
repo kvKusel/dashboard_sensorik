@@ -7,8 +7,8 @@ import {
   soilMoistureGaugeChartConfig,
 } from "../../chartsConfig/chartsConfig";
 import BarChart from "../../components/BarChart";
-import LineChart from "../../components/LineChart";
 import Gauge from "../../components/DoughnutChart";
+import LineChart from "../../components/LineChart";
 import { useWeatherStationPrecipitation } from "../../hooks/weatherStation/WeatherStationPrecipitation ";
 import { useWeatherStationTemperature } from "../../hooks/weatherStation/WeatherStationTemperatureData";
 import HochbeetTable from "./HochbeetTable";
@@ -246,6 +246,7 @@ const HochbeetDashboard = () => {
               <LineChart
                 lineChartConfig={soilMoistureConfig}
                 lineData={selectedDataset}
+                activeTab={"hochbeet"}
               />
             </div>
 
