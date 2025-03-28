@@ -155,7 +155,7 @@ const BarChartHochbeet = ({ barChartConfig, barChartData }) => {
       },
       plugins: [
           {
-          afterDraw: (chart, args, options) => {
+          beforeDraw: (chart, args, options) => {
             const {
               ctx,
               chartArea: { top, right, bottom, left, width, height },

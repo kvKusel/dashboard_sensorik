@@ -75,8 +75,8 @@ const noPrecipitationPlugin = {
     },
 };
 
-// Now register the necessary components and the plugin
-ChartJS.register(TimeScale, LinearScale, BarElement, Title, Tooltip, Legend, noPrecipitationPlugin);
+// Now register the necessary components
+ChartJS.register(TimeScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 
 
@@ -206,7 +206,7 @@ const WolfsteinForecastBarChart = () => {
             legend: {
                 display: false,
             },
-            noPrecipitationPlugin: true
+            noPrecipitationPlugin
 
         },
     };

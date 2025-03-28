@@ -81,7 +81,7 @@ const noPrecipitationPluginHistorical = {
 
 
 // Register the plugin using the new method
-ChartJS.register(noPrecipitationPluginHistorical);
+// ChartJS.register(noPrecipitationPluginHistorical);
 
 
 
@@ -193,7 +193,7 @@ const WolfsteinHistoricalBarChart = ({ currentPeriodHistoricalPrecipitation, his
             legend: {
                 display: false,
             },
-            noPrecipitationPluginHistorical: true,  // Enable the custom plugin
+            noPrecipitationPluginHistorical  // Enable the custom plugin
 
         },
     };
