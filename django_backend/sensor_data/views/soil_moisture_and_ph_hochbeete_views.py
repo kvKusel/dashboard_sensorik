@@ -60,8 +60,9 @@ class SoilMoistureDataHochbeetProject(View):
                 return JsonResponse({"error": "Device not found"}, status=404)
 
             # Query the soil moisture readings for the device
-            readings = SoilMoistureReading.objects.filter(device=device).order_by('timestamp')
-
+            readings = SoilMoistureReading.objects.filter(device=device) \
+                .order_by('-timestamp')[:25]  # Get the last 25 readings
+                
             if readings.exists():
                 # Convert queryset to DataFrame
                 df = pd.DataFrame(list(readings.values('timestamp', 'soil_moisture_value')))
@@ -111,8 +112,11 @@ class pHDataHochbeetProject(View):
             except Device.DoesNotExist:
                 return JsonResponse({"error": "Device not found"}, status=404)
 
-            readings = pHReading.objects.filter(device=device).order_by('timestamp')
-
+            # Fetch only the last 25 readings, ordered by most recent first
+            readings = pHReading.objects.filter(device=device) \
+                .order_by('-timestamp')[:25]
+                
+                
             if readings.exists():
                 response_data = list(readings.values('timestamp', 'ph_value'))
                 logger.info(f"Response data: {response_data}")
