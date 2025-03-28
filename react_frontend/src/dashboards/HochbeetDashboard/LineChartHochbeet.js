@@ -202,7 +202,7 @@ const LineChartHochbeet = ({
     if (
       lineData.length === 0 
     ) {
-      lineChartConfiguration = {
+      lineChartConfiguration = {    
         type: "line",
         data: {
           labels: [],
