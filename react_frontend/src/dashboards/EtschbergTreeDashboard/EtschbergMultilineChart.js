@@ -89,16 +89,16 @@ const chartData = {
       title: {
         display: true,
         text: "Bodenfeuchte - zeitlicher Verlauf",
-        color: "lightgrey",
+        color: "#18204F",
         font: {
-          size: "18rem",
+          size: "20",
           weight: "bolder",
         },
       },
       legend: {
         display: true,
         labels: {
-          color: "lightgrey",
+          color: "#6972A8",
           padding: 20,
           font: {
             size: "18rem",
@@ -123,14 +123,14 @@ const chartData = {
         min: periodBoundary,
         max: Date.now(),
         grid: {
-          color: "lightgrey",
+          color: "#BFC2DA",
           
         },
         ticks: {
-          color: "lightgrey",
+          color: "#6972A8",
           maxTicksLimit: 4,
           font: {
-            size: 14,
+            size: 16,
           },
           callback: function (label, index, labels) {
             const parsedDate = new Date(label);
@@ -145,9 +145,9 @@ const chartData = {
         title: {
           display: true,
           text: "Bodenfeuchte (%)",
-          color: "lightgrey",
+          color: "#6972A8",
           font: {
-            size: 16,
+            size: 18,
           },
           padding: {
             top: 10,
@@ -156,14 +156,14 @@ const chartData = {
         min: 0,
         // max: 200,
         grid: {
-          color: "lightgrey",
+          color: "#BFC2DA",
 
         },
         ticks: {
           maxTicksLimit: 4,
-          color: "lightgrey",
+          color: "#6972A8",
           font: {
-            size: 14,
+            size: 16,
           },
         },
       },

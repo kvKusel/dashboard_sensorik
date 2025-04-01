@@ -1,25 +1,26 @@
-import requests
-from django.http import JsonResponse
-from django.db import connection
 import csv
-from django.views import View
-from influxdb_client import InfluxDBClient
-import os
 import json
+import logging
+import os
+import re
 from collections import defaultdict
 from datetime import datetime, timedelta
-import re
-from django.http import HttpResponse
+
 import pandas as pd
+import requests
+from django.db import connection
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
-from sensor_data.models import HistoricalPrecipitation, ForecastedPrecipitation, Device, WeatherData, SoilMoistureReading, pHReading, waterLevelReading
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-import logging
 from django.utils import timezone
+from django.utils.decorators import method_decorator
+from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from dotenv import load_dotenv
-import os
+from influxdb_client import InfluxDBClient
+from sensor_data.models import (Device, ForecastedPrecipitation,
+                                HistoricalPrecipitation, SoilMoistureReading,
+                                WeatherData, pHReading, waterLevelReading)
+
 #from .utils import ConstrainedDataAnalyzer
 
 
@@ -137,7 +138,24 @@ ALLOWED_DEVICE_IDS_AWS = {
         'water_level': 'distance',
         'battery': 'battery'
     }
-}
+},
+#sensor Lohnweiler_1
+"6749E17799680048": {
+    'type': 'water_level_sensor',
+    'field_mapping': {
+        'water_level': 'distance',
+        'battery': 'battery'
+    }
+},
+#sensor Hinzweiler_1
+"6749E17419910043": {
+    'type': 'water_level_sensor',
+    'field_mapping': {
+        'water_level': 'distance',
+        'battery': 'battery'
+    }
+},
+
 }
 
 # Define the fixed sensor-to-bottom distances for each device
@@ -148,8 +166,10 @@ SENSOR_TO_BOTTOM_DISTANCES = {
     "6749E09611440028": 126,                    ### subtract 30 cm still, because the canal itself is 30 cm lower!
     "6749E17530450043": 405, 
     "6749E09866560038": 453,
- 
-
+    #sensor Lohnweiler_1
+    "6749E17799680048": 300,                ### subtract XXX cm when the distance to bottom from sensor properly measured
+    #sensor Hinzweiler_1
+    "6749E17419910043": 300,                ### subtract XXX cm when the distance to bottom from sensor properly measured
 }
 
 @method_decorator(csrf_exempt, name='dispatch')

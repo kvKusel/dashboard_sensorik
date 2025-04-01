@@ -17,6 +17,8 @@ const WaterLevelSubpage = ({
   waterLevelLauterecken1,
   waterLevelKreimbach1,
   waterLevelKreimbach3,
+  waterLevelLohnweiler1,
+  waterLevelHinzweiler1,
   currentPeriod,
   onPeriodChange,
   historicalPrecipitationWolfstein,
@@ -82,6 +84,12 @@ const WaterLevelSubpage = ({
   const lastValueKreimbach3 =
     waterLevelKreimbach3[waterLevelKreimbach3.length - 1];
 
+    const lastValueLohnweiler1 =
+    waterLevelLohnweiler1[waterLevelLohnweiler1.length - 1];
+
+    const lastValueHinzweiler1 =
+    waterLevelHinzweiler1[waterLevelHinzweiler1.length - 1];
+
   ///////////////////////////////////            set up for the dynamic markers on the open weather map        ///////////////////////////////////////////////
 
   const [hoveredMarkerId, setHoveredMarkerId] = useState(null);
@@ -109,6 +117,8 @@ const WaterLevelSubpage = ({
       lastValueKreimbach4,
       lastValueLauterecken1,
       lastValueKreisverwaltung,
+      lastValueLohnweiler1,
+      lastValueHinzweiler1,
     };
 
     setLastValue(valueMap[queryType]);
@@ -125,6 +135,8 @@ const WaterLevelSubpage = ({
     lastValueKreimbach4: "Kreimbach 4",
     lastValueLauterecken1: "Lauterecken",
     lastValueKreisverwaltung: "Kusel",
+    lastValueLohnweiler1: "Lohnweiler",
+    lastValueHinzweiler1: "Hinzweiler",
   };
 
   // Get the name from the mapping based on selectedRow
@@ -214,6 +226,8 @@ const WaterLevelSubpage = ({
               lastValueLauterecken1={lastValueLauterecken1}
               lastValueRutsweiler={lastValueRutsweiler}
               lastValueWolfstein={lastValueWolfstein}
+              lastValueLohnweiler1={lastValueLohnweiler1}
+              lastValueHinzweiler1={lastValueHinzweiler1}
               setHoveredMarkerId={setHoveredMarkerId}
               setSelectedMarkerId={setSelectedMarkerId}
             />
@@ -306,6 +320,8 @@ const WaterLevelSubpage = ({
               waterLevelLauterecken1={waterLevelLauterecken1}
               waterLevelKreimbach1={waterLevelKreimbach1}
               waterLevelKreimbach3={waterLevelKreimbach3}
+              waterLevelLohnweiler1={waterLevelLohnweiler1}
+              waterLevelHinzweiler1={waterLevelHinzweiler1}
               currentPeriod={currentPeriod}
               activeDataset={activeDataset}
             />

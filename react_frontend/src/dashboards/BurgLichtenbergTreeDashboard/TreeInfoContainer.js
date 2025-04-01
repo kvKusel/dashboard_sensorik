@@ -5,7 +5,7 @@ import DropdownButton from '../../components/DropDown';
 import LeafletMap from "./LeafletMap";
 import MapLegend from './MapLegend';
 
-const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoistureData, treeSenseGeneralHealthData, lastValuesSoilMoisture, run, setRun, steps }) => {
+const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoistureData, treeSenseGeneralHealthData, lastValuesSoilMoisture}) => {
 
 
   // set up for the needles of the  gauge charts 
@@ -201,10 +201,9 @@ const TreeInfoContainer = ({ trees, selectedTree, handleTreeSelection, soilMoist
             borderStyle: '#FFFFFF',
             borderWidth:'1px',
             borderColor: '#5D7280',
-            zIndex: '0', //add this to make sure the controls of the map are underneath the dropdown elements (Dropdown is directly above the map)
+            zIndex: '0', 
           }}
         >
-                    {/* {soilMoistureData && ( */}
 
           <LeafletMap selectedTree={selectedTree} currentValueSoilMoisture={lastValuesSoilMoisture} treeSenseHealth={healthStateRaw}/>
         </div>

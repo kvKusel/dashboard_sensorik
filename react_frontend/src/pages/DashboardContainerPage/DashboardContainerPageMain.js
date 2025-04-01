@@ -6,6 +6,7 @@ import HochbeetSubpage from "../../dashboards/HochbeetDashboard/HochbeetSubpage"
 import TreeMonitoringSubpage from "../../dashboards/BurgLichtenbergTreeDashboard/TreeMonitoringSubpage";
 import WaterLevelDashboard from "../../dashboards/WaterLevelDashboard/WaterLevelMainPage";
 import WeatherSubpage from "../../dashboards/WeatherDashboard/WeatherSubpage";
+import EtschbergDashboard from "../../dashboards/EtschbergTreeDashboard/EtschbergMainPage";
 import LargeNavbar from "./NavbarLarge";
 import SmallNavbar from "./NavbarSmall";
 
@@ -124,11 +125,11 @@ const Dashboard = () => {
             <div className="col-lg-12 ">
               {/* charts and content generated dynamically */}
               <div className="ms-lg-2">
-                {activeTab === "Baummonitoring" ? (
+                {activeTab === "BaummonitoringBurgLichtenberg" ? (
                   <TreeMonitoringSubpage />
-                ) : // <EtschbergDashboard
-
-                // />
+                ) : activeTab === "BaummonitoringEtschberg" ? (
+                  <EtschbergDashboard />
+                ) :
                 activeTab === "Wetter" ? (
                   <WeatherSubpage />
                 ) : activeTab === "Hochbeet" ? (

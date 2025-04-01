@@ -30,6 +30,8 @@ const MultiLineChart = ({
   waterLevelLauterecken1,
   waterLevelKreimbach1,
   waterLevelKreimbach3,
+  waterLevelLohnweiler1,
+  waterLevelHinzweiler1,
   currentPeriod,
   activeDataset = null // This will be the dataset we want to show
 }) => {
@@ -105,7 +107,9 @@ const MultiLineChart = ({
         lastValueKreimbach3: 3,
         lastValueKreimbach4: 4,
         lastValueLauterecken1: 5,
-        lastValueKreisverwaltung: 6
+        lastValueKreisverwaltung: 6,
+        lastValueLohnweiler1: 7,
+        lastValueHinzweiler1: 8,
       };
       
       // Hide all datasets
@@ -210,6 +214,22 @@ const MultiLineChart = ({
         data: createDataset(waterLevelKreisverwaltung),
         borderColor: "	rgba(166, 109, 212, 1)",
         backgroundColor: "	rgba(166, 109, 212, 1)",
+        tension: 0.2,
+        hidden: true
+      },
+      {
+        label: "Pegel Lohnweiler",
+        data: createDataset(waterLevelKreisverwaltung),
+        borderColor: "	rgb(97, 3, 3)",
+        backgroundColor: "	rgb(97, 3, 3)",
+        tension: 0.2,
+        hidden: true
+      },
+      {
+        label: "Pegel Hinzweiler",
+        data: createDataset(waterLevelKreisverwaltung),
+        borderColor: "	rgb(2, 102, 52)",
+        backgroundColor: "	rgb(2, 102, 52)",
         tension: 0.2,
         hidden: true
       },

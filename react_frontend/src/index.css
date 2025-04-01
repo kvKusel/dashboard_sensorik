@@ -604,3 +604,16 @@ input:checked + .slider:before {
     border-bottom-right-radius: 0.75rem;
   }
 }
+
+.custom-dropdown-item {
+  cursor: pointer;
+  color: black;
+  padding: 8px 12px; /* Adjust as needed */
+  transition: background 0.2s ease-in-out;
+  display: block; /* Ensures it takes the full width */
+  width: 100%; /* Covers the full width of the container */
+}
+
+.custom-dropdown-item:hover {
+  background: #f5f5f5;
+}

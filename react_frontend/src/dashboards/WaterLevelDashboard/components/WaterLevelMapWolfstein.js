@@ -68,7 +68,10 @@ const PegelWolfsteinMap = ({ hoveredMarkerId, selectedMarkerId }) => {
     { id: "lauterecken", position: [49.650507589739846, 7.590545488872102], label: "Lauterecken 1" },
     { id: "kreimbach1", position: [49.54844915352638, 7.631175812962766], label: "Kreimbach 1" },
     { id: "kreimbach3", position: [49.556388641429436, 7.636587365546659], label: "Kreimbach 3" }, 
-    { id: "kusel", position: [49.539820952844316, 7.396752597634942], label: "Kusel" }
+    { id: "kusel", position: [49.539820952844316, 7.396752597634942], label: "Kusel" },
+    { id: "lohnweiler1", position: [49.63553061963123, 7.59709411130715], label: "Lohnweiler" },
+    { id: "hinzweiler1", position: [49.589414954381816, 7.548317327514346], label: "Hinzweiler" },
+
   ];
   
 

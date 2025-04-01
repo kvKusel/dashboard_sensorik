@@ -7,6 +7,8 @@ const SensorTable = ({
   lastValueLauterecken1,
   lastValueRutsweiler,
   lastValueWolfstein,
+  lastValueLohnweiler1,
+  lastValueHinzweiler1,
   setHoveredMarkerId,
   setSelectedMarkerId,
 }) => {
@@ -55,6 +57,23 @@ const SensorTable = ({
       queryType: "lastValueKreisverwaltung",
       value: lastValueKreisverwaltung?.value
         ? Number(lastValueKreisverwaltung.value)
+        : 0,
+    },
+    {
+      id: "lohnweiler1",
+      name: "Lohnweiler",
+      name: "Lohnweiler",
+      queryType: "lastValueLohnweiler1",
+      value: lastValueLohnweiler1?.value
+        ? Number(lastValueLohnweiler1.value)
+        : 0,
+    },
+    {
+      id: "hinzweiler1",
+      name: "Hinzweiler",
+      queryType: "lastValueHinzweiler1",
+      value: lastValueHinzweiler1?.value
+        ? Number(lastValueHinzweiler1.value)
         : 0,
     },
   ];

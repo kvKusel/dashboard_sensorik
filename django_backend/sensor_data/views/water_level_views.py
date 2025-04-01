@@ -46,6 +46,8 @@ class waterLevelDataView(View):
                 "water_level_lauterecken_1": "6749E17530450043",
                 "water_level_kreimbach_1": "6749E09866560038",
                 "water_level_kreimbach_3": "6749E09611440028",
+                "water_level_lohnweiler_1": "6749E17799680048",
+                "water_level_hinzweiler_1": "6749E17419910043",
 
             }
 

@@ -17,6 +17,8 @@ const WaterLevelDashboard = () => {
   const [waterLevelLauterecken1, setWaterLevelLauterecken1] = useState([]);
   const [waterLevelKreimbach1, setWaterLevelKreimbach1] = useState([]);
   const [waterLevelKreimbach3, setWaterLevelKreimbach3] = useState([]);
+  const [waterLevelLohnweiler1, setWaterLevelLohnweiler1] = useState([]);
+  const [waterLevelHinzweiler1, setWaterLevelHinzweiler1] = useState([]);
 
   const [precipitationWolfsteinHistorical, setPrecipitationWolfsteinHistorical] = useState([]);
 
@@ -51,6 +53,12 @@ const WaterLevelDashboard = () => {
         const responseKreimbach3 = await axios.get(
           `${API_URL}water-level-data/?query_type=water_level_kreimbach_3${queryParam}`
         );
+        const responseLohnweiler1 = await axios.get(
+          `${API_URL}water-level-data/?query_type=water_level_lohnweiler_1${queryParam}`
+        );
+        const responseHinzweiler1 = await axios.get(
+          `${API_URL}water-level-data/?query_type=water_level_hinzweiler_1${queryParam}`
+        );
 
         const transformData = (data) =>
           data.map((item) => ({
@@ -65,6 +73,9 @@ const WaterLevelDashboard = () => {
         setWaterLevelLauterecken1(transformData(responseLauterecken1.data));
         setWaterLevelKreimbach1(transformData(responseKreimbach1.data));
         setWaterLevelKreimbach3(transformData(responseKreimbach3.data));
+        setWaterLevelLohnweiler1(transformData(responseLohnweiler1.data));
+        setWaterLevelHinzweiler1(transformData(responseHinzweiler1.data));
+
       };
   
       // Fetch precipitation history data
@@ -140,6 +151,8 @@ const handleTimePeriodChangeHistoricalPrecipitation = (periodHistoricalPrecipita
             waterLevelLauterecken1={waterLevelLauterecken1}
             waterLevelKreimbach1={waterLevelKreimbach1}
             waterLevelKreimbach3={waterLevelKreimbach3}
+            waterLevelLohnweiler1={waterLevelLohnweiler1}
+            waterLevelHinzweiler1={waterLevelHinzweiler1}
             currentPeriod={timePeriod}
             onPeriodChange={handleTimePeriodChange}
             historicalPrecipitationWolfstein={precipitationWolfsteinHistorical}
