@@ -1,5 +1,5 @@
 from django.urls import path
-from .views.views import index, HistoricalPrecipitationView, ForecastDataViewWolfstein
+from .views.views import index, HistoricalPrecipitationView, ForecastDataViewWolfstein 
 from .views.treesense_views import (
     ElectricalResistanceDataView, 
     TreeHealthDataView, 
@@ -9,6 +9,7 @@ from .views.treesense_views import (
 from .views.soil_moisture_burg_lichtenberg_views import (
     SoilDataView
 )
+
 
 from .views.weather_stations_views.siebenpfeiffer_gymnasium_views import (
     WeatherDataView
@@ -42,8 +43,13 @@ from .views.soil_moisture_and_ph_hochbeete_views import (
     pHDataHochbeetProject, SoilMoistureDataHochbeetProject
 )
 
+from .views.soil_moisture_etschberg_views import (
+    soilMoistureEtschbergDataView
+)
+
 urlpatterns = [
     path('soil-data/', SoilDataView.as_view(), name='soil_data'),
+    path('soil-data/etschberg/', soilMoistureEtschbergDataView.as_view(), name='soil_data'),
     path('weather-station-data/', WeatherStationDataView.as_view(), name='weather_station_data'),
     path('electrical-resistance-data/', ElectricalResistanceDataView.as_view(), name='electrical_resistance_data'),
     path('tree-moisture-content-data/', TreeMoistureContentDataView.as_view(), name='tree_moisture_content_data'),

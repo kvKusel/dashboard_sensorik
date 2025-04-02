@@ -3,7 +3,7 @@
   <defs>
     <style>
       .cls-1 {
-        fill: url(#Unbenannter_Verlauf_161);
+        fill: url(#Unbenannter_Verlauf_166);
         stroke: #1d1d1b;
         stroke-miterlimit: 10;
       }
@@ -13,9 +13,9 @@
         stroke-width: 0px;
       }
     </style>
-    <linearGradient id="Unbenannter_Verlauf_161" data-name="Unbenannter Verlauf 161" x1=".5" y1="145.16" x2="289.83" y2="145.16" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#009640"/>
-      <stop offset=".5" stop-color="#009640"/>
+    <linearGradient id="Unbenannter_Verlauf_166" data-name="Unbenannter Verlauf 166" x1=".5" y1="145.16" x2="289.83" y2="145.16" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#e30613"/>
+      <stop offset=".5" stop-color="#e30613"/>
     </linearGradient>
   </defs>
   <g id="Ebene_1-2" data-name="Ebene 1">

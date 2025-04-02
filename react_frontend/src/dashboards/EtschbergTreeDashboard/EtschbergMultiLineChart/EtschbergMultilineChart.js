@@ -24,7 +24,7 @@ ChartJS.register(
   Legend
 );
 
-const MultiLineChart = ({ waterLevelRutsweiler, waterLevelKreimbach, waterLevelWolfstein, currentPeriod }) => {
+const MultiLineChart = ({currentPeriod, soilMoistureEtschberg1, soilMoistureEtschberg2, soilMoistureEtschberg3, soilMoistureEtschberg4, soilMoistureEtschberg5 }) => {
 
   const [windowSize, setWindowSize] = useState(window.innerWidth);
 
@@ -36,6 +36,7 @@ useEffect(() => {
   window.addEventListener("resize", handleResize);
   return () => window.removeEventListener("resize", handleResize);
 }, []);
+
 
 
   const calculateTimePeriodBoundary = (period) => {
@@ -54,7 +55,6 @@ useEffect(() => {
     }
   };
 
-  console.log(waterLevelRutsweiler)
 
   const periodBoundary = calculateTimePeriodBoundary(currentPeriod);
 
@@ -69,26 +69,42 @@ useEffect(() => {
 const chartData = {
     datasets: [
       {
-        label: "Baum 1",
-        data: createDataset(waterLevelRutsweiler),
-        borderColor: "rgba(75, 192, 192, 1)",
-        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        label: "Baum im SW",
+        data: createDataset(soilMoistureEtschberg1),
+        borderColor: "rgba(231, 132, 78, 1)",
+        backgroundColor: "rgba(231, 132, 78, 1)",
         tension: 0.2, // Adjust this value for more or less smoothing
 
       },
       {
-        label: "Baum 2",
-        data: createDataset(waterLevelWolfstein),
-        borderColor: "rgba(255, 99, 132, 1)",
-        backgroundColor: "rgba(255, 99, 132, 0.2)",
+        label: "Baum im SE",
+        data: createDataset(soilMoistureEtschberg2),
+        borderColor: "rgba(131, 201, 104, 1)",
+        backgroundColor: "rgba(131, 201, 104, 1)",
         tension: 0.2, // Adjust this value for more or less smoothing
 
       },
       {
-        label: "Baum 3",
-        data: createDataset(waterLevelKreimbach),
-        borderColor: "rgba(54, 162, 235, 1)",
-        backgroundColor: "rgba(54, 162, 235, 0.2)",
+        label: "Baum in der Mitte",
+        data: createDataset(soilMoistureEtschberg3),
+        borderColor: "rgba(78, 159, 188, 1)",
+        backgroundColor: "rgba(78, 159, 188, 1)",
+        tension: 0.2, // Adjust this value for more or less smoothing
+
+      },
+      {
+        label: "Baum im NW",
+        data: createDataset(soilMoistureEtschberg4),
+        borderColor: "	rgba(166, 109, 212, 1)",
+        backgroundColor: "	rgba(166, 109, 212, 1)",
+        tension: 0.2, // Adjust this value for more or less smoothing
+
+      },
+      {
+        label: "Baum im NE",
+        data: createDataset(soilMoistureEtschberg5),
+        borderColor: "rgba(236, 200, 91, 1)",
+        backgroundColor: "rgba(236, 200, 91, 1)",
         tension: 0.2, // Adjust this value for more or less smoothing
 
       },
@@ -101,7 +117,7 @@ const chartData = {
     plugins: {
       title: {
         display: true,
-        text: "Bodenfeuchte - zeitlicher Verlauf",
+        text: "Bodenfeuchte - letzte 30 Tage",
         color: "#18204F",
         font: {
           size: "20",
