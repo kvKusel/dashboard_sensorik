@@ -40,7 +40,7 @@ const noPrecipitationPluginHistorical = {
 
             ctx.save();
 
-            const text = "kein Niederschlag im dargestellten Zeitraum.";
+            const text = "kein Niederschlag im dargestellten Zeitraum";
             const maxWidth = width - 20;
             const lineHeight = 20;
             const xCenter = left + (right - left) / 2;
@@ -99,6 +99,9 @@ const WolfsteinHistoricalBarChart = ({ currentPeriodHistoricalPrecipitation, his
                         backgroundColor: 'rgba(90, 41, 182, 1)',
                         borderColor: 'rgb(90, 41, 182)',
                         borderWidth: 1,
+                        barThickness: 15, // Set your desired minimum thickness here
+                        maxBarThickness: 30, // Optional: set a maximum thickness
+
                     },
                 ],
             },);
@@ -193,7 +196,7 @@ const WolfsteinHistoricalBarChart = ({ currentPeriodHistoricalPrecipitation, his
             legend: {
                 display: false,
             },
-            noPrecipitationPluginHistorical  // Enable the custom plugin
+            // noPrecipitationPluginHistorical  // Enable the custom plugin
 
         },
     };
@@ -201,7 +204,7 @@ const WolfsteinHistoricalBarChart = ({ currentPeriodHistoricalPrecipitation, his
 
     return (
         <div className="w-100 h-100">
-            <Bar data={chartData} options={options} />
+            <Bar data={chartData} options={options} plugins={[noPrecipitationPluginHistorical]} />
         </div>
     );
 };

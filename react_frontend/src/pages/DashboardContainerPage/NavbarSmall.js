@@ -1,9 +1,9 @@
-// src/components/Navbar/SmallNavbar.js
-
-import React from "react";
+import { React, useState } from "react";
 import { Link } from "react-router-dom";
 
 const SmallNavbar = ({ activeTab, handleSelect, navbarExpanded, setNavbarExpanded }) => {
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  
   return (
     <div
     style={{
@@ -127,36 +127,89 @@ const SmallNavbar = ({ activeTab, handleSelect, navbarExpanded, setNavbarExpande
                 Pegelmonitoring
               </p>
             </div>
-            <div>
-              <p
-                style={{
-                  marginTop: "5px",
-                  marginBottom: "5px",
-                  padding: "5px 5px",
-                  textAlign: "right",
-                  borderRadius: "5px", // Rounded corners like a button
-                  cursor: "pointer", // Pointer cursor to indicate it's clickable
-                  fontSize: "1.1em",
-                  display: "inline-block",
-                  textDecoration:
-                    activeTab === "Baummonitoring"
-                      ? "underline"
-                      : "none",
-                  color:
-                    activeTab === "Baummonitoring"
-                      ? "#AADB40"
-                      : "#fff",
-                }}
-                onClick={() => handleSelect("Baummonitoring")}
-                className=" "
-                type="button"
-                id="downloadDropdown"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Baummonitoring
-              </p>
+   
+            <div
+        className="nav-item position-relative"
+        onMouseEnter={() => setIsDropdownOpen(true)}
+        onMouseLeave={() => setIsDropdownOpen(false)}
+        style={{
+          
+         
+          textAlign: "right",
+          borderRadius: "5px", // Rounded corners like a button
+          cursor: "pointer", // Pointer cursor to indicate it's clickable
+          
+          display: "inline-block",
+          textDecoration:
+            activeTab === "Baummonitoring"
+              ? "underline"
+              : "none",
+          color:
+            activeTab === "Baummonitoring"
+              ? "#AADB40"
+              : "#fff",
+        }}      >
+        <p
+         className="nav-item position-relative"
+        onMouseEnter={() => setIsDropdownOpen(true)}
+        onMouseLeave={() => setIsDropdownOpen(false)}
+        style={{
+          marginTop: "5px",
+          marginBottom: "5px",
+          padding: "5px 5px",
+          textAlign: "right",
+          borderRadius: "5px", // Rounded corners like a button
+          cursor: "pointer", // Pointer cursor to indicate it's clickable
+          fontSize: "1.1em",
+          display: "inline-block",
+          textDecoration:
+            activeTab === "Baummonitoring"
+              ? "underline"
+              : "none",
+          color:
+            activeTab === "Baummonitoring"
+              ? "#AADB40"
+              : "#fff",
+        }}      
+        >
+          Baummonitoring ▾
+        </p>
+
+        {isDropdownOpen && (
+          <div
+            className="position-absolute bg-white rounded shadow "
+            style={{ top: "100%", left: 0, minWidth: "160px",  zIndex: "9999" }}
+          >
+            <div className="custom-dropdown-item rounded-top">
+            <p
+              className="dropdown-item  px-2 py-1 "
+              style={{ cursor: "pointer", color: "black",  zIndex: "999" }}
+              onClick={() => {
+                handleSelect("BaummonitoringBurgLichtenberg");
+                setIsDropdownOpen(false);
+              }}
+            >
+              Burg Lichtenberg
+            </p>
             </div>
+            {/* <hr style={{  borderColor: "#ddd" }} /> */}
+            <div className="custom-dropdown-item rounded-bottom ">
+
+            <p
+              className="dropdown-item px-2 py-1 custom-dropdown-item"
+              style={{ cursor: "pointer", color: "black",  zIndex: "999" }}
+              onClick={() => {
+                handleSelect("BaummonitoringEtschberg");
+                setIsDropdownOpen(false);
+              }}
+            >
+              Etschberg
+            </p>
+            </div>
+          </div>
+        )}
+      </div>
+
             <div>
               <p
                 style={{

@@ -2,12 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ReactSVG } from "react-svg";
 // import { ReactComponent as EtschbergHeatMap } from "../../assets/etschberg_heatmap.svg";
-import EtschbergMap from "./EtschbergMap";
-import MultiLineChartEtschberg from "./EtschbergMultilineChart";
+import EtschbergMap from "./EtschbergOSMMap/EtschbergMap";
+import MultiLineChartEtschberg from "./EtschbergMultiLineChart/EtschbergMultilineChart";
 import { useWeatherStationPrecipitation } from "../../hooks/weatherStation/WeatherStationPrecipitation ";
 import BarChart from "../../components/BarChart";
 import { precipitationConfig } from "../../chartsConfig/chartsConfig";
 import { Bar } from "react-chartjs-2";
+import SmallMap from "./SmallMap/SmallMap";
+import { ReactComponent as TreeSVG} from "../../assets/tree.svg";
 
 const API_URL = process.env.REACT_APP_API_URL.endsWith("/")
   ? process.env.REACT_APP_API_URL
@@ -112,29 +114,40 @@ const EtschbergDashboard = () => {
 
       {!isLoading && (
         <React.Fragment>
-          <div className="row mt-4 mb-2 rounded-3 " style={{ flex: "1 1 auto", minHeight: "60vh" }}>
-            <div
-              className="col-12 col-md-3 p-2  mx-2 mb-3 mb-md-0 rounded-3 "
-              style={{
-                flex: "1 1 auto",
-                maxWidth: "100%",
-                backgroundColor: "#FFFFFF",
-                boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
-    
-                borderRadius: "0px",
-                borderStyle: 'solid',
-                borderWidth:'1px',
-                borderColor: '#FFFFFF',
-                zIndex: "0", //add this to make sure the controls of the map are underneath the dropdown elements (Dropdown is directly above the map)
-              }}
-            >
-              <div style={{ width: "100%", height: "auto" }}>
-                {/* <EtschbergHeatMap /> */}
-              </div>
-            </div>
+          <div className="row mt-4  rounded-3 " style={{ flex: "1 1 auto", minHeight: "60vh" }}>
+          <div
+  className="col-12 col-lg-8 p-2 m-2 mb-3 mb-lg-2 mb-xl-0 rounded-3 d-flex"
+  style={{
+    flex: "1 1 auto",
+    // Remove minHeight: "60vh",
+    backgroundColor: "#FFFFFF",
+    boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+    borderRadius: "0px",
+    borderStyle: "solid",
+    borderWidth: "1px",
+    borderColor: "#FFFFFF",
+    zIndex: "0",
+    // Add these flexbox properties to control height based on content
+    flexDirection: "column", // Stack items vertically
+    alignItems: "stretch",   // Make children stretch to container width
+  }}
+>
+  <div
+    style={{
+      flex: "1 1 auto",
+
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center", // Ensure vertical centering
+      width: "100%",
+    }}
+  >
+    <SmallMap />
+  </div>
+</div>
 
             <div
-              className="col-12 col-md-3 p-2  mx-2 rounded-3"
+              className="col-3 p-2  m-2 mb-3 mb-lg-2 mb-xl-0  rounded-3 d-flex flex-column"
               style={{
                 flex: "1 1 auto",
                 maxWidth: "100%",
@@ -148,16 +161,26 @@ const EtschbergDashboard = () => {
                 zIndex: "0", //add this to make sure the controls of the map are underneath the dropdown elements (Dropdown is directly above the map)
               }}
             >
-              <div style={{ width: "100%", height: "100%" }}>
-                <EtschbergMap />
+              <div className="" style={{ display: "flex", justifyContent: "center", width: "100%" , height: "auto", overflow: "hidden" }}>
+<TreeSVG className='pt-5' style={{ width: "90%", height: "auto", maxWidth: "90%" }} />
               </div>
+              <div
+  className="d-flex flex-column "
+  style={{ width: "100%", height: "30%", justifyContent: "flex-end" }}
+>
+  <p className="fs-3 fw-bold">Baum:</p>
+  <p className="fs-3 fw-bold">Bodenfeuchte:</p>
+</div>
             </div>
+
+
+
           </div>
 
           {/* row with the multiline chart */}
 
           <div className="row  " style={{ flex: "1 1 auto" }}>
-            <div className="col-xs-12 d-flex p-2 pb-0 ">
+            <div className="col-12 d-flex p-2 pb-0 ">
               <div
                 className="chart-container rounded-3"
                 style={{
@@ -186,7 +209,7 @@ const EtschbergDashboard = () => {
 
                     {/* row with the bar chart with precipitation data */}
 
-                    <div className="row mt-2 mb-5 " style={{ flex: "1 1 auto" }}>
+                    <div className="row mt-2  " style={{ flex: "1 1 auto" }}>
             <div className="col-xs-12 d-flex p-2 pb-0">
               <div
                 className="chart-container rounded-3"
@@ -209,6 +232,33 @@ const EtschbergDashboard = () => {
                     barChartData={weatherStationPrecipitationData}
                   />
                 )}              </div>
+            </div>
+          </div>
+
+
+          
+          {/* row with the osm map */}
+
+          <div className="row mt-2 mb-5 " style={{ flex: "1 1 auto" }}>
+            <div className="col-xs-12 d-flex p-2 pb-0 ">
+              <div
+                className="chart-container rounded-3"
+                style={{
+                  flex: "1 1 auto",
+                  minHeight: "40vh",
+                  maxHeight: "60vh",
+                  backgroundColor: "#FFFFFF",
+                  boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+      
+                  borderRadius: "0px",
+                  borderStyle: 'solid',
+                  borderWidth:'1px',
+                  borderColor: '#FFFFFF'
+                }}
+              >
+                < EtschbergMap
+                />
+              </div>
             </div>
           </div>
 

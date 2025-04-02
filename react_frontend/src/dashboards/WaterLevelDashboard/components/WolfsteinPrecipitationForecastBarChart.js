@@ -16,7 +16,7 @@ const API_URL = process.env.REACT_APP_API_URL.endsWith('/')
 // Define the custom plugin before registering it
 const noPrecipitationPlugin = {
     id: 'noPrecipitationPlugin',
-    beforeDraw: (chart) => {
+    afterDraw: (chart) => {
         const {
             ctx,
             chartArea: { top, right, bottom, left, width, height },
@@ -36,14 +36,14 @@ const noPrecipitationPlugin = {
 
             ctx.save();
 
-            const text = "kein Niederschlag im dargestellten Zeitraum.";
+            const text = "kein Niederschlag im dargestellten Zeitraum";
             const maxWidth = width - 20;
             const lineHeight = 20;
             const xCenter = left + (right - left) / 2;
             const yCenter = top + (height / 2) - 8;
 
             ctx.font = `${fontSize} Poppins, sans-serif`;
-            ctx.fillStyle = "lightgrey";
+            ctx.fillStyle = "#6972A8";
             ctx.textAlign = "center";
 
             // Function to wrap text
@@ -110,6 +110,8 @@ const WolfsteinForecastBarChart = () => {
                             backgroundColor: '#AADB40',
                             borderColor: '#AADB40',
                             borderWidth: 1,
+                            barThickness: 15, // Set your desired minimum thickness here
+                            maxBarThickness: 30, // Optional: set a maximum thickness
                             
                         },
                     ],
@@ -206,14 +208,15 @@ const WolfsteinForecastBarChart = () => {
             legend: {
                 display: false,
             },
-            noPrecipitationPlugin
+            // noPrecipitationPlugin
 
         },
     };
 
     return (
         <div className="w-100 h-100">
-            <Bar data={chartData} options={options} />
+            <Bar data={chartData} options={options}                 plugins={[noPrecipitationPlugin]} // <-- Pass the plugin object in an array HERE
+            />
         </div>
     );
 };

@@ -53,7 +53,7 @@ const MultiLineChart = ({
           const { top, left, width, height } = chartArea;
           
           ctx.save();
-          const text = "Pegel aus Tabelle oder Legende auswählen, um die Daten anzuzeigen.";
+          const text = "Pegel aus Tabelle oder Legende auswählen, um die Daten anzuzeigen";
           const maxWidth = width - 20;
           const lineHeight = 20;
           const xCenter = left + (width / 2);
@@ -219,7 +219,7 @@ const MultiLineChart = ({
       },
       {
         label: "Pegel Lohnweiler",
-        data: createDataset(waterLevelKreisverwaltung),
+        data: createDataset(waterLevelLohnweiler1),
         borderColor: "	rgb(97, 3, 3)",
         backgroundColor: "	rgb(97, 3, 3)",
         tension: 0.2,
@@ -227,7 +227,7 @@ const MultiLineChart = ({
       },
       {
         label: "Pegel Hinzweiler",
-        data: createDataset(waterLevelKreisverwaltung),
+        data: createDataset(waterLevelHinzweiler1),
         borderColor: "	rgb(2, 102, 52)",
         backgroundColor: "	rgb(2, 102, 52)",
         tension: 0.2,

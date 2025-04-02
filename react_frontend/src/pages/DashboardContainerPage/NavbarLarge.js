@@ -59,10 +59,10 @@ const LargeNavbar = ({ activeTab, handleSelect }) => {
             <h6
               className="dropdown-item px-2 py-1 custom-dropdown-item"
               style={{ cursor: "pointer", color: "black",  zIndex: "999" }}
-              // onClick={() => {
-              //   handleSelect("BaummonitoringEtschberg");
-              //   setIsDropdownOpen(false);
-              // }}
+              onClick={() => {
+                handleSelect("BaummonitoringEtschberg");
+                setIsDropdownOpen(false);
+              }}
             >
               Etschberg
             </h6>
