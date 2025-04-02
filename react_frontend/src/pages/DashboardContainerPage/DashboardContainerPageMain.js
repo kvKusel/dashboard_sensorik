@@ -69,6 +69,17 @@ const Dashboard = () => {
     }
   };
 
+  const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 1200);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsLargeScreen(window.innerWidth >= 1200);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     /* main container */
     <>
@@ -117,8 +128,7 @@ const Dashboard = () => {
           minHeight: "100vh",
         }}
       >
-        <div className="container">
-          {/* create two columns, one for a side menu, the other for the main content */}
+    <div className={isLargeScreen ? "container" : "container-fluid"}>
 
           <div className="row  mt-2 ">
             {/*MAIN CONTENT  */}

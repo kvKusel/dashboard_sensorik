@@ -87,6 +87,17 @@ const WolfsteinForecastBarChart = () => {
         datasets: [],
     });
 
+        const [windowSize, setWindowSize] = useState(window.innerWidth);
+      
+      useEffect(() => {
+        const handleResize = () => {
+          setWindowSize(window.innerWidth); // Change state on resize
+        };
+      
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+      }, []);
+
     useEffect(() => {
         const fetchForecastData = async () => {
             try {
@@ -215,7 +226,8 @@ const WolfsteinForecastBarChart = () => {
 
     return (
         <div className="w-100 h-100">
-            <Bar data={chartData} options={options}                 plugins={[noPrecipitationPlugin]} // <-- Pass the plugin object in an array HERE
+            <Bar data={chartData} options={options}             key={windowSize}
+            plugins={[noPrecipitationPlugin]} // <-- Pass the plugin object in an array HERE
             />
         </div>
     );

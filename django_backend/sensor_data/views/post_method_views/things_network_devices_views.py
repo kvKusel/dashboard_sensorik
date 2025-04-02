@@ -27,7 +27,7 @@ import os
 load_dotenv()
 
 
-#############################              TTN Webhooks - weather station Siebenpfeiffer Gymnasium        ###########################################
+#############################              TTN Webhooks       ###########################################
 logger = logging.getLogger(__name__)
 
 ALLOWED_DEVICE_IDS = {
@@ -81,6 +81,50 @@ ALLOWED_DEVICE_IDS = {
             'soil_moisture_value': 'water_SOIL'
         }
     },
+    
+    
+    ##############################################################   soil moisture Etschberg  ###########################################################
+    
+        "soil-moisture-etschberg-1": {
+        'type': 'soil_moisture_sensor',
+        'field_mapping': {
+            'soil_moisture_value': 'water_SOIL'
+        }
+    },
+        
+                "soil-moisture-etschberg-2-1811": {
+        'type': 'soil_moisture_sensor',
+        'field_mapping': {
+            'soil_moisture_value': 'water_SOIL'
+        }
+    },
+    
+    
+            "soil-moisture-etschberg-3-181a": {
+        'type': 'soil_moisture_sensor',
+        'field_mapping': {
+            'soil_moisture_value': 'water_SOIL'
+        }
+    },
+    
+    
+            "soil-moisture-etschberg-4-181d": {
+        'type': 'soil_moisture_sensor',
+        'field_mapping': {
+            'soil_moisture_value': 'water_SOIL'
+        }
+    },
+    
+    
+            "soil-moisture-etschberg-5-180c": {
+        'type': 'soil_moisture_sensor',
+        'field_mapping': {
+            'soil_moisture_value': 'water_SOIL'
+        }
+    }, 
+    
+        ##############################################################   pH sensors Siebenpfeiffer Gymnasium  ###########################################################
+
     "a84041f571875f2b-ph-dragino2-schule": {
         'type': 'ph_sensor',
         'field_mapping': {

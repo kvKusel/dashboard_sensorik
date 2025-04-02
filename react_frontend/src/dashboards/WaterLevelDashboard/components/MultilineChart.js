@@ -38,6 +38,17 @@ const MultiLineChart = ({
   // Create a ref to the chart instance
   const chartRef = React.useRef(null);
 
+    const [windowSize, setWindowSize] = useState(window.innerWidth);
+  
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowSize(window.innerWidth); // Change state on resize
+    };
+  
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   // Define the noDatasetPlugin
   const noDatasetPlugin = {
     id: 'noDatasetMessage',
@@ -340,6 +351,7 @@ const MultiLineChart = ({
         data={chartData} 
         options={options} 
         plugins={[noDatasetPlugin]} 
+        key={windowSize}
       />
     </div>
   );

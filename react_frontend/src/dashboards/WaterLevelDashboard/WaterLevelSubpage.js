@@ -199,7 +199,7 @@ const WaterLevelSubpage = ({
 
       <div className="row mt-3 rounded-3" style={{ flex: "1 1 auto" }}>
         <div
-          className="col-12 col-md-3 d-flex flex-column rounded-3"
+          className="col-12 col-md-4 d-flex flex-column rounded-3"
           style={{
             flex: "1 1 auto",
             // backgroundColor: "transparent",
@@ -241,14 +241,7 @@ const WaterLevelSubpage = ({
           >
             <div
               className="col-12 d-flex flex-column flex-grow-1 "
-              // style={{
-              //   backgroundColor: "#5D7280",
-              //   borderStyle: "solid",
-              //   borderWidth: "1px",
-              //   borderColor: "#5D7280",
-              //   position: "relative",
-              //   zIndex: "0",
-              // }}
+  
             >
               <div>
                 <p
@@ -276,7 +269,7 @@ const WaterLevelSubpage = ({
         </div>
 
         <div
-          className="col-12 col-md-8  p-2   mt-3 mt-sm-0 ms-md-4 rounded-3"
+          className="col-12 col-md-7  p-2   mt-3 mt-sm-0 ms-md-4 rounded-3"
           style={{
             flex: "1 1 auto",
             backgroundColor: "#fff",
@@ -303,7 +296,7 @@ const WaterLevelSubpage = ({
             className=""
             style={{
               flex: "1 1 auto",
-              minHeight: isSmallScreen ? "60vh" : "40vh", // Conditional minHeight
+              minHeight: isSmallScreen ? "40vh" : window.innerWidth < 1200 ? "30vh" : "40vh",
               maxHeight: "60vh",
               // borderRadius: "0px",
               // borderStyle: "solid",
@@ -384,7 +377,7 @@ const WaterLevelSubpage = ({
             className=""
             style={{
               flex: "1 1 auto",
-              minHeight: "40vh",
+              minHeight: isSmallScreen ? "40vh" : window.innerWidth < 1200 ? "20vh" : "40vh",
               // maxHeight: "60vh",
               // backgroundColor: "#5D7280",
               // borderStyle: "solid",
@@ -469,7 +462,7 @@ const WaterLevelSubpage = ({
             className=""
             style={{
               flex: "1 1 auto",
-              minHeight: "40vh",
+              minHeight: isSmallScreen ? "40vh" : window.innerWidth < 1200 ? "20vh" : "40vh",
               maxHeight: "60vh",
               // borderRadius: "0px",
               
