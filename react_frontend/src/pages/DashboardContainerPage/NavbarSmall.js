@@ -128,6 +128,60 @@ const SmallNavbar = ({ activeTab, handleSelect, navbarExpanded, setNavbarExpande
               </p>
             </div>
    
+        
+
+            <div>
+              <p
+                style={{
+                  marginTop: "5px",
+                  marginBottom: "5px",
+                  padding: "5px 5px",
+                  textAlign: "right",
+                  borderRadius: "5px", // Rounded corners like a button
+                  cursor: "pointer", // Pointer cursor to indicate it's clickable
+                  fontSize: "1.1em",
+                  display: "inline-block",
+                  textDecoration:
+                    activeTab === "Wetter" ? "underline" : "none",
+                  color: activeTab === "Wetter" ? "#AADB40" : "#fff",
+                }}
+                onClick={() => handleSelect("Wetter")}
+                className=" "
+                type="button"
+                id="downloadDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Wetter
+              </p>
+            </div>
+            <div>
+              <p
+                style={{
+                  marginTop: "5px",
+                  marginBottom: "5px",
+                  padding: "5px 5px",
+                  textAlign: "right",
+                  borderRadius: "5px", // Rounded corners like a button
+                  cursor: "pointer", // Pointer cursor to indicate it's clickable
+                  fontSize: "1.1em",
+                  display: "inline-block",
+                  textDecoration:
+                    activeTab === "Hochbeet" ? "underline" : "none",
+                  color:
+                    activeTab === "Hochbeet" ? "#AADB40" : "#fff",
+                }}
+                onClick={() => handleSelect("Hochbeet")}
+                className=" "
+                type="button"
+                id="downloadDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Hochbeet-Projekt
+              </p>
+            </div>
+
             <div
         className="nav-item position-relative"
         onMouseEnter={() => setIsDropdownOpen(true)}
@@ -209,58 +263,7 @@ const SmallNavbar = ({ activeTab, handleSelect, navbarExpanded, setNavbarExpande
           </div>
         )}
       </div>
-
-            <div>
-              <p
-                style={{
-                  marginTop: "5px",
-                  marginBottom: "5px",
-                  padding: "5px 5px",
-                  textAlign: "right",
-                  borderRadius: "5px", // Rounded corners like a button
-                  cursor: "pointer", // Pointer cursor to indicate it's clickable
-                  fontSize: "1.1em",
-                  display: "inline-block",
-                  textDecoration:
-                    activeTab === "Wetter" ? "underline" : "none",
-                  color: activeTab === "Wetter" ? "#AADB40" : "#fff",
-                }}
-                onClick={() => handleSelect("Wetter")}
-                className=" "
-                type="button"
-                id="downloadDropdown"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Wetter
-              </p>
-            </div>
-            <div>
-              <p
-                style={{
-                  marginTop: "5px",
-                  marginBottom: "5px",
-                  padding: "5px 5px",
-                  textAlign: "right",
-                  borderRadius: "5px", // Rounded corners like a button
-                  cursor: "pointer", // Pointer cursor to indicate it's clickable
-                  fontSize: "1.1em",
-                  display: "inline-block",
-                  textDecoration:
-                    activeTab === "Hochbeet" ? "underline" : "none",
-                  color:
-                    activeTab === "Hochbeet" ? "#AADB40" : "#fff",
-                }}
-                onClick={() => handleSelect("Hochbeet")}
-                className=" "
-                type="button"
-                id="downloadDropdown"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Hochbeet-Projekt
-              </p>
-            </div>
+      
           </div>
         </div>
       )}
