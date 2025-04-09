@@ -160,16 +160,27 @@ ALLOWED_DEVICE_IDS_AWS = {
 
 # Define the fixed sensor-to-bottom distances for each device
 SENSOR_TO_BOTTOM_DISTANCES = {
+    #sensor Kreimbach_4
     "6749D19422850054": 336,
+    #sensor Rustweiler a.d. Lauter
     "6749D19385550035": 355,
+    #sensor Wolfstein    
     "6749D19427550061": 355,
-    "6749E09611440028": 126,                    ### subtract 30 cm still, because the canal itself is 30 cm lower!
-    "6749E17530450043": 405, 
+    
+    #sensor Kreimbach_3 (Kanal)
+    "6749E09611440028": 88,                 
+    
+    #sensor Lauterecken_1
+    "6749E17530450043": 410, 
+    
+    #sensor Kreimbach_1
     "6749E09866560038": 453,
+    
     #sensor Lohnweiler_1
-    "6749E17799680048": 300,                ### subtract XXX cm when the distance to bottom from sensor properly measured
+    "6749E17323330042": 123,
+                    
     #sensor Hinzweiler_1
-    "6749E17419910043": 300,                ### subtract XXX cm when the distance to bottom from sensor properly measured
+    "6749E17419910043": 151,              
 }
 
 @method_decorator(csrf_exempt, name='dispatch')
