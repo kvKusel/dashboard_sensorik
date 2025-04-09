@@ -140,7 +140,7 @@ ALLOWED_DEVICE_IDS_AWS = {
     }
 },
 #sensor Lohnweiler_1
-"6749E17799680048": {
+"6749E17323330042": {
     'type': 'water_level_sensor',
     'field_mapping': {
         'water_level': 'distance',
