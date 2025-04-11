@@ -171,13 +171,13 @@ SENSOR_TO_BOTTOM_DISTANCES = {
     "6749E09611440028": 88,                 
     
     #sensor Lauterecken_1
-    "6749E17530450043": 410, 
+    "6749E17530450043": 400, 
     
     #sensor Kreimbach_1
     "6749E09866560038": 453,
     
     #sensor Lohnweiler_1
-    "6749E17323330042": 123,
+    "6749E17323330042": 122,
                     
     #sensor Hinzweiler_1
     "6749E17419910043": 151,              

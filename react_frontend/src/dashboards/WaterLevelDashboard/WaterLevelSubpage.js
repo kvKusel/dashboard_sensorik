@@ -107,7 +107,6 @@ const WaterLevelSubpage = ({
   // Handle table row clicks
   const handleRowClick = (queryType) => {
     setSelectedRow(queryType);
-
     // Update lastValue based on the selected queryType
     const valueMap = {
       lastValueWolfstein,
@@ -125,7 +124,9 @@ const WaterLevelSubpage = ({
 
     // Update the active dataset
     setActiveDataset(queryType);
+
   };
+
 
   const nameMapping = {
     lastValueWolfstein: "Wolfstein",
@@ -163,6 +164,56 @@ const WaterLevelSubpage = ({
       showTick: true,
     },
   ];
+
+
+  const arcsMap = {
+    lastValueWolfstein: [
+      { limit: 250, color: "#83C968", showTick: true },
+      { limit: 300, color: "#ECC85B", showTick: true },
+      { limit: 350, color: "#E7844E", showTick: true },
+    ],
+    lastValueRutsweiler: [
+      { limit: 200, color: "#83C968", showTick: true },
+      { limit: 250, color: "#ECC85B", showTick: true },
+      { limit: 300, color: "#E7844E", showTick: true },
+    ],
+    lastValueKreimbach1: [
+      { limit: 200, color: "#83C968", showTick: true },
+      { limit: 250, color: "#ECC85B", showTick: true },
+      { limit: 300, color: "#E7844E", showTick: true },
+    ],
+    lastValueKreimbach3: [
+      { limit: 50, color: "#83C968", showTick: true },
+      { limit: 65, color: "#ECC85B", showTick: true },
+      { limit: 130, color: "#E7844E", showTick: true },
+    ],
+    lastValueKreimbach4: [
+      { limit: 200, color: "#83C968", showTick: true },
+      { limit: 250, color: "#ECC85B", showTick: true },
+      { limit: 300, color: "#E7844E", showTick: true },
+    ],
+    lastValueLauterecken1: [
+      { limit: 200, color: "#83C968", showTick: true },
+      { limit: 250, color: "#ECC85B", showTick: true },
+      { limit: 300, color: "#E7844E", showTick: true },
+    ],
+    lastValueKreisverwaltung: [
+      { limit: 200, color: "#83C968", showTick: true },
+      { limit: 250, color: "#ECC85B", showTick: true },
+      { limit: 300, color: "#E7844E", showTick: true },
+    ],
+    lastValueLohnweiler1: [
+      { limit: 70, color: "#83C968", showTick: true },
+      { limit: 100, color: "#ECC85B", showTick: true },
+      { limit: 130, color: "#E7844E", showTick: true },
+    ],
+    lastValueHinzweiler1: [
+      { limit: 90, color: "#83C968", showTick: true },
+      { limit: 140, color: "#ECC85B", showTick: true },
+      { limit: 190, color: "#E7844E", showTick: true },
+    ],
+  };
+  
 
 
 
@@ -260,9 +311,11 @@ const WaterLevelSubpage = ({
               {/* Ensure the gauge takes up the remaining space */}
               <div className="flex-grow-1 d-flex align-items-center justify-content-center pb-0">
                 <GaugeWaterLevel
+                  key={selectedRow}  // Force re-render when selectedRow changes
+
                   value={selectedRow === "default" ? "0" : lastValue.value}
-                  arcs={arcsDefault}
-                />{" "}
+                  arcs={selectedRow === "default" ? arcsDefault : arcsMap[selectedRow]}
+                  />{" "}
               </div>
             </div>
           </div>
