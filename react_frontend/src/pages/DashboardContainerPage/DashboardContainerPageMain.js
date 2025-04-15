@@ -96,7 +96,7 @@ const Dashboard = () => {
               {/* Hide on small screens, show on medium and larger */}
               <h4 className="">
                 <Link to="/" className="text-decoration-none text-white">
-                  SENSORNETZ LANDL(I)EBEN{" "}
+                  SENSORNETZ LAND L(i)EBEN{" "}
                 </Link>
               </h4>
             </div>
@@ -107,7 +107,7 @@ const Dashboard = () => {
             {" "}
             <span className="">
               <Link to="/" className="text-decoration-none text-white">
-                SENSORNETZ LANDL(I)EBEN{" "}
+                SENSORNETZ LAND L(i)EBEN{" "}
               </Link>
             </span>
             {/* Hamburger menu for small screens */}
