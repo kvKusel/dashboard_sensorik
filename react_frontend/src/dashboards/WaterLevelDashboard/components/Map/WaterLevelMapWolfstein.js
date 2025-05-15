@@ -1,0 +1,224 @@
+import React, { useState, useEffect } from "react";
+import { MapContainer, TileLayer, Marker, Popup, Polygon, useMap } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L, { map } from "leaflet";
+import RainIntensityLegend from "../WolfsteinLegend";
+import RadarFetcher from "./FetchPrecipitationMap"; // Import the new component
+import polygonLandkreisKusel from "./KuselPolygonCoords";
+import CustomMapMarkers from "./CustomMapMarker";
+import { useRef } from "react";
+
+
+const worldBounds = [
+  [-90, -180],
+  [-90, 180],
+  [90, 180],
+  [90, -180]
+];
+
+// Mask component to apply the effect
+const MaskLayer = () => {
+  const map = useMap();
+
+  React.useEffect(() => {
+    const mask = L.polygon([worldBounds, polygonLandkreisKusel], {
+      color: "black",
+      fillColor: "black",
+      fillOpacity: 0.5,
+      stroke: false
+    }).addTo(map);
+
+    return () => {
+      map.removeLayer(mask);
+    };
+  }, [map]);
+
+  return null;
+};
+
+
+
+// Fix broken marker icons
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+  iconRetinaUrl:
+    "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png",
+  iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
+  shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
+});
+
+
+
+
+
+
+
+
+
+const PegelWolfsteinMap = ({ hoveredMarkerId, selectedMarkerId, onMarkerClick, setHoveredMarkerId, setSelectedMarkerId, mapRef, mapCenter, setMapCenter, handleMarkerClick }) => {
+
+
+// const mapRef = useRef();
+
+
+// const handleMarkerClick = (position) => {
+//   if (mapRef.current) {
+//     mapRef.current.setView(position, 18); // use desired zoom level instead of mapZoom
+//     setMapCenter(position);
+//   }
+// };
+
+
+  const markers = [
+    { id: "wolfstein", position: [49.581045, 7.619593], label: "Wolfstein", queryType: "lastValueWolfstein", },
+    { id: "rutsweiler", position: [49.566297, 7.623804], label: "Rutsweiler a.d. Lauter", queryType: "lastValueRutsweiler", },
+    { id: "kreimbach4", position: [49.554087, 7.621883], label: "Kreimbach 3", queryType: "lastValueKreimbach4", },
+    { id: "lauterecken", position: [49.650507589739846, 7.590545488872102], label: "Lauterecken", queryType: "lastValueLauterecken1", },
+    { id: "kreimbach1", position: [49.54844915352638, 7.631175812962766], label: "Kreimbach 1", queryType: "lastValueKreimbach1", },
+    { id: "kreimbach3", position: [49.556388641429436, 7.636587365546659], label: "Kreimbach 2", queryType: "lastValueKreimbach3", }, 
+    { id: "kusel", position: [49.539820952844316, 7.396752597634942], label: "Kusel", queryType: "lastValueKreisverwaltung", },
+    { id: "lohnweiler1", position: [49.63553061963123, 7.59709411130715], label: "Lohnweiler", queryType: "lastValueLohnweiler1", },
+    { id: "hinzweiler1", position: [49.589414954381816, 7.548317327514346], label: "Hinzweiler", queryType: "lastValueHinzweiler1", },
+
+  ];
+  
+
+
+  // const [mapCenter, setMapCenter] = useState(window.innerWidth < 768 ? [49.500444, 7.49246] : [49.560144, 7.49246]);
+  const [mapZoom, setMapZoom] = useState(window.innerWidth < 768 ? 10 : 11); // Zoom based on screen size
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Update mapZoom based on screen width
+      setMapZoom(window.innerWidth < 768 ? 10 : 11);
+      
+      // Update mapCenter based on screen width
+      const newCenter = window.innerWidth < 768 
+        ? [49.560444, 7.49246] // Slightly lower latitude for smaller screens
+        : [49.560144, 7.49246]; // Original latitude for larger screens
+      setMapCenter(newCenter);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  
+  const tileLayerUrl = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
+
+  const [timeType, setTimeType] = useState("past"); // Default to 'past'
+  const [frameIndex, setFrameIndex] = useState(8); // Default to 8 (current time)
+  const [radarUrl, setRadarUrl] = useState("");
+
+
+
+  useEffect(() => {
+  if (!mapRef.current) return;
+
+  const map = mapRef.current;
+
+//  button that sets the map view to the initial center and zoom
+
+
+  const ResetControl = L.Control.extend({
+    onAdd: function () {
+      const container = L.DomUtil.create("div", "leaflet-bar leaflet-control leaflet-control-custom");
+      container.innerHTML = "Ansicht<br>zurücksetzen";
+      container.style.backgroundColor = "white";
+      container.style.padding = "7px";
+      container.style.fontSize = "12px";
+      container.style.textAlign = "center";
+      container.style.lineHeight = "1.2";
+      container.style.cursor = "pointer";
+      container.style.boxShadow = "0 1px 4px rgba(0,0,0,0.3)";
+      container.style.borderRadius = "4px";
+      container.title = "Zur Startansicht der Karte zurückkehren";
+
+container.onclick = function () {
+  const resetCenter = window.innerWidth < 768
+    ? [49.560444, 7.49246]
+    : [49.560144, 7.49246];
+  const resetZoom = window.innerWidth < 768 ? 10 : 11;
+
+  map.setView(resetCenter, resetZoom);
+};
+
+      return container;
+    }
+  });
+
+  const resetControl = new ResetControl({ position: "topright" });
+  map.addControl(resetControl);
+
+  return () => {
+    map.removeControl(resetControl);
+  };
+}, [mapCenter, mapZoom, mapRef.current]);
+
+
+  
+
+  return (
+<MapContainer
+  center={mapCenter}
+  zoom={mapZoom}
+    scrollWheelZoom={true}  // Enable scroll zooming
+
+  style={{ width: "100%", height: "100%", minHeight: "600px" }}
+   ref={(mapInstance) => {
+    mapRef.current = mapInstance;
+  }}>
+      <TileLayer
+        attribution='&copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url={tileLayerUrl}
+      />
+  
+      {/* Add Mask */}
+      <MaskLayer />
+  
+      {/* Add the actual polygon outline */}
+      <Polygon positions={polygonLandkreisKusel} color="transparent" fillOpacity={1} />
+  
+      <RadarFetcher
+        setRadarUrl={setRadarUrl}
+        timeType={timeType}
+        frameIndex={frameIndex}
+      />
+      
+      {radarUrl && (
+        <TileLayer
+          url={radarUrl}
+          attribution='&copy; <a href="https://rainviewer.com" target="_blank">RainViewer</a>'
+          opacity={0.5}
+        />
+      )}
+  
+<CustomMapMarkers
+  markers={markers}
+  hoveredMarkerId={hoveredMarkerId}
+  selectedMarkerId={selectedMarkerId}
+  onMarkerClick={handleMarkerClick}
+  onMarkerClick2={onMarkerClick} // Pass the onMarkerClick prop to CustomMapMarkers
+                setHoveredMarkerId={setHoveredMarkerId}
+              setSelectedMarkerId={setSelectedMarkerId}
+/>
+  
+      <RainIntensityLegend
+        timeType={timeType}
+        setTimeType={setTimeType}
+        frameIndex={frameIndex}
+        setFrameIndex={setFrameIndex}
+      />
+
+
+    </MapContainer>
+  );
+  
+};
+
+export default PegelWolfsteinMap;

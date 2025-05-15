@@ -11,42 +11,49 @@ const SensorTable = ({
   lastValueHinzweiler1,
   setHoveredMarkerId,
   setSelectedMarkerId,
+  onSelectPosition,
 }) => {
   const data = [
     {
       id: "wolfstein",
       name: "Wolfstein",
       queryType: "lastValueWolfstein",
+      position: [49.581045, 7.619593],
       value: lastValueWolfstein?.value ? Number(lastValueWolfstein.value) : 0,
     },
     {
       id: "rutsweiler",
       name: "Rutsweiler a.d. Lauter",
       queryType: "lastValueRutsweiler",
+      position: [49.566297, 7.623804],
       value: lastValueRutsweiler?.value ? Number(lastValueRutsweiler.value) : 0,
     },
     {
       id: "kreimbach1",
       name: "Kreimbach 1",
       queryType: "lastValueKreimbach1",
+      position: [49.54844915352638, 7.631175812962766],
       value: lastValueKreimbach1?.value ? Number(lastValueKreimbach1.value) : 0,
     },
     {
       id: "kreimbach3",
-      name: "Kreimbach 3",
+      name: "Kreimbach 2",
       queryType: "lastValueKreimbach3",
+      position: [49.556388641429436, 7.636587365546659],
       value: lastValueKreimbach3?.value ? Number(lastValueKreimbach3.value) : 0,
     },
     {
       id: "kreimbach4",
-      name: "Kreimbach 4",
+      name: "Kreimbach 3",
       queryType: "lastValueKreimbach4",
+      position: [49.554087, 7.621883],
       value: lastValueKreimbach4?.value ? Number(lastValueKreimbach4.value) : 0,
     },
     {
       id: "lauterecken",
-      name: "Lauterecken 1",
+      name: "Lauterecken",
       queryType: "lastValueLauterecken1",
+      position: [49.650507589739846, 7.590545488872102],
       value: lastValueLauterecken1?.value
         ? Number(lastValueLauterecken1.value)
         : 0,
@@ -55,6 +62,7 @@ const SensorTable = ({
       id: "kusel",
       name: "Kusel",
       queryType: "lastValueKreisverwaltung",
+      position: [49.539820952844316, 7.396752597634942], 
       value: lastValueKreisverwaltung?.value
         ? Number(lastValueKreisverwaltung.value)
         : 0,
@@ -64,6 +72,7 @@ const SensorTable = ({
       name: "Lohnweiler",
       name: "Lohnweiler",
       queryType: "lastValueLohnweiler1",
+      position: [49.63553061963123, 7.59709411130715],
       value: lastValueLohnweiler1?.value
         ? Number(lastValueLohnweiler1.value)
         : 0,
@@ -72,6 +81,7 @@ const SensorTable = ({
       id: "hinzweiler1",
       name: "Hinzweiler",
       queryType: "lastValueHinzweiler1",
+      position: [49.589414954381816, 7.548317327514346],
       value: lastValueHinzweiler1?.value
         ? Number(lastValueHinzweiler1.value)
         : 0,
@@ -130,6 +140,8 @@ const SensorTable = ({
             key={item.id}
             onClick={() => {
               onRowClick(item.queryType);
+              onSelectPosition(item.position);
+
               setSelectedMarkerId(item.id);
             }}
             onMouseEnter={() => {
@@ -150,7 +162,9 @@ const SensorTable = ({
               backgroundColor: index % 2 === 0 ? "#F8F9FA" : "#fff", // Alternating row colors
             }}
           >
-            <td style={{ padding: "10px", paddingLeft: "10px" }}>{item.name}</td>
+            <td style={{ padding: "10px", paddingLeft: "10px" }}>
+              {item.name}
+            </td>
             <td
               style={{
                 padding: "10px",

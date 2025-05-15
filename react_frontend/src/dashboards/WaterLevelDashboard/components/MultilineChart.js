@@ -49,6 +49,46 @@ const MultiLineChart = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+
+const formatDatasetLabel = (datasetKey) => {
+  if (!datasetKey) return "";
+
+  // Full key overrides
+  const overrides = {
+    lastValueKreimbach3: "Kreimbach 2",
+    lastValueKreimbach4: "Kreimbach 3",
+  };
+
+  if (overrides[datasetKey]) {
+    return overrides[datasetKey];
+  }
+
+  // Remove 'lastValue' prefix
+  let name = datasetKey.replace(/^lastValue/, "");
+
+  // Match location and optional number
+  const match = name.match(/^([a-zA-Z]+)(\d*)$/);
+  if (!match) return name;
+
+  let [, location, number] = match;
+
+  const corrections = {
+    Rutsweiler: "Rutsweiler a.d Lauter",
+    Kreisverwaltung: "Kusel",
+    Lohnweiler: "Lonhweiler",
+    Lauterecken: "Lauterecken",
+    Hinzweiler: "Hinzweiler",
+  };
+
+  const corrected = corrections[location] || location;
+
+  const ignoreNumber = Object.keys(corrections).includes(location);
+
+  return ignoreNumber ? corrected : number ? `${corrected} ${number}` : corrected;
+};
+
+
+
   // Define the noDatasetPlugin
   const noDatasetPlugin = {
     id: 'noDatasetMessage',
@@ -255,7 +295,8 @@ const MultiLineChart = ({
         display: true,
         padding: {
           top:10,
-          bottom:20},        text: "Pegelstände - zeitlicher Verlauf",
+          bottom:20},       
+      text: `Pegel ${formatDatasetLabel(activeDataset)} - Verlauf`,
         color: "#18204F",
         
         font: {
@@ -264,7 +305,7 @@ const MultiLineChart = ({
         },
       },
       legend: {
-        display: true,
+        display: false,
         labels: {
           color: "#6972A8",
           font: {

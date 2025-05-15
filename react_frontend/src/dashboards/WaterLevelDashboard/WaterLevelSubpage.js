@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import PegelWolfsteinMap from "./components/WaterLevelMapWolfstein";
+import React, { useEffect, useState, useRef } from "react";
+import PegelWolfsteinMap from "./components/Map/WaterLevelMapWolfstein";
 
 import GaugeWaterLevel from "./components/GaugeChartWaterLevel";
 import MultiLineChart from "./components/MultilineChart";
@@ -84,13 +84,13 @@ const WaterLevelSubpage = ({
   const lastValueKreimbach3 =
     waterLevelKreimbach3[waterLevelKreimbach3.length - 1];
 
-    const lastValueLohnweiler1 =
+  const lastValueLohnweiler1 =
     waterLevelLohnweiler1[waterLevelLohnweiler1.length - 1];
 
-    const lastValueHinzweiler1 =
+  const lastValueHinzweiler1 =
     waterLevelHinzweiler1[waterLevelHinzweiler1.length - 1];
 
-  ///////////////////////////////////            set up for the dynamic markers on the open weather map        ///////////////////////////////////////////////
+  ///////////////////////////////////            set up for the dynamic markers on the open street map        ///////////////////////////////////////////////
 
   const [hoveredMarkerId, setHoveredMarkerId] = useState(null);
 
@@ -124,20 +124,29 @@ const WaterLevelSubpage = ({
 
     // Update the active dataset
     setActiveDataset(queryType);
-
   };
-
 
   const nameMapping = {
     lastValueWolfstein: "Wolfstein",
     lastValueRutsweiler: "Rutsweiler a.d. Lauter",
     lastValueKreimbach1: "Kreimbach 1",
-    lastValueKreimbach3: "Kreimbach 3",
-    lastValueKreimbach4: "Kreimbach 4",
+    lastValueKreimbach3: "Kreimbach 2",
+    lastValueKreimbach4: "Kreimbach 3",
     lastValueLauterecken1: "Lauterecken",
     lastValueKreisverwaltung: "Kusel",
     lastValueLohnweiler1: "Lohnweiler",
     lastValueHinzweiler1: "Hinzweiler",
+  };
+
+  //setup to handle zooming into a marker from both the map and the table when marker or row is clicked
+  const mapRef = useRef();
+  const [mapCenter, setMapCenter] = useState([49.560144, 7.49246]);
+
+  const handleMarkerClick = (position) => {
+    if (mapRef.current) {
+      mapRef.current.setView(position, 18);
+    }
+    setMapCenter(position);
   };
 
   // Get the name from the mapping based on selectedRow
@@ -164,7 +173,6 @@ const WaterLevelSubpage = ({
       showTick: true,
     },
   ];
-
 
   const arcsMap = {
     lastValueWolfstein: [
@@ -213,9 +221,6 @@ const WaterLevelSubpage = ({
       { limit: 190, color: "#E7844E", showTick: true },
     ],
   };
-  
-
-
 
   ///////////////////////////////////        END OF set up for the table that displays all sensors         ///////////////////////////////////////////////
 
@@ -264,11 +269,13 @@ const WaterLevelSubpage = ({
           {/* SensorTable Section */}
           <div
             className="row flex-grow-1 rounded-3 mb-2"
-            style={{ backgroundColor: "#fff",             boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+            style={{
+              backgroundColor: "#fff",
+              boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
             }}
           >
-            <SensorTable 
-            className="rounded-3"
+            <SensorTable
+              className="rounded-3"
               onRowClick={handleRowClick}
               lastValueKreisverwaltung={lastValueKreisverwaltung}
               lastValueKreimbach1={lastValueKreimbach1}
@@ -281,28 +288,31 @@ const WaterLevelSubpage = ({
               lastValueHinzweiler1={lastValueHinzweiler1}
               setHoveredMarkerId={setHoveredMarkerId}
               setSelectedMarkerId={setSelectedMarkerId}
+              onSelectPosition={handleMarkerClick}
             />
           </div>
 
           {/* Status Section */}
           <div
             className="row flex-grow-1 mt-3 rounded-3"
-            style={{ backgroundColor: "#fff",             boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+            style={{
+              backgroundColor: "#fff",
+              boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
             }}
           >
-            <div
-              className="col-12 d-flex flex-column flex-grow-1 "
-  
-            >
+            <div className="col-12 d-flex flex-column flex-grow-1 ">
               <div>
                 <p
                   className=" pt-2 mb-0"
                   style={{ color: "#18204F", fontSize: "1.1rem" }}
                 >
-                  {displayName}
+                  Pegel {displayName}
                 </p>
                 {selectedRow !== "default" && (
-                  <p className=" mb-0" style={{ color: "#18204F", fontSize: "1.1rem" }}>
+                  <p
+                    className=" mb-0"
+                    style={{ color: "#18204F", fontSize: "1.1rem" }}
+                  >
                     Letzte Messung: {formatTimestamp(lastValue.time)}
                   </p>
                 )}
@@ -311,11 +321,14 @@ const WaterLevelSubpage = ({
               {/* Ensure the gauge takes up the remaining space */}
               <div className="flex-grow-1 d-flex align-items-center justify-content-center pb-0">
                 <GaugeWaterLevel
-                  key={selectedRow}  // Force re-render when selectedRow changes
-
+                  key={selectedRow} // Force re-render when selectedRow changes
                   value={selectedRow === "default" ? "0" : lastValue.value}
-                  arcs={selectedRow === "default" ? arcsDefault : arcsMap[selectedRow]}
-                  />{" "}
+                  arcs={
+                    selectedRow === "default"
+                      ? arcsDefault
+                      : arcsMap[selectedRow]
+                  }
+                />{" "}
               </div>
             </div>
           </div>
@@ -337,19 +350,37 @@ const WaterLevelSubpage = ({
           <PegelWolfsteinMap
             hoveredMarkerId={hoveredMarkerId}
             selectedMarkerId={selectedMarkerId}
+            onMarkerClick={handleRowClick}
+            setHoveredMarkerId={setHoveredMarkerId}
+            setSelectedMarkerId={setSelectedMarkerId}
+            mapRef={mapRef}
+            mapCenter={mapCenter}
+            setMapCenter={setMapCenter}
+            handleMarkerClick={handleMarkerClick}
           />
         </div>
       </div>
 
       {/* row with the line chart */}
 
-      <div className="row mt-4 rounded-top-3" style={{ flex: "1 1 auto", backgroundColor: "#FFF", boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)"}}>
+      <div
+        className="row mt-4 rounded-top-3"
+        style={{
+          flex: "1 1 auto",
+          backgroundColor: "#FFF",
+          boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+        }}
+      >
         <div className="col-xs-12 d-flex p-2 pb-0">
           <div
             className=""
             style={{
               flex: "1 1 auto",
-              minHeight: isSmallScreen ? "40vh" : window.innerWidth < 1200 ? "30vh" : "40vh",
+              minHeight: isSmallScreen
+                ? "40vh"
+                : window.innerWidth < 1200
+                ? "30vh"
+                : "40vh",
               maxHeight: "60vh",
               // borderRadius: "0px",
               // borderStyle: "solid",
@@ -358,7 +389,6 @@ const WaterLevelSubpage = ({
             }}
           >
             <MultiLineChart
-
               waterLevelKreisverwaltung={waterLevelKreisverwaltung}
               waterLevelRutsweiler={waterLevelRutsweiler}
               waterLevelKreimbach={waterLevelKreimbach}
@@ -377,33 +407,34 @@ const WaterLevelSubpage = ({
 
       {/* row with sliders for choosing time span */}
 
-      <div className="row rounded-bottom-3 mb-4" style={{ flex: "1 1 auto", backgroundColor: "#FFF",  }}>
+      <div
+        className="row rounded-bottom-3 mb-4"
+        style={{ flex: "1 1 auto", backgroundColor: "#FFF" }}
+      >
         <div className="col-xs-12 d-flex p-2 pt-0">
           <div
             className=" d-flex pb-2"
             style={{
               flex: "1 1 auto",
-              
+
               // borderStyle: "solid",
               // borderWidth: "1px",
               // borderColor: "#5D7280",
               // borderRadius: "0px",
-
             }}
           >
-            <Dropdown className="pt-3 ps-2"            >
+            <Dropdown className="pt-3 ps-2">
               <Dropdown.Toggle
                 variant="danger"
                 id="dropdown-basic"
-                className="ps-1 d-flex align-items-center custom-dropdown2" 
-                style={{fontSize: "1.1rem"}}
-             
+                className="ps-1 d-flex align-items-center custom-dropdown2"
+                style={{ fontSize: "1.1rem" }}
               >
                 <img src={time_icon} alt="Time Icon" className="icon" />
                 {timePeriodLabels[currentPeriod] || "Zeitraum auswählen"}
               </Dropdown.Toggle>
 
-              <Dropdown.Menu >
+              <Dropdown.Menu>
                 <Dropdown.Item onClick={() => onPeriodChange("24h")}>
                   Letzte 24 Stunden
                 </Dropdown.Item>
@@ -424,13 +455,24 @@ const WaterLevelSubpage = ({
 
       {/* row with the bar chart showing the past precipitation  */}
 
-      <div className="row rounded-top-3 " style={{ flex: "1 1 auto", backgroundColor: "#fff", boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)", }}>
+      <div
+        className="row rounded-top-3 "
+        style={{
+          flex: "1 1 auto",
+          backgroundColor: "#fff",
+          boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+        }}
+      >
         <div className="col-xs-12 d-flex p-2 pb-0">
           <div
             className=""
             style={{
               flex: "1 1 auto",
-              minHeight: isSmallScreen ? "40vh" : window.innerWidth < 1200 ? "20vh" : "40vh",
+              minHeight: isSmallScreen
+                ? "40vh"
+                : window.innerWidth < 1200
+                ? "20vh"
+                : "40vh",
               // maxHeight: "60vh",
               // backgroundColor: "#5D7280",
               // borderStyle: "solid",
@@ -454,7 +496,10 @@ const WaterLevelSubpage = ({
 
       {/* row with sliders for choosing time span */}
 
-      <div className="row rounded-bottom-3" style={{ flex: "1 1 auto", backgroundColor: "#fff"  }}>
+      <div
+        className="row rounded-bottom-3"
+        style={{ flex: "1 1 auto", backgroundColor: "#fff" }}
+      >
         <div className="col-xs-12 d-flex p-2 pt-0">
           <div
             className=" d-flex pb-2"
@@ -467,13 +512,12 @@ const WaterLevelSubpage = ({
             //   borderColor: "#5D7280",
             // }}
           >
-            <Dropdown className="pt-3 ps-2 " > 
+            <Dropdown className="pt-3 ps-2 ">
               <Dropdown.Toggle
                 variant="danger"
                 id="dropdown-basic"
                 className="ps-1 d-flex align-items-center custom-dropdown2"
-                style={{fontSize: "1.1rem"}}
-
+                style={{ fontSize: "1.1rem" }}
               >
                 <img src={time_icon} alt="Time Icon" className="icon" />
                 {timePeriodLabels[currentPeriodHistoricalPrecipitation] ||
@@ -509,16 +553,27 @@ const WaterLevelSubpage = ({
 
       {/* row with the bar chart for the 5 day forecast */}
 
-      <div className="row mt-4 mb-2 rounded-3" style={{ flex: "1 1 auto",backgroundColor: "#fff", boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)", }}>
+      <div
+        className="row mt-4 mb-2 rounded-3"
+        style={{
+          flex: "1 1 auto",
+          backgroundColor: "#fff",
+          boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+        }}
+      >
         <div className="col-xs-12 d-flex p-2 pb-0">
           <div
             className=""
             style={{
               flex: "1 1 auto",
-              minHeight: isSmallScreen ? "40vh" : window.innerWidth < 1200 ? "20vh" : "40vh",
+              minHeight: isSmallScreen
+                ? "40vh"
+                : window.innerWidth < 1200
+                ? "20vh"
+                : "40vh",
               maxHeight: "60vh",
               // borderRadius: "0px",
-              
+
               // borderStyle: "solid",
               // borderWidth: "1px",
               // borderColor: "#5D7280",

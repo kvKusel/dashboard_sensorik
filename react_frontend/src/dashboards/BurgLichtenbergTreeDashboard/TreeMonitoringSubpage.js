@@ -389,7 +389,7 @@ const TreeMonitoringSubpage = ({ run, setRun, steps }) => {
             </div>
           </div>
 
-          {/* fourth row - tree crown moisture data */}
+          {/* fourth row - tree crown electrical resistance data */}
           <div className="row " style={{ flex: "1 1 auto" }}>
             <div className="col-xs-12 d-flex p-2">
               <div
