@@ -9,8 +9,8 @@ from datetime import datetime, timedelta, timezone
 from django.core.management.base import BaseCommand
 from django.core.management import call_command
 from django.utils.timezone import now
-
-
+import pandas as pd
+from io import StringIO
 from django.utils.timezone import now as tz_now, make_aware, utc
 from django.db import connections, connection
 
@@ -19,9 +19,7 @@ path = '/home/scdash/django_project/dashboard_smartcity/django_backend'
 if path not in sys.path:
     sys.path.append(path)
     print(f"Added {path} to sys.path")
-    
-# Ensure the Django settings module is set, set to production in production environment!
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_backend.settings.production')
+     
 
 # Add the project root to the Python path
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..'))
@@ -33,7 +31,7 @@ django.setup()
 
 # Try to import the models
 try:
-    from sensor_data.models import Device, TreeMoistureReading, ElectricalResistanceReading, TreeHealthReading, WeatherData, HistoricalPrecipitation, ForecastedPrecipitation
+    from sensor_data.models import Device, TreeMoistureReading, ElectricalResistanceReading, TreeHealthReading, WeatherData, HistoricalPrecipitation, ForecastedPrecipitation, waterLevelReading
     print("Successfully imported sensor_data.models")
 except ModuleNotFoundError as e:
     print(f"Error importing sensor_data.models: {e}")
@@ -47,6 +45,10 @@ class Command(BaseCommand):
         while True:  # Infinite loop to repeatedly fetch data every 20 minutes
             self.stdout.write(self.style.NOTICE('Attempting to fetch data...'))
 
+            # Fetch and save the water level data from RLP API              
+            self.fetch_water_level_data()
+
+
             # Fetch precipitation data
             self.fetch_precipitation_data()
 
@@ -58,8 +60,68 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.ERROR("Authentication failed, skipping tree moisture data fetch."))
 
             # Wait for 60 minutes before running again
-            self.stdout.write(self.style.NOTICE(f"Next execution in 60 minutes at {tz_now() + timedelta(minutes=60)}"))
-            time.sleep(60 * 60)  # Sleep for 60 minutes (60 minutes * 60 seconds)
+            self.stdout.write(self.style.NOTICE(f"Next execution in 15 minutes at {tz_now() + timedelta(minutes=60)}"))
+            time.sleep(15 * 60)  # Sleep for 15 minutes (15 minutes * 60 seconds)
+            
+######################################################          # Fetch and save the water level data from RLP API  (Pegel Untersulzbach)      ########################################################
+    def fetch_water_level_data(self):
+        sources = [
+            {
+                "url": "https://geodaten-wasser.rlp-umwelt.de/api/export/messstellen_wasserstand_messwerte.csv?w=messstellennummer%3D2546070400",
+                "device_id": "pegel_untersulzbach",
+                "name": "Pegel Untersulzbach"
+            },
+            {
+                "url": "https://geodaten-wasser.rlp-umwelt.de/api/export/messstellen_wasserstand_messwerte.csv?w=messstellennummer%3D2546077000",
+                "device_id": "pegel_lohnweiler_land",
+                "name": "Pegel Lohnweiler / RLP"
+            }
+        ]
+
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+            "Accept": "text/csv,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.5",
+            "Referer": "https://geodaten-wasser.rlp-umwelt.de/",
+            "Connection": "keep-alive",
+        }
+
+        for source in sources:
+            try:
+                response = requests.get(source["url"], headers=headers)
+                response.raise_for_status()
+                df = pd.read_csv(StringIO(response.text), sep=';')
+                print(df.head(10))
+
+                device, _ = Device.objects.get_or_create(
+                    device_id=source["device_id"],
+                    defaults={"name": source["name"]}
+                )
+
+                last_entry = waterLevelReading.objects.filter(device=device).order_by('-timestamp').first()
+                last_timestamp = last_entry.timestamp if last_entry else None
+
+                for _, row in df.iterrows():
+                    try:
+                        timestamp = datetime.strptime(row["Datum"], "%d.%m.%Y %H:%M")
+                        timestamp = make_aware(timestamp, timezone.utc)
+                        if last_timestamp is None or timestamp > last_timestamp:
+                            waterLevelReading.objects.create(
+                                timestamp=timestamp,
+                                water_level_value=row["Wasserstand in cm"],
+                                device=device
+                            )
+                    except Exception as e:
+                        print(f"Skipping row for {source['device_id']} due to error: {e}")
+
+                self.stdout.write(self.style.SUCCESS(f"{source['name']} data fetched and stored successfully."))
+
+            except Exception as e:
+                self.stdout.write(self.style.ERROR(f"Failed to fetch/store data for {source['name']}: {e}"))
+
+
+
+######################################################          # Fetch and save the forecasted and historical precipitation data from OpenWeatherMap API         ########################################################   
 
         
     def fetch_precipitation_data(self):

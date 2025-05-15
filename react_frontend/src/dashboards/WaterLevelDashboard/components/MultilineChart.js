@@ -32,6 +32,8 @@ const MultiLineChart = ({
   waterLevelKreimbach3,
   waterLevelLohnweiler1,
   waterLevelHinzweiler1,
+  waterLevelUntersulzbach,
+  waterLevelLohnweilerRLP,
   currentPeriod,
   activeDataset = null // This will be the dataset we want to show
 }) => {
@@ -78,6 +80,8 @@ const formatDatasetLabel = (datasetKey) => {
     Lohnweiler: "Lonhweiler",
     Lauterecken: "Lauterecken",
     Hinzweiler: "Hinzweiler",
+      LohnweilerRLP: "Lohnweiler (Lauter)",
+
   };
 
   const corrected = corrections[location] || location;
@@ -161,6 +165,8 @@ const formatDatasetLabel = (datasetKey) => {
         lastValueKreisverwaltung: 6,
         lastValueLohnweiler1: 7,
         lastValueHinzweiler1: 8,
+        lastValueUntersulzbach: 9,
+        lastValueLohnweilerRLP: 10,
       };
       
       // Hide all datasets
@@ -281,6 +287,22 @@ const formatDatasetLabel = (datasetKey) => {
         data: createDataset(waterLevelHinzweiler1),
         borderColor: "	rgb(2, 102, 52)",
         backgroundColor: "	rgb(2, 102, 52)",
+        tension: 0.2,
+        hidden: true
+      },
+            {
+        label: "Pegel Untersulzbach",
+        data: createDataset(waterLevelUntersulzbach),
+        borderColor: "rgba(131, 201, 104, 1)",
+        backgroundColor: "rgba(131, 201, 104, 1)",
+        tension: 0.2,
+        hidden: true
+      },
+            {
+        label: "Pegel Lohnweiler (Lauter)",
+        data: createDataset(waterLevelLohnweilerRLP),
+        borderColor: "rgba(209, 67, 91, 1)",
+        backgroundColor: "rgba(209, 67, 91, 1)",
         tension: 0.2,
         hidden: true
       },

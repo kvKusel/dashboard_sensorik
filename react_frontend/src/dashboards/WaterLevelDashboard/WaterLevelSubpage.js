@@ -19,6 +19,8 @@ const WaterLevelSubpage = ({
   waterLevelKreimbach3,
   waterLevelLohnweiler1,
   waterLevelHinzweiler1,
+  waterLevelUntersulzbach,
+  waterLevelLohnweilerRLP,
   currentPeriod,
   onPeriodChange,
   historicalPrecipitationWolfstein,
@@ -90,6 +92,13 @@ const WaterLevelSubpage = ({
   const lastValueHinzweiler1 =
     waterLevelHinzweiler1[waterLevelHinzweiler1.length - 1];
 
+      const lastValueUntersulzbach =
+    waterLevelUntersulzbach[waterLevelUntersulzbach.length - 1];
+
+  const lastValueLohnweilerRLP =  
+    waterLevelLohnweilerRLP[waterLevelLohnweilerRLP.length - 1];
+
+
   ///////////////////////////////////            set up for the dynamic markers on the open street map        ///////////////////////////////////////////////
 
   const [hoveredMarkerId, setHoveredMarkerId] = useState(null);
@@ -118,6 +127,8 @@ const WaterLevelSubpage = ({
       lastValueKreisverwaltung,
       lastValueLohnweiler1,
       lastValueHinzweiler1,
+      lastValueUntersulzbach,
+      lastValueLohnweilerRLP,
     };
 
     setLastValue(valueMap[queryType]);
@@ -136,6 +147,8 @@ const WaterLevelSubpage = ({
     lastValueKreisverwaltung: "Kusel",
     lastValueLohnweiler1: "Lohnweiler",
     lastValueHinzweiler1: "Hinzweiler",
+    lastValueUntersulzbach: "Untersulzbach",
+    lastValueLohnweilerRLP: "Lohnweiler (Lauter)",
   };
 
   //setup to handle zooming into a marker from both the map and the table when marker or row is clicked
@@ -220,6 +233,17 @@ const WaterLevelSubpage = ({
       { limit: 140, color: "#ECC85B", showTick: true },
       { limit: 190, color: "#E7844E", showTick: true },
     ],
+    
+    lastValueUntersulzbach: [
+      { limit: 200, color: "#83C968", showTick: true },
+      { limit: 250, color: "#ECC85B", showTick: true },
+      { limit: 300, color: "#E7844E", showTick: true },
+    ],
+    lastValueLohnweilerRLP: [
+      { limit: 200, color: "#83C968", showTick: true },
+      { limit: 250, color: "#ECC85B", showTick: true },
+      { limit: 300, color: "#E7844E", showTick: true },
+    ],
   };
 
   ///////////////////////////////////        END OF set up for the table that displays all sensors         ///////////////////////////////////////////////
@@ -286,6 +310,8 @@ const WaterLevelSubpage = ({
               lastValueWolfstein={lastValueWolfstein}
               lastValueLohnweiler1={lastValueLohnweiler1}
               lastValueHinzweiler1={lastValueHinzweiler1}
+              lastValueUntersulzbach={lastValueUntersulzbach}
+              lastValueLohnweilerRLP={lastValueLohnweilerRLP}
               setHoveredMarkerId={setHoveredMarkerId}
               setSelectedMarkerId={setSelectedMarkerId}
               onSelectPosition={handleMarkerClick}
@@ -398,6 +424,8 @@ const WaterLevelSubpage = ({
               waterLevelKreimbach3={waterLevelKreimbach3}
               waterLevelLohnweiler1={waterLevelLohnweiler1}
               waterLevelHinzweiler1={waterLevelHinzweiler1}
+              waterLevelUntersulzbach={waterLevelUntersulzbach}
+              waterLevelLohnweilerRLP={waterLevelLohnweilerRLP} 
               currentPeriod={currentPeriod}
               activeDataset={activeDataset}
             />

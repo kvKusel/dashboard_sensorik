@@ -48,6 +48,10 @@ class waterLevelDataView(View):
                 "water_level_kreimbach_3": "6749E09611440028",
                 "water_level_lohnweiler_1": "6749E17323330042",
                 "water_level_hinzweiler_1": "6749E17419910043",
+                "water_level_untersulzbach": "pegel_untersulzbach",
+                "water_level_lohnweiler_rlp": "pegel_lohnweiler_land",
+
+
 
             }
 

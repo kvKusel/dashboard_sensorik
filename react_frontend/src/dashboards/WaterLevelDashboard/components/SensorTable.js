@@ -9,6 +9,8 @@ const SensorTable = ({
   lastValueWolfstein,
   lastValueLohnweiler1,
   lastValueHinzweiler1,
+  lastValueUntersulzbach,
+  lastValueLohnweilerRLP,
   setHoveredMarkerId,
   setSelectedMarkerId,
   onSelectPosition,
@@ -84,6 +86,24 @@ const SensorTable = ({
       position: [49.589414954381816, 7.548317327514346],
       value: lastValueHinzweiler1?.value
         ? Number(lastValueHinzweiler1.value)
+        : 0,
+    },
+        {
+      id: "untersulzbach",
+      name: "Untersulzbach",
+      queryType: "lastValueUntersulzbach",
+      position: [49.528584, 7.663114], 
+      value: lastValueUntersulzbach?.value
+        ? Number(lastValueUntersulzbach.value)
+        : 0,
+    },
+    {
+      id: "lohnweilerRLP",
+      name: "Lohnweiler (Lauter)",
+      queryType: "lastValueLohnweilerRLP",
+      position: [49.636245, 7.600337],
+      value: lastValueLohnweilerRLP?.value
+        ? Number(lastValueLohnweilerRLP.value)
         : 0,
     },
   ];
