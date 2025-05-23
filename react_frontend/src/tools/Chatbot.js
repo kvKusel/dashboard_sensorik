@@ -3,6 +3,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "../index.css";
 import chatIcon from "../assets/logo_landlieben.png";
 
+
+
+const API_URL = process.env.REACT_APP_API_URL.endsWith('/')
+  ? process.env.REACT_APP_API_URL
+  : `${process.env.REACT_APP_API_URL}/`;
+
 // Dummy list - replace this with the full list or import from a helper
 const KNOWN_LOCATIONS = [
   "kusel",
@@ -214,10 +220,7 @@ Probiere es einfach aus! 🎯
           state: currentState
         };
 
-
-        
-
-        const response = await fetch("http://127.0.0.1:8000/api/chat/", {
+        const response = await fetch( `${API_URL}api/chat/`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(requestBody),
