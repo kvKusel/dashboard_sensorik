@@ -81,7 +81,7 @@ const PegelWolfsteinMap = ({ hoveredMarkerId, selectedMarkerId, onMarkerClick, s
     { id: "lohnweiler1", position: [49.63553061963123, 7.59709411130715], label: "Lohnweiler", queryType: "lastValueLohnweiler1", },
     { id: "hinzweiler1", position: [49.589414954381816, 7.548317327514346], label: "Hinzweiler", queryType: "lastValueHinzweiler1", },
     { id: "untersulzbach", position: [49.528584, 7.663114], label: "Untersulzbach", queryType: "lastValueUntersulzbach", }, 
-    { id: "lohnweilerRLP", position: [49.636245, 7.600337], label: "Lohnweiler RLP", queryType: "lastValueLohnweilerRLP", },
+    { id: "lohnweilerRLP", position: [49.636245, 7.600337], label: "Lohnweiler (Lauter)", queryType: "lastValueLohnweilerRLP", },
   ];
   
 

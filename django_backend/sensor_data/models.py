@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 class Device(models.Model):
     device_id = models.CharField(max_length=100, unique=True)
@@ -114,3 +115,35 @@ class HistoricalPrecipitation(models.Model):
 
     def __str__(self):
         return f"Timestamp: {self.timestamp}, Precipitation: {self.precipitation}"
+
+
+
+#########################################       model to store chatbot messages       ######################################################
+
+
+class ChatSession(models.Model):
+    """Groups related conversations together"""
+    session_id = models.CharField(max_length=100, unique=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"Session {self.session_id} - {self.created_at.strftime('%Y-%m-%d %H:%M')}"
+
+
+class ChatInteraction(models.Model):
+    """Stores individual question/answer pairs"""
+    session = models.ForeignKey(ChatSession, on_delete=models.CASCADE, related_name='interactions')
+    user_message = models.TextField()
+    bot_response = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        preview = self.user_message[:50] + "..." if len(self.user_message) > 50 else self.user_message
+        return f"{self.session.session_id} - {preview}"

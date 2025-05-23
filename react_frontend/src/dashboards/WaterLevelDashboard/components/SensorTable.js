@@ -71,12 +71,20 @@ const SensorTable = ({
     },
     {
       id: "lohnweiler1",
-      name: "Lohnweiler",
-      name: "Lohnweiler",
+      name: "Lohnweiler (Mausbach)",
       queryType: "lastValueLohnweiler1",
       position: [49.63553061963123, 7.59709411130715],
       value: lastValueLohnweiler1?.value
         ? Number(lastValueLohnweiler1.value)
+        : 0,
+    },
+        {
+      id: "lohnweilerRLP",
+      name: "Lohnweiler (Lauter)",
+      queryType: "lastValueLohnweilerRLP",
+      position: [49.636245, 7.600337],
+      value: lastValueLohnweilerRLP?.value
+        ? Number(lastValueLohnweilerRLP.value)
         : 0,
     },
     {
@@ -97,15 +105,7 @@ const SensorTable = ({
         ? Number(lastValueUntersulzbach.value)
         : 0,
     },
-    {
-      id: "lohnweilerRLP",
-      name: "Lohnweiler (Lauter)",
-      queryType: "lastValueLohnweilerRLP",
-      position: [49.636245, 7.600337],
-      value: lastValueLohnweilerRLP?.value
-        ? Number(lastValueLohnweilerRLP.value)
-        : 0,
-    },
+
   ];
 
   const rowStyle = {

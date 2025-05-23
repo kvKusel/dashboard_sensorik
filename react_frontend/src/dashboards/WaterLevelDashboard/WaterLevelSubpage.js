@@ -8,6 +8,7 @@ import time_icon from "../../assets/time_icon.svg";
 import WolfsteinForecastBarChart from "./components/WolfsteinPrecipitationForecastBarChart";
 import WolfsteinHistoricalBarChart from "./components/WolfsteinPrecipitationHistoricalBarChart";
 import SensorTable from "./components/SensorTable";
+import Chatbot from "../../tools/Chatbot";
 
 const WaterLevelSubpage = ({
   waterLevelKreisverwaltung,
@@ -608,6 +609,7 @@ const WaterLevelSubpage = ({
             }}
           >
             <WolfsteinForecastBarChart />
+            <Chatbot />
           </div>
         </div>
       </div>

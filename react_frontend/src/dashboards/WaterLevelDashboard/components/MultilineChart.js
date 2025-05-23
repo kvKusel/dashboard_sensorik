@@ -77,7 +77,7 @@ const formatDatasetLabel = (datasetKey) => {
   const corrections = {
     Rutsweiler: "Rutsweiler a.d Lauter",
     Kreisverwaltung: "Kusel",
-    Lohnweiler: "Lonhweiler",
+    Lohnweiler: "Lohnweiler (Mausbach)",
     Lauterecken: "Lauterecken",
     Hinzweiler: "Hinzweiler",
       LohnweilerRLP: "Lohnweiler (Lauter)",

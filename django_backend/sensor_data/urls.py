@@ -47,6 +47,11 @@ from .views.soil_moisture_etschberg_views import (
     soilMoistureEtschbergDataView
 )
 
+from .views.chatbot_views.chatbot_views import ChatEndpointView
+
+from .views.chatbot_views.data_analytics_for_chatbot import DataAnalyticsForChatbot
+
+
 urlpatterns = [
     path('soil-data/', SoilDataView.as_view(), name='soil_data'),
     path('soil-data/etschberg/', soilMoistureEtschbergDataView.as_view(), name='soil_data'),
@@ -67,6 +72,7 @@ urlpatterns = [
     path('api/historical-precipitation/', HistoricalPrecipitationView.as_view(), name='historical_precipitation'),
 
 
-    #path('api/chat/', ChatEndpointView.as_view(), name='chat_endpoint'),
+    path('api/chat/', ChatEndpointView.as_view(), name='chat_endpoint'),
+    path('api/data-analytics-chatbot/', DataAnalyticsForChatbot.as_view(), name='data_analytics_chatbot'),
 ]
 

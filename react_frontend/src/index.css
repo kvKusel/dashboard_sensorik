@@ -490,7 +490,7 @@ input:checked + .slider:before {
 
 /* CHATBOT CONFIGURATION */
 .chatbot-container {
-  max-width: 20%; /* Ensure it doesn't overflow on smaller screens */
+  max-width: 80%;
   border: 1px solid #ccc;
   border-radius: 8px;
   overflow: hidden;
@@ -503,6 +503,25 @@ input:checked + .slider:before {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Optional shadow for better visibility */
   z-index: 1000; /* Ensure it stays on top */
 }
+
+@media (min-width: 768px) {
+  .chatbot-container {
+    max-width: 40%;
+  }
+}
+
+@media (min-width: 1024px) {
+  .chatbot-container {
+    max-width: 25%;
+  }
+}
+
+@media (min-width: 1200px) {
+  .chatbot-container {
+    max-width: 20%;
+  }
+}
+
 
 
 

@@ -19,6 +19,9 @@ path = '/home/scdash/django_project/dashboard_smartcity/django_backend'
 if path not in sys.path:
     sys.path.append(path)
     print(f"Added {path} to sys.path")
+    
+# Ensure the Django settings module is set, set to production in production environment!
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'django_backend.settings.production')
      
 
 # Add the project root to the Python path
@@ -103,7 +106,7 @@ class Command(BaseCommand):
 
                 for _, row in df.iterrows():
                     try:
-                        timestamp = datetime.strptime(row["Datum"], "%d.%m.%Y %H:%M")
+                        timestamp = datetime.strptime(row["Datum"], "%d.%m.%Y %H:%M") - timedelta(hours=1)
                         timestamp = make_aware(timestamp, timezone.utc)
                         if last_timestamp is None or timestamp > last_timestamp:
                             waterLevelReading.objects.create(
