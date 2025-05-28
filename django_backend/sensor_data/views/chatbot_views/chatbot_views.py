@@ -126,6 +126,19 @@ AUFFÄLLIGKEITEN:
                 )
                 return self.log_and_respond(session, user_input, station_list)
 
+            # Check for time period request  
+            if any(keyword in user_input.lower() for keyword in ['zeitraum', 'zeiträume', 'welche zeitraum', 'verfügbar', 'tage']):
+                if 'zeitraum' in user_input.lower() or 'zeiträume' in user_input.lower():
+                    time_periods = (
+                        "⏰ Verfügbare Zeiträume:\n"
+                        "• 24 Stunden (1 Tag)\n"
+                        "• 7 Tage\n"
+                        "• 30 Tage\n"
+                        "• 365 Tage (1 Jahr)\n"
+                        "Bitte nenne einen Ort und einen gewünschten Zeitraum. 🎯"
+                    )
+                    return self.log_and_respond(session, user_input, time_periods)
+
             # Use GPT to extract location and time period
             extracted_data = self.gpt_extract_location_and_days(user_input, data.get("state", {}))
             logger.info(f"GPT extracted data: {extracted_data}")
@@ -141,6 +154,20 @@ AUFFÄLLIGKEITEN:
                 )
                 # Store context that we're waiting for Lohnweiler clarification
                 state = {"waiting_for_lohnweiler_choice": True}
+                return self.log_and_respond(session, user_input, clarification_msg, state=state)
+
+            # Handle Kreimbach ambiguity  
+            if extracted_data == "AMBIGUOUS_KREIMBACH":
+                logger.info("Kreimbach ambiguity detected by GPT, requesting clarification")
+                clarification_msg = (
+                    "⚠️ Es gibt drei Stationen in Kreimbach:\n"
+                    "1️⃣ Kreimbach 1\n"
+                    "2️⃣ Kreimbach 2\n"
+                    "3️⃣ Kreimbach 3\n"
+                    "\nBitte wähle eine Station (antworte mit '1', '2' oder '3')."
+                )
+                # Store context that we're waiting for Kreimbach clarification
+                state = {"waiting_for_kreimbach_choice": True}
                 return self.log_and_respond(session, user_input, clarification_msg, state=state)
 
             if extracted_data:
@@ -206,8 +233,9 @@ AUFFÄLLIGKEITEN:
                     "Du bist ein freundlicher Assistent für Wasserstandsdaten. "
                     "Verfügbare Pegelstationen: Wolfstein, Rutsweiler a.d. Lauter, Kreimbach 1/2/3, "
                     "Lauterecken, Kusel, Lohnweiler (Mausbach), Lohnweiler (Lauter), Hinzweiler, Untersulzbach. "
-                    "Verfügbare Zeiträume: 24 Stunden, 7 Tage, 30 Tage, 1 Jahr. "
-                    "Hilf dem Benutzer bei der Formulierung einer klaren Anfrage."
+                    "Verfügbare Zeiträume: 24 Stunden (1 Tag), 7 Tage, 30 Tage, 365 Tage (1 Jahr). "
+                    "Hilf dem Benutzer bei der Formulierung einer klaren Anfrage. "
+                    "Beende deine Antwort mit 🎯."
                 )}
             ] + messages
             
@@ -243,6 +271,8 @@ AUFFÄLLIGKEITEN:
         if state:
             if state.get("waiting_for_lohnweiler_choice"):
                 context_info = "User is responding to Lohnweiler station choice (Mausbach vs Lauter)"
+            elif state.get("waiting_for_kreimbach_choice"):
+                context_info = "User is responding to Kreimbach station choice (1, 2, or 3)"
             elif "location" in state:
                 context_info = f"Previous context: User was asking about {state['location']}"
                 if "time_range" in state:
@@ -278,21 +308,25 @@ VERFÜGBARE ZEITRÄUME:
 SPEZIELLE REGELN:
 - Erkenne auch Tippfehler und ähnliche Schreibweisen bei Ortsnamen
 - Wenn nur "lohnweiler" ohne weitere Spezifikation genannt wird: Antworte mit "AMBIGUOUS_LOHNWEILER"
+- Wenn nur "kreimbach" ohne Nummer (1, 2, 3) genannt wird: Antworte mit "AMBIGUOUS_KREIMBACH"
 - Bei relativen Zeitangaben wie "letzten Monat", "vergangene Woche" nutze entsprechende Tage
 - Wenn kein Zeitraum angegeben, aber statistische Begriffe (Statistik, Analyse, Trend) verwendet werden: Standard 30 Tage
 - Bei Follow-up Fragen ohne expliziten Ort: nutze Kontext falls verfügbar
 - Wenn User antwortet "mausbach", "lauter", "1", "2" nach Lohnweiler-Frage: setze entsprechend "lohnweiler (mausbach)" oder "lohnweiler (lauter)"
+- Wenn User antwortet "1", "2", "3" nach Kreimbach-Frage: setze entsprechend "kreimbach 1", "kreimbach 2", oder "kreimbach 3"
 - Wenn nur "lauter" gesagt wird im Kontext von Lohnweiler: nutze "lohnweiler (lauter)"
 - Wenn nur "mausbach" gesagt wird im Kontext von Lohnweiler: nutze "lohnweiler (mausbach)"
 
 ANTWORTFORMAT (nur JSON, keine weitere Erklärung):
-{{"location": "ort_name oder null", "days": zahl_oder_null, "needs_clarification": "AMBIGUOUS_LOHNWEILER oder null"}}
+{{"location": "ort_name oder null", "days": zahl_oder_null, "needs_clarification": "AMBIGUOUS_LOHNWEILER oder AMBIGUOUS_KREIMBACH oder null"}}
 
 Beispiele:
 "Wolfstein letzte 7 Tage" → {{"location": "wolfstein", "days": 7, "needs_clarification": null}}
 "owlfstein, letzte 30 tage" → {{"location": "wolfstein", "days": 30, "needs_clarification": null}}
 "Lohnweiler Statistik" → {{"location": null, "days": null, "needs_clarification": "AMBIGUOUS_LOHNWEILER"}}
+"Kreimbach letzte 5 Tage" → {{"location": null, "days": 5, "needs_clarification": "AMBIGUOUS_KREIMBACH"}}
 "mausbach" (nach Lohnweiler-Frage) → {{"location": "lohnweiler (mausbach)", "days": 30, "needs_clarification": null}}
+"2" (nach Kreimbach-Frage) → {{"location": "kreimbach 2", "days": 30, "needs_clarification": null}}
 "und lauter" (im Lohnweiler-Kontext) → {{"location": "lohnweiler (lauter)", "days": 30, "needs_clarification": null}}
 "und im letzten Jahr?" → {{"location": null, "days": 365, "needs_clarification": null}}
 """},
@@ -320,9 +354,11 @@ Beispiele:
                 days = result.get("days") 
                 needs_clarification = result.get("needs_clarification")
                 
-                # Handle Lohnweiler ambiguity
+                # Handle ambiguities
                 if needs_clarification == "AMBIGUOUS_LOHNWEILER":
                     return "AMBIGUOUS_LOHNWEILER"
+                elif needs_clarification == "AMBIGUOUS_KREIMBACH":
+                    return "AMBIGUOUS_KREIMBACH"
                 
                 # Use state context for missing values
                 if not location and state and "location" in state:
