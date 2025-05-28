@@ -57,6 +57,10 @@ class ChatEndpointView(View):
         return js.dumps(payload, ensure_ascii=False, separators=(",", ":"))
 
     def post(self, request, *args, **kwargs):
+        session = None
+        session_id = None
+        user_input = ""
+        
         try:
             data = json.loads(request.body)
             messages = data.get('messages', [])
@@ -64,9 +68,12 @@ class ChatEndpointView(View):
             session, session_id = get_or_create_session(session_id)
 
             if not messages:
-                return JsonResponse({'error': 'No messages provided'}, status=400)
+                logger.warning("No messages provided in request")
+                return self.log_and_respond(session, "", 'No messages provided', status=400)
 
-            messages = messages[-8:]  # keep conversation short
+            messages = messages[-8:]
+            user_input = messages[-1]['content']
+            logger.info(f"Processing user input: {user_input}")
 
             prompt = [
                 {"role": "system", "content": (
@@ -83,6 +90,105 @@ class ChatEndpointView(View):
                 )}
             ] + messages
 
+            # Check for station list request first
+            if any(keyword in user_input.lower() for keyword in ['stationen', 'pegelstationen', 'orte', 'welche stationen']):
+                station_list = (
+                    "🌊 Verfügbare Pegelstationen:\n"
+                    "• Wolfstein\n"
+                    "• Rutsweiler a.d. Lauter\n"
+                    "• Kreimbach 1\n"
+                    "• Kreimbach 2\n"
+                    "• Kreimbach 3\n"
+                    "• Lauterecken\n"
+                    "• Kusel\n"
+                    "• Lohnweiler (Mausbach)\n"
+                    "• Lohnweiler (Lauter)\n"
+                    "• Hinzweiler\n"
+                    "• Untersulzbach\n"
+                    "Bitte nenne einen Ort und einen Zeitraum, um Wasserstandsdaten zu erhalten. 🎯"
+                )
+                return self.log_and_respond(session, user_input, station_list)
+
+            # Check for Lohnweiler ambiguity BEFORE extraction
+            if "lohnweiler" in user_input.lower() and not ("mausbach" in user_input.lower() or "lauter" in user_input.lower()):
+                logger.info("Lohnweiler ambiguity detected, requesting clarification")
+                clarification_msg = (
+                    "⚠️ Es gibt zwei Stationen in Lohnweiler:\n"
+                    "1️⃣ Lohnweiler (Mausbach)\n"
+                    "2️⃣ Lohnweiler (Lauter)\n"
+                    "\nBitte wähle eine Station (antworte mit 'Mausbach', 'Lauter', '1' oder '2')."
+                )
+                return self.log_and_respond(session, user_input, clarification_msg)
+
+            # Try to extract location and days
+            extracted_data = self.extract_location_and_days(user_input)
+            logger.info(f"Extracted data: {extracted_data}")
+            
+            # Enhanced state fallback logic
+            state = data.get("state", {})
+            if not extracted_data:
+                # No extraction at all - try full state fallback
+                if "location" in state and "time_range" in state:
+                    location = state["location"]
+                    days = self.map_time_range_to_days(state["time_range"])
+                    if location and days:
+                        extracted_data = (location, days)
+                        logger.info(f"Using full state fallback: {extracted_data}")
+            else:
+                # Partial extraction - check if we need to fill in missing parts from state
+                location, days = extracted_data
+                if not location and "location" in state:
+                    location = state["location"]
+                    logger.info(f"Using location from state: {location}")
+                if not days and "time_range" in state:
+                    days = self.map_time_range_to_days(state["time_range"])
+                    logger.info(f"Using days from state: {days}")
+                
+                # Update extracted_data if we filled in missing parts
+                if location and days:
+                    extracted_data = (location, days)
+                    logger.info(f"Updated extracted data with state: {extracted_data}")
+
+            if extracted_data:
+                location, days = extracted_data
+                logger.info(f"Getting analytics for {location}, {days} days")
+                
+                analytics = get_water_level_analytics(location, days)
+                if not analytics or ('error' in analytics):
+                    logger.warning(f"No analytics data available for {location}, {days} days")
+                    error_msg = (
+                        f"Es tut mir leid, aber ich habe derzeit keine Wasserstandsdaten für {location} für diesen Zeitraum verfügbar. "
+                        f"Bitte versuche es mit einem anderen Ort oder Zeitraum. 🎯"
+                    )
+                    return self.log_and_respond(session, user_input, error_msg, state={"location": location, "time_range": f"{days} Tage"})
+
+                analytics_json = self.build_analytics_json(analytics)
+                system_stats_note = ""
+                if days not in [1, 7, 30, 365]:
+                    system_stats_note = f"Hinweis: Der angegebene Zeitraum war nicht verfügbar. Stattdessen wurden die Daten für {days} Tage verwendet."
+
+                system_stats = system_stats_note + (
+                    "Folgende geprüfte Wasserstandsdaten stehen zur Verfügung. "
+                    "Nutze *nur* diese Zahlen in deiner Antwort, beantworte präzise die Benutzerfrage "
+                    "und gib am Ende 🎯 aus.\n"
+                    f"{analytics_json}"
+                )
+
+                enriched_prompt = [
+                    {"role": "system", "content": system_stats},
+                    {"role": "system", "content": prompt[0]["content"]},
+                ] + messages
+
+                gpt_stats = openai.chat.completions.create(
+                    model="gpt-4-turbo",
+                    messages=enriched_prompt,
+                    temperature=0
+                ).choices[0].message.content.strip()
+
+                return self.log_and_respond(session, user_input, gpt_stats, state={"location": location, "time_range": f"{days} Tage"})
+
+            # If we get here, no extraction was possible - call GPT for general response
+            logger.info("No extraction possible, calling GPT for general response")
             gpt_response = openai.chat.completions.create(
                 model="gpt-4-turbo",
                 messages=prompt,
@@ -90,93 +196,35 @@ class ChatEndpointView(View):
             )
 
             reply = gpt_response.choices[0].message.content.strip()
-            if any(keyword in messages[-1]['content'].lower() for keyword in ['stationen', 'pegelstationen', 'orte', 'welche stationen']):
-                station_list = (
-                    "🌊 Verfügbare Pegelstationen:"
-                    "• Wolfstein"
-                    "• Rutsweiler a.d. Lauter"
-                    "• Kreimbach 1"
-                    "• Kreimbach 2"
-                    "• Kreimbach 3"
-                    "• Lauterecken"
-                    "• Kusel"
-                    "• Lohnweiler (Mausbach)"
-                    "• Lohnweiler (Lauter)"
-                    "• Hinzweiler"
-                    "• Untersulzbach"
-                    "Bitte nenne einen Ort und einen Zeitraum, um Wasserstandsdaten zu erhalten. 🎯"
-                )
-                return JsonResponse({"message": station_list})
-            log_chat_interaction(session, messages[-1]['content'], reply)
+            return self.log_and_respond(session, user_input, reply)
 
-            extracted_data = self.extract_location_and_days(reply)
+        except json.JSONDecodeError as e:
+            logger.error(f"JSON decode error: {e}")
+            import uuid
+            fallback_id = str(uuid.uuid4())
+            session, _ = get_or_create_session(fallback_id)
+            return self.log_and_respond(session, user_input, 'Ich konnte deine Anfrage leider nicht verstehen. Bitte gib einen anderen Ort oder Zeitraum an. 🎯', status=400)
 
-            # fallback to state
-            if not extracted_data:
-                state = data.get("state", {})
-                if "location" in state and "time_range" in state:
-                    #print("[backend] using fallback state")
-                    location = state["location"]
-                    days = self.map_time_range_to_days(state["time_range"])
-                    if location and days:
-                        extracted_data = (location, days)
-
-            if extracted_data:
-                location, days = extracted_data
-                #print(f"[backend] calling analytics for {location=} {days=}")
-                analytics = get_water_level_analytics(location, days)
-                if not analytics or ('error' in analytics):
-                    return JsonResponse({
-                        "message": f"Es tut mir leid, aber ich habe derzeit keine Wasserstandsdaten für {location} für diesen Zeitraum verfügbar. Bitte versuche es mit einem anderen Ort oder Zeitraum. 🎯",
-                        "state": {"location": location, "time_range": f"{days} Tage"}
-                    })
-                if analytics:
-                    analytics_json = self.build_analytics_json(analytics)
-                    system_stats_note = ""
-                    if days not in [1, 7, 30, 365]:
-                        system_stats_note = (
-                            f"Hinweis: Der angegebene Zeitraum war nicht verfügbar. Stattdessen wurden die Daten für {days} Tage verwendet."
-                        )
-
-                    system_stats = system_stats_note + (
-                        "Folgende geprüfte Wasserstandsdaten stehen zur Verfügung. "
-                        "Nutze *nur* diese Zahlen in deiner Antwort, beantworte präzise die Benutzerfrage "
-                        "und gib am Ende 🎯 aus.\n"
-                        f"{analytics_json}"
-                    )
-                    enriched_prompt = [
-                        {"role": "system", "content": system_stats},
-                        {"role": "system", "content": prompt[0]["content"]},
-                    ] + messages
-
-                    gpt_stats = openai.chat.completions.create(
-                        model="gpt-4-turbo",
-                        messages=enriched_prompt,
-                        temperature=0
-                    ).choices[0].message.content.strip()
-
-                    return JsonResponse({
-                        "message": gpt_stats,
-                        "state": {"location": location, "time_range": f"{days} Tage"}
-                    })
-
-            if "lohnweiler" in messages[-1]['content'].lower():
-                return JsonResponse({
-                    "message": (
-                        "⚠️ Es gibt zwei Stationen in Lohnweiler:\n"
-                        "1️⃣ Lohnweiler (Mausbach)\n"
-                        "2️⃣ Lohnweiler (Lauter)\n"
-                        "\nBitte wähle eine Station (antworte mit 'Mausbach', 'Lauter', '1' oder '2')."
-                    )
-                })
-
-            return JsonResponse({"message": reply})
-
-        except json.JSONDecodeError:
-            return JsonResponse({'message': 'Ich konnte deine Anfrage leider nicht verstehen. Bitte gib einen anderen Ort oder Zeitraum an. 🎯'}, status=400)
         except Exception as e:
-            logger.error(str(e))
-            return JsonResponse({'message': 'Es ist ein unerwarteter Fehler aufgetreten. Bitte versuche es mit einem anderen Ort oder Zeitraum. 🎯'}, status=500)
+            logger.error(f"Unexpected error processing request: {e}", exc_info=True)
+            if not session:
+                import uuid
+                fallback_id = str(uuid.uuid4())
+                session, _ = get_or_create_session(fallback_id)
+            return self.log_and_respond(session, user_input, 'Es ist ein unerwarteter Fehler aufgetreten. Bitte versuche es mit einem anderen Ort oder Zeitraum. 🎯', status=500)
+
+    def log_and_respond(self, session, user_msg, bot_msg, state=None, status=200):
+        if session:
+            try:
+                log_chat_interaction(session, user_msg, bot_msg)
+                logger.info(f"Logged interaction - User: '{user_msg}' Bot: '{bot_msg[:100]}...'")
+            except Exception as e:
+                logger.warning(f"Failed to log interaction: {e}")
+        
+        response = {"message": bot_msg}
+        if state:
+            response["state"] = state
+        return JsonResponse(response, status=status)
 
     def extract_location_and_days(self, text):
         locations = list(QUERY_TYPE_MAP.keys())
@@ -184,21 +232,55 @@ class ChatEndpointView(View):
             "24": 1, "24h": 1, "24 stunden": 1,
             "7 tage": 7, "7d": 7, "7 days": 7,
             "30 tage": 30, "30d": 30,
-            "365 tage": 365, "1 jahr": 365
+            "365 tage": 365, "1 jahr": 365, "jahr": 365, "letzten jahr": 365, "gesamten jahr": 365,
+            "letzte jahr": 365, "ganzen jahr": 365, "kompletten jahr": 365
         }
-        text = text.lower()
+        text_lower = text.lower()
+        
+        logger.info(f"Extracting from text: {text}")
 
-        # Enhanced location matching for implicit Lohnweiler (Mausbach/Lauter)
-        if "mausbach" in text and "lohnweiler" in text:
+        # Location extraction with special handling for Lohnweiler
+        location = None
+        if "mausbach" in text_lower and "lohnweiler" in text_lower:
             location = "lohnweiler (mausbach)"
-        elif "lauter" in text and "lohnweiler" in text:
+        elif "lauter" in text_lower and "lohnweiler" in text_lower:
             location = "lohnweiler (lauter)"
         else:
-            location = next((loc for loc in locations if loc in text), None)
+            # Find any matching location
+            for loc in locations:
+                if loc.lower() in text_lower:
+                    location = loc
+                    break
 
-        days = next((v for k, v in time_keywords.items() if k in text), None)
+        # Time extraction - check longest keywords first to avoid partial matches
+        days = None
+        sorted_keywords = sorted(time_keywords.items(), key=lambda x: len(x[0]), reverse=True)
+        for keyword, day_value in sorted_keywords:
+            if keyword in text_lower:
+                days = day_value
+                logger.info(f"Found time keyword '{keyword}' -> {days} days")
+                break
 
-        return (location, days) if location and days else (location, self.suggest_fallback_days(text)) if location else None
+        # Default fallback for statistical requests
+        if not days and any(word in text_lower for word in ["statistik", "analyse", "trend"]):
+            logger.info("Statistical request detected, defaulting to 30 days")
+            days = 30
+
+        # Fallback days suggestion if location found but no time
+        if location and not days:
+            days = self.suggest_fallback_days(text_lower)
+            logger.info(f"Using fallback days: {days}")
+
+        result = None
+        if location and days:
+            result = (location, days)
+        elif location:
+            result = (location, None)  # Location found, no time
+        elif days:
+            result = (None, days)  # Time found, no location
+        
+        logger.info(f"Extraction result: {result}")
+        return result
 
     def map_time_range_to_days(self, time_range_str):
         if not time_range_str:
@@ -215,18 +297,5 @@ class ChatEndpointView(View):
         return None
 
     def suggest_fallback_days(self, text):
-        # naive fallback to closest valid period
-        for day in [1, 7, 30, 365]:
-            if str(day) in text:
-                return min([1, 7, 30, 365], key=lambda x: abs(x - day))
+        # Default to 7 days for most requests
         return 7
-        t = time_range_str.lower()
-        if "24" in t or "1 tag" in t:
-            return 1
-        if "7" in t:
-            return 7
-        if "30" in t:
-            return 30
-        if "365" in t or "jahr" in t:
-            return 365
-        return None
