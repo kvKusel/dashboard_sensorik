@@ -16,12 +16,12 @@ const DownloadIcon = ({
   className = '',
   tooltipText = 'Datensatz herunterladen',
 }) => {
-  const nameMapping = {
+  const deviceIdMapping = {
     lastValueWolfstein: "31",
     lastValueRutsweiler: "30",
     lastValueKreimbach1: "34",
     lastValueKreimbach3: "32",
-    lastValueKreimbach4: "36",
+    lastValueKreimbach4: "29",
     lastValueLauterecken1: "33",
     lastValueKreisverwaltung: "14",
     lastValueLohnweiler1: "42",
@@ -30,25 +30,36 @@ const DownloadIcon = ({
     lastValueLohnweilerRLP: "44",
   };
 
+  const nameMapping = {
+    lastValueWolfstein: "Wolfstein",
+    lastValueRutsweiler: "Rutsweiler",
+    lastValueKreimbach1: "Kreimbach_1",
+    lastValueKreimbach3: "Kreimbach_2",
+    lastValueKreimbach4: "Kreimbach_3",
+    lastValueLauterecken1: "Lauterecken",
+    lastValueKreisverwaltung: "Kusel",
+    lastValueLohnweiler1: "Lohnweiler_Mausbach",
+    lastValueHinzweiler1: "Hinzweiler",
+    lastValueUntersulzbach: "Untersulzbach",
+    lastValueLohnweilerRLP: "Lauterecken_Lauter",
+  };
+
+  const isDatasetSelected = activeDataset && deviceIdMapping[activeDataset];
+  const iconColor = isDatasetSelected ? color : '#ccc';
+  const currentTooltipText = isDatasetSelected ? tooltipText : 'Wählen Sie einen Datensatz zum Herunterladen aus';
+
   const renderTooltip = (props) => (
     <Tooltip id="download-tooltip" {...props}>
-      {tooltipText}
+      {currentTooltipText}
     </Tooltip>
   );
 
-  //console.log(activeDataset);
-
   const handleDownload = async () => {
-    if (!activeDataset) {
-      alert('Kein Datensatz ausgewählt.');
-      return;
+    if (!isDatasetSelected) {
+      return; // Do nothing if no dataset is selected
     }
 
-    const deviceId = nameMapping[activeDataset];
-    if (!deviceId) {
-      alert('Unbekannter Datensatz.');
-      return;
-    }
+    const deviceId = deviceIdMapping[activeDataset];
 
     try {
       // Use device ID in the API call
@@ -62,9 +73,9 @@ const DownloadIcon = ({
 
       const a = document.createElement('a');
       a.href = downloadUrl;
-      // Create a more readable filename
-      const locationName = activeDataset.replace('lastValue', '').toLowerCase();
-      a.download = `${locationName}_dataset.csv`;
+      // Create filename with location name and _Pegelstaende suffix
+      const locationName = nameMapping[activeDataset];
+      a.download = `${locationName}_Pegelstaende.csv`;
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -77,11 +88,11 @@ const DownloadIcon = ({
 
   return (
     <OverlayTrigger placement="bottom" overlay={renderTooltip}>
-      <div style={{ cursor: 'pointer' }}>
+      <div style={{ cursor: isDatasetSelected ? 'pointer' : 'not-allowed' }}>
         <FontAwesomeIcon
           icon={faDownload}
           size={size}
-          style={{ color }}
+          style={{ color: iconColor }}
           className={className}
           onClick={handleDownload}
         />

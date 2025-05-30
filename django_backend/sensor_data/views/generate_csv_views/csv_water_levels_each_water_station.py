@@ -38,12 +38,11 @@ class ExportWaterLevelDataView(View):
 
         query = """
         SELECT 
-            DATE_FORMAT(timestamp, '%%Y-%%m-%%d %%H:00:00') AS formatted_timestamp,
-            ROUND(AVG(water_level_value), 1) AS average_level_cm
+            timestamp,
+            water_level_value
         FROM sensor_data_waterlevelreading
         WHERE device_id = %s
-        GROUP BY formatted_timestamp
-        ORDER BY formatted_timestamp ASC;
+        ORDER BY timestamp ASC;
         """
 
         with connection.cursor() as cursor:
@@ -58,18 +57,18 @@ class ExportWaterLevelDataView(View):
             data = [
                 {
                     'timestamp': row[0],
-                    'average_water_level_cm': row[1]
+                    'water_level_cm': row[1]
                 }
                 for row in results
             ]
             return JsonResponse(data, safe=False)
 
         response = HttpResponse(content_type='text/csv')
-        filename = f"{device_name}_dataset.csv"
+        filename = f"{device_name}_pegelstaende.csv"
         response['Content-Disposition'] = f'attachment; filename=\"{filename}\"'
 
         writer = csv.writer(response)
-        writer.writerow(['Timestamp', 'Average Water Level [cm]'])
+        writer.writerow(['Timestamp', 'Water Level [cm]'])
         for row in results:
             writer.writerow(row)
 

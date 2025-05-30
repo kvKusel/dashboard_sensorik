@@ -72,14 +72,14 @@ const PegelWolfsteinMap = ({ hoveredMarkerId, selectedMarkerId, onMarkerClick, s
 
   const markers = [
     { id: "wolfstein", position: [49.581045, 7.619593], label: "Wolfstein", queryType: "lastValueWolfstein", },
-    { id: "rutsweiler", position: [49.566297, 7.623804], label: "Rutsweiler a.d. Lauter", queryType: "lastValueRutsweiler", },
-    { id: "kreimbach4", position: [49.554087, 7.621883], label: "Kreimbach 3", queryType: "lastValueKreimbach4", },
-    { id: "lauterecken", position: [49.650507589739846, 7.590545488872102], label: "Lauterecken", queryType: "lastValueLauterecken1", },
-    { id: "kreimbach1", position: [49.54844915352638, 7.631175812962766], label: "Kreimbach 1", queryType: "lastValueKreimbach1", },
+    { id: "rutsweiler", position: [49.566260, 7.623804], label: "Rutsweiler a.d. Lauter", queryType: "lastValueRutsweiler", },
+    { id: "kreimbach4", position: [49.554057, 7.621883], label: "Kreimbach 3", queryType: "lastValueKreimbach4", },
+    { id: "lauterecken", position: [49.650457589739846, 7.590545488872102], label: "Lauterecken", queryType: "lastValueLauterecken1", },
+    { id: "kreimbach1", position: [49.54848915352638, 7.631195812962766], label: "Kreimbach 1", queryType: "lastValueKreimbach1", },
     { id: "kreimbach3", position: [49.556388641429436, 7.636587365546659], label: "Kreimbach 2", queryType: "lastValueKreimbach3", }, 
-    { id: "kusel", position: [49.539820952844316, 7.396752597634942], label: "Kusel", queryType: "lastValueKreisverwaltung", },
+    { id: "kusel", position: [49.539810952844316, 7.396764597634942], label: "Kusel", queryType: "lastValueKreisverwaltung", },
     { id: "lohnweiler1", position: [49.63553061963123, 7.59709411130715], label: "Lohnweiler", queryType: "lastValueLohnweiler1", },
-    { id: "hinzweiler1", position: [49.589414954381816, 7.548317327514346], label: "Hinzweiler", queryType: "lastValueHinzweiler1", },
+    { id: "hinzweiler1", position: [49.589394954381816, 7.548317327514346], label: "Hinzweiler", queryType: "lastValueHinzweiler1", },
     { id: "untersulzbach", position: [49.528584, 7.663114], label: "Untersulzbach", queryType: "lastValueUntersulzbach", }, 
     { id: "lohnweilerRLP", position: [49.636245, 7.600337], label: "Lohnweiler (Lauter)", queryType: "lastValueLohnweilerRLP", },
   ];
