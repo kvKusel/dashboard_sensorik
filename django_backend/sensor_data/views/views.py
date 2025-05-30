@@ -107,32 +107,52 @@ class ForecastDataViewWolfstein(View):
 #############################            historical precipitation data for Wolfstein (for bar chart)        ###########################################
     
     
+
 class HistoricalPrecipitationView(View):
     def get(self, request, *args, **kwargs):
         try:
             # Get the time range from the request
-            time_range = request.GET.get("time_range", "24h")  # Default to '24h'
+            time_range = request.GET.get("time_range", "24h")
+            
+            # Get current datetime in the desired timezone (Berlin/CET)
+            berlin_tz = timezone.get_current_timezone()  # or use pytz.timezone('Europe/Berlin')
             now = timezone.now()
-
-            # Calculate the time boundary
+            
+            # Calculate start and end dates based on time_range
             if time_range == "24h":
-                time_boundary = now - timezone.timedelta(hours=24)
+                start_date = now - timedelta(hours=24)
+                end_date = now
             elif time_range == "7d":
-                time_boundary = now - timezone.timedelta(days=7)
+                start_date = now - timedelta(days=7)
+                end_date = now
             elif time_range == "30d":
-                time_boundary = now - timezone.timedelta(days=30)
+                start_date = now - timedelta(days=30)
+                end_date = now
             elif time_range == "365d":
-                time_boundary = now - timezone.timedelta(days=365)
+                start_date = now - timedelta(days=365)
+                end_date = now
             else:
                 return JsonResponse({"error": "Invalid time range"}, status=400)
 
-            # Filter readings
-            readings = HistoricalPrecipitation.objects.filter(timestamp__gte=int(time_boundary.timestamp())).order_by('timestamp')
-
+            # Convert to Unix epochs (timestamps)
+            start_timestamp = int(start_date.timestamp())
+            end_timestamp = int(end_date.timestamp())
+            
+            # Filter readings between start and end timestamps
+            readings = HistoricalPrecipitation.objects.filter(
+                timestamp__gte=start_timestamp,
+                timestamp__lte=end_timestamp
+            ).order_by('timestamp')
+        
             if readings.exists():
+                # Debug: Show first and last readings
+                first_reading = readings.first()
+                last_reading = readings.last()
+         
                 response_data = list(readings.values('timestamp', 'precipitation'))
                 return JsonResponse(response_data, safe=False)
             else:
                 return JsonResponse({"message": "No data available for the selected time period."}, status=204)
+                
         except Exception as e:
-            return JsonResponse({"error": str(e)}, status=500)
+            return JsonResponse({"error": str(e)}, status=500) 
