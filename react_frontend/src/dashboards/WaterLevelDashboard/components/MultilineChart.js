@@ -108,7 +108,7 @@ const formatDatasetLabel = (datasetKey) => {
           const { top, left, width, height } = chartArea;
           
           ctx.save();
-          const text = "Pegel aus Tabelle oder Legende auswählen, um die Daten anzuzeigen";
+          const text = "Pegel aus der Tabelle oder Karte auswählen, um die Daten anzuzeigen";
           const maxWidth = width - 20;
           const lineHeight = 20;
           const xCenter = left + (width / 2);

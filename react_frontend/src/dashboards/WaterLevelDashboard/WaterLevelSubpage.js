@@ -172,7 +172,7 @@ const WaterLevelSubpage = ({
   const displayName =
     selectedRow !== "default"
       ? nameMapping[selectedRow]
-      : "(Pegel aus der Tabelle auswählen, um Details anzuzeigen.)";
+      : "aus der Tabelle oder Karte auswählen, um Details anzuzeigen.";
 
   //arc settings for the water level gauge chart component
   const arcsDefault = [
@@ -338,7 +338,7 @@ const WaterLevelSubpage = ({
                   className=" pt-2 mb-0"
                   style={{ color: "#18204F", fontSize: "1.1rem" }}
                 >
-                  Pegel {displayName}
+  {`Pegel ${displayName}`}
                 </p>
                 {selectedRow !== "default" && (
                   <p
@@ -524,61 +524,58 @@ const WaterLevelSubpage = ({
       </div>
 
       {/* row with sliders for choosing time span */}
+<div
+  className="row rounded-bottom-3"
+  style={{ flex: "1 1 auto", backgroundColor: "#fff" }}
+>
+  <div className="col-xs-12 d-flex justify-content-between align-items-center p-2 pt-0">
+    
+    {/* Left: Dropdown */}
+    <div className="d-flex align-items-center">
+      <Dropdown className="pt-3 ps-2">
+        <Dropdown.Toggle
+          variant="danger"
+          id="dropdown-basic"
+          className="ps-1 d-flex align-items-center custom-dropdown2"
+          style={{ fontSize: "1.1rem" }}
+        >
+          <img src={time_icon} alt="Time Icon" className="icon" />
+          {timePeriodLabels[currentPeriodHistoricalPrecipitation] ||
+            "Zeitraum auswählen"}
+        </Dropdown.Toggle>
 
-      <div
-        className="row rounded-bottom-3"
-        style={{ flex: "1 1 auto", backgroundColor: "#fff" }}
-      >
-        <div className="col-xs-12 d-flex p-2 pt-0">
-          <div
-            className=" d-flex pb-2"
-            // style={{
-            //   flex: "1 1 auto",
-            //   borderRadius: "0px",
-            //   backgroundColor: "#5D7280",
-            //   borderStyle: "solid",
-            //   borderWidth: "1px",
-            //   borderColor: "#5D7280",
-            // }}
+        <Dropdown.Menu>
+          <Dropdown.Item
+            onClick={() => onPeriodChangeHistoricalPrecipitation("24h")}
           >
-            <Dropdown className="pt-3 ps-2 ">
-              <Dropdown.Toggle
-                variant="danger"
-                id="dropdown-basic"
-                className="ps-1 d-flex align-items-center custom-dropdown2"
-                style={{ fontSize: "1.1rem" }}
-              >
-                <img src={time_icon} alt="Time Icon" className="icon"  />
-                {timePeriodLabels[currentPeriodHistoricalPrecipitation] ||
-                  "Zeitraum auswählen"}
-              </Dropdown.Toggle>
+            Letzte 24 Stunden
+          </Dropdown.Item>
+          <Dropdown.Item
+            onClick={() => onPeriodChangeHistoricalPrecipitation("7d")}
+          >
+            Letzte 7 Tage
+          </Dropdown.Item>
+          <Dropdown.Item
+            onClick={() => onPeriodChangeHistoricalPrecipitation("30d")}
+          >
+            Letzte 30 Tage
+          </Dropdown.Item>
+          <Dropdown.Item
+            onClick={() => onPeriodChangeHistoricalPrecipitation("365d")}
+          >
+            Letzte 365 Tage
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+    </div>
 
-              <Dropdown.Menu>
-                <Dropdown.Item
-                  onClick={() => onPeriodChangeHistoricalPrecipitation("24h")}
-                >
-                  Letzte 24 Stunden
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => onPeriodChangeHistoricalPrecipitation("7d")}
-                >
-                  Letzte 7 Tage
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => onPeriodChangeHistoricalPrecipitation("30d")}
-                >
-                  Letzte 30 Tage
-                </Dropdown.Item>
-                <Dropdown.Item
-                  onClick={() => onPeriodChangeHistoricalPrecipitation("365d")}
-                >
-                  Letzte 365 Tage
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-        </div>
-      </div>
+    {/* Right: Download Icon */}
+    <div className="pt-3 pe-2">
+      <DownloadIcon isPrecipitationDownload={true} tooltipText="Niederschlagsdaten herunterladen" />
+    </div>
+  </div>
+</div>
+
 
       {/* row with the bar chart for the 5 day forecast */}
 

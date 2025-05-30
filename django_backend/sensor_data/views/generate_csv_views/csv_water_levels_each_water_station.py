@@ -3,6 +3,7 @@ from django.views import View
 from django.db import connection
 import csv
 from datetime import datetime
+import pytz
 
 class ExportWaterLevelDataView(View):
     def get(self, request, *args, **kwargs):
@@ -53,14 +54,31 @@ class ExportWaterLevelDataView(View):
         if not results:
             return HttpResponseBadRequest(f'No data found for device_id {device_id}')
 
+        # Set up CET timezone
+        cet = pytz.timezone('Europe/Berlin')  # CET/CEST timezone
+
         if request.GET.get('format') == 'json':
-            data = [
-                {
-                    'timestamp': row[0],
+            data = []
+            for row in results:
+                # Convert timestamp to CET if it's a Unix timestamp
+                if isinstance(row[0], (int, float)):
+                    # Unix timestamp
+                    dt = datetime.fromtimestamp(row[0], tz=cet)
+                    timestamp = dt.isoformat()
+                else:
+                    # Already a datetime object, convert to CET
+                    if row[0].tzinfo is None:
+                        # Naive datetime, assume UTC and convert to CET
+                        dt = pytz.utc.localize(row[0]).astimezone(cet)
+                    else:
+                        # Already timezone-aware, convert to CET
+                        dt = row[0].astimezone(cet)
+                    timestamp = dt.isoformat()
+                
+                data.append({
+                    'timestamp': timestamp,
                     'water_level_cm': row[1]
-                }
-                for row in results
-            ]
+                })
             return JsonResponse(data, safe=False)
 
         response = HttpResponse(content_type='text/csv')
@@ -69,7 +87,22 @@ class ExportWaterLevelDataView(View):
 
         writer = csv.writer(response)
         writer.writerow(['Timestamp', 'Water Level [cm]'])
+        
         for row in results:
-            writer.writerow(row)
+            # Convert timestamp to CET formatted string
+            if isinstance(row[0], (int, float)):
+                # Unix timestamp
+                dt = datetime.fromtimestamp(row[0], tz=cet)
+            else:
+                # Already a datetime object, convert to CET
+                if row[0].tzinfo is None:
+                    # Naive datetime, assume UTC and convert to CET
+                    dt = pytz.utc.localize(row[0]).astimezone(cet)
+                else:
+                    # Already timezone-aware, convert to CET
+                    dt = row[0].astimezone(cet)
+            
+            formatted_timestamp = dt.strftime('%Y-%m-%d %H:%M:%S %Z')
+            writer.writerow([formatted_timestamp, row[1]])
 
         return response

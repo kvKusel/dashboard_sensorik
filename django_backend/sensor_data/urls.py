@@ -42,6 +42,10 @@ from .views.generate_csv_views.csv_hochbeete_weather_station import (
 from .views.generate_csv_views.csv_water_levels_each_water_station import (
     ExportWaterLevelDataView
 )
+
+from .views.generate_csv_views.csv_historical_precipitation import (
+    ExportPrecipitationDataView 
+)
     
 
 from .views.soil_moisture_and_ph_hochbeete_views import (
@@ -77,6 +81,8 @@ urlpatterns = [
     path('api/forecast-data-wolfstein/', ForecastDataViewWolfstein.as_view(), name='forecast_data'),
     path('api/historical-precipitation/', HistoricalPrecipitationView.as_view(), name='historical_precipitation'),
 
+    #csv with precipitation data
+    path('api/export-precipitation-data/', ExportPrecipitationDataView.as_view(), name='export-precipitation-data'),
 
     path('api/chat/', ChatEndpointView.as_view(), name='chat_endpoint'),
     path('api/data-analytics-chatbot/', DataAnalyticsForChatbot.as_view(), name='data_analytics_chatbot'),
