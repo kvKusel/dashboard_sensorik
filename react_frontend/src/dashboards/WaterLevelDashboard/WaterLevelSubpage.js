@@ -403,7 +403,7 @@ const WaterLevelSubpage = ({
           boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
         }}
       >
-        <div className="col-xs-12 d-flex p-2 pb-0">
+        <div className="col-xs-12 d-flex p-2 pb-4">
           <div
             className=""
             style={{
@@ -411,7 +411,7 @@ const WaterLevelSubpage = ({
               minHeight: isSmallScreen
                 ? "40vh"
                 : window.innerWidth < 1200
-                ? "30vh"
+                ? "50vh"
                 : "40vh",
               maxHeight: "60vh",
               // borderRadius: "0px",
@@ -492,7 +492,7 @@ const WaterLevelSubpage = ({
           boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
         }}
       >
-        <div className="col-xs-12 d-flex p-2 pb-0">
+        <div className="col-xs-12 d-flex p-2 pb-2">
           <div
             className=""
             style={{
@@ -500,7 +500,7 @@ const WaterLevelSubpage = ({
               minHeight: isSmallScreen
                 ? "40vh"
                 : window.innerWidth < 1200
-                ? "20vh"
+                ? "40vh"
                 : "40vh",
               // maxHeight: "60vh",
               // backgroundColor: "#5D7280",
@@ -595,7 +595,7 @@ const WaterLevelSubpage = ({
               minHeight: isSmallScreen
                 ? "40vh"
                 : window.innerWidth < 1200
-                ? "20vh"
+                ? "40vh"
                 : "40vh",
               maxHeight: "60vh",
               // borderRadius: "0px",

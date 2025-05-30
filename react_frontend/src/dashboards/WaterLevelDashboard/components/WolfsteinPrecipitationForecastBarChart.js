@@ -209,8 +209,9 @@ const WolfsteinForecastBarChart = () => {
                 display: true,
                 text: 'Niederschlagsvorhersage (5 Tage)',
                 color: '#18204F',
-                padding: {bottom:20},
-
+    padding: {
+      bottom: window.innerWidth <= 576 ? 40 : 20 // 576px is Bootstrap's sm breakpoint
+    },
                 font: {
                     size: 20,
                     weight: 'bolder',
