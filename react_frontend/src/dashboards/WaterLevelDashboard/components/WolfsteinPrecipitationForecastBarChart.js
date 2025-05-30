@@ -161,9 +161,9 @@ const WolfsteinForecastBarChart = () => {
             ticks: {
 
               stepSize: 1, // Ensure one tick per day
-              minTicksLimit: 5, // Limit the number of ticks (days in this case)
+              minTicksLimit: 4, // Limit the number of ticks (days in this case)
 
-                maxTicksLimit: 5, // Limit the number of ticks (days in this case)
+                maxTicksLimit: 4, // Limit the number of ticks (days in this case)
                 color: '#6972A8',
                 font: {
                     size: 16,
