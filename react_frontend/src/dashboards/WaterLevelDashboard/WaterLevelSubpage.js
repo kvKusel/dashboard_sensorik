@@ -10,6 +10,11 @@ import WolfsteinHistoricalBarChart from "./components/WolfsteinPrecipitationHist
 import SensorTable from "./components/SensorTable";
 import Chatbot from "../../tools/Chatbot";
 
+// Importing FontAwesome for download icon
+import DownloadIcon from "./components/DownloadIcon";
+
+
+
 const WaterLevelSubpage = ({
   waterLevelKreisverwaltung,
   waterLevelWolfstein,
@@ -435,52 +440,47 @@ const WaterLevelSubpage = ({
       </div>
 
       {/* row with sliders for choosing time span */}
+<div
+  className="row rounded-bottom-3 mb-4"
+  style={{ flex: "1 1 auto", backgroundColor: "#FFF" }}
+>
+  <div className="col-xs-12 d-flex justify-content-between align-items-center p-2 pt-0">
+    {/* Left: Dropdown */}
+    <div className="d-flex ">
+      <Dropdown className="ps-2">
+        <Dropdown.Toggle
+          variant="danger"
+          id="dropdown-basic"
+          className="ps-1 d-flex align-items-center custom-dropdown2"
+          style={{ fontSize: "1.1rem" }}
+        >
+          <img src={time_icon} alt="Time Icon" className="icon" />
+          {timePeriodLabels[currentPeriod] || "Zeitraum auswählen"}
+        </Dropdown.Toggle>
 
-      <div
-        className="row rounded-bottom-3 mb-4"
-        style={{ flex: "1 1 auto", backgroundColor: "#FFF" }}
-      >
-        <div className="col-xs-12 d-flex p-2 pt-0">
-          <div
-            className=" d-flex pb-2"
-            style={{
-              flex: "1 1 auto",
+        <Dropdown.Menu>
+          <Dropdown.Item onClick={() => onPeriodChange("24h")}>
+            Letzte 24 Stunden
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => onPeriodChange("7d")}>
+            Letzte 7 Tage
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => onPeriodChange("30d")}>
+            Letzte 30 Tage
+          </Dropdown.Item>
+          <Dropdown.Item onClick={() => onPeriodChange("365d")}>
+            Letzte 365 Tage
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
+    </div>
 
-              // borderStyle: "solid",
-              // borderWidth: "1px",
-              // borderColor: "#5D7280",
-              // borderRadius: "0px",
-            }}
-          >
-            <Dropdown className="pt-3 ps-2">
-              <Dropdown.Toggle
-                variant="danger"
-                id="dropdown-basic"
-                className="ps-1 d-flex align-items-center custom-dropdown2"
-                style={{ fontSize: "1.1rem" }}
-              >
-                <img src={time_icon} alt="Time Icon" className="icon" />
-                {timePeriodLabels[currentPeriod] || "Zeitraum auswählen"}
-              </Dropdown.Toggle>
+            <DownloadIcon className="pe-2" 
+                          activeDataset={activeDataset}
+/>
+  </div>
+</div>
 
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={() => onPeriodChange("24h")}>
-                  Letzte 24 Stunden
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => onPeriodChange("7d")}>
-                  Letzte 7 Tage
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => onPeriodChange("30d")}>
-                  Letzte 30 Tage
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => onPeriodChange("365d")}>
-                  Letzte 365 Tage
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
-        </div>
-      </div>
 
       {/* row with the bar chart showing the past precipitation  */}
 
@@ -548,7 +548,7 @@ const WaterLevelSubpage = ({
                 className="ps-1 d-flex align-items-center custom-dropdown2"
                 style={{ fontSize: "1.1rem" }}
               >
-                <img src={time_icon} alt="Time Icon" className="icon" />
+                <img src={time_icon} alt="Time Icon" className="icon"  />
                 {timePeriodLabels[currentPeriodHistoricalPrecipitation] ||
                   "Zeitraum auswählen"}
               </Dropdown.Toggle>

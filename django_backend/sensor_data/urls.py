@@ -39,6 +39,11 @@ from .views.generate_csv_views.csv_hochbeete_weather_station import (
     ExportWeatherDataView
 )
 
+from .views.generate_csv_views.csv_water_levels_each_water_station import (
+    ExportWaterLevelDataView
+)
+    
+
 from .views.soil_moisture_and_ph_hochbeete_views import (
     pHDataHochbeetProject, SoilMoistureDataHochbeetProject
 )
@@ -66,6 +71,7 @@ urlpatterns = [
     path('ph-data/', pHDataHochbeetProject.as_view(), name='ph-data'),
     path('water-level-data/', waterLevelDataView.as_view(), name='water-level'),
     path('api/export-asset-data/', ExportAssetDataView.as_view(), name='export_asset_data'),
+    path('api/export-water-level-data/', ExportWaterLevelDataView.as_view(), name='export_water_level_data'),
     path('api/export-weather-data/', ExportWeatherDataView.as_view(), name='export_weather_data'),
     path('', index, name='index'),
     path('api/forecast-data-wolfstein/', ForecastDataViewWolfstein.as_view(), name='forecast_data'),
