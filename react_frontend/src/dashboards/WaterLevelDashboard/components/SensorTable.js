@@ -223,16 +223,30 @@ const SensorTable = ({
                 )}
               </td>
               <td style={{ padding: "10px", textAlign: "center" }}>
-                <div
-                  style={{
-                    width: "16px",
-                    height: "16px",
-                    borderRadius: "50%",
-                    display: "inline-block",
-                    backgroundColor:
-                      item.value < 200 ? "#83C968" : item.value <= 250 ? "#ECC85B" : "#E7844E",
-                  }}
-                ></div>
+                {(() => {
+                  if (!item.timestamp) return <span style={{ fontSize: "20px", fontWeight: "bold" }}>-</span>;
+                  
+                  const now = new Date();
+                  const sensorTime = new Date(item.timestamp);
+                  const timeDifferenceHours = (now - sensorTime) / (1000 * 60 * 60);
+                  
+                  if (timeDifferenceHours > 2) {
+                    return <span style={{ fontSize: "20px", fontWeight: "bold" }}>-</span>;
+                  }
+                  
+                  return (
+                    <div
+                      style={{
+                        width: "16px",
+                        height: "16px",
+                        borderRadius: "50%",
+                        display: "inline-block",
+                        backgroundColor:
+                          item.value < 200 ? "#83C968" : item.value <= 250 ? "#ECC85B" : "#E7844E",
+                      }}
+                    ></div>
+                  );
+                })()}
               </td>
               <td style={{ padding: "10px", textAlign: "center" }}>
                 <div
