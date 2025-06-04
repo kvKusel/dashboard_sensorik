@@ -147,15 +147,46 @@ const WaterLevelSubpage = ({
     lastValueWolfstein: "Wolfstein",
     lastValueRutsweiler: "Rutsweiler a.d. Lauter",
     lastValueKreimbach1: "Kreimbach 1",
-    lastValueKreimbach3: "Kreimbach 2",
+    lastValueKreimbach3: "Kreimbach 2 (Kreimbach)",
     lastValueKreimbach4: "Kreimbach 3",
     lastValueLauterecken1: "Lauterecken",
     lastValueKreisverwaltung: "Kusel",
-    lastValueLohnweiler1: "Lohnweiler",
-    lastValueHinzweiler1: "Hinzweiler",
-    lastValueUntersulzbach: "Untersulzbach",
-    lastValueLohnweilerRLP: "Lohnweiler (Lauter)",
-  };
+    lastValueLohnweiler1: "Lohnweiler (Mausbach)",
+    lastValueHinzweiler1: "Hinzweiler (Talbach)",
+lastValueUntersulzbach: (
+  <>
+    Untersulzbach{" "}
+    <span style={{ fontSize: "0.75rem" }}>
+      [
+      <a
+        href="https://wasserportal.rlp-umwelt.de/"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ color: "#555", textDecoration: "underline" }}
+      >
+        Quelle: LfU RLP
+      </a>
+      ]
+    </span>
+  </>
+),
+lastValueLohnweilerRLP: (
+  <>
+    Lohnweiler (Lauter){" "}
+    <span style={{ fontSize: "0.75rem" }}>
+      [
+      <a
+        href="https://wasserportal.rlp-umwelt.de/"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ color: "#555", textDecoration: "underline" }}
+      >
+        Quelle: LfU RLP
+      </a>
+      ]
+    </span>
+  </>
+),  };
 
   //setup to handle zooming into a marker from both the map and the table when marker or row is clicked
   const mapRef = useRef();
@@ -334,12 +365,10 @@ const WaterLevelSubpage = ({
           >
             <div className="col-12 d-flex flex-column flex-grow-1 ">
               <div>
-                <p
-                  className=" pt-2 mb-0"
-                  style={{ color: "#18204F", fontSize: "1.1rem" }}
-                >
-  {`Pegel ${displayName}`}
-                </p>
+<p className="pt-2 mb-0" style={{ color: "#18204F", fontSize: "1.1rem" }}>
+  Pegel {displayName}
+</p>
+
                 {selectedRow !== "default" && (
                   <p
                     className=" mb-0"
@@ -440,44 +469,75 @@ const WaterLevelSubpage = ({
       </div>
 
       {/* row with sliders for choosing time span */}
+{/* row with sliders for choosing time span */}
 <div
   className="row rounded-bottom-3 mb-4"
   style={{ flex: "1 1 auto", backgroundColor: "#FFF" }}
 >
-  <div className="col-xs-12 d-flex justify-content-between align-items-center p-2 pt-0">
-    {/* Left: Dropdown */}
-    <div className="d-flex ">
-      <Dropdown className="ps-2">
-        <Dropdown.Toggle
-          variant="danger"
-          id="dropdown-basic"
-          className="ps-1 d-flex align-items-center custom-dropdown2"
-          style={{ fontSize: "1.1rem" }}
+  <div className="col-xs-12 p-2 pt-0">
+    {/* Attribution above dropdown on small screens - only show for RLP data sources */}
+    {(activeDataset === "lastValueLohnweilerRLP" || activeDataset === "lastValueUntersulzbach") && (
+      <div className="d-block d-sm-none mb-2 ps-2">
+        <a
+          href="https://wasserportal.rlp-umwelt.de/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#555", textDecoration: "underline", fontSize: "0.9rem" }}
         >
-          <img src={time_icon} alt="Time Icon" className="icon" />
-          {timePeriodLabels[currentPeriod] || "Zeitraum auswählen"}
-        </Dropdown.Toggle>
+          Quelle: LfU RLP
+        </a>
+      </div>
+    )}
 
-        <Dropdown.Menu>
-          <Dropdown.Item onClick={() => onPeriodChange("24h")}>
-            Letzte 24 Stunden
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => onPeriodChange("7d")}>
-            Letzte 7 Tage
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => onPeriodChange("30d")}>
-            Letzte 30 Tage
-          </Dropdown.Item>
-          <Dropdown.Item onClick={() => onPeriodChange("365d")}>
-            Letzte 365 Tage
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+    {/* Main row with dropdown, attribution (hidden on small), and download */}
+    <div className="d-flex justify-content-between align-items-center">
+      {/* Left: Dropdown */}
+      <div className="d-flex">
+        <Dropdown className="ps-2">
+          <Dropdown.Toggle
+            variant="danger"
+            id="dropdown-basic"
+            className="ps-1 d-flex align-items-center custom-dropdown2"
+            style={{ fontSize: "1.1rem" }}
+          >
+            <img src={time_icon} alt="Time Icon" className="icon" />
+            {timePeriodLabels[currentPeriod] || "Zeitraum auswählen"}
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu>
+            <Dropdown.Item onClick={() => onPeriodChange("24h")}>
+              Letzte 24 Stunden
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => onPeriodChange("7d")}>
+              Letzte 7 Tage
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => onPeriodChange("30d")}>
+              Letzte 30 Tage
+            </Dropdown.Item>
+            <Dropdown.Item onClick={() => onPeriodChange("365d")}>
+              Letzte 365 Tage
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
+
+      {/* Center: Attribution (hidden on small screens) - only show for RLP data sources */}
+      {(activeDataset === "lastValueLohnweilerRLP" || activeDataset === "lastValueUntersulzbach") && (
+        <div className="d-none d-sm-block">
+          <a
+            href="https://wasserportal.rlp-umwelt.de/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "#555", textDecoration: "underline", fontSize: "0.9rem" }}
+          >
+            Quelle: LfU RLP
+          </a>
+        </div>
+      )}
+
+      {/* Right: Download Icon */}
+      <DownloadIcon className="pe-2" activeDataset={activeDataset} />
     </div>
-
-            <DownloadIcon className="pe-2" 
-                          activeDataset={activeDataset}
-/>
   </div>
 </div>
 

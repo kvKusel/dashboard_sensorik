@@ -665,3 +665,35 @@ input:checked + .slider:before {
 }
 
 
+/* responsive font size for different dashboard elements */
+.responsive-fs-text {
+  font-size: 0.8rem;
+}
+
+@media (min-width: 576px) {
+  .responsive-fs-text {
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .responsive-fs-text {
+    font-size: 1rem;
+  }
+}
+
+.responsive-th {
+  font-size: 0.9rem;
+}
+
+@media (min-width: 576px) {
+  .responsive-th {
+    font-size: 0.9rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .responsive-th {
+    font-size: 1rem;
+  }
+}

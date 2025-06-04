@@ -416,7 +416,7 @@ const formatDatasetLabel = (datasetKey) => {
         plugins={[noDatasetPlugin]} 
         key={windowSize}
       />
-    </div>
+    </div>  
   );
 };
 
