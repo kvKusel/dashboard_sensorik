@@ -200,7 +200,7 @@ const WolfsteinHistoricalBarChart = ({
     plugins: {
       title: {
         display: true,
-        text: "Niederschlag - Rückblick",
+        text: "Niederschlag - Rückblick (Wolfstein)",
         padding: { bottom: 20 },
 
         color: "#18204F",

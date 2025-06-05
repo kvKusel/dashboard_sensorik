@@ -353,7 +353,7 @@ const formatDatasetLabel = (datasetKey) => {
         min: periodBoundary,
         max: Date.now(),
         grid: {
-          minTicksLimit: 5, // Ensure at least 5 ticks on the axis
+          minTicksLimit: 3, // Ensure at least 5 ticks on the axis
           
           lineWidth: 2,
           color: "#BFC2DA",
@@ -364,7 +364,7 @@ const formatDatasetLabel = (datasetKey) => {
           },
           color: "#6972A8",
           
-          maxTicksLimit: 5,
+          maxTicksLimit: 4,
           font: {
             size: 16,
           },
@@ -380,30 +380,33 @@ const formatDatasetLabel = (datasetKey) => {
         },
       },
       y: {
-        title: {
-          display: true,
-          text: "Wasserstand (cm)",
-          color: "#6972A8",
-          font: {
-            size: 18,
-          },
-          padding: {
-            top: 10,
-          },
-        },
-        grid: {
-          lineWidth: 2,
+  min: 0,
+  max: 200,
+  title: {
+    display: true,
+    text: "Wasserstand (cm)",
+    color: "#6972A8",
+    font: {
+      size: 18,
+    },
+    padding: {
+      top: 10,
+    },
+  },
+  grid: {
+    lineWidth: 2,
+    color: "#BFC2DA",
+  },
+  ticks: {
+    stepSize: 50,
+    maxTicksLimit: 5,
+    color: "#6972A8",
+    font: {
+      size: 16,
+    },
+  },
+},
 
-          color: "#BFC2DA",
-        },
-        ticks: {
-          maxTicksLimit: 4,
-          color: "#6972A8",
-          font: {
-            size: 16,
-          },
-        },
-      },
     },
   };
 

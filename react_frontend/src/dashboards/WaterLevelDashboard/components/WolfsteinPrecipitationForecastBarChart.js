@@ -207,7 +207,7 @@ const WolfsteinForecastBarChart = () => {
         plugins: {
             title: {
                 display: true,
-                text: 'Niederschlagsvorhersage (5 Tage)',
+                text: 'Niederschlagsvorhersage (5 Tage, Wolfstein)',
                 color: '#18204F',
     padding: {
       bottom: window.innerWidth <= 576 ? 40 : 20 // 576px is Bootstrap's sm breakpoint

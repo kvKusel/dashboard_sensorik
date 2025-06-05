@@ -469,28 +469,30 @@ lastValueLohnweilerRLP: (
       </div>
 
       {/* row with sliders for choosing time span */}
-{/* row with sliders for choosing time span */}
+
+
 <div
   className="row rounded-bottom-3 mb-4"
   style={{ flex: "1 1 auto", backgroundColor: "#FFF" }}
 >
   <div className="col-xs-12 p-2 pt-0">
-    {/* Attribution above dropdown on small screens - only show for RLP data sources */}
+    
+    {/* Attribution on small screens (above row) */}
     {(activeDataset === "lastValueLohnweilerRLP" || activeDataset === "lastValueUntersulzbach") && (
-      <div className="d-block d-sm-none mb-2 ps-2">
+      <div className="d-block d-sm-none mb-2 text-left">
         <a
           href="https://wasserportal.rlp-umwelt.de/"
           target="_blank"
           rel="noopener noreferrer"
-          style={{ color: "#555", textDecoration: "underline", fontSize: "0.9rem" }}
+          style={{ color: "#555", textDecoration: "underline", fontSize: "0.9rem", paddingLeft: "10px" }}
         >
           Quelle: LfU RLP
         </a>
       </div>
     )}
 
-    {/* Main row with dropdown, attribution (hidden on small), and download */}
-    <div className="d-flex justify-content-between align-items-center">
+    <div className="d-flex justify-content-between align-items-center position-relative">
+      
       {/* Left: Dropdown */}
       <div className="d-flex">
         <Dropdown className="ps-2">
@@ -521,14 +523,17 @@ lastValueLohnweilerRLP: (
         </Dropdown>
       </div>
 
-      {/* Center: Attribution (hidden on small screens) - only show for RLP data sources */}
+      {/* Centered Attribution on larger screens */}
       {(activeDataset === "lastValueLohnweilerRLP" || activeDataset === "lastValueUntersulzbach") && (
-        <div className="d-none d-sm-block">
+        <div
+          className="d-none d-sm-block position-absolute top-50 start-50 translate-middle"
+          style={{ fontSize: "0.9rem" }}
+        >
           <a
             href="https://wasserportal.rlp-umwelt.de/"
             target="_blank"
             rel="noopener noreferrer"
-            style={{ color: "#555", textDecoration: "underline", fontSize: "0.9rem" }}
+            style={{ color: "#555", textDecoration: "underline" }}
           >
             Quelle: LfU RLP
           </a>
@@ -542,134 +547,191 @@ lastValueLohnweilerRLP: (
 </div>
 
 
-      {/* row with the bar chart showing the past precipitation  */}
 
-      <div
-        className="row rounded-top-3 "
-        style={{
-          flex: "1 1 auto",
-          backgroundColor: "#fff",
-          boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
-        }}
-      >
-        <div className="col-xs-12 d-flex p-2 pb-2">
-          <div
-            className=""
-            style={{
-              flex: "1 1 auto",
-              minHeight: isSmallScreen
-                ? "40vh"
-                : window.innerWidth < 1200
-                ? "40vh"
-                : "40vh",
-              // maxHeight: "60vh",
-              // backgroundColor: "#5D7280",
-              // borderStyle: "solid",
-              // borderWidth: "1px",
-              // borderRadius: "0px",
+   {/* row with the bar chart showing the past precipitation */}
+<div
+  className="row rounded-top-3"
+  style={{
+    flex: "1 1 auto",
+    backgroundColor: "#fff",
+    boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+  }}
+>
+  <div className="col-xs-12 d-flex p-2 pb-2">
+    <div
+      className=""
+      style={{
+        flex: "1 1 auto",
+        minHeight: isSmallScreen
+          ? "40vh"
+          : window.innerWidth < 1200
+          ? "40vh"
+          : "40vh",
+      }}
+    >
+      <WolfsteinHistoricalBarChart
+        currentPeriodHistoricalPrecipitation={
+          currentPeriodHistoricalPrecipitation
+        }
+        historicalPrecipitationWolfstein={
+          historicalPrecipitationWolfstein
+        }
+      />
+    </div>
+  </div>
+</div>
 
-              // borderColor: "#5D7280",
-            }}
-          >
-            <WolfsteinHistoricalBarChart
-              currentPeriodHistoricalPrecipitation={
-                currentPeriodHistoricalPrecipitation
-              }
-              historicalPrecipitationWolfstein={
-                historicalPrecipitationWolfstein
-              }
-            />
-          </div>
-        </div>
-      </div>
+{/* row with sliders for choosing time span and OpenWeather attribution */}
 
-      {/* row with sliders for choosing time span */}
 <div
   className="row rounded-bottom-3"
   style={{ flex: "1 1 auto", backgroundColor: "#fff" }}
 >
-  <div className="col-xs-12 d-flex justify-content-between align-items-center p-2 pt-0">
-    
-    {/* Left: Dropdown */}
-    <div className="d-flex align-items-center">
-      <Dropdown className="pt-3 ps-2">
-        <Dropdown.Toggle
-          variant="danger"
-          id="dropdown-basic"
-          className="ps-1 d-flex align-items-center custom-dropdown2"
-          style={{ fontSize: "1.1rem" }}
-        >
-          <img src={time_icon} alt="Time Icon" className="icon" />
-          {timePeriodLabels[currentPeriodHistoricalPrecipitation] ||
-            "Zeitraum auswählen"}
-        </Dropdown.Toggle>
-
-        <Dropdown.Menu>
-          <Dropdown.Item
-            onClick={() => onPeriodChangeHistoricalPrecipitation("24h")}
-          >
-            Letzte 24 Stunden
-          </Dropdown.Item>
-          <Dropdown.Item
-            onClick={() => onPeriodChangeHistoricalPrecipitation("7d")}
-          >
-            Letzte 7 Tage
-          </Dropdown.Item>
-          <Dropdown.Item
-            onClick={() => onPeriodChangeHistoricalPrecipitation("30d")}
-          >
-            Letzte 30 Tage
-          </Dropdown.Item>
-          <Dropdown.Item
-            onClick={() => onPeriodChangeHistoricalPrecipitation("365d")}
-          >
-            Letzte 365 Tage
-          </Dropdown.Item>
-        </Dropdown.Menu>
-      </Dropdown>
+  <div className="col-xs-12 p-2 pt-0">
+    {/* Attribution on small screens - above row */}
+    <div className="d-block d-sm-none mb-2 text-left">
+      <a
+        href="https://openweathermap.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ color: "#555", textDecoration: "underline", fontSize: "0.9rem", paddingLeft: "10px" }}
+      >
+        Quelle: OpenWeather
+      </a>
     </div>
 
-    {/* Right: Download Icon */}
-    <div className="pt-3 pe-2">
-      <DownloadIcon isPrecipitationDownload={true} tooltipText="Niederschlagsdaten herunterladen" />
+    <div className="d-flex justify-content-between align-items-center position-relative">
+      {/* Left: Dropdown */}
+      <div className="d-flex align-items-center">
+        <Dropdown className=" ps-2">
+          <Dropdown.Toggle
+            variant="danger"
+            id="dropdown-basic"
+            className="ps-1 d-flex align-items-center custom-dropdown2"
+            style={{ fontSize: "1.1rem" }}
+          >
+            <img src={time_icon} alt="Time Icon" className="icon" />
+            {timePeriodLabels[currentPeriodHistoricalPrecipitation] ||
+              "Zeitraum auswählen"}
+          </Dropdown.Toggle>
+
+          <Dropdown.Menu>
+            <Dropdown.Item
+              onClick={() => onPeriodChangeHistoricalPrecipitation("24h")}
+            >
+              Letzte 24 Stunden
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => onPeriodChangeHistoricalPrecipitation("7d")}
+            >
+              Letzte 7 Tage
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => onPeriodChangeHistoricalPrecipitation("30d")}
+            >
+              Letzte 30 Tage
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={() => onPeriodChangeHistoricalPrecipitation("365d")}
+            >
+              Letzte 365 Tage
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </div>
+
+      {/* Center: Attribution for larger screens */}
+      <div
+        className="d-none d-sm-block position-absolute top-50 start-50 translate-middle"
+        style={{ fontSize: "0.9rem" }}
+      >
+        <a
+          href="https://openweathermap.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#555", textDecoration: "underline" }}
+        >
+          Quelle: OpenWeather
+        </a>
+      </div>
+
+      {/* Right: Download Icon */}
+      <div className="pe-2">
+        <DownloadIcon
+          isPrecipitationDownload={true}
+          tooltipText="Niederschlagsdaten herunterladen"
+        />
+      </div>
     </div>
   </div>
 </div>
 
 
-      {/* row with the bar chart for the 5 day forecast */}
 
-      <div
-        className="row mt-4 mb-2 rounded-3"
-        style={{
-          flex: "1 1 auto",
-          backgroundColor: "#fff",
-          boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
-        }}
+
+
+
+   {/* row with the bar chart for the 5 day forecast */}
+<div
+  className="row mt-4 rounded-top-3"
+  style={{
+    flex: "1 1 auto",
+    backgroundColor: "#fff",
+    boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
+  }}
+>
+  <div className="col-xs-12 d-flex p-2 pb-0">
+    <div
+      className=""
+      style={{
+        flex: "1 1 auto",
+        minHeight: isSmallScreen
+          ? "40vh"
+          : window.innerWidth < 1200
+          ? "40vh"
+          : "40vh",
+        maxHeight: "60vh",
+      }}
+    >
+      <WolfsteinForecastBarChart />
+      <Chatbot />
+    </div>
+  </div>
+</div>
+
+{/* Attribution row for forecast OpenWeather */}
+<div
+  className="row rounded-bottom-3 mb-2"
+  style={{ flex: "1 1 auto", backgroundColor: "#fff" }}
+>
+  <div className="col-xs-12 p-2 pt-0">
+    {/* Attribution above on small screens */}
+    <div className="d-block d-sm-none mb-2 ps-2">
+      <a
+        href="https://openweathermap.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ color: "#555", textDecoration: "underline", fontSize: "0.9rem" }}
       >
-        <div className="col-xs-12 d-flex p-2 pb-0">
-          <div
-            className=""
-            style={{
-              flex: "1 1 auto",
-              minHeight: isSmallScreen
-                ? "40vh"
-                : window.innerWidth < 1200
-                ? "40vh"
-                : "40vh",
-              maxHeight: "60vh",
-              // borderRadius: "0px",
+        Quelle: OpenWeather
+      </a>
+    </div>
 
-              // borderStyle: "solid",
-              // borderWidth: "1px",
-              // borderColor: "#5D7280",
-            }}
-          >
-            <WolfsteinForecastBarChart />
-            <Chatbot />
-          </div>
-        </div>
+    {/* Main row with centered attribution on larger screens */}
+    <div className="d-flex justify-content-center align-items-center">
+      <div className="d-none d-sm-block">
+        <a
+          href="https://openweathermap.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#555", textDecoration: "underline", fontSize: "0.9rem" }}
+        >
+          Quelle: OpenWeather
+        </a>
       </div>
+    </div>
+  </div>
+</div>
     </React.Fragment>
   );
 };
