@@ -122,7 +122,21 @@ const WaterLevelSubpage = ({
 
   // const [selectedRow, setSelectedRow] = useState("default");
 
-  const [lastValue, setLastValue] = useState(lastValueWolfstein); // Default to Wolfstein's last value
+const lastValueMap = {
+  lastValueWolfstein,
+  lastValueRutsweiler,
+  lastValueKreimbach1,
+  lastValueKreimbach3,
+  lastValueKreimbach4,
+  lastValueLauterecken1,
+  lastValueKreisverwaltung,
+  lastValueLohnweiler1,
+  lastValueHinzweiler1,
+  lastValueUntersulzbach,
+  lastValueLohnweilerRLP,
+};
+
+const lastValue = selectedRow !== "default" ? lastValueMap[selectedRow] : null;
 
   // Handle table row clicks
 const handleRowClick = (queryType) => {
