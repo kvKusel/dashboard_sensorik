@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+// --- Updated WaterLevelDashboard.js ---
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import WolfsteinSubpage from "./WaterLevelSubpage";
 import { format } from 'date-fns';
@@ -9,7 +10,8 @@ const API_URL = process.env.REACT_APP_API_URL.endsWith('/')
   : `${process.env.REACT_APP_API_URL}/`;
 
 const WaterLevelDashboard = () => {
-  const [isLoading, setIsLoading] = useState(true); // Start as loading
+  const [isLoading, setIsLoading] = useState(true);
+
   const [waterLevelKreisverwaltung, setWaterLevelKreisverwaltung] = useState([]);
   const [waterLevelRutsweiler, setWaterLevelRutsweiler] = useState([]);
   const [waterLevelKreimbachKaulbach, setWaterLevelKreimbachKaulbach] = useState([]);
@@ -27,155 +29,129 @@ const WaterLevelDashboard = () => {
   const [timePeriod, setTimePeriod] = useState("30d");
   const [timePeriodHistoricalPrecipitation, setTimePeriodHistoricalPrecipitation] = useState("7d");
 
+  // NEW STATE TO PRESERVE PEGEL
+  const [activeDataset, setActiveDataset] = useState(null);
+  const [selectedRow, setSelectedRow] = useState("default");
+
+  // Add refs for scroll targets and scroll pending flags
+  const scrollTargetRef = useRef(null);
+  const [pendingScroll, setPendingScroll] = useState(null);
+
   const fetchAllData = async () => {
     try {
-      setIsLoading(true); // Show loading before fetching data
-  
-      // Fetch water level data
-      const fetchWaterLevelData = async (timeRange) => {
-        const queryParam = `&time_range=${timeRange}`; // Append time range filter
-        const responseKreisverwaltung = await axios.get(
-          `${API_URL}water-level-data/?query_type=water_level_kv${queryParam}`
-        );
-        const responseRutsweiler = await axios.get(
-          `${API_URL}water-level-data/?query_type=water_level_rutsweiler${queryParam}`
-        );
-        const responseKreimbachKaulbach = await axios.get(
-          `${API_URL}water-level-data/?query_type=water_level_kreimbach_kaulbach${queryParam}`
-        );
-        const responseWolfstein = await axios.get(
-          `${API_URL}water-level-data/?query_type=water_level_wolfstein${queryParam}`
-        );
-        const responseLauterecken1 = await axios.get(
-          `${API_URL}water-level-data/?query_type=water_level_lauterecken_1${queryParam}`
-        );
-        const responseKreimbach1 = await axios.get(
-          `${API_URL}water-level-data/?query_type=water_level_kreimbach_1${queryParam}`
-        );
-        const responseKreimbach3 = await axios.get(
-          `${API_URL}water-level-data/?query_type=water_level_kreimbach_3${queryParam}`
-        );
-        const responseLohnweiler1 = await axios.get(
-          `${API_URL}water-level-data/?query_type=water_level_lohnweiler_1${queryParam}`
-        );
-        const responseHinzweiler1 = await axios.get(
-          `${API_URL}water-level-data/?query_type=water_level_hinzweiler_1${queryParam}`
-        );
-                const responseUntersulzbach = await axios.get(
-          `${API_URL}water-level-data/?query_type=water_level_untersulzbach${queryParam}`
-        );
-                        const responseLohnweilerRLP = await axios.get(
-          `${API_URL}water-level-data/?query_type=water_level_lohnweiler_rlp${queryParam}`
-        );
+      setIsLoading(true);
+      const queryParam = `&time_range=${timePeriod}`;
 
-        const transformData = (data) =>
-          data.map((item) => ({
-            time: item.timestamp,
-            value: item.water_level_value,
-          }));
-  
-        setWaterLevelKreisverwaltung(transformData(responseKreisverwaltung.data));
-        setWaterLevelRutsweiler(transformData(responseRutsweiler.data));
-        setWaterLevelKreimbachKaulbach(transformData(responseKreimbachKaulbach.data));
-        setWaterLevelWolfstein(transformData(responseWolfstein.data));
-        setWaterLevelLauterecken1(transformData(responseLauterecken1.data));
-        setWaterLevelKreimbach1(transformData(responseKreimbach1.data));
-        setWaterLevelKreimbach3(transformData(responseKreimbach3.data));
-        setWaterLevelLohnweiler1(transformData(responseLohnweiler1.data));
-        setWaterLevelHinzweiler1(transformData(responseHinzweiler1.data));
-                setWaterLevelUntersulzbach(transformData(responseUntersulzbach.data));
-                setWaterLevelLohnweilerRLP(transformData(responseLohnweilerRLP.data));
+      const fetch = (type) => axios.get(`${API_URL}water-level-data/?query_type=${type}${queryParam}`);
 
-      };
-  
-      // Fetch precipitation history data
-      const fetchPrecipitationHistoryData = async (timeRange) => {
-        const queryParam = `/?time_range=${timeRange}`; // Append time range filter
-        const responsePrecipitationHistorical = await axios.get(
-          `${API_URL}api/historical-precipitation${queryParam}`
-        );
-  
-        const transformHistoricalPrecipitationData = (data) => {
-          const timeZone = 'Europe/Berlin'; // CET timezone
-          const labels = data.map(entry =>
-            format(toZonedTime(new Date(entry.timestamp * 1000), timeZone), 'yyyy-MM-dd HH:mm')
-          );
-          const precipitationValues = data.map(entry => entry.precipitation);
-          return { labels, precipitationValues };
-        };
-  
-        setPrecipitationWolfsteinHistorical(
-          transformHistoricalPrecipitationData(responsePrecipitationHistorical.data)
-        );
-      };
-  
-      // Call both functions concurrently
-      await Promise.all([
-        fetchWaterLevelData(timePeriod),
-        fetchPrecipitationHistoryData(timePeriodHistoricalPrecipitation),
+      const [
+        kv, rutsweiler, kreimbachK, wolfstein, lauterecken1, kreimbach1,
+        kreimbach3, lohnweiler1, hinzweiler1, untersulzbach, lohnweilerRLP
+      ] = await Promise.all([
+        fetch("water_level_kv"), fetch("water_level_rutsweiler"), fetch("water_level_kreimbach_kaulbach"),
+        fetch("water_level_wolfstein"), fetch("water_level_lauterecken_1"), fetch("water_level_kreimbach_1"),
+        fetch("water_level_kreimbach_3"), fetch("water_level_lohnweiler_1"), fetch("water_level_hinzweiler_1"),
+        fetch("water_level_untersulzbach"), fetch("water_level_lohnweiler_rlp")
       ]);
-    } catch (error) {
-      console.error("Error fetching data:", error);
+
+      const map = (d) => d.data.map(item => ({ time: item.timestamp, value: item.water_level_value }));
+
+      setWaterLevelKreisverwaltung(map(kv));
+      setWaterLevelRutsweiler(map(rutsweiler));
+      setWaterLevelKreimbachKaulbach(map(kreimbachK));
+      setWaterLevelWolfstein(map(wolfstein));
+      setWaterLevelLauterecken1(map(lauterecken1));
+      setWaterLevelKreimbach1(map(kreimbach1));
+      setWaterLevelKreimbach3(map(kreimbach3));
+      setWaterLevelLohnweiler1(map(lohnweiler1));
+      setWaterLevelHinzweiler1(map(hinzweiler1));
+      setWaterLevelUntersulzbach(map(untersulzbach));
+      setWaterLevelLohnweilerRLP(map(lohnweilerRLP));
+
+      const precipitationResponse = await axios.get(`${API_URL}api/historical-precipitation/?time_range=${timePeriodHistoricalPrecipitation}`);
+      const timeZone = 'Europe/Berlin';
+      const transform = (data) => ({
+        labels: data.map(e => format(toZonedTime(new Date(e.timestamp * 1000), timeZone), 'yyyy-MM-dd HH:mm')),
+        precipitationValues: data.map(e => e.precipitation)
+      });
+
+      setPrecipitationWolfsteinHistorical(transform(precipitationResponse.data));
+
+    } catch (e) {
+      console.error("Error fetching data:", e);
     } finally {
-      setIsLoading(false); // Set loading to false after all data is fetched
+      setIsLoading(false);
     }
   };
 
+  // Handle period changes with scroll intent
+  const handlePeriodChange = (newPeriod) => {
+    setPendingScroll('multiline-chart');
+    setTimePeriod(newPeriod);
+  };
 
-// Combine useEffect to fetch all data on dependency changes
-useEffect(() => {
-  fetchAllData();
-}, [timePeriod, timePeriodHistoricalPrecipitation]);
+  const handleHistoricalPeriodChange = (newPeriod) => {
+    setPendingScroll('historical-precipitation');
+    setTimePeriodHistoricalPrecipitation(newPeriod);
+  };
 
-// Update both handlers to trigger combined fetch
-const handleTimePeriodChange = (period) => {
-  setTimePeriod(period);
-};
+  // Effect to handle scrolling after data loads
+  useEffect(() => {
+    if (!isLoading && pendingScroll) {
+      const scrollToTarget = () => {
+        const targetId = pendingScroll;
+        const element = document.getElementById(targetId);
+        
+        if (element) {
+          element.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'start',
+            inline: 'nearest'
+          });
+        }
+        
+        setPendingScroll(null);
+      };
 
-const handleTimePeriodChangeHistoricalPrecipitation = (periodHistoricalPrecipitation) => {
-  setTimePeriodHistoricalPrecipitation(periodHistoricalPrecipitation);
-};
+      // Small delay to ensure DOM is fully rendered
+      const timeoutId = setTimeout(scrollToTarget, 100);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isLoading, pendingScroll]);
 
+  useEffect(() => {
+    fetchAllData();
+  }, [timePeriod, timePeriodHistoricalPrecipitation]);
 
   return (
     <div style={{ minHeight: "80vh" }}>
       {isLoading ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: "80vh",
-            color: "#18204F",
-          }}
-        >
+        <div className="d-flex justify-content-center align-items-center min-vh-100" style={{ color: "#18204F" }}>
           <p className="fs-1">Sensordaten werden geladen...</p>
         </div>
       ) : (
-        <React.Fragment>
-          <WolfsteinSubpage
+        <WolfsteinSubpage
           waterLevelKreisverwaltung={waterLevelKreisverwaltung}
-            waterLevelWolfstein={waterLevelWolfstein}
-            waterLevelRutsweiler={waterLevelRutsweiler}
-            waterLevelKreimbach={waterLevelKreimbachKaulbach}
-            waterLevelLauterecken1={waterLevelLauterecken1}
-            waterLevelKreimbach1={waterLevelKreimbach1}
-            waterLevelKreimbach3={waterLevelKreimbach3}
-            waterLevelLohnweiler1={waterLevelLohnweiler1}
-            waterLevelHinzweiler1={waterLevelHinzweiler1}
-            waterLevelUntersulzbach={waterLevelUntersulzbach}
-            waterLevelLohnweilerRLP={waterLevelLohnweilerRLP}
-            currentPeriod={timePeriod}
-            onPeriodChange={handleTimePeriodChange}
-            historicalPrecipitationWolfstein={precipitationWolfsteinHistorical}
-            onPeriodChangeHistoricalPrecipitation={handleTimePeriodChangeHistoricalPrecipitation}
-            currentPeriodHistoricalPrecipitation={timePeriodHistoricalPrecipitation}
-          />
-
-          {/* <KuselbachSubpage
-            waterLevelKreisverwaltung={waterLevelKreisverwaltung}
-          /> */}
-        </React.Fragment>
+          waterLevelWolfstein={waterLevelWolfstein}
+          waterLevelRutsweiler={waterLevelRutsweiler}
+          waterLevelKreimbach={waterLevelKreimbachKaulbach}
+          waterLevelLauterecken1={waterLevelLauterecken1}
+          waterLevelKreimbach1={waterLevelKreimbach1}
+          waterLevelKreimbach3={waterLevelKreimbach3}
+          waterLevelLohnweiler1={waterLevelLohnweiler1}
+          waterLevelHinzweiler1={waterLevelHinzweiler1}
+          waterLevelUntersulzbach={waterLevelUntersulzbach}
+          waterLevelLohnweilerRLP={waterLevelLohnweilerRLP}
+          currentPeriod={timePeriod}
+          onPeriodChange={handlePeriodChange}
+          historicalPrecipitationWolfstein={precipitationWolfsteinHistorical}
+          onPeriodChangeHistoricalPrecipitation={handleHistoricalPeriodChange}
+          currentPeriodHistoricalPrecipitation={timePeriodHistoricalPrecipitation}
+          activeDataset={activeDataset}
+          setActiveDataset={setActiveDataset}
+          selectedRow={selectedRow}
+          setSelectedRow={setSelectedRow}
+        />
       )}
     </div>
   );

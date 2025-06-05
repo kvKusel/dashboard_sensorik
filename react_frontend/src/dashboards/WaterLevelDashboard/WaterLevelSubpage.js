@@ -32,6 +32,11 @@ const WaterLevelSubpage = ({
   historicalPrecipitationWolfstein,
   onPeriodChangeHistoricalPrecipitation,
   currentPeriodHistoricalPrecipitation,
+
+    activeDataset,
+  setActiveDataset,
+  selectedRow,
+  setSelectedRow
 }) => {
   // check the screen size to render the multiline chart properly
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
@@ -113,35 +118,18 @@ const WaterLevelSubpage = ({
 
   ///////////////////////////////////            set up for the table that displays all sensors and controls which data is displayed        ///////////////////////////////////////////////
 
-  const [activeDataset, setActiveDataset] = useState(null);
+  // const [activeDataset, setActiveDataset] = useState(null);
 
-  const [selectedRow, setSelectedRow] = useState("default");
+  // const [selectedRow, setSelectedRow] = useState("default");
 
   const [lastValue, setLastValue] = useState(lastValueWolfstein); // Default to Wolfstein's last value
 
   // Handle table row clicks
-  const handleRowClick = (queryType) => {
-    setSelectedRow(queryType);
-    // Update lastValue based on the selected queryType
-    const valueMap = {
-      lastValueWolfstein,
-      lastValueRutsweiler,
-      lastValueKreimbach1,
-      lastValueKreimbach3,
-      lastValueKreimbach4,
-      lastValueLauterecken1,
-      lastValueKreisverwaltung,
-      lastValueLohnweiler1,
-      lastValueHinzweiler1,
-      lastValueUntersulzbach,
-      lastValueLohnweilerRLP,
-    };
+const handleRowClick = (queryType) => {
+  setSelectedRow(queryType);
+  setActiveDataset(queryType);
+};
 
-    setLastValue(valueMap[queryType]);
-
-    // Update the active dataset
-    setActiveDataset(queryType);
-  };
 
   const nameMapping = {
     lastValueWolfstein: "Wolfstein",
@@ -425,6 +413,8 @@ lastValueLohnweilerRLP: (
       {/* row with the line chart */}
 
       <div
+        id="multiline-chart" // <-- Add this ID
+
         className="row mt-4 rounded-top-3"
         style={{
           flex: "1 1 auto",
@@ -550,6 +540,8 @@ lastValueLohnweilerRLP: (
 
    {/* row with the bar chart showing the past precipitation */}
 <div
+  id="historical-precipitation" // <-- Add this ID
+
   className="row rounded-top-3"
   style={{
     flex: "1 1 auto",
