@@ -152,7 +152,7 @@ const handleRowClick = (queryType) => {
     lastValueKreimbach3: "Kreimbach 2 (Kreimbach)",
     lastValueKreimbach4: "Kreimbach 3",
     lastValueLauterecken1: "Lauterecken",
-    lastValueKreisverwaltung: "Kusel",
+    lastValueKreisverwaltung: "Kusel (Kuselbach)",
     lastValueLohnweiler1: "Lohnweiler (Mausbach)",
     lastValueHinzweiler1: "Hinzweiler (Talbach)",
 lastValueUntersulzbach: (
@@ -354,6 +354,9 @@ lastValueLohnweilerRLP: (
               setHoveredMarkerId={setHoveredMarkerId}
               setSelectedMarkerId={setSelectedMarkerId}
               onSelectPosition={handleMarkerClick}
+                selectedRow={selectedRow}
+  hoveredMarkerId={hoveredMarkerId} // <-- add this
+
             />
           </div>
 

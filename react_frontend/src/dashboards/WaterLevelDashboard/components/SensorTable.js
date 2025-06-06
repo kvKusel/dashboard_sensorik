@@ -16,6 +16,9 @@ const SensorTable = ({
   setHoveredMarkerId,
   setSelectedMarkerId,
   onSelectPosition,
+    selectedRow,
+      hoveredMarkerId, 
+
 }) => {
   // Helper function to determine sensor status color based on timestamp
   const getSensorStatusColor = (timestamp) => {
@@ -122,7 +125,7 @@ const SensorTable = ({
     },
     {
       id: "kusel",
-      name: "Kusel",
+      name: "Kusel (Kuselbach)",
       queryType: "lastValueKreisverwaltung",
       position: [49.539820952844316, 7.396752597634942], 
       value: lastValueKreisverwaltung?.value
@@ -188,19 +191,24 @@ const SensorTable = ({
                 onSelectPosition(item.position);
                 setSelectedMarkerId(item.id);
               }}
-              onMouseEnter={() => {
-                setHoveredMarkerId(item.id);
-                document.getElementById(item.id).style.backgroundColor = rowHoverStyle.backgroundColor;
-              }}
-              onMouseLeave={() => {
-                setHoveredMarkerId(null);
-                document.getElementById(item.id).style.backgroundColor = index % 2 === 0 ? "#F8F9FA" : "#fff";
-              }}
+onMouseEnter={() => setHoveredMarkerId(item.id)}
+onMouseLeave={() => setHoveredMarkerId(null)}
+
               id={item.id}
-              style={{
-                ...rowStyle,
-                backgroundColor: index % 2 === 0 ? "#F8F9FA" : "#fff",
-              }}
+style={{
+  ...rowStyle,
+  backgroundColor:
+    item.queryType === selectedRow
+      ? "#D0E3FF"
+      : hoveredMarkerId === item.id
+        ? "#E0E0E0" // gray hover
+        : index % 2 === 0
+          ? "#F8F9FA"
+          : "#fff",
+  fontWeight: item.queryType === selectedRow ? "bold" : "normal",
+  border: item.queryType === selectedRow ? "2px solid #1F2C61" : "none",
+}}
+
             >
               <td className="responsive-fs-text" style={{ paddingLeft: "5px" }}>
                 {item.name}
@@ -270,15 +278,15 @@ const SensorTable = ({
               </tr>
             )}
 
-            {index === 8 && (
+            {/* {index === 8 && (
               <tr>
                 <td colSpan="3" style={{ textAlign: "center", padding: "10px", fontWeight: "bold", backgroundColor: "#EFEFEF" }}>
                   Glan:
                 </td>
               </tr>
-            )}
+            )} */}
 
-            {index === 9 && (
+            {index === 8 && (
               <tr>
                 <td colSpan="3" style={{ textAlign: "center", padding: "10px", fontWeight: "bold", backgroundColor: "#EFEFEF" }}>
                   Glan - Nebenflüsse:
