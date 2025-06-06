@@ -39,8 +39,11 @@ const MultiLineChart = ({
 }) => {
   // Create a ref to the chart instance
   const chartRef = React.useRef(null);
+  
+  // State to track which datasets are manually selected by clicking legend
+  const [manuallySelected, setManuallySelected] = useState(new Set());
 
-    const [windowSize, setWindowSize] = useState(window.innerWidth);
+  const [windowSize, setWindowSize] = useState(window.innerWidth);
   
   useEffect(() => {
     const handleResize = () => {
@@ -51,6 +54,82 @@ const MultiLineChart = ({
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Dataset configuration with colors and keys
+  const datasetConfig = [
+    
+    {
+      key: "lastValueHinzweiler1",
+      label: "Pegel Hinzweiler",
+      data: waterLevelHinzweiler1,
+      color: "rgb(2, 102, 52)"
+    },
+
+
+    {
+      key: "lastValueKreimbach1",
+      label: "Pegel Kreimbach 1",
+      data: waterLevelKreimbach1,
+      color: "rgba(131, 201, 104, 1)"
+    },
+    {
+      key: "lastValueKreimbach3",
+      label: "Pegel Kreimbach 2",
+      data: waterLevelKreimbach3,
+      color: "rgba(209, 67, 91, 1)"
+    },
+    {
+      key: "lastValueKreimbach4",
+      label: "Pegel Kreimbach 3",
+      data: waterLevelKreimbach,
+      color: "rgba(78, 159, 188, 1)"
+    },
+
+    {
+      key: "lastValueKreisverwaltung",
+      label: "Pegel Kusel",
+      data: waterLevelKreisverwaltung,
+      color: "rgba(166, 109, 212, 1)"
+    },
+        {
+      key: "lastValueLauterecken1",
+      label: "Pegel Lauterecken",
+      data: waterLevelLauterecken1,
+      color: "rgba(74, 104, 212, 1)"
+    },
+
+        {
+      key: "lastValueLohnweilerRLP",
+      label: "Pegel Lohnweiler (Lauter)",
+      data: waterLevelLohnweilerRLP,
+      color: "rgba(209, 67, 91, 1)"
+    },
+    {
+      key: "lastValueLohnweiler1",
+      label: "Pegel Lohnweiler (Mausbach)",
+      data: waterLevelLohnweiler1,
+      color: "rgb(97, 3, 3)"
+    },
+        {
+      key: "lastValueRutsweiler",
+      label: "Pegel Rutsweiler a.d. Lauter",
+      data: waterLevelRutsweiler,
+      color: "rgba(236, 200, 91, 1)"
+    },
+    {
+      key: "lastValueUntersulzbach",
+      label: "Pegel Untersulzbach",
+      data: waterLevelUntersulzbach,
+      color: "rgba(131, 201, 104, 1)"
+    },
+
+        {
+      key: "lastValueWolfstein",
+      label: "Pegel Wolfstein",
+      data: waterLevelWolfstein,
+      color: "rgba(231, 132, 78, 1)"
+    },
+
+  ];
 
 const formatDatasetLabel = (datasetKey) => {
   if (!datasetKey) return "";
@@ -90,8 +169,6 @@ const formatDatasetLabel = (datasetKey) => {
 
   return ignoreNumber ? corrected : number ? `${corrected} ${number}` : corrected;
 };
-
-
 
   // Define the noDatasetPlugin
   const noDatasetPlugin = {
@@ -149,42 +226,48 @@ const formatDatasetLabel = (datasetKey) => {
     }
   };
 
-  // Use effect to update dataset visibility when activeDataset changes
+  // Handle legend item click
+  const handleLegendClick = (datasetKey) => {
+    const newManuallySelected = new Set(manuallySelected);
+    
+    if (newManuallySelected.has(datasetKey)) {
+      newManuallySelected.delete(datasetKey);
+    } else {
+      newManuallySelected.add(datasetKey);
+    }
+    
+    setManuallySelected(newManuallySelected);
+  };
+
+  // Use effect to update dataset visibility when activeDataset or manuallySelected changes
   useEffect(() => {
     if (chartRef.current) {
       const chart = chartRef.current;
       
-      // Map dataset name to index
-      const datasetIndices = {
-        lastValueWolfstein: 0,
-        lastValueRutsweiler: 1,
-        lastValueKreimbach1: 2,
-        lastValueKreimbach3: 3,
-        lastValueKreimbach4: 4,
-        lastValueLauterecken1: 5,
-        lastValueKreisverwaltung: 6,
-        lastValueLohnweiler1: 7,
-        lastValueHinzweiler1: 8,
-        lastValueUntersulzbach: 9,
-        lastValueLohnweilerRLP: 10,
-      };
-      
-      // Hide all datasets
+      // Hide all datasets first
       chart.data.datasets.forEach((dataset, index) => {
         chart.setDatasetVisibility(index, false);
       });
       
-      // Show only the active dataset if it exists
+      // Show active dataset if it exists
       if (activeDataset) {
-        const indexToShow = datasetIndices[activeDataset];
-        if (indexToShow !== undefined) {
-          chart.setDatasetVisibility(indexToShow, true);
+        const activeIndex = datasetConfig.findIndex(config => config.key === activeDataset);
+        if (activeIndex !== -1) {
+          chart.setDatasetVisibility(activeIndex, true);
         }
       }
       
+      // Show manually selected datasets
+      manuallySelected.forEach(datasetKey => {
+        const index = datasetConfig.findIndex(config => config.key === datasetKey);
+        if (index !== -1) {
+          chart.setDatasetVisibility(index, true);
+        }
+      });
+      
       chart.update();
     }
-  }, [activeDataset]);
+  }, [activeDataset, manuallySelected]);
 
   const calculateTimePeriodBoundary = (period) => {
     const now = Date.now();
@@ -214,99 +297,15 @@ const formatDatasetLabel = (datasetKey) => {
       }));
   };
 
-
-
   const chartData = {
-    datasets: [
-      {
-        label: "Pegel Wolfstein",
-        data: createDataset(waterLevelWolfstein),
-        borderColor: "rgba(231, 132, 78, 1)",
-        backgroundColor: "rgba(231, 132, 78, 1)",
-        tension: 0.2,
-        hidden: true
-      },
-      {
-        label: "Pegel Rutsweiler a.d. Lauter",
-        data: createDataset(waterLevelRutsweiler),
-        borderColor: "rgba(236, 200, 91, 1)",
-        backgroundColor: "rgba(236, 200, 91, 1)",
-        tension: 0.2,
-        hidden: true
-      },
-      {
-        label: "Pegel Kreimbach 1",
-        data: createDataset(waterLevelKreimbach1),
-        borderColor: "rgba(131, 201, 104, 1)",
-        backgroundColor: "rgba(131, 201, 104, 1)",
-        tension: 0.2,
-        hidden: true
-      },
-      {
-        label: "Pegel Kreimbach 3",
-        data: createDataset(waterLevelKreimbach3),
-        borderColor: "rgba(209, 67, 91, 1)",
-        backgroundColor: "rgba(209, 67, 91, 1)",
-        tension: 0.2,
-        hidden: true
-      },
-      {
-        label: "Pegel Kreimbach 4",
-        data: createDataset(waterLevelKreimbach),
-        borderColor: "rgba(78, 159, 188, 1)",
-        backgroundColor: "rgba(78, 159, 188, 1)",
-        tension: 0.2,
-        hidden: true
-      },
-      {
-        label: "Pegel Lauterecken 1",
-        data: createDataset(waterLevelLauterecken1),
-        borderColor: "rgba(74, 104, 212, 1)",
-        backgroundColor: "rgba(74, 104, 212, 1)",
-        tension: 0.2,
-        hidden: true
-      },
-      {
-        label: "Pegel Kusel",
-        data: createDataset(waterLevelKreisverwaltung),
-        borderColor: "	rgba(166, 109, 212, 1)",
-        backgroundColor: "	rgba(166, 109, 212, 1)",
-        tension: 0.2,
-        hidden: true
-      },
-      {
-        label: "Pegel Lohnweiler",
-        data: createDataset(waterLevelLohnweiler1),
-        borderColor: "	rgb(97, 3, 3)",
-        backgroundColor: "	rgb(97, 3, 3)",
-        tension: 0.2,
-        hidden: true
-      },
-      {
-        label: "Pegel Hinzweiler",
-        data: createDataset(waterLevelHinzweiler1),
-        borderColor: "	rgb(2, 102, 52)",
-        backgroundColor: "	rgb(2, 102, 52)",
-        tension: 0.2,
-        hidden: true
-      },
-            {
-        label: "Pegel Untersulzbach",
-        data: createDataset(waterLevelUntersulzbach),
-        borderColor: "rgba(131, 201, 104, 1)",
-        backgroundColor: "rgba(131, 201, 104, 1)",
-        tension: 0.2,
-        hidden: true
-      },
-            {
-        label: "Pegel Lohnweiler (Lauter)",
-        data: createDataset(waterLevelLohnweilerRLP),
-        borderColor: "rgba(209, 67, 91, 1)",
-        backgroundColor: "rgba(209, 67, 91, 1)",
-        tension: 0.2,
-        hidden: true
-      },
-    ],
+    datasets: datasetConfig.map(config => ({
+      label: config.label,
+      data: createDataset(config.data),
+      borderColor: config.color,
+      backgroundColor: config.color,
+      tension: 0.2,
+      hidden: true
+    }))
   };
 
   const options = {
@@ -412,14 +411,168 @@ const formatDatasetLabel = (datasetKey) => {
 
   return (
     <div className="w-100 h-100">
-      <Line 
-        ref={chartRef} 
-        data={chartData} 
-        options={options} 
-        plugins={[noDatasetPlugin]} 
-        key={windowSize}
+      <div style={{ height: 'calc(100% - 80px)' }}>
+        <Line 
+          ref={chartRef} 
+          data={chartData} 
+          options={options} 
+          plugins={[noDatasetPlugin]} 
+          key={windowSize}
+        />
+      </div>
+      
+      <PegelDropdown 
+        datasetConfig={datasetConfig}
+        activeDataset={activeDataset}
+        manuallySelected={manuallySelected}
+        onSelectionChange={handleLegendClick}
       />
-    </div>  
+    </div>
+  );
+};
+
+// Separate dropdown component outside of chart context
+const PegelDropdown = ({ datasetConfig, activeDataset, manuallySelected, onSelectionChange }) => {
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownOpen && !event.target.closest('.pegel-dropdown-container')) {
+        setDropdownOpen(false);
+      }
+    };
+    
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, [dropdownOpen]);
+
+  return (
+    <div className="mt-4 d-flex justify-content-left">
+      <div className="position-relative pegel-dropdown-container" style={{ paddingLeft: '7px' }}>  
+        <button
+          className="btn btn-outline-primary p-2"
+          type="button"
+          onClick={() => setDropdownOpen(!dropdownOpen)}
+          style={{
+            backgroundColor: 'white',
+            borderColor: '#6972A8',
+            color: '#6972A8',
+            minWidth: '183px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            fontSize: '1.1rem',
+          }}
+        >
+          <span>
+            Weitere Pegel
+          </span>
+          <svg 
+            width="12" 
+            height="12" 
+            viewBox="0 0 12 12" 
+            fill="currentColor"
+            style={{
+              transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+              transition: 'transform 0.2s'
+            }}
+          >
+            <path d="M2 4l4 4 4-4H2z"/>
+          </svg>
+        </button>
+        
+        {dropdownOpen && (
+          <div
+            className="position-absolute bg-white border rounded shadow-lg"
+            style={{
+              top: 'calc(100% + 4px)',
+              left: '0',
+              width: '250px',
+              zIndex: 1000,
+              maxHeight: '400px',
+              overflowY: 'auto',
+              border: '1px solid #dee2e6'
+            }}
+          >
+            {datasetConfig.map((config, index) => {
+              const isActive = activeDataset === config.key;
+              const isManuallySelected = manuallySelected.has(config.key);
+              const isVisible = isActive || isManuallySelected;
+              
+              return (
+                <div
+                  key={config.key}
+                  className="d-flex align-items-center"
+                  style={{
+                    cursor: 'pointer',
+                    padding: '8px 16px',
+                    backgroundColor: isVisible ? 'rgba(105, 114, 168, 0.1)' : 'white',
+                    borderBottom: index < datasetConfig.length - 1 ? '1px solid #f0f0f0' : 'none'
+                  }}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    onSelectionChange(config.key);
+                  }}
+                >
+                  <div className="me-3">
+                    {isVisible ? (
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="#28a745">
+                        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                      </svg>
+                    ) : (
+                      <div style={{ 
+                        width: '16px', 
+                        height: '16px', 
+                        border: '1px solid #ccc', 
+                        borderRadius: '2px',
+                        backgroundColor: 'white'
+                      }}></div>
+                    )}
+                  </div>
+                  
+                  <div
+                    className="me-3"
+                    style={{
+                      width: '20px',
+                      height: '3px',
+                      backgroundColor: config.color,
+                      borderRadius: '2px',
+                      opacity: isVisible ? 1 : 0.5
+                    }}
+                  />
+                  
+                  <span
+                    style={{
+                      color: isVisible ? '#18204F' : '#999',
+                      fontSize: '14px',
+                      fontWeight: isActive ? 'bold' : 'normal',
+                      flex: 1
+                    }}
+                  >
+                    {config.label}
+                    {isActive && (
+                      <span 
+                        className="ms-2"
+                        style={{ 
+                          fontSize: '10px',
+                          backgroundColor: '#007bff',
+                          color: 'white',
+                          padding: '2px 6px',
+                          borderRadius: '10px'
+                        }}
+                      >
+                        Aktiv
+                      </span>
+                    )}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    </div>
   );
 };
 

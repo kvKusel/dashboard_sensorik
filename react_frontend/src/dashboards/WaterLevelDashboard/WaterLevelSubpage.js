@@ -439,7 +439,7 @@ lastValueLohnweilerRLP: (
           boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
         }}
       >
-        <div className="col-xs-12 d-flex p-2 pb-4">
+        <div className="col-xs-12 d-flex p-2 ">
           <div
             className=""
             style={{
@@ -448,7 +448,7 @@ lastValueLohnweilerRLP: (
                 ? "40vh"
                 : window.innerWidth < 1200
                 ? "50vh"
-                : "40vh",
+                : "50vh",
               maxHeight: "60vh",
               // borderRadius: "0px",
               // borderStyle: "solid",
