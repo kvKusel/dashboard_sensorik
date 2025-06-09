@@ -172,8 +172,9 @@ const SensorTable = ({
           }}
         >
           <th className="responsive-th" style={{ padding: "10px", textAlign: "left" }}>Pegel</th>
+                    <th className="responsive-th" style={{ padding: "10px", textAlign: "center" }}>Sensorstatus</th>
+
           <th className="responsive-th" style={{ padding: "10px", textAlign: "center" }}>Wasserstand</th>
-          <th className="responsive-th" style={{ padding: "10px", textAlign: "center" }}>Sensorstatus</th>
         </tr>
       </thead>
       <tbody>
@@ -230,7 +231,20 @@ style={{
                   </>
                 )}
               </td>
+
               <td style={{ padding: "10px", textAlign: "center" }}>
+                <div
+                  style={{
+                    width: "16px",
+                    height: "16px",
+                    borderRadius: "50%",
+                    display: "inline-block",
+                    backgroundColor: getSensorStatusColor(item.timestamp),
+                  }}
+                ></div>
+              </td>
+
+                            <td style={{ padding: "10px", textAlign: "center" }}>
                 {(() => {
                   if (!item.timestamp) return <span style={{ fontSize: "20px", fontWeight: "bold" }}>-</span>;
                   
@@ -255,17 +269,6 @@ style={{
                     ></div>
                   );
                 })()}
-              </td>
-              <td style={{ padding: "10px", textAlign: "center" }}>
-                <div
-                  style={{
-                    width: "16px",
-                    height: "16px",
-                    borderRadius: "50%",
-                    display: "inline-block",
-                    backgroundColor: getSensorStatusColor(item.timestamp),
-                  }}
-                ></div>
               </td>
             </tr>
 

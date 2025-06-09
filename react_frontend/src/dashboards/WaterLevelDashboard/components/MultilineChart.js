@@ -42,6 +42,8 @@ const MultiLineChart = ({
   
   // State to track which datasets are manually selected by clicking legend
   const [manuallySelected, setManuallySelected] = useState(new Set());
+  // State to track the calculated Y-axis max
+  const [yAxisMax, setYAxisMax] = useState(200);
 
   const [windowSize, setWindowSize] = useState(window.innerWidth);
   
@@ -226,6 +228,55 @@ const formatDatasetLabel = (datasetKey) => {
     }
   };
 
+  // Function to calculate max value from visible datasets
+  const calculateYAxisMax = () => {
+    let maxValue = 0;
+    const visibleDatasets = new Set();
+    
+    // Add active dataset
+    if (activeDataset) {
+      visibleDatasets.add(activeDataset);
+    }
+    
+    // Add manually selected datasets
+    manuallySelected.forEach(datasetKey => {
+      visibleDatasets.add(datasetKey);
+    });
+    
+    // If no datasets are visible, return default
+    if (visibleDatasets.size === 0) {
+      return 200;
+    }
+    
+    // Calculate period boundary to only consider data in current time period
+    const periodBoundary = calculateTimePeriodBoundary(currentPeriod);
+    
+    // Find max value across all visible datasets
+    visibleDatasets.forEach(datasetKey => {
+      const config = datasetConfig.find(c => c.key === datasetKey);
+      if (config && config.data) {
+        const filteredData = config.data.filter(item => 
+          new Date(item.time).getTime() >= periodBoundary
+        );
+        
+        filteredData.forEach(item => {
+          if (item.value > maxValue) {
+            maxValue = item.value;
+          }
+        });
+      }
+    });
+    
+    // Add 20cm buffer
+    const valueWithBuffer = maxValue + 20;
+    
+    // Round up to the next 50cm increment
+    const roundedMax = Math.ceil(valueWithBuffer / 50) * 50;
+    
+    // Ensure minimum of 50cm
+    return Math.max(roundedMax, 50);
+  };
+
   // Handle legend item click
   const handleLegendClick = (datasetKey) => {
     const newManuallySelected = new Set(manuallySelected);
@@ -239,8 +290,12 @@ const formatDatasetLabel = (datasetKey) => {
     setManuallySelected(newManuallySelected);
   };
 
-  // Use effect to update dataset visibility when activeDataset or manuallySelected changes
+  // Use effect to update dataset visibility and Y-axis when activeDataset or manuallySelected changes
   useEffect(() => {
+    // Calculate new Y-axis max
+    const newYAxisMax = calculateYAxisMax();
+    setYAxisMax(newYAxisMax);
+    
     if (chartRef.current) {
       const chart = chartRef.current;
       
@@ -265,9 +320,12 @@ const formatDatasetLabel = (datasetKey) => {
         }
       });
       
+      // Update Y-axis max
+      chart.options.scales.y.max = newYAxisMax;
+      
       chart.update();
     }
-  }, [activeDataset, manuallySelected]);
+  }, [activeDataset, manuallySelected, currentPeriod]);
 
   const calculateTimePeriodBoundary = (period) => {
     const now = Date.now();
@@ -379,32 +437,32 @@ const formatDatasetLabel = (datasetKey) => {
         },
       },
       y: {
-  min: 0,
-  max: 200,
-  title: {
-    display: true,
-    text: "Wasserstand (cm)",
-    color: "#6972A8",
-    font: {
-      size: 18,
-    },
-    padding: {
-      top: 10,
-    },
-  },
-  grid: {
-    lineWidth: 2,
-    color: "#BFC2DA",
-  },
-  ticks: {
-    stepSize: 50,
-    maxTicksLimit: 5,
-    color: "#6972A8",
-    font: {
-      size: 16,
-    },
-  },
-},
+        min: 0,
+        max: yAxisMax, // Use dynamic Y-axis max
+        title: {
+          display: true,
+          text: "Wasserstand (cm)",
+          color: "#6972A8",
+          font: {
+            size: 18,
+          },
+          padding: {
+            top: 10,
+          },
+        },
+        grid: {
+          lineWidth: 2,
+          color: "#BFC2DA",
+        },
+        ticks: {
+          stepSize: yAxisMax <= 100 ? 25 : 50, // 25cm steps for scales ≤100cm, 50cm for larger scales
+          maxTicksLimit: 8,
+          color: "#6972A8",
+          font: {
+            size: 16,
+          },
+        },
+      },
 
     },
   };
