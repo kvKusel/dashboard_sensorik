@@ -13,6 +13,8 @@ import Chatbot from "../../tools/Chatbot";
 // Importing FontAwesome for download icon
 import DownloadIcon from "./components/DownloadIcon";
 
+import MapInteractionOverlay from "./components/Map/MapInteractionOverlay";
+
 
 
 const WaterLevelSubpage = ({
@@ -413,17 +415,19 @@ lastValueLohnweilerRLP: (
             zIndex: "0",
           }}
         >
-          <PegelWolfsteinMap
-            hoveredMarkerId={hoveredMarkerId}
-            selectedMarkerId={selectedMarkerId}
-            onMarkerClick={handleRowClick}
-            setHoveredMarkerId={setHoveredMarkerId}
-            setSelectedMarkerId={setSelectedMarkerId}
-            mapRef={mapRef}
-            mapCenter={mapCenter}
-            setMapCenter={setMapCenter}
-            handleMarkerClick={handleMarkerClick}
-          />
+  <MapInteractionOverlay>
+    <PegelWolfsteinMap
+      hoveredMarkerId={hoveredMarkerId}
+      selectedMarkerId={selectedMarkerId}
+      onMarkerClick={handleRowClick}
+      setHoveredMarkerId={setHoveredMarkerId}
+      setSelectedMarkerId={setSelectedMarkerId}
+      mapRef={mapRef}
+      mapCenter={mapCenter}
+      setMapCenter={setMapCenter}
+      handleMarkerClick={handleMarkerClick}
+    />
+  </MapInteractionOverlay>
         </div>
       </div>
 
