@@ -26,8 +26,8 @@ const WaterLevelDashboard = () => {
 
   const [precipitationWolfsteinHistorical, setPrecipitationWolfsteinHistorical] = useState([]);
 
-  const [timePeriod, setTimePeriod] = useState("7d");
-  const [timePeriodHistoricalPrecipitation, setTimePeriodHistoricalPrecipitation] = useState("7d");
+  const [timePeriod, setTimePeriod] = useState("30d");
+  const [timePeriodHistoricalPrecipitation, setTimePeriodHistoricalPrecipitation] = useState("30d");
 
   // NEW STATE TO PRESERVE PEGEL
   const [activeDataset, setActiveDataset] = useState(null);

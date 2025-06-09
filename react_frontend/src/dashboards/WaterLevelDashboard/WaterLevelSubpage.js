@@ -77,39 +77,62 @@ const WaterLevelSubpage = ({
     // Format into desired structure
     return `${day}/${month}/${year}, ${hours}:${minutes} Uhr`;
   };
+// Replace the lastValue assignments (around line 90-110) with these safe versions:
 
-  const lastValueKreisverwaltung =
-    waterLevelKreisverwaltung[waterLevelKreisverwaltung.length - 1];
+const lastValueKreisverwaltung =
+  waterLevelKreisverwaltung?.length > 0 
+    ? waterLevelKreisverwaltung[waterLevelKreisverwaltung.length - 1]
+    : null;
 
-  const lastValueRutsweiler =
-    waterLevelRutsweiler[waterLevelRutsweiler.length - 1];
+const lastValueRutsweiler =
+  waterLevelRutsweiler?.length > 0
+    ? waterLevelRutsweiler[waterLevelRutsweiler.length - 1]
+    : null;
 
-  const lastValueKreimbach4 =
-    waterLevelKreimbach[waterLevelKreimbach.length - 1]; // sensor by the PfalzMalz
+const lastValueKreimbach4 =
+  waterLevelKreimbach?.length > 0
+    ? waterLevelKreimbach[waterLevelKreimbach.length - 1]
+    : null;
 
-  const lastValueWolfstein =
-    waterLevelWolfstein[waterLevelWolfstein.length - 1];
+const lastValueWolfstein =
+  waterLevelWolfstein?.length > 0
+    ? waterLevelWolfstein[waterLevelWolfstein.length - 1]
+    : null;
 
-  const lastValueLauterecken1 =
-    waterLevelLauterecken1[waterLevelLauterecken1.length - 1];
+const lastValueLauterecken1 =
+  waterLevelLauterecken1?.length > 0
+    ? waterLevelLauterecken1[waterLevelLauterecken1.length - 1]
+    : null;
 
-  const lastValueKreimbach1 =
-    waterLevelKreimbach1[waterLevelKreimbach1.length - 1];
+const lastValueKreimbach1 =
+  waterLevelKreimbach1?.length > 0
+    ? waterLevelKreimbach1[waterLevelKreimbach1.length - 1]
+    : null;
 
-  const lastValueKreimbach3 =
-    waterLevelKreimbach3[waterLevelKreimbach3.length - 1];
+const lastValueKreimbach3 =
+  waterLevelKreimbach3?.length > 0
+    ? waterLevelKreimbach3[waterLevelKreimbach3.length - 1]
+    : null;
 
-  const lastValueLohnweiler1 =
-    waterLevelLohnweiler1[waterLevelLohnweiler1.length - 1];
+const lastValueLohnweiler1 =
+  waterLevelLohnweiler1?.length > 0
+    ? waterLevelLohnweiler1[waterLevelLohnweiler1.length - 1]
+    : null;
 
-  const lastValueHinzweiler1 =
-    waterLevelHinzweiler1[waterLevelHinzweiler1.length - 1];
+const lastValueHinzweiler1 =
+  waterLevelHinzweiler1?.length > 0
+    ? waterLevelHinzweiler1[waterLevelHinzweiler1.length - 1]
+    : null;
 
-      const lastValueUntersulzbach =
-    waterLevelUntersulzbach[waterLevelUntersulzbach.length - 1];
+const lastValueUntersulzbach =
+  waterLevelUntersulzbach?.length > 0
+    ? waterLevelUntersulzbach[waterLevelUntersulzbach.length - 1]
+    : null;
 
-  const lastValueLohnweilerRLP =  
-    waterLevelLohnweilerRLP[waterLevelLohnweilerRLP.length - 1];
+const lastValueLohnweilerRLP =
+  waterLevelLohnweilerRLP?.length > 0
+    ? waterLevelLohnweilerRLP[waterLevelLohnweilerRLP.length - 1]
+    : null;
 
 
   ///////////////////////////////////            set up for the dynamic markers on the open street map        ///////////////////////////////////////////////
@@ -375,28 +398,27 @@ lastValueLohnweilerRLP: (
 <p className="pt-2 mb-0" style={{ color: "#18204F", fontSize: "1.1rem" }}>
   Pegel {displayName}
 </p>
-
-                {selectedRow !== "default" && (
-                  <p
-                    className=" mb-0"
-                    style={{ color: "#18204F", fontSize: "1.1rem" }}
-                  >
-                    Letzte Messung: {formatTimestamp(lastValue.time)}
-                  </p>
-                )}
+{selectedRow !== "default" && lastValue && (
+  <p
+    className=" mb-0"
+    style={{ color: "#18204F", fontSize: "1.1rem" }}
+  >
+    Letzte Messung: {formatTimestamp(lastValue.time)}
+  </p>
+)}
               </div>
 
               {/* Ensure the gauge takes up the remaining space */}
               <div className="flex-grow-1 d-flex align-items-center justify-content-center pb-0">
-                <GaugeWaterLevel
-                  key={selectedRow} // Force re-render when selectedRow changes
-                  value={selectedRow === "default" ? "0" : lastValue.value}
-                  arcs={
-                    selectedRow === "default"
-                      ? arcsDefault
-                      : arcsMap[selectedRow]
-                  }
-                />{" "}
+<GaugeWaterLevel
+  key={selectedRow}
+  value={selectedRow === "default" || !lastValue ? "0" : lastValue.value}
+  arcs={
+    selectedRow === "default"
+      ? arcsDefault
+      : arcsMap[selectedRow]
+  }
+/>{" "}
               </div>
             </div>
           </div>

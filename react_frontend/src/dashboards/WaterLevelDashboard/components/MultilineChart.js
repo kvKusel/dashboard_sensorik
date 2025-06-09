@@ -363,7 +363,7 @@ const { start: periodStart, end: periodEnd } = calculateTimePeriodBoundary(curre
   // Create datasets with actual timestamps AND filter datasets so that only every 10th data point is displayed
   const createDataset = (data) => {
     return data
-       .filter((_, index) => currentPeriod === "365d" ? index % 10 === 0 : true)    // Filter every 10th data point
+      .filter((_, index) => index % 10 === 0)  // Filter every 10th data point
       .map((item) => ({
         x: new Date(item.time).getTime(),
         y: item.value,
@@ -371,9 +371,8 @@ const { start: periodStart, end: periodEnd } = calculateTimePeriodBoundary(curre
   };
 
   const chartData = {
-datasets: datasetConfig
-  .filter(config => Array.isArray(config.data) && config.data.length > 0)
-  .map(config => ({      label: config.label,
+    datasets: datasetConfig.map(config => ({
+      label: config.label,
       data: createDataset(config.data),
       borderColor: config.color,
       backgroundColor: config.color,
