@@ -255,9 +255,11 @@ const formatDatasetLabel = (datasetKey) => {
     visibleDatasets.forEach(datasetKey => {
       const config = datasetConfig.find(c => c.key === datasetKey);
       if (config && config.data) {
-        const filteredData = config.data.filter(item => 
-          new Date(item.time).getTime() >= periodBoundary
-        );
+        const filteredData = config.data.filter(item => {
+          const time = new Date(item.time).getTime();
+          return time >= periodStart && time <= periodEnd;
+        });
+
         
         filteredData.forEach(item => {
           if (item.value > maxValue) {
@@ -327,23 +329,36 @@ const formatDatasetLabel = (datasetKey) => {
     }
   }, [activeDataset, manuallySelected, currentPeriod]);
 
-  const calculateTimePeriodBoundary = (period) => {
-    const now = Date.now();
-    switch (period) {
-      case "24h":
-        return now - 24 * 60 * 60 * 1000;
-      case "7d":
-        return now - 7 * 24 * 60 * 60 * 1000;
-      case "30d":
-        return now - 30 * 24 * 60 * 60 * 1000;
-      case "365d":
-        return now - 365 * 24 * 60 * 60 * 1000;
-      default:
-        return now - 24 * 60 * 60 * 1000;
-    }
-  };
+const calculateTimePeriodBoundary = (period) => {
+  const now = new Date();
+  const endOfToday = new Date(now);
+  endOfToday.setHours(23, 59, 59, 999); // End of current day
 
-  const periodBoundary = calculateTimePeriodBoundary(currentPeriod);
+  const startOfPeriod = new Date(endOfToday);
+  switch (period) {
+    case "24h":
+      startOfPeriod.setDate(endOfToday.getDate() - 1);
+      break;
+    case "7d":
+      startOfPeriod.setDate(endOfToday.getDate() - 7);
+      break;
+    case "30d":
+      startOfPeriod.setDate(endOfToday.getDate() - 30);
+      break;
+    case "365d":
+      startOfPeriod.setDate(endOfToday.getDate() - 365);
+      break;
+    default:
+      startOfPeriod.setDate(endOfToday.getDate() - 1);
+  }
+
+  // Normalize start time to beginning of day
+  startOfPeriod.setHours(0, 0, 0, 0);
+
+  return { start: startOfPeriod.getTime(), end: endOfToday.getTime() };
+};
+
+const { start: periodStart, end: periodEnd } = calculateTimePeriodBoundary(currentPeriod);
 
   // Create datasets with actual timestamps AND filter datasets so that only every 10th data point is displayed
   const createDataset = (data) => {
@@ -407,8 +422,8 @@ const formatDatasetLabel = (datasetKey) => {
             day: "MMM d",
           },
         },
-        min: periodBoundary,
-        max: Date.now(),
+  min: periodStart,
+  max: periodEnd,
         grid: {
           minTicksLimit: 3, // Ensure at least 5 ticks on the axis
           

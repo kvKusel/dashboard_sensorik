@@ -94,6 +94,42 @@ const WolfsteinHistoricalBarChart = ({
 
   const [windowSize, setWindowSize] = useState(window.innerWidth);
 
+
+
+
+  const getPeriodTimeRange = (period) => {
+  const now = new Date();
+
+  const endOfToday = new Date(now);
+  endOfToday.setHours(23, 59, 59, 999);
+
+  const startOfPeriod = new Date(endOfToday);
+  switch (period) {
+    case "24h":
+      startOfPeriod.setDate(endOfToday.getDate() - 1);
+      break;
+    case "7d":
+      startOfPeriod.setDate(endOfToday.getDate() - 7);
+      break;
+    case "30d":
+      startOfPeriod.setDate(endOfToday.getDate() - 30);
+      break;
+    case "365d":
+      startOfPeriod.setDate(endOfToday.getDate() - 365);
+      break;
+    default:
+      startOfPeriod.setDate(endOfToday.getDate() - 1);
+  }
+
+  startOfPeriod.setHours(0, 0, 0, 0);
+
+  return { start: startOfPeriod.getTime(), end: endOfToday.getTime() };
+};
+
+
+
+
+
   useEffect(() => {
     const handleResize = () => {
       setWindowSize(window.innerWidth); // Change state on resize
@@ -116,11 +152,17 @@ const WolfsteinHistoricalBarChart = ({
             borderWidth: 1,
             barThickness: 15, // Set your desired minimum thickness here
             maxBarThickness: 30, // Optional: set a maximum thickness
+            
+            
           },
         ],
       });
     }
   }, [historicalPrecipitationWolfstein, currentPeriodHistoricalPrecipitation]);
+
+
+  const { start: xMin, end: xMax } = getPeriodTimeRange(currentPeriodHistoricalPrecipitation);
+
 
   const options = {
     maintainAspectRatio: false,
@@ -128,14 +170,20 @@ const WolfsteinHistoricalBarChart = ({
       // Replace your x-axis configuration in the options object with this:
       // Replace your x-axis configuration with this simplified version (matching forecast):
       x: {
-        type: "time",
-        time: {
-          unit: currentPeriodHistoricalPrecipitation === "24h" ? "hour" : "day",
-          tooltipFormat: "yyyy-MM-dd HH:mm",
-          displayFormats: {
-            hour: "MMM d, HH:00",
-            day: "MMM d",
-          },
+      type: "time",
+      min: xMin,
+      max: xMax,
+        offset: false, // This removes padding/offset
+
+      time: {
+        unit: currentPeriodHistoricalPrecipitation === "24h" ? "hour" : "day",
+        tooltipFormat: "yyyy-MM-dd HH:mm",
+        displayFormats: {
+          hour: "MMM d, HH:00",
+          day: "MMM d",
+        },
+            bounds: "ticks", // Align range to ticks instead of data
+
         },
         grid: {
           offset: false,

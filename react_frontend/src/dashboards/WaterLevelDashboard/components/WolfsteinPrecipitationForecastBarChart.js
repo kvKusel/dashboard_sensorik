@@ -140,6 +140,9 @@ const WolfsteinForecastBarChart = () => {
         scales: {
           x: {
             type: 'time', // Use time scale
+                    offset: false, // This removes padding/offset
+ min: new Date().setHours(0, 0, 0, 0), // Today at midnight
+  max: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).setHours(23, 59, 59, 999), // 5 days from now at end of day
             time: {
                 unit: 'day', // Show each day on the x-axis
                 tooltipFormat: 'yyyy-MM-dd HH:mm', // Tooltip format
