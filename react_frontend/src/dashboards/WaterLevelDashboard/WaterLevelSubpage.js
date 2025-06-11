@@ -729,7 +729,7 @@ lastValueLohnweilerRLP: (
       }}
     >
       <WolfsteinForecastBarChart />
-      <Chatbot />
+      {/* <Chatbot /> */}         
     </div>
   </div>
 </div>
