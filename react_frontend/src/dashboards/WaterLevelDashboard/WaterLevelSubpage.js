@@ -476,7 +476,7 @@ lastValueLohnweilerRLP: (
             style={{
               flex: "1 1 auto",
               minHeight: isSmallScreen
-                ? "40vh"
+                ? "50vh"
                 : window.innerWidth < 1200
                 ? "50vh"
                 : "50vh",
@@ -516,7 +516,7 @@ lastValueLohnweilerRLP: (
   <div className="col-xs-12 p-2 pt-0">
     
     {/* Attribution on small screens (above row) */}
-    {(activeDataset === "lastValueLohnweilerRLP" || activeDataset === "lastValueUntersulzbach") && (
+    {/* {(activeDataset === "lastValueLohnweilerRLP" || activeDataset === "lastValueUntersulzbach") && (
       <div className="d-block d-sm-none mb-2 text-left">
         <a
           href="https://wasserportal.rlp-umwelt.de/"
@@ -527,7 +527,7 @@ lastValueLohnweilerRLP: (
           Quelle: LfU RLP
         </a>
       </div>
-    )}
+    )} */}
 
     <div className="d-flex justify-content-between align-items-center position-relative">
       
@@ -578,9 +578,26 @@ lastValueLohnweilerRLP: (
         </div>
       )}
 
+      
+
       {/* Right: Download Icon */}
       <DownloadIcon className="pe-2" activeDataset={activeDataset} />
     </div>
+
+    {/* Attribution on mobile BELOW the dropdown */}
+{(activeDataset === "lastValueLohnweilerRLP" || activeDataset === "lastValueUntersulzbach") && (
+  <div className="d-block d-sm-none mt-2 ps-2">
+    <a
+      href="https://wasserportal.rlp-umwelt.de/"
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{ color: "#555", textDecoration: "underline", fontSize: "0.9rem" }}
+    >
+      Quelle: LfU RLP
+    </a>
+  </div>
+)}
+
   </div>
 </div>
 
