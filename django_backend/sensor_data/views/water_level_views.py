@@ -85,7 +85,6 @@ class waterLevelDataView(View):
 
             if readings.exists():
                 response_data = list(readings.values('timestamp', 'water_level_value'))
-                logger.info(f"Returning {len(response_data)} water level readings. Latest: {response_data[-1] if response_data else 'None'}")
                 return JsonResponse(response_data, safe=False)
             else:
                 return JsonResponse({"message": "No data available for the selected time period."}, status=204)

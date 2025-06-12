@@ -156,3 +156,52 @@ class HistoricalPrecipitationView(View):
                 
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500) 
+        
+
+
+        
+############################            historical precipitation data for weather station Lohnweiler (for bar chart)        ###########################################
+
+
+class FTPWeatherDataView(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            # Read time range from query parameters
+            time_range = request.GET.get("time_range", "24h")
+
+            now = timezone.now()
+            if time_range == "24h":
+                start_date = now - timedelta(hours=24)
+            elif time_range == "7d":
+                start_date = now - timedelta(days=7)
+            elif time_range == "30d":
+                start_date = now - timedelta(days=30)
+            elif time_range == "365d":
+                start_date = now - timedelta(days=365)
+            else:
+                return JsonResponse({"error": "Invalid time range"}, status=400)
+
+            # Fetch the device representing the FTP weather station
+            device_id = "ftp_weather_station"
+            try:
+                device = Device.objects.get(device_id=device_id)
+            except Device.DoesNotExist:
+                return JsonResponse({"error": "FTP weather station device not found"}, status=404)
+
+            # Query WeatherData for the device and time range
+            readings = WeatherData.objects.filter(
+                device=device,
+                timestamp__gte=start_date,
+                timestamp__lte=now
+            ).order_by("timestamp")
+
+            if readings.exists():
+                response_data = list(
+                    readings.values("timestamp", "temperature", "humidity", "wind_speed", "precipitation")
+                )
+                return JsonResponse(response_data, safe=False)
+            else:
+                return JsonResponse({"message": "No data available for the selected time period."}, status=204)
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)

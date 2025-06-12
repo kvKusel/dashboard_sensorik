@@ -33,6 +33,8 @@ const WaterLevelSubpage = ({
   currentPeriod,
   onPeriodChange,
   historicalPrecipitationWolfstein,
+    lohnweilerPrecipitation,
+
   onPeriodChangeHistoricalPrecipitation,
   currentPeriodHistoricalPrecipitation,
 
@@ -633,6 +635,8 @@ lastValueLohnweilerRLP: (
         historicalPrecipitationWolfstein={
           historicalPrecipitationWolfstein
         }
+                lohnweilerPrecipitation={lohnweilerPrecipitation}
+
       />
     </div>
   </div>
@@ -751,7 +755,7 @@ lastValueLohnweilerRLP: (
       }}
     >
       <WolfsteinForecastBarChart />
-      {/* <Chatbot /> */}         
+      <Chatbot />         
     </div>
   </div>
 </div>

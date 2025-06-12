@@ -1,4 +1,3 @@
-// --- Updated WaterLevelDashboard.js ---
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import WolfsteinSubpage from "./WaterLevelSubpage";
@@ -25,15 +24,14 @@ const WaterLevelDashboard = () => {
   const [waterLevelLohnweilerRLP, setWaterLevelLohnweilerRLP] = useState([]);
 
   const [precipitationWolfsteinHistorical, setPrecipitationWolfsteinHistorical] = useState([]);
+  const [lohnweilerPrecipitation, setLohnweilerPrecipitation] = useState([]);
 
   const [timePeriod, setTimePeriod] = useState("30d");
   const [timePeriodHistoricalPrecipitation, setTimePeriodHistoricalPrecipitation] = useState("30d");
 
-  // NEW STATE TO PRESERVE PEGEL
   const [activeDataset, setActiveDataset] = useState(null);
   const [selectedRow, setSelectedRow] = useState("default");
 
-  // Add refs for scroll targets and scroll pending flags
   const scrollTargetRef = useRef(null);
   const [pendingScroll, setPendingScroll] = useState(null);
 
@@ -68,23 +66,31 @@ const WaterLevelDashboard = () => {
       setWaterLevelUntersulzbach(map(untersulzbach));
       setWaterLevelLohnweilerRLP(map(lohnweilerRLP));
 
-      const precipitationResponse = await axios.get(`${API_URL}api/historical-precipitation/?time_range=${timePeriodHistoricalPrecipitation}`);
-      const timeZone = 'Europe/Berlin';
-      const transform = (data) => ({
-        labels: data.map(e => format(toZonedTime(new Date(e.timestamp * 1000), timeZone), 'yyyy-MM-dd HH:mm')),
-        precipitationValues: data.map(e => e.precipitation)
-      });
+    const precipitationResponse = await axios.get(`${API_URL}api/historical-precipitation/?time_range=${timePeriodHistoricalPrecipitation}`);
+    const timeZone = 'Europe/Berlin';
+    const transform = (data) => ({
+      labels: data.map(e => format(toZonedTime(new Date(e.timestamp * 1000), timeZone), 'yyyy-MM-dd HH:mm')),
+      precipitationValues: data.map(e => e.precipitation)
+    });
+    const wolfsteinData = transform(precipitationResponse.data);
+    setPrecipitationWolfsteinHistorical(wolfsteinData);
 
-      setPrecipitationWolfsteinHistorical(transform(precipitationResponse.data));
+    const lohnweilerResponse = await axios.get(`${API_URL}api/lohnweiler-weather-data/?time_range=${timePeriodHistoricalPrecipitation}`);
+    const transformLohnweiler = (data) => ({
+      labels: data.map(e => format(toZonedTime(new Date(e.timestamp), timeZone), 'yyyy-MM-dd HH:mm')),
+      precipitationValues: data.map(e => e.precipitation)
+    });
 
-    } catch (e) {
-      console.error("Error fetching data:", e);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    const lohnweilerData = transformLohnweiler(lohnweilerResponse.data);
+    setLohnweilerPrecipitation(lohnweilerData);
 
-  // Handle period changes with scroll intent
+  } catch (e) {
+    console.error("Error fetching data:", e);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
   const handlePeriodChange = (newPeriod) => {
     setPendingScroll('multiline-chart');
     setTimePeriod(newPeriod);
@@ -95,13 +101,12 @@ const WaterLevelDashboard = () => {
     setTimePeriodHistoricalPrecipitation(newPeriod);
   };
 
-  // Effect to handle scrolling after data loads
   useEffect(() => {
     if (!isLoading && pendingScroll) {
       const scrollToTarget = () => {
         const targetId = pendingScroll;
         const element = document.getElementById(targetId);
-        
+
         if (element) {
           element.scrollIntoView({ 
             behavior: 'smooth', 
@@ -109,11 +114,10 @@ const WaterLevelDashboard = () => {
             inline: 'nearest'
           });
         }
-        
+
         setPendingScroll(null);
       };
 
-      // Small delay to ensure DOM is fully rendered
       const timeoutId = setTimeout(scrollToTarget, 100);
       return () => clearTimeout(timeoutId);
     }
@@ -122,6 +126,8 @@ const WaterLevelDashboard = () => {
   useEffect(() => {
     fetchAllData();
   }, [timePeriod, timePeriodHistoricalPrecipitation]);
+
+
 
   return (
     <div style={{ minHeight: "80vh" }}>
@@ -151,6 +157,7 @@ const WaterLevelDashboard = () => {
           setActiveDataset={setActiveDataset}
           selectedRow={selectedRow}
           setSelectedRow={setSelectedRow}
+          lohnweilerPrecipitation={lohnweilerPrecipitation}
         />
       )}
     </div>

@@ -33,6 +33,10 @@ const Chatbot = () => {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
+  // used for scrolling to user's last message if chat is reopened
+  const lastUserMessageRef = useRef(null);
+
+
   // State to track follow-up context
   const [awaitingTimeRange, setAwaitingTimeRange] = useState(false);
   const [pendingLocation, setPendingLocation] = useState(null);
@@ -41,15 +45,36 @@ const Chatbot = () => {
     time_range: null
   });
 
+
+  // Scroll to bottom function, together with the useEffect underneath providing smoother user experience
   const scrollToBottom = () => {
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   };
 
-  useEffect(() => {
-    if (isOpen) scrollToBottom();
-  }, [messages, isOpen]);
+
+
+useEffect(() => {
+  if (isOpen) {
+    const onlyGreeting =
+      messages.length === 1 &&
+      !messages[0].fromUser &&
+      messages[0].text.includes("Willkommen beim Wasserstand-Dashboard");
+
+    if (onlyGreeting) return;
+
+    // Scroll to last user message if available
+    if (lastUserMessageRef.current) {
+      lastUserMessageRef.current.scrollIntoView({ behavior: "smooth" });
+    } else {
+      scrollToBottom(); // Fallback
+    }
+  }
+}, [isOpen, messages]);
+
+
+
 
   // Load state and messages from sessionStorage
   useEffect(() => {
@@ -138,29 +163,14 @@ const initialBotMessage = () => ({
   text: `
 🌊 **Willkommen beim Wasserstand-Dashboard!**\n\n
 Ich kann dir Wasserstandsdaten für verschiedene Messstationen bereitstellen.\n\n
-**Verfügbare Messstationen:**\n
-• Wolfstein\n
-• Rutsweiler a.d. Lauter\n
-• Kreimbach 1\n
-• Kreimbach 2\n
-• Kreimbach 3\n
-• Lauterecken\n
-• Kusel\n
-• Lohnweiler\n
-• Lohnweiler (Lauter)\n
-• Hinzweiler\n
-• Untersulzbach\n\n
+
 **So funktioniert es:**\n
-👉 Nenne einen Ort und einen Zeitraum (z.B. 'Kreimbach, 7 Tage')\n
+👉 Nenne einen Pegel und einen Zeitraum (z.B. 'Kreimbach, 7 Tage')\n
+👉Welche Pegel verfügbar sind, siehst du in der Sensortabelle (oben auf dem Handy, links auf dem Desktop)\n
 👉 Verfügbare Zeiträume: 24 Stunden, 7 Tage, 30 Tage, 1 Jahr\n
-👉 Du kannst allgemeine Anfragen stellen (z.B. 'Daten für Kreimbach, 7 Tage') oder spezifische Fragen wie:\n
+👉 Du kannst allgemeine Anfragen stellen (z.B. 'Kreimbach, letzte 30 Tage') oder spezifische Fragen wie:\n
    • 'Maximaler Wasserstand in Kusel in den letzten 7 Tagen?'\n
    • 'Wie war der Trend in Lohnweiler im letzten Jahr?'\n\n
-**Beispiele:**\n
-• 'Kreimbach, letzte 30 Tage'\n
-• 'Kusel, 7 Tage'\n
-• 'Lohnweiler, 24 Stunden'\n
-• 'Was war der niedrigste Wasserstand in Wolfstein in den letzten 30 Tagen?'\n\n
 Probiere es einfach aus! 🎯
   `,
   fromUser: false,
@@ -285,16 +295,24 @@ Probiere es einfach aus! 🎯
             
           </div>
           <div className="chatbot-messages">
-            {messages.map((msg, index) => (
-              <div
-                key={index}
-                className={
-                  msg.fromUser ? "message user-message" : "message bot-message"
-                }
-              >
-                {msg.text}
-              </div>
-            ))}
+{messages.map((msg, index) => {
+  const isLastUserMessage =
+    msg.fromUser &&
+    index === messages.map(m => m.fromUser).lastIndexOf(true);
+
+  return (
+    <div
+      key={index}
+      ref={isLastUserMessage ? lastUserMessageRef : null}
+      className={
+        msg.fromUser ? "message user-message" : "message bot-message"
+      }
+    >
+      {msg.text}
+    </div>
+  );
+})}
+
             {isLoading && <div className="message bot-message">Wird geladen...</div>}
             <div ref={messagesEndRef} />
           </div>

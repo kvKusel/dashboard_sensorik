@@ -10,9 +10,11 @@ from django.core.management.base import BaseCommand
 from django.core.management import call_command
 from django.utils.timezone import now
 import pandas as pd
-from io import StringIO
+from io import StringIO, BytesIO
 from django.utils.timezone import now as tz_now, make_aware, utc
-from django.db import connections, connection
+from django.db import connections, connection, transaction
+import ftplib
+
 
 # Add the project root to the Python path - uncomment for production environment!
 path = '/home/scdash/django_project/dashboard_smartcity/django_backend'
@@ -42,7 +44,7 @@ except ModuleNotFoundError as e:
     
     
 class Command(BaseCommand):
-    help = 'Fetch precipitation data and Treesense data, then store them in the database'
+    help = 'Fetch precipitation data, weahter data and Treesense data, then store them in the database'
 
     def handle(self, *args, **kwargs):
         while True:  # Infinite loop to repeatedly fetch data every 20 minutes
@@ -54,6 +56,10 @@ class Command(BaseCommand):
 
             # Fetch precipitation data
             self.fetch_precipitation_data()
+            
+            # fetch weather station data from FTP server
+            self.fetch_ftp_weather_data()
+
 
             # Authenticate and fetch tree data
             access_token = self.authenticate()  # Get the token
@@ -65,6 +71,171 @@ class Command(BaseCommand):
             # Wait for 60 minutes before running again
             self.stdout.write(self.style.NOTICE(f"Next execution in 15 minutes at {tz_now() + timedelta(minutes=60)}"))
             time.sleep(15 * 60)  # Sleep for 15 minutes (15 minutes * 60 seconds)
+            
+            
+            
+######################################################          # Fetch and save the weather station data for Weatherstation Lohnweiler      ########################################################
+
+
+    def fetch_ftp_weather_data(self):
+            """Fetch weather data from FTP server"""
+            # Get FTP credentials from environment variables
+            ftp_host = os.getenv('FTP_HOST')
+            ftp_username = os.getenv('FTP_USERNAME')
+            ftp_password = os.getenv('FTP_PASSWORD')
+            csv_filename = os.getenv('FTP_CSV_FILENAME', 'weather_data.csv')  # Default filename
+            device_id = 'ftp_weather_station'
+            
+            if not all([ftp_host, ftp_username, ftp_password]):
+                self.stdout.write(self.style.WARNING('FTP credentials not found in environment variables. Skipping FTP weather data fetch.'))
+                return
+            
+            try:
+                # Connect to FTP server and fetch data
+                csv_data = self.fetch_csv_from_ftp(ftp_host, ftp_username, ftp_password, csv_filename)
+                
+                if csv_data:
+                    # Process and save the data
+                    self.process_and_save_ftp_data(csv_data, device_id)
+                    self.stdout.write(self.style.SUCCESS('FTP weather data fetched and stored successfully'))
+                else:
+                    self.stdout.write(self.style.ERROR('Failed to fetch CSV data from FTP server'))
+                    
+            except Exception as e:
+                self.stdout.write(self.style.ERROR(f'Error processing FTP weather data: {e}'))
+
+    def fetch_csv_from_ftp(self, host, username, password, filename):
+        """Fetch CSV file from FTP server"""
+        try:
+            # Connect to FTP server
+            ftp = ftplib.FTP_TLS(host)
+            ftp.login(username, password)
+            
+            # Explicitly switch to secure data connection
+            ftp.prot_p()
+            
+            self.stdout.write(self.style.SUCCESS(f'Connected to FTP server with SSL/TLS: {host}'))
+            
+            # List files to verify the file exists
+            files = ftp.nlst()
+            if filename not in files:
+                self.stdout.write(self.style.ERROR(f'File {filename} not found on FTP server. Available files: {files}'))
+                ftp.quit()
+                return None
+            
+            # Download the file content
+            csv_bytes = BytesIO()
+            ftp.retrbinary(f'RETR {filename}', csv_bytes.write)
+            ftp.quit()
+
+            csv_data = csv_bytes.getvalue().decode('latin1')  # or 'iso-8859-1'
+
+            self.stdout.write(self.style.SUCCESS(f'Successfully downloaded {filename} from FTP server'))
+            
+            return csv_data
+            
+        except ftplib.all_errors as e:
+            self.stdout.write(self.style.ERROR(f'FTP error: {e}'))
+            return None
+        
+        
+        
+            
+            
+    def process_and_save_ftp_data(self, csv_data, device_id):
+        """Process CSV data and save new records to database"""
+
+        # Temporarily disable auto_now_add on the timestamp field
+        timestamp_field = WeatherData._meta.get_field('timestamp')
+        original_auto_now_add = timestamp_field.auto_now_add
+        timestamp_field.auto_now_add = False
+
+        try:
+            # Parse CSV data
+            df = pd.read_csv(StringIO(csv_data), sep=';', engine='python')
+
+            # Get or create the device
+            device, created = Device.objects.get_or_create(
+                device_id=device_id,
+                defaults={'name': f'FTP Weather Station {device_id}'}
+            )
+
+            # Get the latest timestamp from database for this device
+            latest_reading = WeatherData.objects.filter(device=device).order_by('-timestamp').first()
+            latest_timestamp = latest_reading.timestamp if latest_reading else None
+
+            # Process each row
+            new_records = []
+            skipped_count = 0
+
+            for index, row in df.iterrows():
+                try:
+                    # Parse timestamp from 'Messzeit'
+                    if 'Messzeit' in df.columns:
+                        timestamp_str = str(row['Messzeit']).strip()
+                        try:
+                            # Parse the timestamp
+                            naive_timestamp = datetime.strptime(timestamp_str, '%d.%m.%Y %H:%M')
+                            from django.utils import timezone as django_timezone
+                            timestamp = django_timezone.make_aware(naive_timestamp)
+                        except ValueError:
+                            continue
+                    else:
+                        continue
+
+                    # Skip if we already have this timestamp
+                    if latest_timestamp and timestamp <= latest_timestamp:
+                        skipped_count += 1
+                        continue
+
+                    # Extract weather data - adjust column names based on your CSV
+                    weather_record = WeatherData(
+                        device=device,
+                        timestamp=timestamp,
+                        temperature=self.safe_float(row.get('Lufttemperatur [C]', 0)),
+                        humidity=self.safe_float(row.get('Luftfeuchte [%]', 0)),
+                        wind_speed=self.safe_float(row.get('mittl. Windgeschwindigkeit [m/s]', 0)),
+                        wind_direction=self.safe_float(row.get('Windrichtung [Grad]', 0)),
+                        precipitation=self.safe_float(row.get('Niederschlag [mm]', 0)),
+                        air_pressure=self.safe_float(row.get('Luftdruck [hPa]', 0)),
+                        uv=None,
+                        luminosity=None,
+                        rainfall_counter=0
+                    )
+
+                    new_records.append(weather_record)
+
+                except Exception:
+                    continue
+
+            if new_records:
+                with transaction.atomic():
+                    WeatherData.objects.bulk_create(new_records)
+            
+        except Exception:
+            pass
+
+        finally:
+            # Restore the original auto_now_add setting
+            timestamp_field.auto_now_add = original_auto_now_add
+
+            
+
+    def safe_float(self, value):
+        """Safely convert value to float, handling various formats"""
+        if value is None or pd.isna(value):
+            return 0.0
+        
+        try:
+            # Handle comma as decimal separator
+            if isinstance(value, str):
+                value = value.replace(',', '.')
+            return float(value)
+        except (ValueError, TypeError):
+            return 0.0
+            
+            
+            
             
 ######################################################          # Fetch and save the water level data from RLP API  (Pegel Untersulzbach)      ########################################################
     def fetch_water_level_data(self):
@@ -94,7 +265,6 @@ class Command(BaseCommand):
                 response = requests.get(source["url"], headers=headers)
                 response.raise_for_status()
                 df = pd.read_csv(StringIO(response.text), sep=';')
-                print(df.head(10))
 
                 device, _ = Device.objects.get_or_create(
                     device_id=source["device_id"],

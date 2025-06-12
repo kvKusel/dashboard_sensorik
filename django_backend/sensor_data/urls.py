@@ -1,5 +1,5 @@
 from django.urls import path
-from .views.views import index, HistoricalPrecipitationView, ForecastDataViewWolfstein 
+from .views.views import index, HistoricalPrecipitationView, ForecastDataViewWolfstein, FTPWeatherDataView
 from .views.treesense_views import (
     ElectricalResistanceDataView, 
     TreeHealthDataView, 
@@ -61,6 +61,7 @@ from .views.chatbot_views.chatbot_views import ChatEndpointView
 from .views.chatbot_views.data_analytics_for_chatbot import DataAnalyticsForChatbot
 
 
+
 urlpatterns = [
     path('soil-data/', SoilDataView.as_view(), name='soil_data'),
     path('soil-data/etschberg/', soilMoistureEtschbergDataView.as_view(), name='soil_data'),
@@ -80,6 +81,9 @@ urlpatterns = [
     path('', index, name='index'),
     path('api/forecast-data-wolfstein/', ForecastDataViewWolfstein.as_view(), name='forecast_data'),
     path('api/historical-precipitation/', HistoricalPrecipitationView.as_view(), name='historical_precipitation'),
+    
+    path('api/lohnweiler-weather-data/', FTPWeatherDataView.as_view(), name='ftp_weather_data'),
+
 
     #csv with precipitation data
     path('api/export-precipitation-data/', ExportPrecipitationDataView.as_view(), name='export-precipitation-data'),
