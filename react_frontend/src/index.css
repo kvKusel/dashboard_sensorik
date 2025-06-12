@@ -697,3 +697,23 @@ input:checked + .slider:before {
     font-size: 1rem;
   }
 }
+
+
+/* Custom button styles for info buttons in water level dashboard info window */
+.custom-info-button {
+  font-size: 1rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  border: 2px solid rgba(8, 185, 23, 0.3);
+  background-color: rgba(223, 245, 225, 0.3);
+  color: #1A2146;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.custom-info-button:hover {
+  background-color: rgba(8, 185, 23, 0.1);
+  border-color: rgba(8, 185, 23, 0.5);
+  color: #0d2c5a;
+  text-decoration: none;
+}

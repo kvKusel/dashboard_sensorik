@@ -15,6 +15,7 @@ import DownloadIcon from "./components/DownloadIcon";
 
 import MapInteractionOverlay from "./components/Map/MapInteractionOverlay";
 
+import WelcomeBanner from "./components/WelcomeBanner";
 
 
 const WaterLevelSubpage = ({
@@ -339,9 +340,13 @@ lastValueLohnweilerRLP: (
         </div>
       </div> */}
 
+
+      {/* Welcome banner row */}
+<WelcomeBanner />
+
       {/* row with the map */}
 
-      <div className="row mt-3 rounded-3" style={{ flex: "1 1 auto" }}>
+      <div className="row rounded-3" style={{ flex: "1 1 auto" }}>
         <div
           className="col-12 col-md-4 d-flex flex-column rounded-3"
           style={{

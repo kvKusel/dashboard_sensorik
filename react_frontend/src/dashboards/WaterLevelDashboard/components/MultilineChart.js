@@ -522,37 +522,40 @@ const PegelDropdown = ({ datasetConfig, activeDataset, manuallySelected, onSelec
   return (
     <div className="mt-4 d-flex justify-content-left">
       <div className="position-relative pegel-dropdown-container" style={{ paddingLeft: '7px' }}>  
-        <button
-          className="btn btn-outline-primary p-2"
-          type="button"
-          onClick={() => setDropdownOpen(!dropdownOpen)}
-          style={{
-            backgroundColor: 'white',
-            borderColor: '#6972A8',
-            color: '#6972A8',
-            minWidth: '183px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            fontSize: '1.1rem',
-          }}
-        >
-          <span>
-            Weitere Pegel
-          </span>
+   <button
+  className="btn btn-outline-primary p-2 position-relative"
+  type="button"
+  onClick={() => setDropdownOpen(!dropdownOpen)}
+  style={{
+    backgroundColor: 'white',
+    borderColor: '#6972A8',
+    color: '#6972A8',
+    minWidth: '183px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: '1.1rem',
+  }}
+>
+  <span>Weitere Pegel</span>
+
+  {/* Positioned arrow icon */}
           <svg 
+              className="position-absolute"
+  
             width="12" 
             height="12" 
             viewBox="0 0 12 12" 
             fill="currentColor"
             style={{
               transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-              transition: 'transform 0.2s'
+              transition: 'transform 0.2s',
+               right: '12px'
             }}
           >
             <path d="M2 4l4 4 4-4H2z"/>
           </svg>
-        </button>
+</button>
         
         {dropdownOpen && (
           <div
