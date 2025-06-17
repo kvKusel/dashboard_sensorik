@@ -352,11 +352,11 @@ lastValueLohnweilerRLP: (
 
 
       {/* Welcome banner row */}
-<WelcomeBanner />
+{/* <WelcomeBanner /> */}
 
       {/* row with the map */}
 
-      <div className="row rounded-3" style={{ flex: "1 1 auto" }}>
+      <div className="row rounded-3 mt-3" style={{ flex: "1 1 auto" }}>
         <div
           className="col-12 col-md-4 d-flex flex-column rounded-3"
           style={{

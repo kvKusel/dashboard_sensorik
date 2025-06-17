@@ -9,6 +9,7 @@ import WeatherSubpage from "../../dashboards/WeatherDashboard/WeatherSubpage";
 import EtschbergDashboard from "../../dashboards/EtschbergTreeDashboard/EtschbergMainPage";
 import LargeNavbar from "./NavbarLarge";
 import SmallNavbar from "./NavbarSmall";
+import WelcomePopup from "./WelcomePopup";
 
 const API_URL = process.env.REACT_APP_API_URL; // This will switch based on the environment - dev env will point to local Django, prod env to the proper domain
 
@@ -83,6 +84,8 @@ const Dashboard = () => {
   return (
     /* main container */
     <>
+      {activeTab === "Pegelmonitoring" && <WelcomePopup activeTab={activeTab}  />} 
+
       <div
         className="d-flex  align-items-center justify-content-between py-2"
         style={{

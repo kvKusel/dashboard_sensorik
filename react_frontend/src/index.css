@@ -740,3 +740,5 @@ input:checked + .slider:before {
 .custom-dropdown2-precipitation::after {
   display: none !important;
 }
+
+
