@@ -743,19 +743,22 @@ lastValueLohnweilerRLP: (
       </div>
 
       {/* Center: Attribution for larger screens */}
-      <div
-        className="d-none d-sm-block position-absolute top-50 start-50 translate-middle"
-        style={{ fontSize: "0.9rem" }}
-      >
-        <a
-          href="https://openweathermap.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: "#555", textDecoration: "underline" }}
-        >
-          Quelle: OpenWeather
-        </a>
-      </div>
+  {precipitationActiveDataset === 'wolfstein' && (
+  <div
+    className="d-none d-sm-block position-absolute top-50 start-50 translate-middle"
+    style={{ fontSize: "0.9rem" }}
+  >
+    <a
+      href="https://openweathermap.org/"
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{ color: "#555", textDecoration: "underline" }}
+    >
+      Quelle: OpenWeather
+    </a>
+  </div>
+)}
+
 
       {/* Right: Download Icon */}
       <div className="pe-2">
@@ -770,16 +773,24 @@ lastValueLohnweilerRLP: (
     </div>
 
         {/* Attribution on small screens - above row */}
-    <div className="d-block d-sm-none my-2 text-left">
-      <a
-        href="https://openweathermap.org/"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ color: "#555", textDecoration: "underline", fontSize: "0.9rem", paddingLeft: "10px" }}
-      >
-        Quelle: OpenWeather
-      </a>
-    </div>
+{precipitationActiveDataset === 'wolfstein' && (
+  <div className="d-block d-sm-none my-2 text-left">
+    <a
+      href="https://openweathermap.org/"
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{
+        color: "#555",
+        textDecoration: "underline",
+        fontSize: "0.9rem",
+        paddingLeft: "10px",
+      }}
+    >
+      Quelle: OpenWeather
+    </a>
+  </div>
+)}
+
   </div>
 </div>
 
