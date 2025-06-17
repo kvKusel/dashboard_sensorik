@@ -315,6 +315,14 @@ lastValueLohnweilerRLP: (
 
   ///////////////////////////////////        END OF set up for the table that displays all sensors         ///////////////////////////////////////////////
 
+
+
+
+
+  const [precipitationActiveDataset, setPrecipitationActiveDataset] = useState('lohnweiler');
+
+
+  
   return (
     <React.Fragment>
       {/* row with the title */}
@@ -465,14 +473,14 @@ lastValueLohnweilerRLP: (
       <div
         id="multiline-chart" // <-- Add this ID
 
-        className="row mt-4 rounded-top-3"
+        className="row mt-4 rounded-top-3 "
         style={{
           flex: "1 1 auto",
           backgroundColor: "#FFF",
           boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
         }}
       >
-        <div className="col-xs-12 d-flex p-2 ">
+        <div className="col-xs-12 d-flex p-2 pb-0 ">
           <div
             className=""
             style={{
@@ -605,10 +613,10 @@ lastValueLohnweilerRLP: (
 
 
 
-   {/* row with the bar chart showing the past precipitation */}
+ 
+{/* row with the bar chart showing the past precipitation */}
 <div
-  id="historical-precipitation" // <-- Add this ID
-
+  id="historical-precipitation"
   className="row rounded-top-3"
   style={{
     flex: "1 1 auto",
@@ -626,6 +634,7 @@ lastValueLohnweilerRLP: (
           : window.innerWidth < 1200
           ? "40vh"
           : "40vh",
+        maxHeight: "60vh",
       }}
     >
       <WolfsteinHistoricalBarChart
@@ -635,31 +644,63 @@ lastValueLohnweilerRLP: (
         historicalPrecipitationWolfstein={
           historicalPrecipitationWolfstein
         }
-                lohnweilerPrecipitation={lohnweilerPrecipitation}
-
+        lohnweilerPrecipitation={lohnweilerPrecipitation}
+        activeDataset={precipitationActiveDataset}
       />
     </div>
   </div>
+
+  
+  
+  {/* Dataset Toggle Dropdown */}
+
+
+ <div className="d-flex justify-content-left my-2" style={{ paddingLeft: "16px" }}>
+  <Dropdown>
+<Dropdown.Toggle
+  variant="danger"
+  id="dropdown-precipitation-location"
+  className="d-flex align-items-center justify-items-center justify-content-between custom-dropdown2 py-2"
+  style={{ fontSize: "1.1rem" ,
+        width: "182px",           // ← Fixed width
+
+  }}
+>
+  {precipitationActiveDataset === 'lohnweiler'
+    ? 'Lohnweiler'
+    : 'Wolfstein'}
+</Dropdown.Toggle>
+
+
+
+<Dropdown.Menu className="custom-dropdown-gray">
+      <Dropdown.Item
+        onClick={() => setPrecipitationActiveDataset('lohnweiler')}
+        active={precipitationActiveDataset === 'lohnweiler'}
+      >
+        {precipitationActiveDataset === 'lohnweiler'}Lohnweiler
+      </Dropdown.Item>
+      <Dropdown.Item
+        onClick={() => setPrecipitationActiveDataset('wolfstein')}
+        active={precipitationActiveDataset === 'wolfstein'}
+      >
+        {precipitationActiveDataset === 'wolfstein'}Wolfstein
+      </Dropdown.Item>
+    </Dropdown.Menu>
+  </Dropdown>
+</div>
+
+
 </div>
 
 {/* row with sliders for choosing time span and OpenWeather attribution */}
 
 <div
-  className="row rounded-bottom-3"
+  className="row  rounded-bottom-3"
   style={{ flex: "1 1 auto", backgroundColor: "#fff" }}
 >
   <div className="col-xs-12 p-2 pt-0">
-    {/* Attribution on small screens - above row */}
-    <div className="d-block d-sm-none mb-2 text-left">
-      <a
-        href="https://openweathermap.org/"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ color: "#555", textDecoration: "underline", fontSize: "0.9rem", paddingLeft: "10px" }}
-      >
-        Quelle: OpenWeather
-      </a>
-    </div>
+
 
     <div className="d-flex justify-content-between align-items-center position-relative">
       {/* Left: Dropdown */}
@@ -723,6 +764,21 @@ lastValueLohnweilerRLP: (
           tooltipText="Niederschlagsdaten herunterladen"
         />
       </div>
+
+
+      
+    </div>
+
+        {/* Attribution on small screens - above row */}
+    <div className="d-block d-sm-none my-2 text-left">
+      <a
+        href="https://openweathermap.org/"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{ color: "#555", textDecoration: "underline", fontSize: "0.9rem", paddingLeft: "10px" }}
+      >
+        Quelle: OpenWeather
+      </a>
     </div>
   </div>
 </div>

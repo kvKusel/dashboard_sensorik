@@ -523,7 +523,7 @@ const PegelDropdown = ({ datasetConfig, activeDataset, manuallySelected, onSelec
     <div className="mt-4 d-flex justify-content-left">
       <div className="position-relative pegel-dropdown-container" style={{ paddingLeft: '7px' }}>  
    <button
-  className="btn btn-outline-primary p-2 position-relative"
+  className="btn btn-outline-primary p-2 position-relative justify-content-between"
   type="button"
   onClick={() => setDropdownOpen(!dropdownOpen)}
   style={{

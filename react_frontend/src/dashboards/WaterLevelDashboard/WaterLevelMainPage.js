@@ -74,6 +74,7 @@ const WaterLevelDashboard = () => {
     });
     const wolfsteinData = transform(precipitationResponse.data);
     setPrecipitationWolfsteinHistorical(wolfsteinData);
+    
 
     const lohnweilerResponse = await axios.get(`${API_URL}api/lohnweiler-weather-data/?time_range=${timePeriodHistoricalPrecipitation}`);
     const transformLohnweiler = (data) => ({
@@ -83,6 +84,8 @@ const WaterLevelDashboard = () => {
 
     const lohnweilerData = transformLohnweiler(lohnweilerResponse.data);
     setLohnweilerPrecipitation(lohnweilerData);
+
+
 
   } catch (e) {
     console.error("Error fetching data:", e);
@@ -126,6 +129,7 @@ const WaterLevelDashboard = () => {
   useEffect(() => {
     fetchAllData();
   }, [timePeriod, timePeriodHistoricalPrecipitation]);
+
 
 
 
