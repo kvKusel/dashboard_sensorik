@@ -69,13 +69,12 @@ const DownloadIcon = ({
       let filename = '';
 
       if (isPrecipitationDownload) {
-        if (precipitationActiveDataset === 'lohnweiler') {
-          downloadUrl = `${API_URL}api/lohnweiler-weather-data/?format=csv`;
-        } else {
           downloadUrl = `${API_URL}api/export-precipitation-data/?dataset=${precipitationActiveDataset}`;
-        }
+  
         filename = `${precipitationNameMapping[precipitationActiveDataset]}_Niederschlagsdaten.csv`;
-      } else {
+      } 
+      
+      else {
         const deviceId = deviceIdMapping[activeDataset];
         downloadUrl = `${API_URL}api/export-water-level-data/?device_id=${deviceId}`;
         filename = `${nameMapping[activeDataset]}_Pegelstaende.csv`;
