@@ -78,8 +78,8 @@ class ExportPrecipitationDataView(View):
 
         if dataset == 'lohnweiler':
             writer.writerow([
-                'Timestamp (CET)', 'Precipitation [mm]', 'Temperature [°C]',
-                'Humidity [%]', 'Wind Speed [m/s]', 'Wind Direction [°]', 'Air Pressure [hPa]'
+                'Timestamp (CET)', 'Precipitation [mm]', 'Temperature [C]',
+                'Humidity [%]', 'Wind Speed [m/s]', 'Wind Direction [deg]', 'Air Pressure [hPa]'
             ])
         else:
             writer.writerow(['Timestamp (CET)', 'Precipitation [mm]'])
