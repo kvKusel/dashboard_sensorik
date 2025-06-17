@@ -16,6 +16,7 @@ const DownloadIcon = ({
   className = '',
   tooltipText = 'Datensatz herunterladen',
   isPrecipitationDownload = false,
+  precipitationActiveDataset = 'lohnweiler',
 }) => {
   const deviceIdMapping = {
     lastValueWolfstein: "31",
@@ -45,68 +46,51 @@ const DownloadIcon = ({
     lastValueLohnweilerRLP: "Lauterecken_Lauter",
   };
 
+  const precipitationNameMapping = {
+    lohnweiler: "Lohnweiler",
+    wolfstein: "Wolfstein",
+  };
+
   const isDatasetSelected = isPrecipitationDownload || (activeDataset && deviceIdMapping[activeDataset]);
   const iconColor = isDatasetSelected ? color : '#ccc';
   const currentTooltipText = isDatasetSelected ? tooltipText : 'Wählen Sie einen Datensatz zum Herunterladen aus';
 
   const renderTooltip = (props) => (
-    <Tooltip id="download-tooltip" {...props} >
+    <Tooltip id="download-tooltip" {...props}>
       {currentTooltipText}
     </Tooltip>
   );
 
   const handleDownload = async () => {
-    if (!isDatasetSelected) {
-      return; // Do nothing if no dataset is selected
-    }
-
-    // Handle precipitation download differently
-    if (isPrecipitationDownload) {
-      try {
-        // TODO: Replace with actual precipitation endpoint
-        const response = await axios.get(
-          `${API_URL}api/export-precipitation-data/`,
-          { responseType: 'blob' }
-        );
-
-        const blob = new Blob([response.data], { type: 'text/csv' });
-        const downloadUrl = window.URL.createObjectURL(blob);
-
-        const a = document.createElement('a');
-        a.href = downloadUrl;
-        a.download = `Niederschlagsdaten.csv`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(downloadUrl);
-      } catch (error) {
-        console.error('Precipitation download failed:', error);
-        alert('Niederschlagsdaten konnten nicht heruntergeladen werden.');
-      }
-      return;
-    }
-
-    const deviceId = deviceIdMapping[activeDataset];
+    if (!isDatasetSelected) return;
 
     try {
-      // Use device ID in the API call
-      const response = await axios.get(
-        `${API_URL}api/export-water-level-data/?device_id=${deviceId}`,
-        { responseType: 'blob' }
-      );
+      let downloadUrl = '';
+      let filename = '';
 
+      if (isPrecipitationDownload) {
+        if (precipitationActiveDataset === 'lohnweiler') {
+          downloadUrl = `${API_URL}api/lohnweiler-weather-data/?format=csv`;
+        } else {
+          downloadUrl = `${API_URL}api/export-precipitation-data/?dataset=${precipitationActiveDataset}`;
+        }
+        filename = `${precipitationNameMapping[precipitationActiveDataset]}_Niederschlagsdaten.csv`;
+      } else {
+        const deviceId = deviceIdMapping[activeDataset];
+        downloadUrl = `${API_URL}api/export-water-level-data/?device_id=${deviceId}`;
+        filename = `${nameMapping[activeDataset]}_Pegelstaende.csv`;
+      }
+
+      const response = await axios.get(downloadUrl, { responseType: 'blob' });
       const blob = new Blob([response.data], { type: 'text/csv' });
-      const downloadUrl = window.URL.createObjectURL(blob);
-
+      const downloadLink = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = downloadUrl;
-      // Create filename with location name and _Pegelstaende suffix
-      const locationName = nameMapping[activeDataset];
-      a.download = `${locationName}_Pegelstaende.csv`;
+      a.href = downloadLink;
+      a.download = filename;
       document.body.appendChild(a);
       a.click();
       a.remove();
-      window.URL.revokeObjectURL(downloadUrl);
+      window.URL.revokeObjectURL(downloadLink);
     } catch (error) {
       console.error('Download failed:', error);
       alert('Datei konnte nicht heruntergeladen werden.');

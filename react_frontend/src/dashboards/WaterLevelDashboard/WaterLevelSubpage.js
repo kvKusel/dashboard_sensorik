@@ -765,6 +765,7 @@ lastValueLohnweilerRLP: (
         <DownloadIcon
           isPrecipitationDownload={true}
           tooltipText="Niederschlagsdaten herunterladen"
+            precipitationActiveDataset={precipitationActiveDataset} 
         />
       </div>
 
