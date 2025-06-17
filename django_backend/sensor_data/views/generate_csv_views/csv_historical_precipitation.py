@@ -14,7 +14,12 @@ class ExportPrecipitationDataView(View):
             query = """
             SELECT 
                 timestamp,
-                precipitation
+                precipitation,
+                temperature,
+                humidity,
+                wind_speed,
+                wind_direction,
+                air_pressure
             FROM sensor_data_weatherdata
             WHERE device_id = %s
             ORDER BY timestamp ASC;
@@ -48,10 +53,21 @@ class ExportPrecipitationDataView(View):
                     dt = datetime.fromtimestamp(dt, tz=cet)
                 else:
                     dt = dt.astimezone(cet)
-                data.append({
-                    'timestamp': dt.isoformat(),
-                    'precipitation_mm': row[1]
-                })
+                if dataset == 'lohnweiler':
+                    data.append({
+                        'timestamp': dt.isoformat(),
+                        'precipitation_mm': row[1],
+                        'temperature_c': row[2],
+                        'humidity_percent': row[3],
+                        'wind_speed_m_s': row[4],
+                        'wind_direction_deg': row[5],
+                        'air_pressure_hpa': row[6]
+                    })
+                else:
+                    data.append({
+                        'timestamp': dt.isoformat(),
+                        'precipitation_mm': row[1]
+                    })
             return JsonResponse(data, safe=False)
 
         response = HttpResponse(content_type='text/csv')
@@ -59,7 +75,14 @@ class ExportPrecipitationDataView(View):
         response['Content-Disposition'] = f'attachment; filename="{filename}"'
 
         writer = csv.writer(response)
-        writer.writerow(['Timestamp (CET)', 'Precipitation [mm]'])
+
+        if dataset == 'lohnweiler':
+            writer.writerow([
+                'Timestamp (CET)', 'Precipitation [mm]', 'Temperature [°C]',
+                'Humidity [%]', 'Wind Speed [m/s]', 'Wind Direction [°]', 'Air Pressure [hPa]'
+            ])
+        else:
+            writer.writerow(['Timestamp (CET)', 'Precipitation [mm]'])
 
         for row in results:
             dt = row[0]
@@ -68,6 +91,11 @@ class ExportPrecipitationDataView(View):
             else:
                 dt = dt.astimezone(cet)
             formatted_timestamp = dt.strftime('%Y-%m-%d %H:%M:%S %Z')
-            writer.writerow([formatted_timestamp, row[1]])
+            if dataset == 'lohnweiler':
+                writer.writerow([
+                    formatted_timestamp, row[1], row[2], row[3], row[4], row[5], row[6]
+                ])
+            else:
+                writer.writerow([formatted_timestamp, row[1]])
 
         return response
