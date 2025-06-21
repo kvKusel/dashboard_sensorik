@@ -21,7 +21,6 @@ ChartJS.register(
   Tooltip,
   Legend
 );
-
 const MultiLineChart = ({
   waterLevelKreisverwaltung,
   waterLevelRutsweiler,
@@ -34,103 +33,52 @@ const MultiLineChart = ({
   waterLevelHinzweiler1,
   waterLevelUntersulzbach,
   waterLevelLohnweilerRLP,
+  waterLevelOhmbachsee,
+  waterLevelNanzdietschweiler,
+  waterLevelRammelsbach,
+  waterLevelEschenau,
+  waterLevelSulzhof,
+  waterLevelOdenbachSteinbruch,
+  waterLevelOdenbach,
+  waterLevelNiedermohr,
+  waterLevelLoellbach,
   currentPeriod,
-  activeDataset = null // This will be the dataset we want to show
+  activeDataset = null,
 }) => {
-  // Create a ref to the chart instance
   const chartRef = React.useRef(null);
-  
-  // State to track which datasets are manually selected by clicking legend
   const [manuallySelected, setManuallySelected] = useState(new Set());
-  // State to track the calculated Y-axis max
   const [yAxisMax, setYAxisMax] = useState(200);
-
   const [windowSize, setWindowSize] = useState(window.innerWidth);
-  
+
   useEffect(() => {
-    const handleResize = () => {
-      setWindowSize(window.innerWidth); // Change state on resize
-    };
-  
+    const handleResize = () => setWindowSize(window.innerWidth);
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Dataset configuration with colors and keys
   const datasetConfig = [
-    
-    {
-      key: "lastValueHinzweiler1",
-      label: "Pegel Hinzweiler",
-      data: waterLevelHinzweiler1,
-      color: "rgb(2, 102, 52)"
-    },
+    { key: "lastValueHinzweiler1", label: "Pegel Hinzweiler", data: waterLevelHinzweiler1, color: "rgb(2, 102, 52)" },
+    { key: "lastValueKreimbach1", label: "Pegel Kreimbach 1", data: waterLevelKreimbach1, color: "rgba(131, 201, 104, 1)" },
+    { key: "lastValueKreimbach3", label: "Pegel Kreimbach 2", data: waterLevelKreimbach3, color: "rgba(209, 67, 91, 1)" },
+    { key: "lastValueKreimbach4", label: "Pegel Kreimbach 3", data: waterLevelKreimbach, color: "rgba(78, 159, 188, 1)" },
+    { key: "lastValueKreisverwaltung", label: "Pegel Kusel", data: waterLevelKreisverwaltung, color: "rgba(166, 109, 212, 1)" },
+    { key: "lastValueLauterecken1", label: "Pegel Lauterecken", data: waterLevelLauterecken1, color: "rgba(74, 104, 212, 1)" },
+    { key: "lastValueLohnweilerRLP", label: "Pegel Lohnweiler (Lauter)", data: waterLevelLohnweilerRLP, color: "rgba(209, 67, 91, 1)" },
+    { key: "lastValueLohnweiler1", label: "Pegel Lohnweiler (Mausbach)", data: waterLevelLohnweiler1, color: "rgb(97, 3, 3)" },
+    { key: "lastValueRutsweiler", label: "Pegel Rutsweiler a.d. Lauter", data: waterLevelRutsweiler, color: "rgba(236, 200, 91, 1)" },
+    { key: "lastValueUntersulzbach", label: "Pegel Untersulzbach", data: waterLevelUntersulzbach, color: "rgba(131, 201, 104, 1)" },
+    { key: "lastValueWolfstein", label: "Pegel Wolfstein", data: waterLevelWolfstein, color: "rgba(231, 132, 78, 1)" },
 
-
-    {
-      key: "lastValueKreimbach1",
-      label: "Pegel Kreimbach 1",
-      data: waterLevelKreimbach1,
-      color: "rgba(131, 201, 104, 1)"
-    },
-    {
-      key: "lastValueKreimbach3",
-      label: "Pegel Kreimbach 2",
-      data: waterLevelKreimbach3,
-      color: "rgba(209, 67, 91, 1)"
-    },
-    {
-      key: "lastValueKreimbach4",
-      label: "Pegel Kreimbach 3",
-      data: waterLevelKreimbach,
-      color: "rgba(78, 159, 188, 1)"
-    },
-
-    {
-      key: "lastValueKreisverwaltung",
-      label: "Pegel Kusel",
-      data: waterLevelKreisverwaltung,
-      color: "rgba(166, 109, 212, 1)"
-    },
-        {
-      key: "lastValueLauterecken1",
-      label: "Pegel Lauterecken",
-      data: waterLevelLauterecken1,
-      color: "rgba(74, 104, 212, 1)"
-    },
-
-        {
-      key: "lastValueLohnweilerRLP",
-      label: "Pegel Lohnweiler (Lauter)",
-      data: waterLevelLohnweilerRLP,
-      color: "rgba(209, 67, 91, 1)"
-    },
-    {
-      key: "lastValueLohnweiler1",
-      label: "Pegel Lohnweiler (Mausbach)",
-      data: waterLevelLohnweiler1,
-      color: "rgb(97, 3, 3)"
-    },
-        {
-      key: "lastValueRutsweiler",
-      label: "Pegel Rutsweiler a.d. Lauter",
-      data: waterLevelRutsweiler,
-      color: "rgba(236, 200, 91, 1)"
-    },
-    {
-      key: "lastValueUntersulzbach",
-      label: "Pegel Untersulzbach",
-      data: waterLevelUntersulzbach,
-      color: "rgba(131, 201, 104, 1)"
-    },
-
-        {
-      key: "lastValueWolfstein",
-      label: "Pegel Wolfstein",
-      data: waterLevelWolfstein,
-      color: "rgba(231, 132, 78, 1)"
-    },
-
+    // New sensors
+    { key: "lastValueOhmbachsee", label: "Pegel Ohmbachsee (Ohmbach)", data: waterLevelOhmbachsee, color: "rgba(115, 134, 213, 1)" },
+    { key: "lastValueNanzdietschweiler", label: "Pegel Nanzdietschweiler", data: waterLevelNanzdietschweiler, color: "rgba(245, 184, 112, 1)" },
+    { key: "lastValueRammelsbach", label: "Pegel Rammelsbach (Kuselbach)", data: waterLevelRammelsbach, color: "rgba(128, 222, 234, 1)" },
+    { key: "lastValueEschenau", label: "Pegel Eschenau", data: waterLevelEschenau, color: "rgba(199, 139, 234, 1)" },
+    { key: "lastValueSulzhof", label: "Pegel Sulzhof (Sulzbach)", data: waterLevelSulzhof, color: "rgba(255, 111, 145, 1)" },
+    { key: "lastValueOdenbachSteinbruch", label: "Pegel Odenbach / Steinbruch (Odenbach)", data: waterLevelOdenbachSteinbruch, color: "rgba(101, 178, 112, 1)" },
+    { key: "lastValueOdenbach", label: "Pegel Odenbach", data: waterLevelOdenbach, color: "rgba(255, 193, 7, 1)" },
+    { key: "lastValueNiedermohr", label: "Pegel Niedermohr (Mohrbach)", data: waterLevelNiedermohr, color: "rgba(0, 188, 212, 1)" },
+    { key: "lastValueLoellbach", label: "Pegel Löllbach (Jeckenbach)", data: waterLevelLoellbach, color: "rgba(233, 30, 99, 1)" },
   ];
 
 const formatDatasetLabel = (datasetKey) => {
@@ -155,15 +103,20 @@ const formatDatasetLabel = (datasetKey) => {
 
   let [, location, number] = match;
 
-  const corrections = {
-    Rutsweiler: "Rutsweiler a.d Lauter",
-    Kreisverwaltung: "Kusel (Kuselbach)",
-    Lohnweiler: "Lohnweiler (Mausbach)",
-    Lauterecken: "Lauterecken",
-    Hinzweiler: "Hinzweiler",
-      LohnweilerRLP: "Lohnweiler (Lauter)",
-
-  };
+const corrections = {
+  Rutsweiler: "Rutsweiler a.d Lauter",
+  Kreisverwaltung: "Kusel (Kuselbach)",
+  Lohnweiler: "Lohnweiler (Mausbach)",
+  Lauterecken: "Lauterecken",
+  Hinzweiler: "Hinzweiler (Talbach)",
+  LohnweilerRLP: "Lohnweiler (Lauter)",
+  Ohmbachsee: "Ohmbachsee (Ohmbach)",
+  Rammelsbach: "Rammelsbach (Kuselbach)",
+  Sulzhof: "Sulzhof (Sulzbach)",
+  Niedermohr: "Niedermohr (Mohrbach)",
+  Loellbach: "Löllbach (Jeckenbach)",
+  OdenbachSteinbruch: "Odenbach / Steinbruch (Odenbach)",
+};
 
   const corrected = corrections[location] || location;
 

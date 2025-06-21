@@ -70,20 +70,32 @@ const PegelWolfsteinMap = ({ hoveredMarkerId, selectedMarkerId, onMarkerClick, s
 // };
 
 
-  const markers = [
-    { id: "wolfstein", position: [49.581045, 7.619593], label: "Wolfstein", queryType: "lastValueWolfstein", },
-    { id: "rutsweiler", position: [49.566260, 7.623804], label: "Rutsweiler a.d. Lauter", queryType: "lastValueRutsweiler", },
-    { id: "kreimbach4", position: [49.554057, 7.621883], label: "Kreimbach 3", queryType: "lastValueKreimbach4", },
-    { id: "lauterecken", position: [49.650457589739846, 7.590545488872102], label: "Lauterecken", queryType: "lastValueLauterecken1", },
-    { id: "kreimbach1", position: [49.54848915352638, 7.631195812962766], label: "Kreimbach 1", queryType: "lastValueKreimbach1", },
-    { id: "kreimbach3", position: [49.556388641429436, 7.636587365546659], label: "Kreimbach 2", queryType: "lastValueKreimbach3", }, 
-    { id: "kusel", position: [49.539810952844316, 7.396764597634942], label: "Kusel", queryType: "lastValueKreisverwaltung", },
-    { id: "lohnweiler1", position: [49.63553061963123, 7.59709411130715], label: "Lohnweiler", queryType: "lastValueLohnweiler1", },
-    { id: "hinzweiler1", position: [49.589394954381816, 7.548317327514346], label: "Hinzweiler", queryType: "lastValueHinzweiler1", },
-    { id: "untersulzbach", position: [49.528584, 7.663114], label: "Untersulzbach", queryType: "lastValueUntersulzbach", }, 
-    { id: "lohnweilerRLP", position: [49.636245, 7.600337], label: "Lohnweiler (Lauter)", queryType: "lastValueLohnweilerRLP", },
-  ];
-  
+const markers = [
+  { id: "wolfstein", position: [49.581045, 7.619593], label: "Wolfstein", queryType: "lastValueWolfstein" },
+  { id: "rutsweiler", position: [49.566260, 7.623804], label: "Rutsweiler a.d. Lauter", queryType: "lastValueRutsweiler" },
+  { id: "kreimbach4", position: [49.554057, 7.621883], label: "Kreimbach 3", queryType: "lastValueKreimbach4" },
+  { id: "lauterecken", position: [49.650457589739846, 7.590545488872102], label: "Lauterecken", queryType: "lastValueLauterecken1" },
+  { id: "kreimbach1", position: [49.54848915352638, 7.631195812962766], label: "Kreimbach 1", queryType: "lastValueKreimbach1" },
+  { id: "kreimbach3", position: [49.556388641429436, 7.636587365546659], label: "Kreimbach 2", queryType: "lastValueKreimbach3" },
+  { id: "kusel", position: [49.539810952844316, 7.396764597634942], label: "Kusel", queryType: "lastValueKreisverwaltung" },
+  { id: "lohnweiler1", position: [49.63553061963123, 7.59709411130715], label: "Lohnweiler", queryType: "lastValueLohnweiler1" },
+  { id: "hinzweiler1", position: [49.589394954381816, 7.548317327514346], label: "Hinzweiler", queryType: "lastValueHinzweiler1" },
+  { id: "untersulzbach", position: [49.528584, 7.663114], label: "Untersulzbach", queryType: "lastValueUntersulzbach" },
+  { id: "lohnweilerRLP", position: [49.636245, 7.600337], label: "Lohnweiler (Lauter)", queryType: "lastValueLohnweilerRLP" },
+
+  // ✅ NEW markers
+
+  { id: "ohmbachsee", position: [49.421436, 7.382018], label: "Ohmbachsee", queryType: "lastValueOhmbachsee" },
+  { id: "nanzdietschweiler", position: [49.445651, 7.443034], label: "Nanzdietschweiler", queryType: "lastValueNanzdietschweiler" },
+  { id: "rammelsbach", position: [49.544549, 7.448862], label: "Rammelsbach", queryType: "lastValueRammelsbach" },
+  { id: "eschenau", position: [49.599899, 7.482403], label: "Eschenau", queryType: "lastValueEschenau" },
+  { id: "sulzhof", position: [49.644886, 7.620666], label: "Sulzhof", queryType: "lastValueSulzhof" },
+  { id: "odenbachSteinbruch", position: [49.678306, 7.650426], label: "Odenbach / Steinbruch", queryType: "lastValueOdenbachSteinbruch" },
+  { id: "odenbach", position: [49.688925, 7.652256], label: "Odenbach", queryType: "lastValueOdenbach" },
+  { id: "niedermohr", position: [49.459274, 7.464442], label: "Niedermohr", queryType: "lastValueNiedermohr" },
+  { id: "loellbach", position: [49.703048, 7.598709], label: "Löllbach", queryType: "lastValueLoellbach" }
+];
+
 
 
   // const [mapCenter, setMapCenter] = useState(window.innerWidth < 768 ? [49.500444, 7.49246] : [49.560144, 7.49246]);

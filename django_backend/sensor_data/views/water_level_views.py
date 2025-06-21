@@ -50,6 +50,16 @@ class waterLevelDataView(View):
                 "water_level_hinzweiler_1": "6749E17419910043",
                 "water_level_untersulzbach": "pegel_untersulzbach",
                 "water_level_lohnweiler_rlp": "pegel_lohnweiler_land",
+                
+                "water_level_ohmbachsee": "pegel_stausee_ohmbach",
+                "water_level_nanzdietschweiler": "pegel_nanzdietschweiler",
+                "water_level_rammelsbach": "pegel_rammelsbach",
+                "water_level_eschenau": "pegel_eschenau",
+                "water_level_sulzhof": "pegel_sulzhof",
+                "water_level_odenbach_steinbruch": "pegel_odenbach_steinbruch",
+                "water_level_odenbach": "pegel_odenbach",
+                "water_level_niedermohr": "pegel_niedermohr",
+                "water_level_loellbach": "pegel_loellbach",
 
 
 

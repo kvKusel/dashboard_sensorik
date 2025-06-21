@@ -30,6 +30,17 @@ const WaterLevelSubpage = ({
   waterLevelHinzweiler1,
   waterLevelUntersulzbach,
   waterLevelLohnweilerRLP,
+  waterLevelOhmbachsee,
+waterLevelNanzdietschweiler,
+waterLevelRammelsbach,
+waterLevelEschenau,
+waterLevelSulzhof,
+waterLevelOdenbachSteinbruch,
+waterLevelOdenbach,
+waterLevelNiedermohr,
+waterLevelLoellbach,
+
+
   currentPeriod,
   onPeriodChange,
   historicalPrecipitationWolfstein,
@@ -138,6 +149,18 @@ const lastValueLohnweilerRLP =
     : null;
 
 
+  const lastValueOhmbachsee = waterLevelOhmbachsee?.at(-1) ?? null;
+const lastValueNanzdietschweiler = waterLevelNanzdietschweiler?.at(-1) ?? null;
+const lastValueRammelsbach = waterLevelRammelsbach?.at(-1) ?? null;
+const lastValueEschenau = waterLevelEschenau?.at(-1) ?? null;
+const lastValueSulzhof = waterLevelSulzhof?.at(-1) ?? null;
+const lastValueOdenbachSteinbruch = waterLevelOdenbachSteinbruch?.at(-1) ?? null;
+const lastValueOdenbach = waterLevelOdenbach?.at(-1) ?? null;
+const lastValueNiedermohr = waterLevelNiedermohr?.at(-1) ?? null;
+const lastValueLoellbach = waterLevelLoellbach?.at(-1) ?? null;
+
+
+
   ///////////////////////////////////            set up for the dynamic markers on the open street map        ///////////////////////////////////////////////
 
   const [hoveredMarkerId, setHoveredMarkerId] = useState(null);
@@ -162,6 +185,15 @@ const lastValueMap = {
   lastValueHinzweiler1,
   lastValueUntersulzbach,
   lastValueLohnweilerRLP,
+    lastValueOhmbachsee,
+  lastValueNanzdietschweiler,
+  lastValueRammelsbach,
+  lastValueEschenau,
+  lastValueSulzhof,
+  lastValueOdenbachSteinbruch,
+  lastValueOdenbach,
+  lastValueNiedermohr,
+  lastValueLoellbach,
 };
 
 const lastValue = selectedRow !== "default" ? lastValueMap[selectedRow] : null;
@@ -172,51 +204,216 @@ const handleRowClick = (queryType) => {
   setActiveDataset(queryType);
 };
 
+const nameMapping = {
+  lastValueWolfstein: "Wolfstein",
+  lastValueRutsweiler: "Rutsweiler a.d. Lauter",
+  lastValueKreimbach1: "Kreimbach 1",
+  lastValueKreimbach3: "Kreimbach 2 (Kreimbach)",
+  lastValueKreimbach4: "Kreimbach 3",
+  lastValueLauterecken1: "Lauterecken",
+  lastValueKreisverwaltung: "Kusel (Kuselbach)",
+  lastValueLohnweiler1: "Lohnweiler (Mausbach)",
+  lastValueHinzweiler1: "Hinzweiler (Talbach)",
 
-  const nameMapping = {
-    lastValueWolfstein: "Wolfstein",
-    lastValueRutsweiler: "Rutsweiler a.d. Lauter",
-    lastValueKreimbach1: "Kreimbach 1",
-    lastValueKreimbach3: "Kreimbach 2 (Kreimbach)",
-    lastValueKreimbach4: "Kreimbach 3",
-    lastValueLauterecken1: "Lauterecken",
-    lastValueKreisverwaltung: "Kusel (Kuselbach)",
-    lastValueLohnweiler1: "Lohnweiler (Mausbach)",
-    lastValueHinzweiler1: "Hinzweiler (Talbach)",
-lastValueUntersulzbach: (
-  <>
-    Untersulzbach{" "}
-    <span style={{ fontSize: "0.75rem" }}>
-      [
-      <a
-        href="https://wasserportal.rlp-umwelt.de/"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ color: "#555", textDecoration: "underline" }}
-      >
-        Quelle: LfU RLP
-      </a>
-      ]
-    </span>
-  </>
-),
-lastValueLohnweilerRLP: (
-  <>
-    Lohnweiler (Lauter){" "}
-    <span style={{ fontSize: "0.75rem" }}>
-      [
-      <a
-        href="https://wasserportal.rlp-umwelt.de/"
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{ color: "#555", textDecoration: "underline" }}
-      >
-        Quelle: LfU RLP
-      </a>
-      ]
-    </span>
-  </>
-),  };
+  lastValueUntersulzbach: (
+    <>
+      Untersulzbach{" "}
+      <span style={{ fontSize: "0.75rem" }}>
+        [
+        <a
+          href="https://wasserportal.rlp-umwelt.de/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#555", textDecoration: "underline" }}
+        >
+          Quelle: LfU RLP
+        </a>
+        ]
+      </span>
+    </>
+  ),
+
+  lastValueLohnweilerRLP: (
+    <>
+      Lohnweiler (Lauter){" "}
+      <span style={{ fontSize: "0.75rem" }}>
+        [
+        <a
+          href="https://wasserportal.rlp-umwelt.de/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#555", textDecoration: "underline" }}
+        >
+          Quelle: LfU RLP
+        </a>
+        ]
+      </span>
+    </>
+  ),
+
+  lastValueOhmbachsee: (
+    <>
+      Ohmbachsee (Ohmbach){" "}
+      <span style={{ fontSize: "0.75rem" }}>
+        [
+        <a
+          href="https://wasserportal.rlp-umwelt.de/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#555", textDecoration: "underline" }}
+        >
+          Quelle: LfU RLP
+        </a>
+        ]
+      </span>
+    </>
+  ),
+
+  lastValueNanzdietschweiler: (
+    <>
+      Nanzdietschweiler{" "}
+      <span style={{ fontSize: "0.75rem" }}>
+        [
+        <a
+          href="https://wasserportal.rlp-umwelt.de/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#555", textDecoration: "underline" }}
+        >
+          Quelle: LfU RLP
+        </a>
+        ]
+      </span>
+    </>
+  ),
+
+  lastValueRammelsbach: (
+    <>
+      Rammelsbach (Kuselbach){" "}
+      <span style={{ fontSize: "0.75rem" }}>
+        [
+        <a
+          href="https://wasserportal.rlp-umwelt.de/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#555", textDecoration: "underline" }}
+        >
+          Quelle: LfU RLP
+        </a>
+        ]
+      </span>
+    </>
+  ),
+
+  lastValueEschenau: (
+    <>
+      Eschenau{" "}
+      <span style={{ fontSize: "0.75rem" }}>
+        [
+        <a
+          href="https://wasserportal.rlp-umwelt.de/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#555", textDecoration: "underline" }}
+        >
+          Quelle: LfU RLP
+        </a>
+        ]
+      </span>
+    </>
+  ),
+
+  lastValueSulzhof: (
+    <>
+      Sulzhof (Sulzbach){" "}
+      <span style={{ fontSize: "0.75rem" }}>
+        [
+        <a
+          href="https://wasserportal.rlp-umwelt.de/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#555", textDecoration: "underline" }}
+        >
+          Quelle: LfU RLP
+        </a>
+        ]
+      </span>
+    </>
+  ),
+
+  lastValueOdenbachSteinbruch: (
+    <>
+      Odenbach / Steinbruch (Odenbach){" "}
+      <span style={{ fontSize: "0.75rem" }}>
+        [
+        <a
+          href="https://wasserportal.rlp-umwelt.de/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#555", textDecoration: "underline" }}
+        >
+          Quelle: LfU RLP
+        </a>
+        ]
+      </span>
+    </>
+  ),
+
+  lastValueOdenbach: (
+    <>
+      Odenbach{" "}
+      <span style={{ fontSize: "0.75rem" }}>
+        [
+        <a
+          href="https://wasserportal.rlp-umwelt.de/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#555", textDecoration: "underline" }}
+        >
+          Quelle: LfU RLP
+        </a>
+        ]
+      </span>
+    </>
+  ),
+
+  lastValueNiedermohr: (
+    <>
+      Niedermohr (Mohrbach){" "}
+      <span style={{ fontSize: "0.75rem" }}>
+        [
+        <a
+          href="https://wasserportal.rlp-umwelt.de/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#555", textDecoration: "underline" }}
+        >
+          Quelle: LfU RLP
+        </a>
+        ]
+      </span>
+    </>
+  ),
+
+  lastValueLoellbach: (
+    <>
+      Löllbach (Jeckenbach){" "}
+      <span style={{ fontSize: "0.75rem" }}>
+        [
+        <a
+          href="https://wasserportal.rlp-umwelt.de/"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "#555", textDecoration: "underline" }}
+        >
+          Quelle: LfU RLP
+        </a>
+        ]
+      </span>
+    </>
+  ),
+};
+
 
   //setup to handle zooming into a marker from both the map and the table when marker or row is clicked
   const mapRef = useRef();
@@ -311,6 +508,60 @@ lastValueLohnweilerRLP: (
       { limit: 250, color: "#ECC85B", showTick: true },
       { limit: 300, color: "#E7844E", showTick: true },
     ],
+    lastValueOhmbachsee: [
+      { limit: 200, color: "#83C968", showTick: true },
+      { limit: 250, color: "#ECC85B", showTick: true },
+      { limit: 300, color: "#E7844E", showTick: true },
+],
+
+lastValueNanzdietschweiler: [
+      { limit: 200, color: "#83C968", showTick: true },
+      { limit: 250, color: "#ECC85B", showTick: true },
+      { limit: 300, color: "#E7844E", showTick: true },
+],
+
+lastValueRammelsbach: [
+      { limit: 200, color: "#83C968", showTick: true },
+      { limit: 250, color: "#ECC85B", showTick: true },
+      { limit: 300, color: "#E7844E", showTick: true },
+],
+
+lastValueEschenau: [
+      { limit: 200, color: "#83C968", showTick: true },
+      { limit: 250, color: "#ECC85B", showTick: true },
+      { limit: 300, color: "#E7844E", showTick: true },
+],
+
+lastValueSulzhof: [
+      { limit: 200, color: "#83C968", showTick: true },
+      { limit: 250, color: "#ECC85B", showTick: true },
+      { limit: 300, color: "#E7844E", showTick: true },
+],
+
+lastValueOdenbachSteinbruch: [
+      { limit: 200, color: "#83C968", showTick: true },
+      { limit: 250, color: "#ECC85B", showTick: true },
+      { limit: 300, color: "#E7844E", showTick: true },
+],
+
+lastValueOdenbach: [
+      { limit: 200, color: "#83C968", showTick: true },
+      { limit: 250, color: "#ECC85B", showTick: true },
+      { limit: 300, color: "#E7844E", showTick: true },
+],
+
+lastValueNiedermohr: [
+      { limit: 200, color: "#83C968", showTick: true },
+      { limit: 250, color: "#ECC85B", showTick: true },
+      { limit: 300, color: "#E7844E", showTick: true },
+],
+
+lastValueLoellbach: [
+      { limit: 200, color: "#83C968", showTick: true },
+      { limit: 250, color: "#ECC85B", showTick: true },
+      { limit: 300, color: "#E7844E", showTick: true },
+],
+
   };
 
   ///////////////////////////////////        END OF set up for the table that displays all sensors         ///////////////////////////////////////////////
@@ -391,6 +642,18 @@ lastValueLohnweilerRLP: (
               lastValueHinzweiler1={lastValueHinzweiler1}
               lastValueUntersulzbach={lastValueUntersulzbach}
               lastValueLohnweilerRLP={lastValueLohnweilerRLP}
+
+                lastValueOhmbachsee={lastValueOhmbachsee}
+  lastValueNanzdietschweiler={lastValueNanzdietschweiler}
+  lastValueRammelsbach={lastValueRammelsbach}
+  lastValueEschenau={lastValueEschenau}
+  lastValueSulzhof={lastValueSulzhof}
+  lastValueOdenbachSteinbruch={lastValueOdenbachSteinbruch}
+  lastValueOdenbach={lastValueOdenbach}
+  lastValueNiedermohr={lastValueNiedermohr}
+  lastValueLoellbach={lastValueLoellbach}
+
+
               setHoveredMarkerId={setHoveredMarkerId}
               setSelectedMarkerId={setSelectedMarkerId}
               onSelectPosition={handleMarkerClick}
@@ -509,6 +772,18 @@ lastValueLohnweilerRLP: (
               waterLevelHinzweiler1={waterLevelHinzweiler1}
               waterLevelUntersulzbach={waterLevelUntersulzbach}
               waterLevelLohnweilerRLP={waterLevelLohnweilerRLP} 
+
+                waterLevelOhmbachsee={waterLevelOhmbachsee}
+  waterLevelNanzdietschweiler={waterLevelNanzdietschweiler}
+  waterLevelRammelsbach={waterLevelRammelsbach}
+  waterLevelEschenau={waterLevelEschenau}
+  waterLevelSulzhof={waterLevelSulzhof}
+  waterLevelOdenbachSteinbruch={waterLevelOdenbachSteinbruch}
+  waterLevelOdenbach={waterLevelOdenbach}
+  waterLevelNiedermohr={waterLevelNiedermohr}
+  waterLevelLoellbach={waterLevelLoellbach}
+
+
               currentPeriod={currentPeriod}
               activeDataset={activeDataset}
             />
@@ -571,22 +846,35 @@ lastValueLohnweilerRLP: (
         </Dropdown>
       </div>
 
-      {/* Centered Attribution on larger screens */}
-      {(activeDataset === "lastValueLohnweilerRLP" || activeDataset === "lastValueUntersulzbach") && (
-        <div
-          className="d-none d-sm-block position-absolute top-50 start-50 translate-middle"
-          style={{ fontSize: "0.9rem" }}
-        >
-          <a
-            href="https://wasserportal.rlp-umwelt.de/"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: "#555", textDecoration: "underline" }}
-          >
-            Quelle: LfU RLP
-          </a>
-        </div>
-      )}
+{/* Centered Attribution on larger screens */}
+{[
+  "lastValueLohnweilerRLP",
+  "lastValueUntersulzbach",
+  "lastValueOhmbachsee",
+  "lastValueNanzdietschweiler",
+  "lastValueRammelsbach",
+  "lastValueEschenau",
+  "lastValueSulzhof",
+  "lastValueOdenbachSteinbruch",
+  "lastValueOdenbach",
+  "lastValueNiedermohr",
+  "lastValueLoellbach",
+].includes(activeDataset) && (
+  <div
+    className="d-none d-sm-block position-absolute top-50 start-50 translate-middle"
+    style={{ fontSize: "0.9rem" }}
+  >
+    <a
+      href="https://wasserportal.rlp-umwelt.de/"
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{ color: "#555", textDecoration: "underline" }}
+    >
+      Quelle: LfU RLP
+    </a>
+  </div>
+)}
+
 
       
 
@@ -594,8 +882,20 @@ lastValueLohnweilerRLP: (
       <DownloadIcon className="pe-2" activeDataset={activeDataset} />
     </div>
 
-    {/* Attribution on mobile BELOW the dropdown */}
-{(activeDataset === "lastValueLohnweilerRLP" || activeDataset === "lastValueUntersulzbach") && (
+{/* Attribution on mobile BELOW the dropdown */}
+{[
+  "lastValueLohnweilerRLP",
+  "lastValueUntersulzbach",
+  "lastValueOhmbachsee",
+  "lastValueNanzdietschweiler",
+  "lastValueRammelsbach",
+  "lastValueEschenau",
+  "lastValueSulzhof",
+  "lastValueOdenbachSteinbruch",
+  "lastValueOdenbach",
+  "lastValueNiedermohr",
+  "lastValueLoellbach",
+].includes(activeDataset) && (
   <div className="d-block d-sm-none mt-2 ps-2">
     <a
       href="https://wasserportal.rlp-umwelt.de/"

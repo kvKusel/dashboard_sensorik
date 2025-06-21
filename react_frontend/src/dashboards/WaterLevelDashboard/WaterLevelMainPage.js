@@ -9,8 +9,10 @@ const API_URL = process.env.REACT_APP_API_URL.endsWith('/')
   : `${process.env.REACT_APP_API_URL}/`;
 
 const WaterLevelDashboard = () => {
+
   const [isLoading, setIsLoading] = useState(true);
 
+  //water level data
   const [waterLevelKreisverwaltung, setWaterLevelKreisverwaltung] = useState([]);
   const [waterLevelRutsweiler, setWaterLevelRutsweiler] = useState([]);
   const [waterLevelKreimbachKaulbach, setWaterLevelKreimbachKaulbach] = useState([]);
@@ -22,6 +24,15 @@ const WaterLevelDashboard = () => {
   const [waterLevelHinzweiler1, setWaterLevelHinzweiler1] = useState([]);
   const [waterLevelUntersulzbach, setWaterLevelUntersulzbach] = useState([]);
   const [waterLevelLohnweilerRLP, setWaterLevelLohnweilerRLP] = useState([]);
+  const [waterLevelOhmbachsee, setWaterLevelOhmbachsee] = useState([]);
+  const [waterLevelNanzdietschweiler, setWaterLevelNanzdietschweiler] = useState([]);
+  const [waterLevelRammelsbach, setWaterLevelRammelsbach] = useState([]);
+  const [waterLevelEschenau, setWaterLevelEschenau] = useState([]);
+  const [waterLevelSulzhof, setWaterLevelSulzhof] = useState([]);
+  const [waterLevelOdenbachSteinbruch, setWaterLevelOdenbachSteinbruch] = useState([]);
+  const [waterLevelOdenbach, setWaterLevelOdenbach] = useState([]);
+  const [waterLevelNiedermohr, setWaterLevelNiedermohr] = useState([]);
+  const [waterLevelLoellbach, setWaterLevelLoellbach] = useState([]);
 
   const [precipitationWolfsteinHistorical, setPrecipitationWolfsteinHistorical] = useState([]);
   const [lohnweilerPrecipitation, setLohnweilerPrecipitation] = useState([]);
@@ -44,16 +55,36 @@ const WaterLevelDashboard = () => {
 
       const [
         kv, rutsweiler, kreimbachK, wolfstein, lauterecken1, kreimbach1,
-        kreimbach3, lohnweiler1, hinzweiler1, untersulzbach, lohnweilerRLP
+        kreimbach3, lohnweiler1, hinzweiler1, untersulzbach, lohnweilerRLP,
+        ohmbachsee, nanzdietschweiler, rammelsbach, eschenau, sulzhof,
+        odenbachSteinbruch, odenbach, niedermohr, loellbach
       ] = await Promise.all([
-        fetch("water_level_kv"), fetch("water_level_rutsweiler"), fetch("water_level_kreimbach_kaulbach"),
-        fetch("water_level_wolfstein"), fetch("water_level_lauterecken_1"), fetch("water_level_kreimbach_1"),
-        fetch("water_level_kreimbach_3"), fetch("water_level_lohnweiler_1"), fetch("water_level_hinzweiler_1"),
-        fetch("water_level_untersulzbach"), fetch("water_level_lohnweiler_rlp")
+        fetch("water_level_kv"), 
+        fetch("water_level_rutsweiler"), 
+        fetch("water_level_kreimbach_kaulbach"),
+        fetch("water_level_wolfstein"), 
+        fetch("water_level_lauterecken_1"), 
+        fetch("water_level_kreimbach_1"),
+        fetch("water_level_kreimbach_3"), 
+        fetch("water_level_lohnweiler_1"), 
+        fetch("water_level_hinzweiler_1"),
+        fetch("water_level_untersulzbach"), 
+        fetch("water_level_lohnweiler_rlp"),
+        // New devices
+        fetch("water_level_ohmbachsee"),
+        fetch("water_level_nanzdietschweiler"),
+        fetch("water_level_rammelsbach"),
+        fetch("water_level_eschenau"),
+        fetch("water_level_sulzhof"),
+        fetch("water_level_odenbach_steinbruch"),
+        fetch("water_level_odenbach"),
+        fetch("water_level_niedermohr"),
+        fetch("water_level_loellbach")
       ]);
 
       const map = (d) => d.data.map(item => ({ time: item.timestamp, value: item.water_level_value }));
 
+      // Existing devices
       setWaterLevelKreisverwaltung(map(kv));
       setWaterLevelRutsweiler(map(rutsweiler));
       setWaterLevelKreimbachKaulbach(map(kreimbachK));
@@ -66,33 +97,43 @@ const WaterLevelDashboard = () => {
       setWaterLevelUntersulzbach(map(untersulzbach));
       setWaterLevelLohnweilerRLP(map(lohnweilerRLP));
 
-    const precipitationResponse = await axios.get(`${API_URL}api/historical-precipitation/?time_range=${timePeriodHistoricalPrecipitation}`);
-    const timeZone = 'Europe/Berlin';
-    const transform = (data) => ({
-      labels: data.map(e => format(toZonedTime(new Date(e.timestamp * 1000), timeZone), 'yyyy-MM-dd HH:mm')),
-      precipitationValues: data.map(e => e.precipitation)
-    });
-    const wolfsteinData = transform(precipitationResponse.data);
-    setPrecipitationWolfsteinHistorical(wolfsteinData);
-    
+      // New devices
+      setWaterLevelOhmbachsee(map(ohmbachsee));
+      setWaterLevelNanzdietschweiler(map(nanzdietschweiler));
+      setWaterLevelRammelsbach(map(rammelsbach));
+      setWaterLevelEschenau(map(eschenau));
+      setWaterLevelSulzhof(map(sulzhof));
+      setWaterLevelOdenbachSteinbruch(map(odenbachSteinbruch));
+      setWaterLevelOdenbach(map(odenbach));
+      setWaterLevelNiedermohr(map(niedermohr));
+      setWaterLevelLoellbach(map(loellbach));
 
-    const lohnweilerResponse = await axios.get(`${API_URL}api/lohnweiler-weather-data/?time_range=${timePeriodHistoricalPrecipitation}`);
-    const transformLohnweiler = (data) => ({
-      labels: data.map(e => format(toZonedTime(new Date(e.timestamp), timeZone), 'yyyy-MM-dd HH:mm')),
-      precipitationValues: data.map(e => e.precipitation)
-    });
+      // weather station wolfstein
+      const precipitationResponse = await axios.get(`${API_URL}api/historical-precipitation/?time_range=${timePeriodHistoricalPrecipitation}`);
+      const timeZone = 'Europe/Berlin';
+      const transform = (data) => ({
+        labels: data.map(e => format(toZonedTime(new Date(e.timestamp * 1000), timeZone), 'yyyy-MM-dd HH:mm')),
+        precipitationValues: data.map(e => e.precipitation)
+      });
+      const wolfsteinData = transform(precipitationResponse.data);
+      setPrecipitationWolfsteinHistorical(wolfsteinData);
+      
+      // weather station lohnweiler
+      const lohnweilerResponse = await axios.get(`${API_URL}api/lohnweiler-weather-data/?time_range=${timePeriodHistoricalPrecipitation}`);
+      const transformLohnweiler = (data) => ({
+        labels: data.map(e => format(toZonedTime(new Date(e.timestamp), timeZone), 'yyyy-MM-dd HH:mm')),
+        precipitationValues: data.map(e => e.precipitation)
+      });
 
-    const lohnweilerData = transformLohnweiler(lohnweilerResponse.data);
-    setLohnweilerPrecipitation(lohnweilerData);
+      const lohnweilerData = transformLohnweiler(lohnweilerResponse.data);
+      setLohnweilerPrecipitation(lohnweilerData);
 
-
-
-  } catch (e) {
-    console.error("Error fetching data:", e);
-  } finally {
-    setIsLoading(false);
-  }
-};
+    } catch (e) {
+      console.error("Error fetching data:", e);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handlePeriodChange = (newPeriod) => {
     setPendingScroll('multiline-chart');
@@ -130,9 +171,6 @@ const WaterLevelDashboard = () => {
     fetchAllData();
   }, [timePeriod, timePeriodHistoricalPrecipitation]);
 
-
-
-
   return (
     <div style={{ minHeight: "80vh" }}>
       {isLoading ? (
@@ -152,6 +190,15 @@ const WaterLevelDashboard = () => {
           waterLevelHinzweiler1={waterLevelHinzweiler1}
           waterLevelUntersulzbach={waterLevelUntersulzbach}
           waterLevelLohnweilerRLP={waterLevelLohnweilerRLP}
+          waterLevelOhmbachsee={waterLevelOhmbachsee}
+          waterLevelNanzdietschweiler={waterLevelNanzdietschweiler}
+          waterLevelRammelsbach={waterLevelRammelsbach}
+          waterLevelEschenau={waterLevelEschenau}
+          waterLevelSulzhof={waterLevelSulzhof}
+          waterLevelOdenbachSteinbruch={waterLevelOdenbachSteinbruch}
+          waterLevelOdenbach={waterLevelOdenbach}
+          waterLevelNiedermohr={waterLevelNiedermohr}
+          waterLevelLoellbach={waterLevelLoellbach}
           currentPeriod={timePeriod}
           onPeriodChange={handlePeriodChange}
           historicalPrecipitationWolfstein={precipitationWolfsteinHistorical}

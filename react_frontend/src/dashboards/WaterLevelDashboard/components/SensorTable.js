@@ -13,136 +13,71 @@ const SensorTable = ({
   lastValueHinzweiler1,
   lastValueUntersulzbach,
   lastValueLohnweilerRLP,
+  lastValueOhmbachsee,
+  lastValueNanzdietschweiler,
+  lastValueRammelsbach,
+  lastValueEschenau,
+  lastValueSulzhof,
+  lastValueOdenbachSteinbruch,
+  lastValueOdenbach,
+  lastValueNiedermohr,
+  lastValueLoellbach,
   setHoveredMarkerId,
   setSelectedMarkerId,
   onSelectPosition,
-    selectedRow,
-      hoveredMarkerId, 
-
+  selectedRow,
+  hoveredMarkerId,
 }) => {
   // Helper function to determine sensor status color based on timestamp
   const getSensorStatusColor = (timestamp) => {
     if (!timestamp) return "#E7844E"; // Red if no timestamp
-    
     const now = new Date();
     const sensorTime = new Date(timestamp);
-    const timeDifferenceMs = now - sensorTime;
-    const timeDifferenceHours = timeDifferenceMs / (1000 * 60 * 60);
-    
-    if (timeDifferenceHours < 2) {
-      return "#83C968"; // Green - less than 2 hours
-    } else if (timeDifferenceHours < 24) {
-      return "#ECC85B"; // Yellow - between 2 hours and 1 day
-    } else {
-      return "#E7844E"; // Red - more than 1 day
-    }
+    const timeDifferenceHours = (now - sensorTime) / (1000 * 60 * 60);
+    if (timeDifferenceHours < 2) return "#83C968";
+    if (timeDifferenceHours < 24) return "#ECC85B";
+    return "#E7844E";
   };
 
+  const createRow = (id, name, queryType, position, valueObj, source, sourceUrl) => ({
+    id,
+    name,
+    queryType,
+    position,
+    value: valueObj?.value ? Number(valueObj.value) : 0,
+    timestamp: valueObj?.time,
+    source,
+    sourceUrl,
+  });
+
   const data = [
-    {
-      id: "untersulzbach",
-      name: "Untersulzbach",
-      source: "LfU RLP",
-      sourceUrl: "https://wasserportal.rlp-umwelt.de/",
-      queryType: "lastValueUntersulzbach",
-      position: [49.528584, 7.663114], 
-      value: lastValueUntersulzbach?.value
-        ? Number(lastValueUntersulzbach.value)
-        : 0,
-      timestamp: lastValueUntersulzbach?.time,
-    },
-    {
-      id: "kreimbach1",
-      name: "Kreimbach 1",
-      queryType: "lastValueKreimbach1",
-      position: [49.54844915352638, 7.631175812962766],
-      value: lastValueKreimbach1?.value ? Number(lastValueKreimbach1.value) : 0,
-      timestamp: lastValueKreimbach1?.time,
-    },
-    {
-      id: "kreimbach4",
-      name: "Kreimbach 3",
-      queryType: "lastValueKreimbach4",
-      position: [49.554087, 7.621883],
-      value: lastValueKreimbach4?.value ? Number(lastValueKreimbach4.value) : 0,
-      timestamp: lastValueKreimbach4?.time,
-    },
-    {
-      id: "rutsweiler",
-      name: "Rutsweiler a.d. Lauter",
-      queryType: "lastValueRutsweiler",
-      position: [49.566297, 7.623804],
-      value: lastValueRutsweiler?.value ? Number(lastValueRutsweiler.value) : 0,
-      timestamp: lastValueRutsweiler?.time,
-    },
-    {
-      id: "wolfstein",
-      name: "Wolfstein",
-      queryType: "lastValueWolfstein",
-      position: [49.581045, 7.619593],
-      value: lastValueWolfstein?.value ? Number(lastValueWolfstein.value) : 0,
-      timestamp: lastValueWolfstein?.time,
-    },
-    {
-      id: "lohnweilerRLP",
-      name: "Lohnweiler (Lauter)",
-      source: "LfU RLP",
-      sourceUrl: "https://wasserportal.rlp-umwelt.de/", 
-      queryType: "lastValueLohnweilerRLP",
-      position: [49.636245, 7.600337],
-      value: lastValueLohnweilerRLP?.value
-        ? Number(lastValueLohnweilerRLP.value)
-        : 0,
-      timestamp: lastValueLohnweilerRLP?.time,
-    },
-    {
-      id: "lauterecken",
-      name: "Lauterecken",
-      queryType: "lastValueLauterecken1",
-      position: [49.650507589739846, 7.590545488872102],
-      value: lastValueLauterecken1?.value
-        ? Number(lastValueLauterecken1.value)
-        : 0,
-      timestamp: lastValueLauterecken1?.time,
-    },
-    {
-      id: "kreimbach3",
-      name: "Kreimbach 2 (Kreimbach)",
-      queryType: "lastValueKreimbach3",
-      position: [49.556388641429436, 7.636587365546659],
-      value: lastValueKreimbach3?.value ? Number(lastValueKreimbach3.value) : 0,
-      timestamp: lastValueKreimbach3?.time,
-    },
-    {
-      id: "lohnweiler1",
-      name: "Lohnweiler (Mausbach)",
-      queryType: "lastValueLohnweiler1",
-      position: [49.63553061963123, 7.59709411130715],
-      value: lastValueLohnweiler1?.value
-        ? Number(lastValueLohnweiler1.value)
-        : 0,
-      timestamp: lastValueLohnweiler1?.time,
-    },
-    {
-      id: "kusel",
-      name: "Kusel (Kuselbach)",
-      queryType: "lastValueKreisverwaltung",
-      position: [49.539820952844316, 7.396752597634942], 
-      value: lastValueKreisverwaltung?.value
-        ? Number(lastValueKreisverwaltung.value)
-        : 0,
-      timestamp: lastValueKreisverwaltung?.time,
-    },
-    {
-      id: "hinzweiler1",
-      name: "Hinzweiler (Talbach)",
-      queryType: "lastValueHinzweiler1",
-      position: [49.589414954381816, 7.548317327514346],
-      value: lastValueHinzweiler1?.value
-        ? Number(lastValueHinzweiler1.value)
-        : 0,
-      timestamp: lastValueHinzweiler1?.time,
-    },
+    createRow("untersulzbach", "Untersulzbach", "lastValueUntersulzbach", [49.528584, 7.663114], lastValueUntersulzbach, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+    createRow("kreimbach1", "Kreimbach 1", "lastValueKreimbach1", [49.54844915352638, 7.631175812962766], lastValueKreimbach1),
+    createRow("kreimbach4", "Kreimbach 3", "lastValueKreimbach4", [49.554087, 7.621883], lastValueKreimbach4),
+    createRow("rutsweiler", "Rutsweiler a.d. Lauter", "lastValueRutsweiler", [49.566297, 7.623804], lastValueRutsweiler),
+    createRow("wolfstein", "Wolfstein", "lastValueWolfstein", [49.581045, 7.619593], lastValueWolfstein),
+    createRow("lohnweilerRLP", "Lohnweiler (Lauter)", "lastValueLohnweilerRLP", [49.636245, 7.600337], lastValueLohnweilerRLP, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+    createRow("lauterecken", "Lauterecken", "lastValueLauterecken1", [49.650507589739846, 7.590545488872102], lastValueLauterecken1),
+    createRow("kreimbach3", "Kreimbach 2 (Kreimbach)", "lastValueKreimbach3", [49.556388641429436, 7.636587365546659], lastValueKreimbach3),
+    createRow("lohnweiler1", "Lohnweiler (Mausbach)", "lastValueLohnweiler1", [49.63553061963123, 7.59709411130715], lastValueLohnweiler1),
+    
+        createRow("nanzdietschweiler", "Nanzdietschweiler", "lastValueNanzdietschweiler", [49.445651, 7.443034], lastValueNanzdietschweiler, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+
+        createRow("eschenau", "Eschenau", "lastValueEschenau", [49.599899, 7.482403], lastValueEschenau, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+    createRow("odenbach", "Odenbach", "lastValueOdenbach", [49.688925, 7.652256], lastValueOdenbach, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+
+         createRow("ohmbachsee", "Ohmbachsee (Ohmbach)", "lastValueOhmbachsee", [49.421436, 7.382018], lastValueOhmbachsee, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+    createRow("niedermohr", "Niedermohr (Mohrbach)", "lastValueNiedermohr", [49.459274, 7.464442], lastValueNiedermohr, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+
+    createRow("kusel", "Kusel (Kuselbach)", "lastValueKreisverwaltung", [49.539820952844316, 7.396752597634942], lastValueKreisverwaltung),
+        createRow("rammelsbach", "Rammelsbach (Kuselbach)", "lastValueRammelsbach", [49.544549, 7.448862], lastValueRammelsbach, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+
+    createRow("hinzweiler1", "Hinzweiler (Talbach)", "lastValueHinzweiler1", [49.589414954381816, 7.548317327514346], lastValueHinzweiler1),
+
+   
+    createRow("sulzhof", "Sulzhof (Sulzbach)", "lastValueSulzhof", [49.644886, 7.620666], lastValueSulzhof, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+    createRow("odenbachSteinbruch", "Odenbach / Steinbruch (Odenbach)", "lastValueOdenbachSteinbruch", [49.678306, 7.650426], lastValueOdenbachSteinbruch, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+    createRow("loellbach", "Löllbach (Jeckenbach)", "lastValueLoellbach", [49.703048, 7.598709], lastValueLoellbach, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
   ];
 
   const rowStyle = {
@@ -281,15 +216,15 @@ style={{
               </tr>
             )}
 
-            {/* {index === 8 && (
+            {index === 8 && (
               <tr>
                 <td colSpan="3" style={{ textAlign: "center", padding: "10px", fontWeight: "bold", backgroundColor: "#EFEFEF" }}>
                   Glan:
                 </td>
               </tr>
-            )} */}
+            )}
 
-            {index === 8 && (
+            {index === 11 && (
               <tr>
                 <td colSpan="3" style={{ textAlign: "center", padding: "10px", fontWeight: "bold", backgroundColor: "#EFEFEF" }}>
                   Glan - Nebenflüsse:

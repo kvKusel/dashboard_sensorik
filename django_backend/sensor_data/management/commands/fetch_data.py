@@ -237,7 +237,7 @@ class Command(BaseCommand):
             
             
             
-######################################################          # Fetch and save the water level data from RLP API  (Pegel Untersulzbach)      ########################################################
+######################################################          # Fetch and save the water level data from RLP API  (Pegel Untersulzbach, Lohnweiler...)      ########################################################
     def fetch_water_level_data(self):
         sources = [
             {
@@ -249,8 +249,55 @@ class Command(BaseCommand):
                 "url": "https://geodaten-wasser.rlp-umwelt.de/api/export/messstellen_wasserstand_messwerte.csv?w=messstellennummer%3D2546077000",
                 "device_id": "pegel_lohnweiler_land",
                 "name": "Pegel Lohnweiler / RLP"
+            },
+            {
+                "url": "https://geodaten-wasser.rlp-umwelt.de/api/export/messstellen_wasserstand_messwerte.csv?w=messstellennummer%3D2546052200",
+                "device_id": "pegel_stausee_ohmbach",
+                "name": "Pegel Stausee Ohmbach"
+            },
+            {
+                "url": "https://geodaten-wasser.rlp-umwelt.de/api/export/messstellen_wasserstand_messwerte.csv?w=messstellennummer%3D2546015800",
+                "device_id": "pegel_nanzdietschweiler",
+                "name": "Pegel Nanzdietschweiler"
+            },
+            {
+                "url": "https://geodaten-wasser.rlp-umwelt.de/api/export/messstellen_wasserstand_messwerte.csv?w=messstellennummer%3D2546061300",
+                "device_id": "pegel_rammelsbach",
+                "name": "Pegel Rammelsbach 2"
+            },
+            {
+                "url": "https://geodaten-wasser.rlp-umwelt.de/api/export/messstellen_wasserstand_messwerte.csv?w=messstellennummer%3D2546030700",
+                "device_id": "pegel_eschenau",
+                "name": "Pegel Eschenau"
+            },
+            {
+                "url": "https://geodaten-wasser.rlp-umwelt.de/api/export/messstellen_wasserstand_messwerte.csv?w=messstellennummer%3D2546080600",
+                "device_id": "pegel_sulzhof",
+                "name": "Pegel Sulzhof"
+            },
+            {
+                "url": "https://geodaten-wasser.rlp-umwelt.de/api/export/messstellen_wasserstand_messwerte.csv?w=messstellennummer%3D2546085000",
+                "device_id": "pegel_odenbach_steinbruch",
+                "name": "Pegel Odenbach Steinbruch"
+            },
+            {
+                "url": "https://geodaten-wasser.rlp-umwelt.de/api/export/messstellen_wasserstand_messwerte.csv?w=messstellennummer%3D2546040900",
+                "device_id": "pegel_odenbach",
+                "name": "Pegel Odenbach"
+            },
+            {
+                "url": "https://geodaten-wasser.rlp-umwelt.de/api/export/messstellen_wasserstand_messwerte.csv?w=messstellennummer%3D2546058800",
+                "device_id": "pegel_niedermohr",
+                "name": "Pegel Niedermohr"
+            },
+            {
+                "url": "https://geodaten-wasser.rlp-umwelt.de/api/export/messstellen_wasserstand_messwerte.csv?w=messstellennummer%3D2546090800",
+                "device_id": "pegel_loellbach",
+                "name": "Pegel Löllbach"
             }
+            
         ]
+        
 
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
