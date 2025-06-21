@@ -187,7 +187,7 @@ style={{
                   const sensorTime = new Date(item.timestamp);
                   const timeDifferenceHours = (now - sensorTime) / (1000 * 60 * 60);
                   
-                  if (timeDifferenceHours > 2) {
+                  if (timeDifferenceHours > 6) {
                     return <span style={{ fontSize: "20px", fontWeight: "bold" }}>-</span>;
                   }
                   
