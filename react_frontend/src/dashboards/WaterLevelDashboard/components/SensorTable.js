@@ -34,7 +34,7 @@ const SensorTable = ({
     const now = new Date();
     const sensorTime = new Date(timestamp);
     const timeDifferenceHours = (now - sensorTime) / (1000 * 60 * 60);
-    if (timeDifferenceHours < 2) return "#83C968";
+    if (timeDifferenceHours < 6) return "#83C968";
     if (timeDifferenceHours < 24) return "#ECC85B";
     return "#E7844E";
   };
