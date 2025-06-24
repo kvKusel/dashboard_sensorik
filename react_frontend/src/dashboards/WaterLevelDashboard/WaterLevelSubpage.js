@@ -622,7 +622,7 @@ lastValueLoellbach: [
         >
           {/* SensorTable Section */}
           <div
-            className="row flex-grow-1 rounded-3 mb-2"
+            className="row flex-grow-1 rounded-3 mb-2 sensor-table-wrapper"
             style={{
               backgroundColor: "#fff",
               boxShadow: "0px 4px 24px 0px rgba(40, 53, 131, 0.10)",
@@ -658,7 +658,7 @@ lastValueLoellbach: [
               setSelectedMarkerId={setSelectedMarkerId}
               onSelectPosition={handleMarkerClick}
                 selectedRow={selectedRow}
-  hoveredMarkerId={hoveredMarkerId} // <-- add this
+  hoveredMarkerId={hoveredMarkerId}
 
             />
           </div>

@@ -101,7 +101,7 @@ const SensorTable = ({
         overflow: "hidden", // Ensures child elements respect the border radius
       }}
     >
-      <thead>
+      <thead >
         <tr
           style={{
             backgroundImage: "linear-gradient(0deg, #1A2146 0%, #1F2C61 100%)",
@@ -122,7 +122,7 @@ const SensorTable = ({
         </tr>
 
         {data.map((item, index) => (
-          <React.Fragment key={item.id}>
+          <React.Fragment key={item.id} >
             <tr
               onClick={() => {
                 onRowClick(item.queryType);
