@@ -161,17 +161,7 @@ useEffect(() => {
 
 const initialBotMessage = () => ({
   text: `
-🌊 **Willkommen beim Wasserstand-Dashboard!**\n\n
-Ich kann dir Wasserstandsdaten für verschiedene Messstationen bereitstellen.\n\n
-
-**So funktioniert es:**\n
-👉 Nenne einen Pegel und einen Zeitraum (z.B. 'Kreimbach, 7 Tage')\n
-👉Welche Pegel verfügbar sind, siehst du in der Sensortabelle (oben auf dem Handy, links auf dem Desktop)\n
-👉 Verfügbare Zeiträume: 24 Stunden, 7 Tage, 30 Tage, 1 Jahr\n
-👉 Du kannst allgemeine Anfragen stellen (z.B. 'Kreimbach, letzte 30 Tage') oder spezifische Fragen wie:\n
-   • 'Maximaler Wasserstand in Kusel in den letzten 7 Tagen?'\n
-   • 'Wie war der Trend in Lohnweiler im letzten Jahr?'\n\n
-Probiere es einfach aus! 🎯
+🌊 Herzlich willkommen, ich bin ein KI-Chatbot und helfe Dir bei der Auswertung der gesammelten Daten.
   `,
   fromUser: false,
 });
@@ -290,7 +280,7 @@ Probiere es einfach aus! 🎯
       {isOpen ? (
         <>
           <div className="chatbot-header d-flex justify-content-between">
-            <h5>Datenanalyst</h5>
+            <h5>KI-Assistent</h5>
             <button className="btn-close" style={{backgroundColor: "white"}} onClick={() => setIsOpen(false)} aria-label="Close"></button>
             
           </div>
@@ -335,16 +325,20 @@ Probiere es einfach aus! 🎯
         </>
       ) : (
         <div
-          className="d-flex flex-column align-items-center justify-content-center p-2 p-md-3"
+          className="d-flex flex-column align-items-center justify-content-center py-2 px-2"
           onClick={() => setIsOpen(true)}
+            style={{ cursor: 'pointer' }} 
+
         >
-          <p className="chat-text fw-bold">Datenanalyst</p>
+          <p className="chat-text fw-bold p-1 m-0">KI-Assistent</p>
           <img
             src={chatIcon}
             alt="Chat Icon"
             className="icon"
             style={{ maxHeight: "50px", maxWidth: "50px" }}
           />
+<p className="chat-text fw-bold m-0 p-0">&gt;&gt; Hier klicken &lt;&lt;</p>
+
         </div>
       )}
     </div>

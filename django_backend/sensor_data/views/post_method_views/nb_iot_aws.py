@@ -232,6 +232,8 @@ class AWSIotCore_Milesight_Sensors(View):
 
                     # Calculate actual water level and ensure it's a whole number
                     actual_water_level = int(round(sensor_to_bottom - sensor_to_water_level))
+                    if actual_water_level < 0:
+                        actual_water_level = 0
 
                 except ValueError:
                     logger.error(f"Invalid water level value: {water_level_str} in payload: {payload}")

@@ -47,32 +47,41 @@ class Command(BaseCommand):
     help = 'Fetch precipitation data, weahter data and Treesense data, then store them in the database'
 
     def handle(self, *args, **kwargs):
-        while True:  # Infinite loop to repeatedly fetch data every 20 minutes
+        while True:
+            now_utc = datetime.now(timezone.utc)
+            self.stdout.write(self.style.NOTICE(f"Current time: {now_utc.strftime('%H:%M:%S')}"))
+
+            # Run your tasks
             self.stdout.write(self.style.NOTICE('Attempting to fetch data...'))
 
-            # Fetch and save the water level data from RLP API              
+            # Fetch and save data
             self.fetch_water_level_data()
-
-
-            # Fetch precipitation data
             self.fetch_precipitation_data()
-            
-            # fetch weather station data from FTP server
             self.fetch_ftp_weather_data()
 
-
-            # Authenticate and fetch tree data
-            access_token = self.authenticate()  # Get the token
+            access_token = self.authenticate()
             if access_token:
-                self.fetch_tree_data(access_token)  # Pass token here
+                self.fetch_tree_data(access_token)
             else:
                 self.stdout.write(self.style.ERROR("Authentication failed, skipping tree moisture data fetch."))
 
-            # Wait for 60 minutes before running again
-            self.stdout.write(self.style.NOTICE(f"Next execution in 15 minutes at {tz_now() + timedelta(minutes=60)}"))
-            time.sleep(15 * 60)  # Sleep for 15 minutes (15 minutes * 60 seconds)
-            
-            
+            # ⏳ Calculate next desired run time (01, 16, 31, 46)
+            now = datetime.now()
+            current_minute = now.minute
+
+            # Define the minute marks
+            next_slots = [1, 16, 31, 46]
+            next_minute = next((m for m in next_slots if m > current_minute), next_slots[0])
+            next_hour = now.hour if next_minute > current_minute else (now.hour + 1) % 24
+
+            # Set next run time
+            next_run = now.replace(hour=next_hour, minute=next_minute, second=0, microsecond=0)
+            wait_seconds = (next_run - now).total_seconds()
+
+            self.stdout.write(self.style.SUCCESS(f"Next execution scheduled at: {next_run.strftime('%H:%M:%S')}"))
+            time.sleep(wait_seconds)
+
+                
             
 ######################################################          # Fetch and save the weather station data for Weatherstation Lohnweiler      ########################################################
 

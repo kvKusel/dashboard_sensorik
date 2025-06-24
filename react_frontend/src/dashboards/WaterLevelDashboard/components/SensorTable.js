@@ -51,6 +51,23 @@ const SensorTable = ({
   });
 
   const data = [
+            createRow("nanzdietschweiler", "Nanzdietschweiler", "lastValueNanzdietschweiler", [49.445651, 7.443034], lastValueNanzdietschweiler, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+
+        createRow("eschenau", "Eschenau", "lastValueEschenau", [49.599899, 7.482403], lastValueEschenau, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+    createRow("odenbach", "Odenbach", "lastValueOdenbach", [49.688925, 7.652256], lastValueOdenbach, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+
+
+
+             createRow("ohmbachsee", "Ohmbachsee (Ohmbach)", "lastValueOhmbachsee", [49.421436, 7.382018], lastValueOhmbachsee, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+    createRow("niedermohr", "Niedermohr (Mohrbach)", "lastValueNiedermohr", [49.459274, 7.464442], lastValueNiedermohr, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+    createRow("kusel", "Kusel (Kuselbach)", "lastValueKreisverwaltung", [49.539820952844316, 7.396752597634942], lastValueKreisverwaltung),
+        createRow("rammelsbach", "Rammelsbach (Kuselbach)", "lastValueRammelsbach", [49.544549, 7.448862], lastValueRammelsbach, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+    createRow("hinzweiler1", "Hinzweiler (Talbach)", "lastValueHinzweiler1", [49.589414954381816, 7.548317327514346], lastValueHinzweiler1),
+    createRow("sulzhof", "Sulzhof (Sulzbach)", "lastValueSulzhof", [49.644886, 7.620666], lastValueSulzhof, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+    createRow("odenbachSteinbruch", "Odenbach / Steinbruch (Odenbach)", "lastValueOdenbachSteinbruch", [49.678306, 7.650426], lastValueOdenbachSteinbruch, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+    createRow("loellbach", "Löllbach (Jeckenbach)", "lastValueLoellbach", [49.703048, 7.598709], lastValueLoellbach, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+
+
     createRow("untersulzbach", "Untersulzbach", "lastValueUntersulzbach", [49.528584, 7.663114], lastValueUntersulzbach, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
     createRow("kreimbach1", "Kreimbach 1", "lastValueKreimbach1", [49.54844915352638, 7.631175812962766], lastValueKreimbach1),
     createRow("kreimbach4", "Kreimbach 3", "lastValueKreimbach4", [49.554087, 7.621883], lastValueKreimbach4),
@@ -61,23 +78,8 @@ const SensorTable = ({
     createRow("kreimbach3", "Kreimbach 2 (Kreimbach)", "lastValueKreimbach3", [49.556388641429436, 7.636587365546659], lastValueKreimbach3),
     createRow("lohnweiler1", "Lohnweiler (Mausbach)", "lastValueLohnweiler1", [49.63553061963123, 7.59709411130715], lastValueLohnweiler1),
     
-        createRow("nanzdietschweiler", "Nanzdietschweiler", "lastValueNanzdietschweiler", [49.445651, 7.443034], lastValueNanzdietschweiler, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
 
-        createRow("eschenau", "Eschenau", "lastValueEschenau", [49.599899, 7.482403], lastValueEschenau, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
-    createRow("odenbach", "Odenbach", "lastValueOdenbach", [49.688925, 7.652256], lastValueOdenbach, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
 
-         createRow("ohmbachsee", "Ohmbachsee (Ohmbach)", "lastValueOhmbachsee", [49.421436, 7.382018], lastValueOhmbachsee, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
-    createRow("niedermohr", "Niedermohr (Mohrbach)", "lastValueNiedermohr", [49.459274, 7.464442], lastValueNiedermohr, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
-
-    createRow("kusel", "Kusel (Kuselbach)", "lastValueKreisverwaltung", [49.539820952844316, 7.396752597634942], lastValueKreisverwaltung),
-        createRow("rammelsbach", "Rammelsbach (Kuselbach)", "lastValueRammelsbach", [49.544549, 7.448862], lastValueRammelsbach, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
-
-    createRow("hinzweiler1", "Hinzweiler (Talbach)", "lastValueHinzweiler1", [49.589414954381816, 7.548317327514346], lastValueHinzweiler1),
-
-   
-    createRow("sulzhof", "Sulzhof (Sulzbach)", "lastValueSulzhof", [49.644886, 7.620666], lastValueSulzhof, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
-    createRow("odenbachSteinbruch", "Odenbach / Steinbruch (Odenbach)", "lastValueOdenbachSteinbruch", [49.678306, 7.650426], lastValueOdenbachSteinbruch, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
-    createRow("loellbach", "Löllbach (Jeckenbach)", "lastValueLoellbach", [49.703048, 7.598709], lastValueLoellbach, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
   ];
 
   const rowStyle = {
@@ -115,7 +117,7 @@ const SensorTable = ({
       <tbody>
         <tr>
           <td colSpan="3" style={{ textAlign: "center", padding: "10px", fontWeight: "bold", backgroundColor: "#EFEFEF" }}>
-            Lauter:
+            Glan:
           </td>
         </tr>
 
@@ -208,26 +210,26 @@ style={{
             </tr>
 
             {/* Insert second label row after the 3rd item */}
-            {index === 6 && (
-              <tr>
-                <td colSpan="3" style={{ textAlign: "center", padding: "10px", fontWeight: "bold", backgroundColor: "#EFEFEF" }}>
-                  Lauter - Nebenflüsse:
-                </td>
-              </tr>
-            )}
-
-            {index === 8 && (
-              <tr>
-                <td colSpan="3" style={{ textAlign: "center", padding: "10px", fontWeight: "bold", backgroundColor: "#EFEFEF" }}>
-                  Glan:
-                </td>
-              </tr>
-            )}
-
-            {index === 11 && (
+            {index === 2 && (
               <tr>
                 <td colSpan="3" style={{ textAlign: "center", padding: "10px", fontWeight: "bold", backgroundColor: "#EFEFEF" }}>
                   Glan - Nebenflüsse:
+                </td>
+              </tr>
+            )}
+
+            {index === 10 && (
+              <tr>
+                <td colSpan="3" style={{ textAlign: "center", padding: "10px", fontWeight: "bold", backgroundColor: "#EFEFEF" }}>
+                  Lauter:
+                </td>
+              </tr>
+            )}
+
+            {index === 17 && (
+              <tr>
+                <td colSpan="3" style={{ textAlign: "center", padding: "10px", fontWeight: "bold", backgroundColor: "#EFEFEF" }}>
+                  Lauter - Nebenflüsse:
                 </td>
               </tr>
             )}
