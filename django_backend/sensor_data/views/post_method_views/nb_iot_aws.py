@@ -94,7 +94,16 @@ def send_alert_email(device_id, timestamp, water_level):
     
     
 ALLOWED_DEVICE_IDS_AWS = {
-"6749D19422850054": {
+#sensor Kreimbach_3 (by the Brauerei) (old one - battery died, got swapped with a new sensor)
+# "6749D19422850054": {
+#     'type': 'water_level_sensor',
+#     'field_mapping': {
+#         'water_level': 'distance',
+#         'battery': 'battery'
+#     }
+# },
+#sensor Kreimbach_3 (by the Brauerei) (new one - replaced the old sensor 6749D19422850054 on June 30, 2025)
+"6749E17125480048": {
     'type': 'water_level_sensor',
     'field_mapping': {
         'water_level': 'distance',
@@ -115,7 +124,7 @@ ALLOWED_DEVICE_IDS_AWS = {
         'battery': 'battery'
     }
 },
-#sensor Kreimbach_3
+#sensor Kreimbach_2 (Kanal)
 "6749E09611440028": {
     'type': 'water_level_sensor',
     'field_mapping': {
@@ -161,7 +170,7 @@ ALLOWED_DEVICE_IDS_AWS = {
 # Define the fixed sensor-to-bottom distances for each device
 SENSOR_TO_BOTTOM_DISTANCES = {
     #sensor Kreimbach_4
-    "6749D19422850054": 336,
+    "6749E17125480048": 336,
     #sensor Rustweiler a.d. Lauter
     "6749D19385550035": 355,
     #sensor Wolfstein    
