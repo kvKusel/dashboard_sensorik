@@ -6,6 +6,8 @@ import RainIntensityLegend from "../WolfsteinLegend";
 import RadarFetcher from "./FetchPrecipitationMap";
 import polygonLandkreisKusel from "./KuselPolygonCoords";
 import CustomMapMarkers from "./CustomMapMarker";
+// Import your GeoJSON data directly
+import riverGeojsonData from "../../../../assets/landkreis_kusel_fluesse_simplified.json";
 
 const worldBounds = [
   [-90, -180],
@@ -13,7 +15,6 @@ const worldBounds = [
   [90, 180],
   [90, -180]
 ];
-
 
 // Mask component to apply the effect.
 const MaskLayer = () => {
@@ -45,27 +46,25 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-
 const PegelWolfsteinMap = ({ hoveredMarkerId, selectedMarkerId, onMarkerClick, setHoveredMarkerId, setSelectedMarkerId, mapRef, mapCenter, setMapCenter, handleMarkerClick }) => {
 
-  const [riverGeojsonData, setRiverGeojsonData] = useState(null); // State to hold your GeoJSON data
-
-
-  // Effect to fetch the GeoJSON data
-  useEffect(() => {
-    fetch('/landkreis_kusel_fluesse_simplified.geojson') // Path to your file in the public folder
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        setRiverGeojsonData(data);
-      })
-      .catch(error => console.error("Error fetching river GeoJSON:", error));
-  }, []); // Empty dependency array means this runs once on mount
-
+  // No need for state or useEffect for the GeoJSON data anymore - it's imported directly!
+  // const [riverGeojsonData, setRiverGeojsonData] = useState(null); // Remove this
+  
+  // Remove the entire useEffect that was fetching the data:
+  // useEffect(() => {
+  //   fetch('/landkreis_kusel_fluesse_simplified.geojson')
+  //     .then(response => {
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! status: ${response.status}`);
+  //       }
+  //       return response.json();
+  //     })
+  //     .then(data => {
+  //       setRiverGeojsonData(data);
+  //     })
+  //     .catch(error => console.error("Error fetching river GeoJSON:", error));
+  // }, []);
 
   const markers = [
     { id: "wolfstein", position: [49.581045, 7.619593], label: "Wolfstein", queryType: "lastValueWolfstein" },
@@ -173,17 +172,15 @@ const PegelWolfsteinMap = ({ hoveredMarkerId, selectedMarkerId, onMarkerClick, s
       {/* Add the actual polygon outline */}
       <Polygon positions={polygonLandkreisKusel} color="transparent" fillOpacity={1} />
 
-      {/* Render your GeoJSON river data */}
-      {riverGeojsonData && (
-        <GeoJSON
-          data={riverGeojsonData}
-          style={() => ({
-            color: '#007bff', // A nice river blue
-            weight: 1,         // Line thickness
-            opacity: 1       // Transparency
-          })}
-        />
-      )}
+      {/* Render your GeoJSON river data - no conditional check needed since it's always available */}
+      <GeoJSON
+        data={riverGeojsonData}
+        style={() => ({
+          color: '#007bff', // A nice river blue
+          weight: 1,         // Line thickness
+          opacity: 1       // Transparency
+        })}
+      />
 
       <RadarFetcher
         setRadarUrl={setRadarUrl}
