@@ -14,6 +14,7 @@ const worldBounds = [
   [90, -180]
 ];
 
+
 // Mask component to apply the effect
 const MaskLayer = () => {
   const map = useMap();
