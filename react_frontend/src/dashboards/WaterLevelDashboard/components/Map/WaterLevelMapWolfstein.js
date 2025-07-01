@@ -15,7 +15,7 @@ const worldBounds = [
 ];
 
 
-// Mask component to apply the effect
+// Mask component to apply the effect.
 const MaskLayer = () => {
   const map = useMap();
 
