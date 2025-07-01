@@ -33,6 +33,8 @@ const WaterLevelDashboard = () => {
   const [waterLevelOdenbach, setWaterLevelOdenbach] = useState([]);
   const [waterLevelNiedermohr, setWaterLevelNiedermohr] = useState([]);
   const [waterLevelLoellbach, setWaterLevelLoellbach] = useState([]);
+    const [waterLevelLauterLandLieben, setWaterLevelLauterLandLieben] = useState([]);
+
 
   const [precipitationWolfsteinHistorical, setPrecipitationWolfsteinHistorical] = useState([]);
   const [lohnweilerPrecipitation, setLohnweilerPrecipitation] = useState([]);
@@ -57,7 +59,7 @@ const WaterLevelDashboard = () => {
         kv, rutsweiler, kreimbachK, wolfstein, lauterecken1, kreimbach1,
         kreimbach3, lohnweiler1, hinzweiler1, untersulzbach, lohnweilerRLP,
         ohmbachsee, nanzdietschweiler, rammelsbach, eschenau, sulzhof,
-        odenbachSteinbruch, odenbach, niedermohr, loellbach
+        odenbachSteinbruch, odenbach, niedermohr, loellbach, LohnweilerLauterLandLieben
       ] = await Promise.all([
         fetch("water_level_kv"), 
         fetch("water_level_rutsweiler"), 
@@ -70,7 +72,6 @@ const WaterLevelDashboard = () => {
         fetch("water_level_hinzweiler_1"),
         fetch("water_level_untersulzbach"), 
         fetch("water_level_lohnweiler_rlp"),
-        // New devices
         fetch("water_level_ohmbachsee"),
         fetch("water_level_nanzdietschweiler"),
         fetch("water_level_rammelsbach"),
@@ -79,7 +80,9 @@ const WaterLevelDashboard = () => {
         fetch("water_level_odenbach_steinbruch"),
         fetch("water_level_odenbach"),
         fetch("water_level_niedermohr"),
-        fetch("water_level_loellbach")
+        fetch("water_level_loellbach"),
+                fetch("water_level_lohnweiler_lauter_landlieben")
+
       ]);
 
       const map = (d) => d.data.map(item => ({ time: item.timestamp, value: item.water_level_value }));
@@ -107,6 +110,7 @@ const WaterLevelDashboard = () => {
       setWaterLevelOdenbach(map(odenbach));
       setWaterLevelNiedermohr(map(niedermohr));
       setWaterLevelLoellbach(map(loellbach));
+      setWaterLevelLauterLandLieben(map(LohnweilerLauterLandLieben));
 
       // weather station wolfstein
       const precipitationResponse = await axios.get(`${API_URL}api/historical-precipitation/?time_range=${timePeriodHistoricalPrecipitation}`);
@@ -199,6 +203,7 @@ const WaterLevelDashboard = () => {
           waterLevelOdenbach={waterLevelOdenbach}
           waterLevelNiedermohr={waterLevelNiedermohr}
           waterLevelLoellbach={waterLevelLoellbach}
+          waterLevelLohnweilerLauterLandLieben={waterLevelLauterLandLieben}
           currentPeriod={timePeriod}
           onPeriodChange={handlePeriodChange}
           historicalPrecipitationWolfstein={precipitationWolfsteinHistorical}

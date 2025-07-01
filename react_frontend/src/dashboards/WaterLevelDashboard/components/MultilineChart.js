@@ -42,6 +42,7 @@ const MultiLineChart = ({
   waterLevelOdenbach,
   waterLevelNiedermohr,
   waterLevelLoellbach,
+  waterLevelLohnweilerLauterLandLieben,
   currentPeriod,
   activeDataset = null,
 }) => {
@@ -79,7 +80,12 @@ const MultiLineChart = ({
     { key: "lastValueOdenbach", label: "Pegel Odenbach", data: waterLevelOdenbach, color: "rgba(255, 193, 7, 1)" },
     { key: "lastValueNiedermohr", label: "Pegel Niedermohr (Mohrbach)", data: waterLevelNiedermohr, color: "rgba(0, 188, 212, 1)" },
     { key: "lastValueLoellbach", label: "Pegel Löllbach (Jeckenbach)", data: waterLevelLoellbach, color: "rgba(233, 30, 99, 1)" },
+    { key: "lastValueLohnweilerLauterLandLieben", label: "Pegel Lohnweiler (Lauter) (Sensor LANDL(i)EBEN)", data: waterLevelLohnweilerLauterLandLieben, color: "rgba(255, 87, 34, 1)" },
+    
   ];
+
+
+console.log(waterLevelLohnweilerLauterLandLieben)  
 
 const formatDatasetLabel = (datasetKey) => {
   if (!datasetKey) return "";
@@ -116,6 +122,7 @@ const corrections = {
   Niedermohr: "Niedermohr (Mohrbach)",
   Loellbach: "Löllbach (Jeckenbach)",
   OdenbachSteinbruch: "Odenbach / Steinbruch (Odenbach)",
+  LohnweilerLauterLandLieben: "Lohnweiler (Lauter) (Sensor LANDL(i)EBEN)",
 };
 
   const corrected = corrections[location] || location;

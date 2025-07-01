@@ -102,7 +102,7 @@ ALLOWED_DEVICE_IDS_AWS = {
 #         'battery': 'battery'
 #     }
 # },
-#sensor Kreimbach_3 (by the Brauerei) (new one - replaced the old sensor 6749D19422850054 on June 30, 2025)
+#sensor Kreimbach_3 (by the Brauerei) (new one - replaced the old sensor 6749D19422850054 on June 30, 2025) - WRONG SN FOR NOW!!!!!!!!!!!!!!!!!
 "6749E17125480048": {
     'type': 'water_level_sensor',
     'field_mapping': {
@@ -164,19 +164,27 @@ ALLOWED_DEVICE_IDS_AWS = {
         'battery': 'battery'
     }
 },
+# sensor Lohnweiler (Lauter), installed on June 30, 2025, next to the official sensor of SGD Sued 
+"6749E17799680048": {
+    'type': 'water_level_sensor',
+    'field_mapping': {
+        'water_level': 'distance',
+        'battery': 'battery'
+    }
+},
 
 }
 
 # Define the fixed sensor-to-bottom distances for each device
 SENSOR_TO_BOTTOM_DISTANCES = {
-    #sensor Kreimbach_4
+    #sensor Kreimbach_3 (bei Brauerei)
     "6749E17125480048": 336,
     #sensor Rustweiler a.d. Lauter
     "6749D19385550035": 355,
     #sensor Wolfstein    
     "6749D19427550061": 355,
     
-    #sensor Kreimbach_3 (Kanal)
+    #sensor Kreimbach_2 (Kanal)
     "6749E09611440028": 88,                 
     
     #sensor Lauterecken_1
@@ -189,7 +197,10 @@ SENSOR_TO_BOTTOM_DISTANCES = {
     "6749E17323330042": 122,
                     
     #sensor Hinzweiler_1
-    "6749E17419910043": 151,              
+    "6749E17419910043": 151,   
+
+    # sensor Lohnweiler (Lauter), installed on June 30, 2025, next to the official sensor of SGD Sued 
+    "6749E17799680048":  421,                 
 }
 
 @method_decorator(csrf_exempt, name='dispatch')

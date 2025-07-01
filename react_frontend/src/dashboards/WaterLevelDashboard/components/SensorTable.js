@@ -22,6 +22,7 @@ const SensorTable = ({
   lastValueOdenbach,
   lastValueNiedermohr,
   lastValueLoellbach,
+  lastValueLohnweilerLauterLandLieben,
   setHoveredMarkerId,
   setSelectedMarkerId,
   onSelectPosition,
@@ -74,10 +75,13 @@ const SensorTable = ({
     createRow("rutsweiler", "Rutsweiler a.d. Lauter", "lastValueRutsweiler", [49.566297, 7.623804], lastValueRutsweiler),
     createRow("wolfstein", "Wolfstein", "lastValueWolfstein", [49.581045, 7.619593], lastValueWolfstein),
     createRow("lohnweilerRLP", "Lohnweiler (Lauter)", "lastValueLohnweilerRLP", [49.636245, 7.600337], lastValueLohnweilerRLP, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+            createRow("lohnweilerLauterLandLieben", "Lohnweiler (Lauter) (Sensor LANDL(i)EBEN)", "lastValueLohnweilerLauterLandLieben", [49.636245, 7.600337], lastValueLohnweiler1),
+
     createRow("lauterecken", "Lauterecken", "lastValueLauterecken1", [49.650507589739846, 7.590545488872102], lastValueLauterecken1),
+    
     createRow("kreimbach3", "Kreimbach 2 (Kreimbach)", "lastValueKreimbach3", [49.556388641429436, 7.636587365546659], lastValueKreimbach3),
     createRow("lohnweiler1", "Lohnweiler (Mausbach)", "lastValueLohnweiler1", [49.63553061963123, 7.59709411130715], lastValueLohnweiler1),
-    
+
 
 
   ];
@@ -226,7 +230,7 @@ style={{
               </tr>
             )}
 
-            {index === 17 && (
+            {index === 18 && (
               <tr>
                 <td colSpan="3" style={{ textAlign: "center", padding: "10px", fontWeight: "bold", backgroundColor: "#EFEFEF" }}>
                   Lauter - Nebenflüsse:

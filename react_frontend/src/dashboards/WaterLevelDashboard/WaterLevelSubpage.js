@@ -39,7 +39,7 @@ waterLevelOdenbachSteinbruch,
 waterLevelOdenbach,
 waterLevelNiedermohr,
 waterLevelLoellbach,
-
+waterLevelLohnweilerLauterLandLieben,
 
   currentPeriod,
   onPeriodChange,
@@ -149,6 +149,12 @@ const lastValueLohnweilerRLP =
     : null;
 
 
+    const lastValueLohnweilerLauterLandLieben =
+  waterLevelLohnweilerLauterLandLieben?.length > 0
+    ? waterLevelLohnweilerLauterLandLieben[waterLevelLohnweilerLauterLandLieben.length - 1]
+    : null;
+
+
   const lastValueOhmbachsee = waterLevelOhmbachsee?.at(-1) ?? null;
 const lastValueNanzdietschweiler = waterLevelNanzdietschweiler?.at(-1) ?? null;
 const lastValueRammelsbach = waterLevelRammelsbach?.at(-1) ?? null;
@@ -194,6 +200,7 @@ const lastValueMap = {
   lastValueOdenbach,
   lastValueNiedermohr,
   lastValueLoellbach,
+  lastValueLohnweilerLauterLandLieben
 };
 
 const lastValue = selectedRow !== "default" ? lastValueMap[selectedRow] : null;
@@ -214,6 +221,7 @@ const nameMapping = {
   lastValueKreisverwaltung: "Kusel (Kuselbach)",
   lastValueLohnweiler1: "Lohnweiler (Mausbach)",
   lastValueHinzweiler1: "Hinzweiler (Talbach)",
+  lastValueLohnweilerLauterLandLieben: "Lohnweiler (Lauter) (Sensor LANDL(i)EBEN)",
 
   lastValueUntersulzbach: (
     <>
@@ -561,7 +569,11 @@ lastValueLoellbach: [
       { limit: 250, color: "#ECC85B", showTick: true },
       { limit: 300, color: "#E7844E", showTick: true },
 ],
-
+lastValueLohnweilerLauterLandLieben: [
+      { limit: 200, color: "#83C968", showTick: true }, 
+      { limit: 250, color: "#ECC85B", showTick: true },
+      { limit: 300, color: "#E7844E", showTick: true },
+],
   };
 
   ///////////////////////////////////        END OF set up for the table that displays all sensors         ///////////////////////////////////////////////
@@ -652,6 +664,7 @@ lastValueLoellbach: [
   lastValueOdenbach={lastValueOdenbach}
   lastValueNiedermohr={lastValueNiedermohr}
   lastValueLoellbach={lastValueLoellbach}
+  lastValueLohnweilerLauterLandLieben={lastValueLohnweilerLauterLandLieben}
 
 
               setHoveredMarkerId={setHoveredMarkerId}
@@ -782,6 +795,7 @@ lastValueLoellbach: [
   waterLevelOdenbach={waterLevelOdenbach}
   waterLevelNiedermohr={waterLevelNiedermohr}
   waterLevelLoellbach={waterLevelLoellbach}
+  waterLevelLohnweilerLauterLandLieben={waterLevelLohnweilerLauterLandLieben}
 
 
               currentPeriod={currentPeriod}
@@ -859,6 +873,7 @@ lastValueLoellbach: [
   "lastValueOdenbach",
   "lastValueNiedermohr",
   "lastValueLoellbach",
+  lastValueLohnweilerLauterLandLieben
 ].includes(activeDataset) && (
   <div
     className="d-none d-sm-block position-absolute top-50 start-50 translate-middle"
@@ -895,6 +910,7 @@ lastValueLoellbach: [
   "lastValueOdenbach",
   "lastValueNiedermohr",
   "lastValueLoellbach",
+  lastValueLohnweilerLauterLandLieben
 ].includes(activeDataset) && (
   <div className="d-block d-sm-none mt-2 ps-2">
     <a

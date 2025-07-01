@@ -81,7 +81,7 @@ const markers = [
   { id: "lohnweiler1", position: [49.63553061963123, 7.59709411130715], label: "Lohnweiler", queryType: "lastValueLohnweiler1" },
   { id: "hinzweiler1", position: [49.589394954381816, 7.548317327514346], label: "Hinzweiler", queryType: "lastValueHinzweiler1" },
   { id: "untersulzbach", position: [49.528584, 7.663114], label: "Untersulzbach", queryType: "lastValueUntersulzbach" },
-  { id: "lohnweilerRLP", position: [49.636245, 7.600337], label: "Lohnweiler (Lauter)", queryType: "lastValueLohnweilerRLP" },
+  { id: "lohnweilerRLP", position: [49.636225, 7.600307], label: "Lohnweiler (Lauter)", queryType: "lastValueLohnweilerRLP" },
 
   // ✅ NEW markers
 
@@ -93,7 +93,9 @@ const markers = [
   { id: "odenbachSteinbruch", position: [49.678306, 7.650426], label: "Odenbach / Steinbruch", queryType: "lastValueOdenbachSteinbruch" },
   { id: "odenbach", position: [49.688925, 7.652256], label: "Odenbach", queryType: "lastValueOdenbach" },
   { id: "niedermohr", position: [49.459274, 7.464442], label: "Niedermohr", queryType: "lastValueNiedermohr" },
-  { id: "loellbach", position: [49.703048, 7.598709], label: "Löllbach", queryType: "lastValueLoellbach" }
+  { id: "loellbach", position: [49.703048, 7.598709], label: "Löllbach", queryType: "lastValueLoellbach" },
+    { id: "lohnweilerLauterLandLieben", position: [49.636285, 7.600367], label: "Lohnweiler (Lauter) (Sensor LANDL(i)EBEN)", queryType: "lastValueLohnweilerLauterLandLieben" }
+
 ];
 
 

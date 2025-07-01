@@ -60,6 +60,9 @@ class waterLevelDataView(View):
                 "water_level_odenbach": "pegel_odenbach",
                 "water_level_niedermohr": "pegel_niedermohr",
                 "water_level_loellbach": "pegel_loellbach",
+                    # sensor Lohnweiler (Lauter), installed on June 30, 2025, next to the official sensor of SGD Sued 
+
+                "water_level_lohnweiler_lauter_landlieben": "6749E17799680048",
 
 
 
