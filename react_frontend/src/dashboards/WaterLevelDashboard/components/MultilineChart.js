@@ -85,7 +85,6 @@ const MultiLineChart = ({
   ];
 
 
-console.log(waterLevelLohnweilerLauterLandLieben)  
 
 const formatDatasetLabel = (datasetKey) => {
   if (!datasetKey) return "";
