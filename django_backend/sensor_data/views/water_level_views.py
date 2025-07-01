@@ -41,16 +41,15 @@ class waterLevelDataView(View):
             device_ids = {
                 "water_level_kv": "eui-a8404169c187e059-water-lvl-kv",
                 "water_level_rutsweiler": "6749D19385550035",
-                "water_level_kreimbach_kaulbach": "6749D19422850054",
+                "water_level_kreimbach_kaulbach": "6749E17125480048",           #by brauerei
                 "water_level_wolfstein": "6749D19427550061",
                 "water_level_lauterecken_1": "6749E17530450043",
                 "water_level_kreimbach_1": "6749E09866560038",
-                "water_level_kreimbach_3": "6749E09611440028",
+                "water_level_kreimbach_3": "6749E09611440028",          # sensor Kreimbach_2 (Kreimbach) (in canal / drainage pipe) 
                 "water_level_lohnweiler_1": "6749E17323330042",
                 "water_level_hinzweiler_1": "6749E17419910043",
                 "water_level_untersulzbach": "pegel_untersulzbach",
                 "water_level_lohnweiler_rlp": "pegel_lohnweiler_land",
-                
                 "water_level_ohmbachsee": "pegel_stausee_ohmbach",
                 "water_level_nanzdietschweiler": "pegel_nanzdietschweiler",
                 "water_level_rammelsbach": "pegel_rammelsbach",
@@ -60,9 +59,8 @@ class waterLevelDataView(View):
                 "water_level_odenbach": "pegel_odenbach",
                 "water_level_niedermohr": "pegel_niedermohr",
                 "water_level_loellbach": "pegel_loellbach",
-                    # sensor Lohnweiler (Lauter), installed on June 30, 2025, next to the official sensor of SGD Sued 
+                "water_level_lohnweiler_lauter_landlieben": "6749E17799680048",        # sensor Lohnweiler (Lauter), installed on June 30, 2025, next to the official sensor of SGD Sued 
 
-                "water_level_lohnweiler_lauter_landlieben": "6749E17799680048",
 
 
 

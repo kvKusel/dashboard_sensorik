@@ -200,7 +200,7 @@ SENSOR_TO_BOTTOM_DISTANCES = {
     "6749E17419910043": 151,   
 
     # sensor Lohnweiler (Lauter), installed on June 30, 2025, next to the official sensor of SGD Sued 
-    "6749E17799680048":  421,                 
+    "6749E17799680048":  428,                 
 }
 
 @method_decorator(csrf_exempt, name='dispatch')
