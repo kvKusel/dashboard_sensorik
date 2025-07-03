@@ -75,7 +75,7 @@ const SensorTable = ({
     createRow("rutsweiler", "Rutsweiler a.d. Lauter", "lastValueRutsweiler", [49.566297, 7.623804], lastValueRutsweiler),
     createRow("wolfstein", "Wolfstein", "lastValueWolfstein", [49.581045, 7.619593], lastValueWolfstein),
     createRow("lohnweilerRLP", "Lohnweiler (Lauter)", "lastValueLohnweilerRLP", [49.636245, 7.600337], lastValueLohnweilerRLP, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
-            createRow("lohnweilerLauterLandLieben", "Lohnweiler (Lauter) (Sensor LANDL(i)EBEN)", "lastValueLohnweilerLauterLandLieben", [49.636245, 7.600337], lastValueLohnweiler1),
+            createRow("lohnweilerLauterLandLieben", "Lohnweiler (Lauter) (Sensor LANDL(i)EBEN)", "lastValueLohnweilerLauterLandLieben", [49.636245, 7.600337], lastValueLohnweilerLauterLandLieben),
 
     createRow("lauterecken", "Lauterecken", "lastValueLauterecken1", [49.650507589739846, 7.590545488872102], lastValueLauterecken1),
     
