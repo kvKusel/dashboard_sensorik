@@ -23,13 +23,25 @@ const DownloadIcon = ({
     lastValueRutsweiler: "30",
     lastValueKreimbach1: "34",
     lastValueKreimbach3: "32",
-    lastValueKreimbach4: "29",
+    lastValueKreimbach4: "55",
     lastValueLauterecken1: "33",
     lastValueKreisverwaltung: "14",
     lastValueLohnweiler1: "42",
     lastValueHinzweiler1: "35",
     lastValueUntersulzbach: "43",
     lastValueLohnweilerRLP: "44",
+
+    lastValueOhmbachsee: "46",  
+    lastValueNanzdietschweiler: "47",
+    lastValueRammelsbach: "48",
+    lastValueEschenau: "49",
+    lastValueSulzhof: "50",
+    lastValueOdenbachSteinbruch: "51",
+    lastValueOdenbach: "52",
+    lastValueNiedermohr: "53",
+    lastValueLoellbach: "54",
+  lastValueLohnweilerLauterLandLieben: "36",
+
   };
 
   const nameMapping = {
@@ -43,7 +55,20 @@ const DownloadIcon = ({
     lastValueLohnweiler1: "Lohnweiler_Mausbach",
     lastValueHinzweiler1: "Hinzweiler",
     lastValueUntersulzbach: "Untersulzbach",
-    lastValueLohnweilerRLP: "Lauterecken_Lauter",
+    lastValueLohnweilerRLP: "Lohnweiler_Lauter",
+
+    lastValueOhmbachsee: "Ohmbachsee_Ohmbach",  
+    lastValueNanzdietschweiler: "Nanzdietschweiler",
+    lastValueRammelsbach: "Rammelsbach",
+    lastValueEschenau: "Eschenau",
+    lastValueSulzhof: "Sulzhof",
+    lastValueOdenbachSteinbruch: "Odenbach_Steinbruch",
+    lastValueOdenbach: "Odenbach",
+    lastValueNiedermohr: "Niedermohr",
+    lastValueLoellbach: "Loellbach",
+
+  lastValueLohnweilerLauterLandLieben: "Lohnweiler_Lauter_Land_Lieben",
+
   };
 
   const precipitationNameMapping = {
