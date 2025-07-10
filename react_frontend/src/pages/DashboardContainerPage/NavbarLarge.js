@@ -20,6 +20,39 @@ const LargeNavbar = ({ activeTab, handleSelect }) => {
         Pegelmonitoring
       </h5>
 
+
+            <h5
+        className="nav-item"
+        style={{
+          cursor: "pointer",
+          display: "inline-block",
+          marginRight: "20px",
+          fontWeight: "normal",
+          textDecoration: activeTab === "Wetter" ? "underline" : "none",
+          color: activeTab === "Wetter" ? "#AADB40" : "#fff",
+        }}
+        onClick={() => handleSelect("Wetter")}
+      >
+        Wetter
+      </h5>
+
+
+            <h5
+        className="nav-item"
+        style={{
+          cursor: "pointer",
+          display: "inline-block",
+          marginRight: "20px",
+          fontWeight: "normal",
+          textDecoration: activeTab === "Baummonitoring" ? "underline" : "none",
+          color: activeTab === "Baummonitoring" ? "#AADB40" : "#fff",
+        }}
+        onClick={() => handleSelect("BaummonitoringBurgLichtenberg")}
+      >
+        Baummonitoring
+      </h5>
+
+{/* 
       <div
         className="nav-item position-relative"
         onMouseEnter={() => setIsDropdownOpen(true)}
@@ -53,7 +86,6 @@ const LargeNavbar = ({ activeTab, handleSelect }) => {
               Burg Lichtenberg
             </h6>
             </div>
-            {/* <hr style={{  borderColor: "#ddd" }} /> */}
             <div className="custom-dropdown-item rounded-bottom ">
 
             <h6
@@ -69,23 +101,10 @@ const LargeNavbar = ({ activeTab, handleSelect }) => {
             </div>
           </div>
         )}
-      </div>
+      </div> */}
 
-      <h5
-        className="nav-item"
-        style={{
-          cursor: "pointer",
-          display: "inline-block",
-          marginRight: "20px",
-          fontWeight: "normal",
-          textDecoration: activeTab === "Wetter" ? "underline" : "none",
-          color: activeTab === "Wetter" ? "#AADB40" : "#fff",
-        }}
-        onClick={() => handleSelect("Wetter")}
-      >
-        Wetter
-      </h5>
 
+{/* 
       <h5
         className="nav-item"
         style={{
@@ -99,7 +118,7 @@ const LargeNavbar = ({ activeTab, handleSelect }) => {
         onClick={() => handleSelect("Hochbeet")}
       >
         Hochbeet-Projekt
-      </h5>
+      </h5> */}
     </div>
   );
 };

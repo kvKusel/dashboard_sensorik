@@ -155,7 +155,34 @@ const SmallNavbar = ({ activeTab, handleSelect, navbarExpanded, setNavbarExpande
                 Wetter
               </p>
             </div>
-            <div>
+
+
+                        <div>
+              <p
+                style={{
+                  marginTop: "5px",
+                  marginBottom: "5px",
+                  padding: "5px 5px",
+                  textAlign: "right",
+                  borderRadius: "5px", // Rounded corners like a button
+                  cursor: "pointer", // Pointer cursor to indicate it's clickable
+                  fontSize: "1.1em",
+                  display: "inline-block",
+                  textDecoration:
+                    activeTab === "Baummonitoring" ? "underline" : "none",
+                  color: activeTab === "Baummonitoring" ? "#AADB40" : "#fff",
+                }}
+                onClick={() => handleSelect("BaummonitoringBurgLichtenberg")}
+                className=" "
+                type="button"
+                id="downloadDropdown"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Baummonitoring
+              </p>
+            </div>
+            {/* <div>
               <p
                 style={{
                   marginTop: "5px",
@@ -180,8 +207,8 @@ const SmallNavbar = ({ activeTab, handleSelect, navbarExpanded, setNavbarExpande
               >
                 Hochbeet-Projekt
               </p>
-            </div>
-
+            </div> */}
+{/* 
             <div
         className="nav-item position-relative"
         onMouseEnter={() => setIsDropdownOpen(true)}
@@ -190,8 +217,8 @@ const SmallNavbar = ({ activeTab, handleSelect, navbarExpanded, setNavbarExpande
           
          
           textAlign: "right",
-          borderRadius: "5px", // Rounded corners like a button
-          cursor: "pointer", // Pointer cursor to indicate it's clickable
+          borderRadius: "5px", 
+          cursor: "pointer", 
           
           display: "inline-block",
           textDecoration:
@@ -212,8 +239,8 @@ const SmallNavbar = ({ activeTab, handleSelect, navbarExpanded, setNavbarExpande
           marginBottom: "5px",
           padding: "5px 5px",
           textAlign: "right",
-          borderRadius: "5px", // Rounded corners like a button
-          cursor: "pointer", // Pointer cursor to indicate it's clickable
+          borderRadius: "5px",
+          cursor: "pointer", 
           fontSize: "1.1em",
           display: "inline-block",
           textDecoration:
@@ -246,7 +273,6 @@ const SmallNavbar = ({ activeTab, handleSelect, navbarExpanded, setNavbarExpande
               Burg Lichtenberg
             </p>
             </div>
-            {/* <hr style={{  borderColor: "#ddd" }} /> */}
             <div className="custom-dropdown-item rounded-bottom ">
 
             <p
@@ -262,7 +288,7 @@ const SmallNavbar = ({ activeTab, handleSelect, navbarExpanded, setNavbarExpande
             </div>
           </div>
         )}
-      </div>
+      </div> */}
       
           </div>
         </div>
