@@ -155,6 +155,7 @@ ALLOWED_DEVICE_IDS = {
     'type': 'water_level_sensor',
     'field_mapping': {
         'water_level': "Distance",
+        'battery': "Bat"
     }
 }
 
@@ -288,11 +289,43 @@ class TTNWebhookView(View):
                 except ValueError:
                     logger.error(f"Invalid water level value: {water_level_str} in payload: {payload}")
                     return JsonResponse({'status': 'error', 'message': f"Invalid water level value: {water_level_str}"}, status=400)
+                
+                # Extract and clean battery voltage value
+                if field_mapping.get('battery') not in payload:
+                    logger.error(f"Missing battery field {field_mapping['battery']} in payload: {payload}")
+                    return JsonResponse({'status': 'error', 'message': f"Missing field {field_mapping['battery']} in payload"}, status=400)
+
+                battery_str = str(payload[field_mapping['battery']])
+
+                # Remove non-numeric characters (except for '.' and '-')
+                battery_str_clean = ''.join(c for c in battery_str if c.isdigit() or c in ['.', '-'])
+
+                try:
+                    battery_voltage = float(battery_str_clean)
+                    
+                    # Convert voltage to approximate % based on your Li-SOCl₂ profile
+                    if battery_voltage >= 3.6:
+                        battery_percent = 100
+                    elif battery_voltage >= 3.5:
+                        battery_percent = 85
+                    elif battery_voltage >= 3.4:
+                        battery_percent = 10
+                    elif battery_voltage >= 3.3:
+                        battery_percent = 2
+                    else:
+                        battery_percent = 0
+
+                except ValueError:
+                    logger.error(f"Invalid battery voltage value: {battery_str} in payload: {payload}")
+                    return JsonResponse({'status': 'error', 'message': f"Invalid battery voltage value: {battery_str}"}, status=400)
+
 
                 water_level_data = {
                     'device': device,
                     'timestamp': timezone.now(),  # Use timezone-aware datetime
-                    'water_level_value': actual_water_level
+                    'water_level_value': actual_water_level,
+                    'battery': battery_percent 
+
                 }
 
                 waterLevelReading.objects.create(**water_level_data)
