@@ -221,7 +221,40 @@ const lastValueMap = {
   lastValueLohnweilerLauterLandLieben
 };
 
+
 const lastValue = selectedRow !== "default" ? lastValueMap[selectedRow] : null;
+
+
+const batteryLevelMap = {
+  lastValueWolfstein: waterLevelWolfsteinBattery,
+  lastValueRutsweiler: waterLevelRutsweilerBattery,
+  lastValueKreimbach1: waterLevelKreimbach1Battery,
+  lastValueKreimbach3: waterLevelKreimbach3Battery,
+  lastValueKreimbach4: waterLevelKreimbachKaulbachBattery,
+  lastValueLauterecken1: waterLevelLauterecken1Battery,
+  lastValueKreisverwaltung: waterLevelKreisverwaltungBattery,
+  lastValueLohnweiler1: waterLevelLohnweiler1Battery,
+  lastValueHinzweiler1: waterLevelHinzweiler1Battery,
+  lastValueLohnweilerLauterLandLieben: waterLevelLauterLandLiebenBattery,
+  
+  // For RLP sensors, you might not have battery data, so set to null or undefined
+  lastValueUntersulzbach: null,
+  lastValueLohnweilerRLP: null,
+  lastValueOhmbachsee: null,
+  lastValueNanzdietschweiler: null,
+  lastValueRammelsbach: null,
+  lastValueEschenau: null,
+  lastValueSulzhof: null,
+  lastValueOdenbachSteinbruch: null,
+  lastValueOdenbach: null,
+  lastValueNiedermohr: null,
+  lastValueLoellbach: null,
+};
+
+
+const currentBatteryLevel = selectedRow !== "default" ? batteryLevelMap[selectedRow] : null;
+
+
 
   // Handle table row clicks
 const handleRowClick = (queryType) => {
@@ -725,6 +758,16 @@ waterLevelLauterLandLiebenBattery={waterLevelLauterLandLiebenBattery}
     style={{ color: "#18204F", fontSize: "1.1rem" }}
   >
     Letzte Messung: {formatTimestamp(lastValue.time)}
+  </p>
+  
+)}
+
+{selectedRow !== "default" && lastValue && currentBatteryLevel !== null && (
+  <p
+    className="mb-0"
+    style={{ color: "#18204F", fontSize: "1.1rem" }}
+  >
+    Batterie: {currentBatteryLevel}%
   </p>
 )}
               </div>
