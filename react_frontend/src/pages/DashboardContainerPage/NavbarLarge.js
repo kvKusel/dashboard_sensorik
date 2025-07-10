@@ -44,8 +44,8 @@ const LargeNavbar = ({ activeTab, handleSelect }) => {
           display: "inline-block",
           marginRight: "20px",
           fontWeight: "normal",
-          textDecoration: activeTab === "Baummonitoring" ? "underline" : "none",
-          color: activeTab === "Baummonitoring" ? "#AADB40" : "#fff",
+          textDecoration: activeTab === "BaummonitoringBurgLichtenberg" ? "underline" : "none",
+          color: activeTab === "BaummonitoringBurgLichtenberg" ? "#AADB40" : "#fff",
         }}
         onClick={() => handleSelect("BaummonitoringBurgLichtenberg")}
       >

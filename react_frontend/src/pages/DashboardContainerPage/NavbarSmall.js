@@ -169,8 +169,8 @@ const SmallNavbar = ({ activeTab, handleSelect, navbarExpanded, setNavbarExpande
                   fontSize: "1.1em",
                   display: "inline-block",
                   textDecoration:
-                    activeTab === "Baummonitoring" ? "underline" : "none",
-                  color: activeTab === "Baummonitoring" ? "#AADB40" : "#fff",
+                    activeTab === "BaummonitoringBurgLichtenberg" ? "underline" : "none",
+                  color: activeTab === "BaummonitoringBurgLichtenberg" ? "#AADB40" : "#fff",
                 }}
                 onClick={() => handleSelect("BaummonitoringBurgLichtenberg")}
                 className=" "
