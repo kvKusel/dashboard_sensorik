@@ -28,6 +28,17 @@ const SensorTable = ({
   onSelectPosition,
   selectedRow,
   hoveredMarkerId,
+
+  waterLevelKreisverwaltungBattery,
+  waterLevelRutsweilerBattery,
+  waterLevelKreimbachKaulbachBattery,
+  waterLevelWolfsteinBattery,
+  waterLevelLauterecken1Battery,
+  waterLevelKreimbach1Battery,
+  waterLevelKreimbach3Battery,
+  waterLevelLohnweiler1Battery,
+  waterLevelHinzweiler1Battery,
+  waterLevelLauterLandLiebenBattery
 }) => {
   // Helper function to determine sensor status color based on timestamp
   const getSensorStatusColor = (timestamp) => {
@@ -40,6 +51,31 @@ const SensorTable = ({
     return "#E7844E";
   };
 
+  // Helper function to determine battery status color based on battery value
+  const getBatteryStatusColor = (batteryValue) => {
+    if (batteryValue == null || batteryValue === undefined) return null; // Return null for no battery value
+    if (batteryValue > 50) return "#83C968"; // Green
+    if (batteryValue >= 30) return "#ECC85B"; // Yellow
+    return "#E7844E"; // Red
+  };
+
+  // Battery mapping for each sensor
+  const getBatteryValue = (sensorId) => {
+    const batteryMap = {
+      "kusel": waterLevelKreisverwaltungBattery,
+      "rutsweiler": waterLevelRutsweilerBattery,
+      "kreimbach1": waterLevelKreimbach1Battery,
+      "kreimbach3": waterLevelKreimbach3Battery,
+      "wolfstein": waterLevelWolfsteinBattery,
+      "lauterecken": waterLevelLauterecken1Battery,
+      "lohnweiler1": waterLevelLohnweiler1Battery,
+      "hinzweiler1": waterLevelHinzweiler1Battery,
+      "lohnweilerLauterLandLieben": waterLevelLauterLandLiebenBattery,
+      // Add more mappings as needed for other sensors that have battery values
+    };
+    return batteryMap[sensorId];
+  };
+
   const createRow = (id, name, queryType, position, valueObj, source, sourceUrl) => ({
     id,
     name,
@@ -49,41 +85,31 @@ const SensorTable = ({
     timestamp: valueObj?.time,
     source,
     sourceUrl,
+    batteryValue: getBatteryValue(id),
   });
 
   const data = [
-            createRow("nanzdietschweiler", "Nanzdietschweiler", "lastValueNanzdietschweiler", [49.445651, 7.443034], lastValueNanzdietschweiler, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
-
-        createRow("eschenau", "Eschenau", "lastValueEschenau", [49.599899, 7.482403], lastValueEschenau, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+    createRow("nanzdietschweiler", "Nanzdietschweiler", "lastValueNanzdietschweiler", [49.445651, 7.443034], lastValueNanzdietschweiler, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+    createRow("eschenau", "Eschenau", "lastValueEschenau", [49.599899, 7.482403], lastValueEschenau, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
     createRow("odenbach", "Odenbach", "lastValueOdenbach", [49.688925, 7.652256], lastValueOdenbach, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
-
-
-
-             createRow("ohmbachsee", "Ohmbachsee (Ohmbach)", "lastValueOhmbachsee", [49.421436, 7.382018], lastValueOhmbachsee, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+    createRow("ohmbachsee", "Ohmbachsee (Ohmbach)", "lastValueOhmbachsee", [49.421436, 7.382018], lastValueOhmbachsee, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
     createRow("niedermohr", "Niedermohr (Mohrbach)", "lastValueNiedermohr", [49.459274, 7.464442], lastValueNiedermohr, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
     createRow("kusel", "Kusel (Kuselbach)", "lastValueKreisverwaltung", [49.539820952844316, 7.396752597634942], lastValueKreisverwaltung),
-        createRow("rammelsbach", "Rammelsbach (Kuselbach)", "lastValueRammelsbach", [49.544549, 7.448862], lastValueRammelsbach, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
+    createRow("rammelsbach", "Rammelsbach (Kuselbach)", "lastValueRammelsbach", [49.544549, 7.448862], lastValueRammelsbach, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
     createRow("hinzweiler1", "Hinzweiler (Talbach)", "lastValueHinzweiler1", [49.589414954381816, 7.548317327514346], lastValueHinzweiler1),
     createRow("sulzhof", "Sulzhof (Sulzbach)", "lastValueSulzhof", [49.644886, 7.620666], lastValueSulzhof, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
     createRow("odenbachSteinbruch", "Odenbach / Steinbruch (Odenbach)", "lastValueOdenbachSteinbruch", [49.678306, 7.650426], lastValueOdenbachSteinbruch, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
     createRow("loellbach", "Löllbach (Jeckenbach)", "lastValueLoellbach", [49.703048, 7.598709], lastValueLoellbach, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
-
-
     createRow("untersulzbach", "Untersulzbach", "lastValueUntersulzbach", [49.528584, 7.663114], lastValueUntersulzbach, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
     createRow("kreimbach1", "Kreimbach 1", "lastValueKreimbach1", [49.54844915352638, 7.631175812962766], lastValueKreimbach1),
     createRow("kreimbach4", "Kreimbach 3", "lastValueKreimbach4", [49.554087, 7.621883], lastValueKreimbach4),
     createRow("rutsweiler", "Rutsweiler a.d. Lauter", "lastValueRutsweiler", [49.566297, 7.623804], lastValueRutsweiler),
     createRow("wolfstein", "Wolfstein", "lastValueWolfstein", [49.581045, 7.619593], lastValueWolfstein),
     createRow("lohnweilerRLP", "Lohnweiler (Lauter)", "lastValueLohnweilerRLP", [49.636245, 7.600337], lastValueLohnweilerRLP, "LfU RLP", "https://wasserportal.rlp-umwelt.de/"),
-            createRow("lohnweilerLauterLandLieben", "Lohnweiler (Lauter) (Sensor LANDL(i)EBEN)", "lastValueLohnweilerLauterLandLieben", [49.636245, 7.600337], lastValueLohnweilerLauterLandLieben),
-
+    createRow("lohnweilerLauterLandLieben", "Lohnweiler (Lauter) (Sensor LANDL(i)EBEN)", "lastValueLohnweilerLauterLandLieben", [49.636245, 7.600337], lastValueLohnweilerLauterLandLieben),
     createRow("lauterecken", "Lauterecken", "lastValueLauterecken1", [49.650507589739846, 7.590545488872102], lastValueLauterecken1),
-    
     createRow("kreimbach3", "Kreimbach 2 (Kreimbach)", "lastValueKreimbach3", [49.556388641429436, 7.636587365546659], lastValueKreimbach3),
     createRow("lohnweiler1", "Lohnweiler (Mausbach)", "lastValueLohnweiler1", [49.63553061963123, 7.59709411130715], lastValueLohnweiler1),
-
-
-
   ];
 
   const rowStyle = {
@@ -113,14 +139,14 @@ const SensorTable = ({
           }}
         >
           <th className="responsive-th" style={{ padding: "10px", textAlign: "left" }}>Pegel</th>
-                    <th className="responsive-th" style={{ padding: "10px", textAlign: "center" }}>Sensorstatus</th>
-
+          <th className="responsive-th" style={{ padding: "10px", textAlign: "center" }}>Batterie</th>
+          <th className="responsive-th" style={{ padding: "10px", textAlign: "center" }}>Aktiv</th>
           <th className="responsive-th" style={{ padding: "10px", textAlign: "center" }}>Wasserstand</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td colSpan="3" style={{ textAlign: "center", padding: "10px", fontWeight: "bold", backgroundColor: "#EFEFEF" }}>
+          <td colSpan="4" style={{ textAlign: "center", padding: "10px", fontWeight: "bold", backgroundColor: "#EFEFEF" }}>
             Glan:
           </td>
         </tr>
@@ -133,24 +159,22 @@ const SensorTable = ({
                 onSelectPosition(item.position);
                 setSelectedMarkerId(item.id);
               }}
-onMouseEnter={() => setHoveredMarkerId(item.id)}
-onMouseLeave={() => setHoveredMarkerId(null)}
-
+              onMouseEnter={() => setHoveredMarkerId(item.id)}
+              onMouseLeave={() => setHoveredMarkerId(null)}
               id={item.id}
-style={{
-  ...rowStyle,
-  backgroundColor:
-    item.queryType === selectedRow
-      ? "#D0E3FF"
-      : hoveredMarkerId === item.id
-        ? "#E0E0E0" // gray hover
-        : index % 2 === 0
-          ? "#F8F9FA"
-          : "#fff",
-  fontWeight: item.queryType === selectedRow ? "bold" : "normal",
-  border: item.queryType === selectedRow ? "2px solid #1F2C61" : "none",
-}}
-
+              style={{
+                ...rowStyle,
+                backgroundColor:
+                  item.queryType === selectedRow
+                    ? "#D0E3FF"
+                    : hoveredMarkerId === item.id
+                      ? "#E0E0E0" // gray hover
+                      : index % 2 === 0
+                        ? "#F8F9FA"
+                        : "#fff",
+                fontWeight: item.queryType === selectedRow ? "bold" : "normal",
+                border: item.queryType === selectedRow ? "2px solid #1F2C61" : "none",
+              }}
             >
               <td className="responsive-fs-text" style={{ paddingLeft: "5px" }}>
                 {item.name}
@@ -174,6 +198,22 @@ style={{
               </td>
 
               <td style={{ padding: "10px", textAlign: "center" }}>
+                {item.batteryValue == null || item.batteryValue === undefined ? (
+                  <span style={{ fontSize: "20px", fontWeight: "bold" }}>-</span>
+                ) : (
+                  <div
+                    style={{
+                      width: "16px",
+                      height: "16px",
+                      borderRadius: "50%",
+                      display: "inline-block",
+                      backgroundColor: getBatteryStatusColor(item.batteryValue),
+                    }}
+                  ></div>
+                )}
+              </td>
+
+              <td style={{ padding: "10px", textAlign: "center" }}>
                 <div
                   style={{
                     width: "16px",
@@ -185,7 +225,7 @@ style={{
                 ></div>
               </td>
 
-                            <td style={{ padding: "10px", textAlign: "center" }}>
+              <td style={{ padding: "10px", textAlign: "center" }}>
                 {(() => {
                   if (!item.timestamp) return <span style={{ fontSize: "20px", fontWeight: "bold" }}>-</span>;
                   
@@ -216,7 +256,7 @@ style={{
             {/* Insert second label row after the 3rd item */}
             {index === 2 && (
               <tr>
-                <td colSpan="3" style={{ textAlign: "center", padding: "10px", fontWeight: "bold", backgroundColor: "#EFEFEF" }}>
+                <td colSpan="4" style={{ textAlign: "center", padding: "10px", fontWeight: "bold", backgroundColor: "#EFEFEF" }}>
                   Glan - Nebenflüsse:
                 </td>
               </tr>
@@ -224,7 +264,7 @@ style={{
 
             {index === 10 && (
               <tr>
-                <td colSpan="3" style={{ textAlign: "center", padding: "10px", fontWeight: "bold", backgroundColor: "#EFEFEF" }}>
+                <td colSpan="4" style={{ textAlign: "center", padding: "10px", fontWeight: "bold", backgroundColor: "#EFEFEF" }}>
                   Lauter:
                 </td>
               </tr>
@@ -232,7 +272,7 @@ style={{
 
             {index === 18 && (
               <tr>
-                <td colSpan="3" style={{ textAlign: "center", padding: "10px", fontWeight: "bold", backgroundColor: "#EFEFEF" }}>
+                <td colSpan="4" style={{ textAlign: "center", padding: "10px", fontWeight: "bold", backgroundColor: "#EFEFEF" }}>
                   Lauter - Nebenflüsse:
                 </td>
               </tr>

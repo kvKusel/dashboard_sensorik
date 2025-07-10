@@ -36,6 +36,29 @@ const WaterLevelDashboard = () => {
     const [waterLevelLauterLandLieben, setWaterLevelLauterLandLieben] = useState([]);
 
 
+    //  battery status
+const [waterLevelKreisverwaltungBattery, setWaterLevelKreisverwaltungBattery] = useState(null);
+
+const [waterLevelRutsweilerBattery, setWaterLevelRutsweilerBattery] = useState(null);
+
+const [waterLevelKreimbachKaulbachBattery, setWaterLevelKreimbachKaulbachBattery] = useState(null);
+
+const [waterLevelWolfsteinBattery, setWaterLevelWolfsteinBattery] = useState(null);
+
+const [waterLevelLauterecken1Battery, setWaterLevelLauterecken1Battery] = useState(null);
+
+const [waterLevelKreimbach1Battery, setWaterLevelKreimbach1Battery] = useState(null);
+
+const [waterLevelKreimbach3Battery, setWaterLevelKreimbach3Battery] = useState(null);
+
+const [waterLevelLohnweiler1Battery, setWaterLevelLohnweiler1Battery] = useState(null);
+
+const [waterLevelHinzweiler1Battery, setWaterLevelHinzweiler1Battery] = useState(null);
+
+const [waterLevelLauterLandLiebenBattery, setWaterLevelLauterLandLiebenBattery] = useState(null);
+
+
+
   const [precipitationWolfsteinHistorical, setPrecipitationWolfsteinHistorical] = useState([]);
   const [lohnweilerPrecipitation, setLohnweilerPrecipitation] = useState([]);
 
@@ -48,96 +71,133 @@ const WaterLevelDashboard = () => {
   const scrollTargetRef = useRef(null);
   const [pendingScroll, setPendingScroll] = useState(null);
 
-  const fetchAllData = async () => {
-    try {
-      setIsLoading(true);
-      const queryParam = `&time_range=${timePeriod}`;
+ const fetchAllData = async () => {
+  try {
+    setIsLoading(true);
+    const queryParam = `&time_range=${timePeriod}`;
 
-      const fetch = (type) => axios.get(`${API_URL}water-level-data/?query_type=${type}${queryParam}`);
+    const fetch = (type) => axios.get(`${API_URL}water-level-data/?query_type=${type}${queryParam}`);
 
-      const [
-        kv, rutsweiler, kreimbachK, wolfstein, lauterecken1, kreimbach1,
-        kreimbach3, lohnweiler1, hinzweiler1, untersulzbach, lohnweilerRLP,
-        ohmbachsee, nanzdietschweiler, rammelsbach, eschenau, sulzhof,
-        odenbachSteinbruch, odenbach, niedermohr, loellbach, LohnweilerLauterLandLieben
-      ] = await Promise.all([
-        fetch("water_level_kv"), 
-        fetch("water_level_rutsweiler"), 
-        fetch("water_level_kreimbach_kaulbach"),
-        fetch("water_level_wolfstein"), 
-        fetch("water_level_lauterecken_1"), 
-        fetch("water_level_kreimbach_1"),
-        fetch("water_level_kreimbach_3"), 
-        fetch("water_level_lohnweiler_1"), 
-        fetch("water_level_hinzweiler_1"),
-        fetch("water_level_untersulzbach"), 
-        fetch("water_level_lohnweiler_rlp"),
-        fetch("water_level_ohmbachsee"),
-        fetch("water_level_nanzdietschweiler"),
-        fetch("water_level_rammelsbach"),
-        fetch("water_level_eschenau"),
-        fetch("water_level_sulzhof"),
-        fetch("water_level_odenbach_steinbruch"),
-        fetch("water_level_odenbach"),
-        fetch("water_level_niedermohr"),
-        fetch("water_level_loellbach"),
-                fetch("water_level_lohnweiler_lauter_landlieben")
+    const [
+      kv, rutsweiler, kreimbachK, wolfstein, lauterecken1, kreimbach1,
+      kreimbach3, lohnweiler1, hinzweiler1, untersulzbach, lohnweilerRLP,
+      ohmbachsee, nanzdietschweiler, rammelsbach, eschenau, sulzhof,
+      odenbachSteinbruch, odenbach, niedermohr, loellbach, LohnweilerLauterLandLieben
+    ] = await Promise.all([
+      fetch("water_level_kv"), 
+      fetch("water_level_rutsweiler"), 
+      fetch("water_level_kreimbach_kaulbach"),
+      fetch("water_level_wolfstein"), 
+      fetch("water_level_lauterecken_1"), 
+      fetch("water_level_kreimbach_1"),
+      fetch("water_level_kreimbach_3"), 
+      fetch("water_level_lohnweiler_1"), 
+      fetch("water_level_hinzweiler_1"),
+      fetch("water_level_untersulzbach"), 
+      fetch("water_level_lohnweiler_rlp"),
+      fetch("water_level_ohmbachsee"),
+      fetch("water_level_nanzdietschweiler"),
+      fetch("water_level_rammelsbach"),
+      fetch("water_level_eschenau"),
+      fetch("water_level_sulzhof"),
+      fetch("water_level_odenbach_steinbruch"),
+      fetch("water_level_odenbach"),
+      fetch("water_level_niedermohr"),
+      fetch("water_level_loellbach"),
+      fetch("water_level_lohnweiler_lauter_landlieben")
+    ]);
 
-      ]);
+    const map = (d) => ({
+      readings: d.data.readings.map(item => ({ time: item.timestamp, value: item.water_level_value })),
+      battery: d.data.battery
+    });
 
-      const map = (d) => d.data.map(item => ({ time: item.timestamp, value: item.water_level_value }));
 
-      // Existing devices
-      setWaterLevelKreisverwaltung(map(kv));
-      setWaterLevelRutsweiler(map(rutsweiler));
-      setWaterLevelKreimbachKaulbach(map(kreimbachK));
-      setWaterLevelWolfstein(map(wolfstein));
-      setWaterLevelLauterecken1(map(lauterecken1));
-      setWaterLevelKreimbach1(map(kreimbach1));
-      setWaterLevelKreimbach3(map(kreimbach3));
-      setWaterLevelLohnweiler1(map(lohnweiler1));
-      setWaterLevelHinzweiler1(map(hinzweiler1));
-      setWaterLevelUntersulzbach(map(untersulzbach));
-      setWaterLevelLohnweilerRLP(map(lohnweilerRLP));
+    // Sensors with battery status
+    const kvData = map(kv);
+    setWaterLevelKreisverwaltung(kvData.readings);
+    setWaterLevelKreisverwaltungBattery(kvData.battery);
 
-      // New devices
-      setWaterLevelOhmbachsee(map(ohmbachsee));
-      setWaterLevelNanzdietschweiler(map(nanzdietschweiler));
-      setWaterLevelRammelsbach(map(rammelsbach));
-      setWaterLevelEschenau(map(eschenau));
-      setWaterLevelSulzhof(map(sulzhof));
-      setWaterLevelOdenbachSteinbruch(map(odenbachSteinbruch));
-      setWaterLevelOdenbach(map(odenbach));
-      setWaterLevelNiedermohr(map(niedermohr));
-      setWaterLevelLoellbach(map(loellbach));
-      setWaterLevelLauterLandLieben(map(LohnweilerLauterLandLieben));
+    const rutsweilerData = map(rutsweiler);
+    setWaterLevelRutsweiler(rutsweilerData.readings);
+    setWaterLevelRutsweilerBattery(rutsweilerData.battery);
 
-      // weather station wolfstein
-      const precipitationResponse = await axios.get(`${API_URL}api/historical-precipitation/?time_range=${timePeriodHistoricalPrecipitation}`);
-      const timeZone = 'Europe/Berlin';
-      const transform = (data) => ({
-        labels: data.map(e => format(toZonedTime(new Date(e.timestamp * 1000), timeZone), 'yyyy-MM-dd HH:mm')),
-        precipitationValues: data.map(e => e.precipitation)
-      });
-      const wolfsteinData = transform(precipitationResponse.data);
-      setPrecipitationWolfsteinHistorical(wolfsteinData);
-      
-      // weather station lohnweiler
-      const lohnweilerResponse = await axios.get(`${API_URL}api/lohnweiler-weather-data/?time_range=${timePeriodHistoricalPrecipitation}`);
-      const transformLohnweiler = (data) => ({
-        labels: data.map(e => format(toZonedTime(new Date(e.timestamp), timeZone), 'yyyy-MM-dd HH:mm')),
-        precipitationValues: data.map(e => e.precipitation)
-      });
+    const kreimbachKData = map(kreimbachK);
+    setWaterLevelKreimbachKaulbach(kreimbachKData.readings);
+    setWaterLevelKreimbachKaulbachBattery(kreimbachKData.battery);
 
-      const lohnweilerData = transformLohnweiler(lohnweilerResponse.data);
-      setLohnweilerPrecipitation(lohnweilerData);
+    const wolfsteinData = map(wolfstein);
+    setWaterLevelWolfstein(wolfsteinData.readings);
+    setWaterLevelWolfsteinBattery(wolfsteinData.battery);
 
-    } catch (e) {
-      console.error("Error fetching data:", e);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    const lauterecken1Data = map(lauterecken1);
+    setWaterLevelLauterecken1(lauterecken1Data.readings);
+    setWaterLevelLauterecken1Battery(lauterecken1Data.battery);
+
+    const kreimbach1Data = map(kreimbach1);
+    setWaterLevelKreimbach1(kreimbach1Data.readings);
+    setWaterLevelKreimbach1Battery(kreimbach1Data.battery);
+
+    const kreimbach3Data = map(kreimbach3);
+    setWaterLevelKreimbach3(kreimbach3Data.readings);
+    setWaterLevelKreimbach3Battery(kreimbach3Data.battery);
+
+    const lohnweiler1Data = map(lohnweiler1);
+    setWaterLevelLohnweiler1(lohnweiler1Data.readings);
+    setWaterLevelLohnweiler1Battery(lohnweiler1Data.battery);
+
+    const hinzweiler1Data = map(hinzweiler1);
+    setWaterLevelHinzweiler1(hinzweiler1Data.readings);
+    setWaterLevelHinzweiler1Battery(hinzweiler1Data.battery);
+
+    const lauterLandLiebenData = map(LohnweilerLauterLandLieben);
+    setWaterLevelLauterLandLieben(lauterLandLiebenData.readings);
+    setWaterLevelLauterLandLiebenBattery(lauterLandLiebenData.battery);
+
+    // Sensors without battery status
+    const mapNoBattery = (d) => d.data.readings.map(item => ({ time: item.timestamp, value: item.water_level_value }));
+
+    setWaterLevelUntersulzbach(mapNoBattery(untersulzbach));
+    setWaterLevelLohnweilerRLP(mapNoBattery(lohnweilerRLP));
+    setWaterLevelOhmbachsee(mapNoBattery(ohmbachsee));
+    setWaterLevelNanzdietschweiler(mapNoBattery(nanzdietschweiler));
+    setWaterLevelRammelsbach(mapNoBattery(rammelsbach));
+    setWaterLevelEschenau(mapNoBattery(eschenau));
+    setWaterLevelSulzhof(mapNoBattery(sulzhof));
+    setWaterLevelOdenbachSteinbruch(mapNoBattery(odenbachSteinbruch));
+    setWaterLevelOdenbach(mapNoBattery(odenbach));
+    setWaterLevelNiedermohr(mapNoBattery(niedermohr));
+    setWaterLevelLoellbach(mapNoBattery(loellbach));
+
+
+
+    // Weather station wolfstein
+    const precipitationResponse = await axios.get(`${API_URL}api/historical-precipitation/?time_range=${timePeriodHistoricalPrecipitation}`);
+    const timeZone = 'Europe/Berlin';
+    const transform = (data) => ({
+      labels: data.map(e => format(toZonedTime(new Date(e.timestamp * 1000), timeZone), 'yyyy-MM-dd HH:mm')),
+      precipitationValues: data.map(e => e.precipitation)
+    });
+    setPrecipitationWolfsteinHistorical(transform(precipitationResponse.data));
+
+    // Weather station lohnweiler
+    const lohnweilerResponse = await axios.get(`${API_URL}api/lohnweiler-weather-data/?time_range=${timePeriodHistoricalPrecipitation}`);
+    const transformLohnweiler = (data) => ({
+      labels: data.map(e => format(toZonedTime(new Date(e.timestamp), timeZone), 'yyyy-MM-dd HH:mm')),
+      precipitationValues: data.map(e => e.precipitation)
+    });
+    setLohnweilerPrecipitation(transformLohnweiler(lohnweilerResponse.data));
+
+  } catch (e) {
+    console.error("Error fetching data:", e);
+  } finally {
+    setIsLoading(false);
+  }
+};
+
+
+
+
 
   const handlePeriodChange = (newPeriod) => {
     setPendingScroll('multiline-chart');
@@ -175,6 +235,8 @@ const WaterLevelDashboard = () => {
     fetchAllData();
   }, [timePeriod, timePeriodHistoricalPrecipitation]);
 
+  
+
   return (
     <div style={{ minHeight: "80vh" }}>
       {isLoading ? (
@@ -204,6 +266,20 @@ const WaterLevelDashboard = () => {
           waterLevelNiedermohr={waterLevelNiedermohr}
           waterLevelLoellbach={waterLevelLoellbach}
           waterLevelLohnweilerLauterLandLieben={waterLevelLauterLandLieben}
+
+          waterLevelKreisverwaltungBattery={waterLevelKreisverwaltungBattery}
+waterLevelRutsweilerBattery={waterLevelRutsweilerBattery}
+waterLevelKreimbachKaulbachBattery={waterLevelKreimbachKaulbachBattery}
+waterLevelWolfsteinBattery={waterLevelWolfsteinBattery}
+waterLevelLauterecken1Battery={waterLevelLauterecken1Battery}
+waterLevelKreimbach1Battery={waterLevelKreimbach1Battery}
+waterLevelKreimbach3Battery={waterLevelKreimbach3Battery}
+waterLevelLohnweiler1Battery={waterLevelLohnweiler1Battery}
+waterLevelHinzweiler1Battery={waterLevelHinzweiler1Battery}
+waterLevelLauterLandLiebenBattery={waterLevelLauterLandLiebenBattery}
+
+
+
           currentPeriod={timePeriod}
           onPeriodChange={handlePeriodChange}
           historicalPrecipitationWolfstein={precipitationWolfsteinHistorical}

@@ -17,43 +17,61 @@ import MapInteractionOverlay from "./components/Map/MapInteractionOverlay";
 
 import WelcomeBanner from "./components/WelcomeBanner";
 
-
 const WaterLevelSubpage = ({
   waterLevelKreisverwaltung,
+  waterLevelKreisverwaltungBattery,
+
   waterLevelWolfstein,
+  waterLevelWolfsteinBattery,
+
   waterLevelRutsweiler,
+  waterLevelRutsweilerBattery,
+
   waterLevelKreimbach,
+  waterLevelKreimbachKaulbachBattery, // assuming waterLevelKreimbach is kreimbachKaulbach readings
+
   waterLevelLauterecken1,
+  waterLevelLauterecken1Battery,
+
   waterLevelKreimbach1,
+  waterLevelKreimbach1Battery,
+
   waterLevelKreimbach3,
+  waterLevelKreimbach3Battery,
+
   waterLevelLohnweiler1,
+  waterLevelLohnweiler1Battery,
+
   waterLevelHinzweiler1,
+  waterLevelHinzweiler1Battery,
+
   waterLevelUntersulzbach,
   waterLevelLohnweilerRLP,
   waterLevelOhmbachsee,
-waterLevelNanzdietschweiler,
-waterLevelRammelsbach,
-waterLevelEschenau,
-waterLevelSulzhof,
-waterLevelOdenbachSteinbruch,
-waterLevelOdenbach,
-waterLevelNiedermohr,
-waterLevelLoellbach,
-waterLevelLohnweilerLauterLandLieben,
+  waterLevelNanzdietschweiler,
+  waterLevelRammelsbach,
+  waterLevelEschenau,
+  waterLevelSulzhof,
+  waterLevelOdenbachSteinbruch,
+  waterLevelOdenbach,
+  waterLevelNiedermohr,
+  waterLevelLoellbach,
+
+  waterLevelLohnweilerLauterLandLieben,
+  waterLevelLauterLandLiebenBattery,
 
   currentPeriod,
   onPeriodChange,
   historicalPrecipitationWolfstein,
-    lohnweilerPrecipitation,
-
+  lohnweilerPrecipitation,
   onPeriodChangeHistoricalPrecipitation,
   currentPeriodHistoricalPrecipitation,
-
-    activeDataset,
+  activeDataset,
   setActiveDataset,
   selectedRow,
   setSelectedRow
 }) => {
+
   // check the screen size to render the multiline chart properly
   const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth < 768);
 
@@ -665,6 +683,18 @@ lastValueLohnweilerLauterLandLieben: [
   lastValueNiedermohr={lastValueNiedermohr}
   lastValueLoellbach={lastValueLoellbach}
   lastValueLohnweilerLauterLandLieben={lastValueLohnweilerLauterLandLieben}
+
+            waterLevelKreisverwaltungBattery={waterLevelKreisverwaltungBattery}
+waterLevelRutsweilerBattery={waterLevelRutsweilerBattery}
+waterLevelKreimbachKaulbachBattery={waterLevelKreimbachKaulbachBattery}
+waterLevelWolfsteinBattery={waterLevelWolfsteinBattery}
+waterLevelLauterecken1Battery={waterLevelLauterecken1Battery}
+waterLevelKreimbach1Battery={waterLevelKreimbach1Battery}
+waterLevelKreimbach3Battery={waterLevelKreimbach3Battery}
+waterLevelLohnweiler1Battery={waterLevelLohnweiler1Battery}
+waterLevelHinzweiler1Battery={waterLevelHinzweiler1Battery}
+waterLevelLauterLandLiebenBattery={waterLevelLauterLandLiebenBattery}
+
 
 
               setHoveredMarkerId={setHoveredMarkerId}

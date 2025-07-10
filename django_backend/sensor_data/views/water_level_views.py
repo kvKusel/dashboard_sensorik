@@ -96,11 +96,18 @@ class waterLevelDataView(View):
 
             if readings.exists():
                 response_data = list(readings.values('timestamp', 'water_level_value'))
-                return JsonResponse(response_data, safe=False)
+
+                latest_reading = readings.last()
+                latest_battery = latest_reading.battery if latest_reading and latest_reading.battery is not None else None
+
+                return JsonResponse({
+                    "readings": response_data,
+                    "battery": latest_battery
+                }, safe=False)
             else:
                 return JsonResponse({"message": "No data available for the selected time period."}, status=204)
+
 
         except Exception as e:
             logger.error(f"Error in water level data: {str(e)}")
             return JsonResponse({"error": str(e)}, status=500)
-        

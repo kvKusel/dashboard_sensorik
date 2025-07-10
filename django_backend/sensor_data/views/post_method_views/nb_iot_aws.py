@@ -102,7 +102,7 @@ ALLOWED_DEVICE_IDS_AWS = {
 #         'battery': 'battery'
 #     }
 # },
-#sensor Kreimbach_3 (by the Brauerei) (new one - replaced the old sensor 6749D19422850054 on June 30, 2025) - WRONG SN FOR NOW!!!!!!!!!!!!!!!!!
+#sensor Kreimbach_3 (by the Brauerei) (new one - replaced the old sensor 6749D19422850054 on June 30, 2025) 
 "6749E17125480048": {
     'type': 'water_level_sensor',
     'field_mapping': {

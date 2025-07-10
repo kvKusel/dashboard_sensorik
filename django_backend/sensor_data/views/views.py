@@ -35,53 +35,6 @@ def index(request):
     return render(request, 'index.html')
 
 
-##################################################              chatbot endpoint        #########################################################################
-
-# analyzer = ConstrainedDataAnalyzer()
-
-# @method_decorator(csrf_exempt, name='dispatch')
-# class ChatEndpointView(View):
-#     def __init__(self, **kwargs):
-#         super().__init__(**kwargs)
-#         # Initialize the analyzer once when the view is created
-#         self.analyzer = ConstrainedDataAnalyzer()
-    
-#     def post(self, request, *args, **kwargs):
-#         try:
-#             data = json.loads(request.body)
-#             user_message = data.get('message')
-            
-#             if not user_message:
-#                 return JsonResponse({
-#                     'error': 'Message is required'
-#                 }, status=400)
-            
-#             result = self.analyzer.analyze_data(user_message)
-            
-#             if result.get("success", False):
-#                 return JsonResponse({
-#                     'message': result['analysis'],
-#                     'dataset': result['dataset_used']
-#                 })
-#             else:
-#                 return JsonResponse({
-#                     'error': result.get('error', 'Analysis failed')
-#                 }, status=500)
-                
-#         except json.JSONDecodeError:
-#             return JsonResponse({
-#                 'error': 'Invalid JSON in request body'
-#             }, status=400)
-#         except Exception as e:
-#             return JsonResponse({
-#                 'error': str(e)
-#             }, status=500)
-    
-#     def get(self, request, *args, **kwargs):
-#         return JsonResponse({
-#             'error': 'Only POST requests are allowed'
-#         }, status=405)
-
 
 
 
