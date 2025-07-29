@@ -20,7 +20,7 @@ const DownloadIcon = ({
 }) => {
   const deviceIdMapping = {
     lastValueWolfstein: "31",
-    lastValueRutsweiler: "30",
+    lastValueRutsweiler: "56",
     lastValueKreimbach1: "34",
     lastValueKreimbach3: "32",
     lastValueKreimbach4: "55",
