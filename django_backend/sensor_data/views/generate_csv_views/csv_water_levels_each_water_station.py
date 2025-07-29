@@ -22,7 +22,7 @@ class ExportWaterLevelDataView(View):
         # Mapping for device names (for filename generation)
         device_name_mapping = {
             31: "wolfstein",
-            30: "rutsweiler", 
+            56: "rutsweiler", 
             34: "kreimbach1",
             32: "kreimbach3",
             36: "kreimbach4",

@@ -40,7 +40,7 @@ class waterLevelDataView(View):
 
             device_ids = {
                 "water_level_kv": "eui-a8404169c187e059-water-lvl-kv",
-                "water_level_rutsweiler": "6749D19385550035",
+                "water_level_rutsweiler": "6749E17352790049",
                 "water_level_kreimbach_kaulbach": "6749E17125480048",           #by brauerei
                 "water_level_wolfstein": "6749D19427550061",
                 "water_level_lauterecken_1": "6749E17530450043",

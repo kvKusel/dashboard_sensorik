@@ -102,6 +102,15 @@ ALLOWED_DEVICE_IDS_AWS = {
 #         'battery': 'battery'
 #     }
 # },
+
+#sensor rutsweiler a.d.Lauter, damaged, replaced on July 29, 2025
+# "6749D19385550035": {
+#     'type': 'water_level_sensor',
+#     'field_mapping': {
+#         'water_level': 'distance',
+#         'battery': 'battery'
+#     }
+# },
 #sensor Kreimbach_3 (by the Brauerei) (new one - replaced the old sensor 6749D19422850054 on June 30, 2025) 
 "6749E17125480048": {
     'type': 'water_level_sensor',
@@ -110,13 +119,15 @@ ALLOWED_DEVICE_IDS_AWS = {
         'battery': 'battery'
     }
 },
-"6749D19385550035": {
+#sensor rutsweiler a.d.Lauter (new one - replaced the old sensor 6749D19385550035 on July 29, 2025) 
+"6749E17352790049": {
     'type': 'water_level_sensor',
     'field_mapping': {
         'water_level': 'distance',
         'battery': 'battery'
     }
 },
+
 "6749D19427550061": {
     'type': 'water_level_sensor',
     'field_mapping': {
@@ -180,7 +191,7 @@ SENSOR_TO_BOTTOM_DISTANCES = {
     #sensor Kreimbach_3 (bei Brauerei)
     "6749E17125480048": 336,
     #sensor Rustweiler a.d. Lauter
-    "6749D19385550035": 355,
+    "6749E17352790049": 355,
     #sensor Wolfstein    
     "6749D19427550061": 355,
     
