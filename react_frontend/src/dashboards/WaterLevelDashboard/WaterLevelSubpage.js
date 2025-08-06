@@ -232,7 +232,7 @@ const batteryLevelMap = {
   lastValueKreimbach3: waterLevelKreimbach3Battery,
   lastValueKreimbach4: waterLevelKreimbachKaulbachBattery,
   lastValueLauterecken1: waterLevelLauterecken1Battery,
-  lastValueKreisverwaltung: waterLevelKreisverwaltungBattery,
+  lastValueKreisverwaltung: null,
   lastValueLohnweiler1: waterLevelLohnweiler1Battery,
   lastValueHinzweiler1: waterLevelHinzweiler1Battery,
   lastValueLohnweilerLauterLandLieben: waterLevelLauterLandLiebenBattery,
