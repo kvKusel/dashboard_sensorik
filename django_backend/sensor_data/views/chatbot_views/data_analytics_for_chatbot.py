@@ -64,9 +64,13 @@ def get_water_level_analytics(location, days):
     # Fetch precipitation data
     pr_resp = requests.get(f"https://scdash.eu.pythonanywhere.com/api/historical-precipitation/?time_range={days}d")
     pr_data = pr_resp.json()
+    
+    
+    if isinstance(wl_data, dict) and "readings" in wl_data:
+        wl_data = wl_data["readings"]
 
     if not wl_data or not isinstance(wl_data, list):
-        raise ValueError("No water level data found")
+        raise ValueError(f"No water level data found (raw response: {wl_resp.json()})")
 
     water_levels = [point['water_level_value'] for point in wl_data]
     wl_timestamps = [parser.isoparse(point['timestamp']) for point in wl_data]
