@@ -14,6 +14,22 @@ import WelcomePopup from "./WelcomePopup";
 const API_URL = process.env.REACT_APP_API_URL; // This will switch based on the environment - dev env will point to local Django, prod env to the proper domain
 
 const Dashboard = () => {
+
+    useEffect(() => {
+    // Matomo tracking for /dashboard
+    var _paq = window._paq = window._paq || [];
+    _paq.push(["trackPageView"]);
+    _paq.push(["enableLinkTracking"]);
+    (function() {
+      var u = "https://matomo.land-lieben.de/"; // safer than //
+      _paq.push(["setTrackerUrl", u + "matomo.php"]);
+      _paq.push(["setSiteId", "4"]); // check that 4 matches your Matomo site ID
+      var d = document, g = d.createElement("script"), s = d.getElementsByTagName("script")[0];
+      g.async = true; g.src = u + "matomo.js"; s.parentNode.insertBefore(g, s);
+    })();
+  }, []); // run once when Dashboard mounts
+
+  
   useEffect(() => {
     // Scroll to the top of the page
     window.scrollTo(0, 0);
