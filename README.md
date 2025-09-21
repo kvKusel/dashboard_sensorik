@@ -5,10 +5,9 @@ Sensorik Dashboard – Docker Setup
 - Docker Compose
 
 ## Starten der Anwendung
-Im Projektverzeichnis einfach ausführen:
-
+Nach dem Klonen oder Kopieren dieses Repos in einen lokalen Ordner einfach ausführen:
 ```bash
-docker compose up
+docker compose up --build
 ```
 Dies startet sowohl Backend als auch Frontend:
 
