@@ -9,6 +9,7 @@ Im Projektverzeichnis einfach ausführen:
 
 ```bash
 docker compose up
+``
 Dies startet sowohl Backend als auch Frontend:
 
 Backend ist erreichbar unter: http://localhost:8000/
