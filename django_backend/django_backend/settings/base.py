@@ -94,26 +94,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'django_backend.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-
-# # SSH connection to pythonanywhere db
-# sshtunnel.SSH_TIMEOUT = 5.0
-# sshtunnel.TUNNEL_TIMEOUT = 5.0
-
-# # Start the SSH tunnel
-# tunnel = sshtunnel.SSHTunnelForwarder(
-#     ('ssh.eu.pythonanywhere.com'),  # PythonAnywhere SSH hostname
-#     ssh_username='scdash',  # Your PythonAnywhere username
-#     ssh_password= os.getenv("pythonanywhere"),  # The password you use to log in to the PythonAnywhere website
-#     remote_bind_address=('scdash.mysql.eu.pythonanywhere-services.com', 3306)  # Your PythonAnywhere database hostname
-# )
-# tunnel.start()
-
-# # Ensure the tunnel is stopped when the Django process exits
-# atexit.register(tunnel.stop)
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',

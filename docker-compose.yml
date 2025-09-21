@@ -1,0 +1,72 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8
+    restart: always
+    environment:
+      MYSQL_DATABASE: scdash_local
+      MYSQL_USER: scdash_local_user
+      MYSQL_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "33306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      retries: 10
+
+  backend:
+    build: ./django_backend
+    command: >
+      sh -c "
+        until python manage.py wait_for_db; do
+          echo 'Waiting for DB...'
+          sleep 1
+        done
+        python manage.py migrate &&
+        python manage.py populate_devices &&
+        python manage.py populate_sample_data_water_level &&
+        python manage.py populate_sample_weatherdata &&
+        python manage.py populate_sample_soilmoisture &&
+        python manage.py populate_sample_precipitation &&
+        python manage.py populate_sample_forecast &&
+        python manage.py runserver 0.0.0.0:8000 --settings=django_backend.settings.docker
+      "
+
+    volumes:
+      - ./django_backend:/django_backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_NAME: scdash_local
+      DB_USER: scdash_local_user
+      DB_PASSWORD: 1234
+      DB_PORT: 3306
+      DJANGO_SETTINGS_MODULE: django_backend.settings.docker
+      SECRET_KEY: "django-insecure-dev-key" 
+
+  frontend:
+    build:
+      context: ./react_frontend
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ./react_frontend:/app      
+      - /app/node_modules           
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    stdin_open: true                 # Needed for interactive commands
+    tty: true                        # Keeps the container running
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
